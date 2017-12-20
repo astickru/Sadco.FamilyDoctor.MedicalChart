@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Sadco.FamilyDoctor.Core.Data;
+using System;
+using System.Configuration;
 using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.MedicalChart {
@@ -13,7 +12,11 @@ namespace Sadco.FamilyDoctor.MedicalChart {
 		static void Main() {
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new Form1());
+
+			Cl_App.m_DataContext = new Cl_DataContextMegaTemplate(ConfigurationManager.ConnectionStrings["MedicalChart"].ConnectionString);
+			Cl_App.m_DataContext.f_Init();
+
+			Application.Run(new F_Main());
 		}
 	}
 }
