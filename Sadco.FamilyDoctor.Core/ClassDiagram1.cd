@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Sadco.FamilyDoctor.Core.Entities.Cl_GroupsControl">
+    <Position X="0.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAkAACAAAAEAAAAAAIAAAIAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Entities\Cl_GroupsControl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sadco.FamilyDoctor.Core.Entities.Controls.Cl_Control">
+    <Position X="4.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAkAAAAAAIgEACAAAAGAAZQAAAAABAAAAAAAEA=</HashCode>
+      <FileName>Entities\Controls\Cl_Control.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sadco.FamilyDoctor.Core.Entities.Controls.Cl_ComboBox">
+    <Position X="6.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAQAAAAAAAAAAAAAAAAAAAAAEAAAAI=</HashCode>
+      <FileName>Entities\Controls\Cl_ComboBox.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Sadco.FamilyDoctor.Core.Entities.Controls.Cl_CtrlText">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Entities\Controls\Cl_CtrlText.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Sadco.FamilyDoctor.Core.Entities.Cl_Template">
+    <Position X="8.25" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAAAAAAACAApAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Cl_Template.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sadco.FamilyDoctor.Core.Entities.Cl_GroupsTemplate">
+    <Position X="0.5" Y="3.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAkAACAAAAEAAAAAAIAAAIAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Entities\Cl_GroupsTemplate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Sadco.FamilyDoctor.Core.Entities.Controls.I_Control">
+    <Position X="2.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAkAAAABAAAEACAAAACAAZQAAAAABAAAAAAAEA=</HashCode>
+      <FileName>Entities\Controls\I_Control.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,15 +1,18 @@
-﻿using Sadco.FamilyDoctor.Core.Data;
+﻿using Sadco.FamilyDoctor.MedicalChart.Data;
 using System;
 using System.Configuration;
 using System.Windows.Forms;
 
-namespace Sadco.FamilyDoctor.MedicalChart {
-	static class Program {
+namespace Sadco.FamilyDoctor.MedicalChart
+{
+	static class Program
+	{
 		/// <summary>
 		/// Главная точка входа для приложения.
 		/// </summary>
 		[STAThread]
-		static void Main() {
+		static void Main()
+		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 

@@ -7,13 +7,17 @@ namespace Sadco.FamilyDoctor.Core.Entities {
 		[Key]
 		[Column("F_ID")]
 		public int p_ID { get; set; }
+
 		[Column("F_GROUP_ID")]
-		[ForeignKey("p_GroupTeplates")]
-		public int p_GroupTeplatesID { get; set; }
-		public Cl_GroupTemplates p_GroupTeplates { get; set; }
-		[Column("F_NAME")]
+		[ForeignKey("p_ParentGroup")]
+		public int p_ParentGroupID { get; set; }
+		public Cl_GroupsTemplate p_ParentGroup { get; set; }
+
+		[Column("F_NAME", TypeName = "varchar")]
+		[MaxLength(100)]
 		public string p_Name { get; set; }
-		[Column("F_DESC")]
+		[Column("F_DESC", TypeName = "varchar")]
+		[MaxLength(1000)]
 		public string p_Description { get; set; }
 	}
 }

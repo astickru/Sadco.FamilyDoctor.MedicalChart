@@ -1,4 +1,5 @@
-﻿using Sadco.FamilyDoctor.Core.Data;
+﻿
+using Sadco.FamilyDoctor.MedicalChart.Data;
 
 namespace Sadco.FamilyDoctor.MedicalChart {
 	public static class Cl_App {
