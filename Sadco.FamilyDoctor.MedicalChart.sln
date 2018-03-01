@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sadco.FamilyDoctor.MedicalChart", "Sadco.FamilyDoctor.MedicalChart\Sadco.FamilyDoctor.MedicalChart.csproj", "{F171B48A-88B8-471E-8A4F-10C42B1DA65B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sadco.FamilyDoctor.Core", "Sadco.FamilyDoctor.Core\Sadco.FamilyDoctor.Core.csproj", "{F7A7AE72-2D1E-4B23-9FBE-5E0C59CFB701}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sadco.FamilyDoctor.MSSQL", "Sadco.FamilyDoctor.MSSQL\Sadco.FamilyDoctor.MSSQL.csproj", "{FB6F7810-0426-4D2E-90B5-0573DB4CEA8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,12 +21,11 @@ Global
 		{F7A7AE72-2D1E-4B23-9FBE-5E0C59CFB701}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7A7AE72-2D1E-4B23-9FBE-5E0C59CFB701}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7A7AE72-2D1E-4B23-9FBE-5E0C59CFB701}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FB6F7810-0426-4D2E-90B5-0573DB4CEA8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB6F7810-0426-4D2E-90B5-0573DB4CEA8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB6F7810-0426-4D2E-90B5-0573DB4CEA8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB6F7810-0426-4D2E-90B5-0573DB4CEA8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1CD08B13-6B53-420A-A996-94942C11C827}
 	EndGlobalSection
 EndGlobal
