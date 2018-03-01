@@ -19,6 +19,7 @@ namespace Sadco.FamilyDoctor.MedicalChart
 			Cl_App.m_DataContext = new Cl_DataContextMegaTemplate(ConfigurationManager.ConnectionStrings["MedicalChart"].ConnectionString);
 			Cl_App.m_DataContext.f_Init();
 
+
 			Application.Run(new F_Main());
 		}
 	}
