@@ -1,0 +1,10 @@
+﻿Миграция БД:
+Enable-Migrations
+Add-Migration appInit
+Update-Database
+
+
+A previous migration called 'appInit' was already applied to the target database.
+If you meant to re-scaffold 'appInit', revert it by running
+'Update-Database -TargetMigration $InitialDatabase', then delete '201802211210475_appInit.cs'
+and run 'Add-Migration appInit' again.

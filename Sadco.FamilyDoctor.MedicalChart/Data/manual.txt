@@ -1,4 +1,0 @@
-﻿Миграция БД:
-Enable-Migrations
-EntityFramework\Add-Migration appInit
-EntityFramework\Update-Database

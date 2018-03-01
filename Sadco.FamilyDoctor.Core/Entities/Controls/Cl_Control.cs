@@ -20,9 +20,9 @@ namespace Sadco.FamilyDoctor.Core.Entities.Controls
 		[MaxLength(100)]
 		public string p_Name { get; set; }
 		/// <summary>Иконка меню</summary>
-		[Column("F_IMAGE", TypeName = "varchar")]
+		[Column("F_ICON", TypeName = "varchar")]
 		[MaxLength(50)]
-		public string p_Image { get; set; }
+		public string p_IconName { get; set; }
 		/// <summary>Обязательность заполнения</summary>
 		[Column("F_REQUIRED")]
 		public bool p_Required { get { return m_Required; } set { m_Required = value; } }
@@ -32,9 +32,6 @@ namespace Sadco.FamilyDoctor.Core.Entities.Controls
 		/// <summary>Видимость безусловная</summary>
 		[Column("F_VISIBLE")]
 		public bool p_Visible { get { return m_Visible; } set { m_Visible = value; } }
-		///// <summary>Внешняя ссылка</summary>
-		//[Column("F_REFERENCE")]
-		//public asda p_Reference { get; set; }
 		/// <summary>Подсказка по заполнению (отображается всплывающей подсказкой или сообщение по F1)</summary>
 		[Column("F_HELP", TypeName = "varchar")]
 		[MaxLength(500)]
@@ -62,10 +59,10 @@ namespace Sadco.FamilyDoctor.Core.Entities.Controls
 		public int p_ParentGroupID { get; set; }
 		public Cl_GroupsControl p_ParentGroup { get; set; }
 
-		public Bitmap p_MenuIcon {
+		public Bitmap p_Icon {
 			get {
 				try {
-					object obj = Properties.Resources.ResourceManager.GetObject(p_Image);
+					object obj = Properties.Resources.ResourceManager.GetObject(p_IconName);
 					return ((Bitmap)obj);
 				} catch {
 					return null;

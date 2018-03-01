@@ -1,56 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Sadco.FamilyDoctor.Core;
+using Sadco.FamilyDoctor.MedicalChart.Forms.SubForms;
+using System;
 using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.MedicalChart
 {
 	public partial class F_Main : Form
 	{
+		private UI_PanelManager panelManager = null;
+
 		public F_Main() {
+			Cl_App.Initialize();
+
 			InitializeComponent();
-			AddUnit(0);
+
+			panelManager = new UI_PanelManager(ctrl_CustomControls);
+			setControl<UC_EditorTemplates>();
 		}
 
 		private void ctrl_MenuShowTemplates_Click(object sender, EventArgs e) {
-			AddUnit(0);
+			setControl<UC_EditorTemplates>();
 		}
 
 		private void ctrl_MenuShowElements_Click(object sender, EventArgs e) {
-			AddUnit(1);
+			setControl<UC_EditorElements>();
+		}
+
+		private void setControl<T>() where T : UserControl {
+			this.Text = panelManager.SetControl<T>().Tag.ToString();
 		}
 
 		private void ctrlMIExit_Click(object sender, EventArgs e) {
 			this.Close();
 		}
-
-		#region Unit change handler
-		public UserControl currentUnit = null;
-
-		public void ChangeUnit(object sender, EventArgs e) { AddUnit(0); }
-
-		public void AddUnit(int newUnit) {
-			if (currentUnit != null)
-				DeleteUnit();
-
-			switch (newUnit) {
-				case 0x00: { this.currentUnit = new UC_EditorElements(); break; }
-				case 0x01: { this.currentUnit = new UC_EditorTemplates(); break; }
-				default: { AddUnit(0); return; }
-			}
-			
-			this.ctrl_CustomControls.Controls.Add(this.currentUnit);
-		}
-
-		public void DeleteUnit() {
-			this.currentUnit.Dispose();
-			this.ctrl_CustomControls.Controls.Remove(currentUnit);
-		}
-		#endregion
 	}
 }
