@@ -1,10 +1,11 @@
-﻿using Sadco.FamilyDoctor.Core.Entities;
+﻿using Sadco.FamilyDoctor.Core.Controls;
+using Sadco.FamilyDoctor.Core.Entities;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.MedicalChart.Entities.Controls
 {
-	public class Cl_CtrlTemplateNode : TreeNode, I_TreeControl
+	public class Cl_CtrlTemplateNode : TreeNode
 	{
 		public Cl_Template p_Template { get; private set; }
 
@@ -20,7 +21,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Entities.Controls
 			nodes.Add(this);
 		}
 
-		public void f_SetObjectControl(I_Control control) {
+		public void f_SetObjectControl(Cl_Template control) {
 			if (!(control is Cl_Template))
 				return;
 

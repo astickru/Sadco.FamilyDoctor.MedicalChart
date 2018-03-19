@@ -5,40 +5,65 @@ using System.Drawing;
 
 namespace Sadco.FamilyDoctor.Core.Entities
 {
-	[Table("T_TEMPLATES")]
-	public class Cl_Template : I_Control
-	{
-		[Key]
-		[Column("F_ID")]
-		public int p_ID { get; set; }
+    /// <summary>
+    /// Класс шаблона
+    /// </summary>
+    [Table("T_TEMPLATES")]
+    public class Cl_Template : I_Version, I_Archive
+    {
+        /// <summary>ID шаблона</summary>
+        [Column("F_ID")]
+        [Key]
+        public int p_ID { get; set; }
 
-		[Column("F_GROUP_ID")]
-		[ForeignKey("p_ParentGroup")]
-		public int p_ParentGroupID { get; set; }
-		public Cl_GroupsTemplate p_ParentGroup { get; set; }
+        /// <summary>ID шаблона для всех версий</summary>
+        [Column("F_TEMPLATE_ID")]
+        public int p_TemplateID { get; set; }
 
-		[Column("F_NAME", TypeName = "varchar")]
-		[MaxLength(100)]
-		public string p_Name { get; set; }
+        /// <summary>ID группы шаблонов</summary>
+        [Column("F_GROUP_ID")]
+        [ForeignKey("p_ParentGroup")]
+        public int p_ParentGroupID { get; set; }
+        /// <summary>Группа шаблонов</summary>
+        public Cl_GroupTemplate p_ParentGroup { get; set; }
 
-		[Column("F_DESC", TypeName = "varchar")]
-		[MaxLength(1000)]
-		public string p_Description { get; set; }
+        /// <summary>Системное имя шаблона</summary>
+        [Column("F_NAME", TypeName ="varchar")]
+        [MaxLength(100)]
+        public string p_Name { get; set; }
 
-		[ForeignKey("p_TemplateID")]
-		public ICollection<Cl_TemplateControl> p_TemplateControls { get; set; }
+        /// <summary>Описание шаблона</summary>
+        [Column("F_DESC", TypeName = "varchar")]
+        [MaxLength(1000)]
+        public string p_Description { get; set; }
 
-		public string p_IconName { get { return "template"; } }
+        /// <summary>Возвращает список элемента шаблона</summary>
+        [ForeignKey("p_TemplateID")]
+        public ICollection<Cl_TemplatesElements> p_TemplateControls { get; set; }
 
-		public Bitmap p_Icon {
-			get {
-				try {
-					object obj = Properties.Resources.ResourceManager.GetObject(p_IconName);
-					return ((Bitmap)obj);
-				} catch {
-					return null;
-				}
-			}
-		}
-	}
+        /// <summary>Версия шаблона</summary>
+        [Column("F_VERSION")]
+        public int p_Version { get; set; }
+
+        /// <summary>Флаг нахождения шаблона в архиве</summary>
+        [Column("F_ISARHIVE")]
+        public bool p_IsArhive { get; set; }
+
+        /// <summary>Системное наименование иконки</summary>
+        public string p_IconName { get { return "template"; } }
+
+        public Bitmap p_Icon {
+            get {
+                try
+                {
+                    object obj = Properties.Resources.ResourceManager.GetObject(p_IconName);
+                    return ((Bitmap)obj);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
+    }
 }

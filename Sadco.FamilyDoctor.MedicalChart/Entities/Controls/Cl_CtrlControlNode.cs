@@ -1,43 +1,45 @@
-﻿using Sadco.FamilyDoctor.Core.Entities;
-using Sadco.FamilyDoctor.Core.Entities.Controls;
+﻿using Sadco.FamilyDoctor.Core.Controls;
+using Sadco.FamilyDoctor.Core.Entities;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.MedicalChart.Entities.Controls
 {
-	public class Cl_CtrlControlNode : TreeNode, I_TreeControl
-	{
-		public I_BaseControl p_Control { get; private set; }
+    public class Cl_CtrlControlNode : TreeNode, I_TreeControl
+    {
+        public Cl_Element p_Element { get; private set; }
+        public string p_TreeName { get { return p_Element.p_Name; } }
+        public TreeNode p_getTreeNode { get { return this; } }
 
-		public string p_TreeName { get { return p_Control.p_BaseControl.p_Name; } }
+        public void f_AddToTreeNode(TreeNodeCollection nodes)
+        {
+            base.Tag = this;
+            base.ForeColor = Color.Blue;
+            f_UpdateTreeNodeIcon();
 
-		public TreeNode p_getTreeNode { get { return this; } }
+            nodes.Add(this);
+        }
 
-		public void f_AddToTreeNode(TreeNodeCollection nodes) {
-			base.Tag = this;
-			base.ForeColor = Color.Blue;
-			f_UpdateTreeNodeIcon();
+        public void f_UpdateTreeNodeIcon()
+        {
+            UI_Helper.SetMenuImage(p_Element.p_Icon, p_Element.p_IconName);
 
-			nodes.Add(this);
-		}
+            base.ImageKey = p_Element.p_IconName;
+            base.SelectedImageKey = p_Element.p_IconName;
+        }
 
-		public void f_UpdateTreeNodeIcon() {
-			UI_Helper.SetMenuImage(p_Control.p_Icon, p_Control.p_IconName);
+        public void f_SetObjectControl(I_Control control)
+        {
+            if (!(control is Cl_Element))
+                return;
 
-			base.ImageKey = p_Control.p_BaseControl.p_IconName;
-			base.SelectedImageKey = p_Control.p_BaseControl.p_IconName;
-		}
-
-		public void f_SetObjectControl(I_Control control) {
-			if (!(control is I_BaseControl))
-				return;
-
-			I_BaseControl objControl = control as I_BaseControl;
-			p_Control = objControl;
-			if (p_Control != null) {
-				base.Name = p_Control.p_BaseControl.p_ID.ToString();
-				base.Text = p_TreeName;
-			}
-		}
-	}
+            Cl_Element objControl = control as Cl_Element;
+            p_Element = objControl;
+            if (p_Element != null)
+            {
+                base.Name = p_Element.p_ID.ToString();
+                base.Text = p_TreeName;
+            }
+        }
+    }
 }

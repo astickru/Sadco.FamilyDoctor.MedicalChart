@@ -7,14 +7,12 @@ namespace Sadco.FamilyDoctor.MedicalChart
 {
 	public partial class F_Main : Form
 	{
-		private UI_PanelManager panelManager = null;
+		private UI_PanelManager p_PanelManager = null;
 
 		public F_Main() {
 			Cl_App.Initialize();
-
 			InitializeComponent();
-
-			panelManager = new UI_PanelManager(ctrl_CustomControls);
+			p_PanelManager = new UI_PanelManager(ctrl_CustomControls);
 			setControl<UC_EditorTemplates>();
 		}
 
@@ -27,7 +25,7 @@ namespace Sadco.FamilyDoctor.MedicalChart
 		}
 
 		private void setControl<T>() where T : UserControl {
-			this.Text = panelManager.SetControl<T>().Tag.ToString();
+			this.Text = p_PanelManager.f_SetElement<T>().Tag.ToString();
 		}
 
 		private void ctrlMIExit_Click(object sender, EventArgs e) {

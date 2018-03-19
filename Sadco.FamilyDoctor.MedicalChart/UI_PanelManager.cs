@@ -1,41 +1,41 @@
 ﻿using System;
 using System.Windows.Forms;
-using Sadco.FamilyDoctor.Core.Entities.Controls;
+using Sadco.FamilyDoctor.Core.Entities;
 
 namespace Sadco.FamilyDoctor.MedicalChart
 {
-	public interface I_EditPanel {
-		void ConfirmChanges();
-		void SetControl(I_BaseControl p_Control);
-	}
+    public interface I_EditPanel
+    {
+        object f_ConfirmChanges();
+        void f_SetElement(Cl_Element a_Element);
+    }
 
-	public class UI_PanelManager
-	{
-		public UserControl ActiveControl { get; private set; }
+    public class UI_PanelManager
+    {
+        public UserControl p_ActiveControl { get; private set; }
 
-		private Panel mainPanel = null;
+        private Panel m_MainPanel = null;
 
-		public UI_PanelManager(Panel panel) {
-			mainPanel = panel ?? throw new ArgumentNullException("panel");
-		}
+        public UI_PanelManager(Panel panel)
+        {
+            m_MainPanel = panel ?? throw new ArgumentNullException("panel");
+        }
 
-		public T SetControl<T>() where T : UserControl {
-			UserControl control = (UserControl)Activator.CreateInstance(typeof(T));
+        public T f_SetElement<T>() where T : UserControl
+        {
+            UserControl control = (UserControl)Activator.CreateInstance(typeof(T));
+            this.f_DeleteElement();
+            this.p_ActiveControl = control;
+            this.m_MainPanel.Controls.Add(this.p_ActiveControl);
+            this.p_ActiveControl.Dock = DockStyle.Fill;
+            return (T)p_ActiveControl;
+        }
 
-			this.DeleteControl();
-
-			this.ActiveControl = control;
-			this.mainPanel.Controls.Add(this.ActiveControl);
-			this.ActiveControl.Dock = DockStyle.Fill;
-
-			return (T)ActiveControl;
-		}
-
-		public void DeleteControl() {
-			if (ActiveControl == null) return;
-
-			this.ActiveControl.Dispose();
-			this.mainPanel.Controls.Remove(ActiveControl);
-		}
-	}
+        public void f_DeleteElement()
+        {
+            if (p_ActiveControl == null) return;
+            this.p_ActiveControl.Dispose();
+            this.m_MainPanel.Controls.Remove(p_ActiveControl);
+        }
+    }
 }

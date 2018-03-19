@@ -13,11 +13,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
 	public partial class UC_EditorTemplates : UserControl
 	{
-		public const string WinTitle = "Редактор шаблонов";
+		public const string WinTitle = "Редактор шаблонов v0.3";
 
-		private Cl_GroupsTemplate m_CurrentGroup = null;
+		private Cl_GroupTemplate m_CurrentGroup = null;
 		private Cl_CtrlTemplateNode m_CurrentControl = null;
-		private Cl_GroupsTemplate m_ParentGroup = null;
+		private Cl_GroupTemplate m_ParentGroup = null;
 		private Em_NodeTypes m_SelectedNodeType = Em_NodeTypes.Nothing;
 		private TreeNode m_SelectedNode = null;
 
@@ -39,24 +39,24 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 		private void f_InitTVControls() {
 			UI_Helper.InitTreeView(ctrl_TVTemplates);
 
-			Cl_GroupsTemplate[] groups = Cl_App.m_DataContext.p_GroupsTemplate.Include(g => g.p_SubGroups).Where(e => e.p_ParentID == null).ToArray();
-			foreach (Cl_GroupsTemplate group in groups) {
+			Cl_GroupTemplate[] groups = Cl_App.m_DataContext.p_GroupsTemplate.Include(g => g.p_SubGroups).Where(e => e.p_ParentID == null).ToArray();
+			foreach (Cl_GroupTemplate group in groups) {
 				f_PopulateTVTemplates(group, ctrl_TVTemplates.Nodes);
 			}
 		}
 
-		private void f_PopulateTVTemplates(Cl_GroupsTemplate a_Group, TreeNodeCollection a_TreeNodes) {
+		private void f_PopulateTVTemplates(Cl_GroupTemplate a_Group, TreeNodeCollection a_TreeNodes) {
 			TreeNode node = UI_Helper.CreateNodeGroup(a_Group, a_TreeNodes);
 
 			// Загрузка темплейтов
 			foreach (Cl_Template control in Cl_App.m_DataContext.p_Templates.Where(t => t.p_ParentGroupID == a_Group.p_ID).ToArray()) {
-				UI_Helper.AddTreeNodeControl(new Cl_CtrlTemplateNode(), node.Nodes, control);
+				//UI_Helper.AddTreeNodeControl(new Cl_CtrlTemplateNode(), node.Nodes, control);
 			}
 
 			var dcGroups = Cl_App.m_DataContext.Entry(a_Group).Collection(c => c.p_SubGroups);
 			if (!dcGroups.IsLoaded) dcGroups.Load();
 			// Загрузка групп
-			foreach (Cl_GroupsTemplate group in a_Group.p_SubGroups) {
+			foreach (Cl_GroupTemplate group in a_Group.p_SubGroups) {
 				f_PopulateTVTemplates(group, node.Nodes);
 			}
 		}
@@ -145,7 +145,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 			F_GroupTemplate fGroup = new F_GroupTemplate();
 			fGroup.ctrl_LParentValue.Text = m_CurrentGroup.f_GetFullName();
 			if (fGroup.ShowDialog() == DialogResult.OK) {
-				Cl_GroupsTemplate group = new Cl_GroupsTemplate();
+				Cl_GroupTemplate group = new Cl_GroupTemplate();
 				group.p_Name = fGroup.ctrl_TBName.Text;
 				if (m_CurrentGroup != null) group.p_ParentID = m_CurrentGroup.p_ID;
 
@@ -172,7 +172,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 		private void f_DeleteGroup() {
 			if (m_CurrentGroup == null) return;
 
-			Cl_GroupsTemplate parentGroup = m_CurrentGroup.p_Parent;
+			Cl_GroupTemplate parentGroup = m_CurrentGroup.p_Parent;
 			if (parentGroup == null) return;
 
 			Cl_App.m_DataContext.p_GroupsTemplate.Remove(m_CurrentGroup);
@@ -194,7 +194,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 			newTemplate.p_Name = fTemplate.ctrl_TBName.Text;
 			newTemplate.p_Description = fTemplate.ctrl_TBDecs.Text;
 
-			UI_Helper.AddTreeNodeControl(new Cl_CtrlTemplateNode(), m_SelectedNodeType == Em_NodeTypes.Group ? m_SelectedNode.Nodes : m_SelectedNode.Parent.Nodes, newTemplate);
+			//UI_Helper.AddTreeNodeControl(new Cl_CtrlTemplateNode(), m_SelectedNodeType == Em_NodeTypes.Group ? m_SelectedNode.Nodes : m_SelectedNode.Parent.Nodes, newTemplate);
 
 			Cl_App.m_DataContext.p_Templates.Add(newTemplate);
 			Cl_App.m_DataContext.SaveChanges();
@@ -228,11 +228,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 					ctrl_LVTemplates.Items.Add(listitem);
 				}
 			} else if (m_SelectedNodeType == Em_NodeTypes.Template) {
-				Cl_TemplateControl[] controls = Cl_App.m_DataContext.p_TemplateControls.Where(t => t.p_TemplateID == m_CurrentControl.p_Template.p_ID).ToArray();
-				foreach (Cl_TemplateControl control in controls) {
-					if (control.p_Control == null) continue;
+				Cl_TemplatesElements[] controls = Cl_App.m_DataContext.p_TemplatesElements.Where(t => t.p_TemplateID == m_CurrentControl.p_Template.p_ID).ToArray();
+				foreach (Cl_TemplatesElements control in controls) {
+					if (control.p_Element == null) continue;
 
-					ListViewItem listitem = new ListViewItem(new string[] { control.p_Control.p_BaseControl.p_Name, control.p_ControlType });
+					ListViewItem listitem = new ListViewItem(new string[] { control.p_Element.p_Name, control.p_ControlType });
 					ctrl_LVTemplates.Items.Add(listitem);
 				}
 			}

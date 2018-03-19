@@ -26,7 +26,8 @@ namespace Sadco.FamilyDoctor.Core.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"Data Source=.\SQLEXPRESS;Initial Catalog=MedicalChart;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(localdb)\\mssqllocaldb;Initial Catalog=MedicalChart;Integrated Securi" +
+            "ty=True")]
         public string MedicalDatabase {
             get {
                 return ((string)(this["MedicalDatabase"]));

@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sadco.FamilyDoctor.Core</RootNamespace>
     <AssemblyName>Sadco.FamilyDoctor.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -26,6 +26,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,43 +47,83 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net40\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cl_App.cs" />
-    <Compile Include="Entities\Cl_GroupsControl.cs" />
-    <Compile Include="Entities\Cl_TemplateControls.cs" />
-    <Compile Include="Entities\Controls\Cl_Control.cs" />
-    <Compile Include="Entities\Cl_GroupsTemplate.cs" />
+    <Compile Include="Controls\TreeView\Ctrl_TreeNodeTemplate.cs" />
+    <Compile Include="Controls\TreeView\Ctrl_TreeElements.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\TreeView\Ctrl_TreeNodeElement.cs" />
+    <Compile Include="Controls\TreeView\Ctrl_TreeNodeGroup.cs" />
+    <Compile Include="Controls\TreeView\Ctrl_TreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Ctrl_DesignerPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Ctrl_DesignerPanel.Designer.cs">
+      <DependentUpon>Ctrl_DesignerPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Ctrl_RadioButtonList.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\DesignerPanel\Cl_DesignerHost.cs" />
+    <Compile Include="Controls\DesignerPanel\Cl_DesignSite.cs" />
+    <Compile Include="Controls\DesignerPanel\Cl_MegaDesignerTransaction.cs" />
+    <Compile Include="Controls\DesignerPanel\Cl_SelectionService.cs" />
+    <Compile Include="Controls\DesignerPanel\Cl_NameCreationService.cs" />
+    <Compile Include="Controls\DesignerPanel\Ctrl_ToolboxService.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\TreeView\Dlg_EditorTemplate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\TreeView\Dlg_EditorTemplate.Designer.cs">
+      <DependentUpon>Dlg_EditorTemplate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TreeView\Dlg_EditorElement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\TreeView\Dlg_EditorElement.Designer.cs">
+      <DependentUpon>Dlg_EditorElement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TreeView\Dlg_EditorGroup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\TreeView\Dlg_EditorGroup.Designer.cs">
+      <DependentUpon>Dlg_EditorGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Cl_ElementsParams.cs" />
+    <Compile Include="Entities\Cl_Group.cs" />
+    <Compile Include="Entities\Cl_TemplatesElements.cs" />
     <Compile Include="Entities\Cl_Template.cs" />
     <Compile Include="Data\Cl_DataContextMegaTemplate.cs" />
-    <Compile Include="Entities\Controls\Cl_CtrlImage.cs" />
-    <Compile Include="Entities\Controls\Cl_CtrlTextual.cs" />
-    <Compile Include="Entities\Controls\I_BaseControl.cs" />
-    <Compile Include="Entities\I_Control.cs" />
-    <Compile Include="Entities\I_MenuIcon.cs" />
-    <Compile Include="Entities\I_Group.cs" />
-    <Compile Include="Migrations\201802280921592_appInit.cs" />
-    <Compile Include="Migrations\201802280921592_appInit.Designer.cs">
-      <DependentUpon>201802280921592_appInit.cs</DependentUpon>
+    <Compile Include="Entities\Cl_Element.cs" />
+    <Compile Include="Controls\I_Group.cs" />
+    <Compile Include="Entities\I_Archive.cs" />
+    <Compile Include="Entities\I_Version.cs" />
+    <Compile Include="Migrations\201803191302142_appInit.cs" />
+    <Compile Include="Migrations\201803191302142_appInit.Designer.cs">
+      <DependentUpon>201803191302142_appInit.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -98,7 +139,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
@@ -113,8 +154,23 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201802280921592_appInit.resx">
-      <DependentUpon>201802280921592_appInit.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\Ctrl_DesignerPanel.resx">
+      <DependentUpon>Ctrl_DesignerPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TreeView\Ctrl_TreeView.resx">
+      <DependentUpon>Ctrl_TreeView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TreeView\Dlg_EditorTemplate.resx">
+      <DependentUpon>Dlg_EditorTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TreeView\Dlg_EditorElement.resx">
+      <DependentUpon>Dlg_EditorElement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TreeView\Dlg_EditorGroup.resx">
+      <DependentUpon>Dlg_EditorGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803191302142_appInit.resx">
+      <DependentUpon>201803191302142_appInit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -122,6 +178,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -136,6 +193,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Data\manual.txt" />
+    <None Include="Resources\folder.png" />
     <None Include="Resources\check_box.png" />
     <None Include="Resources\image.png" />
     <None Include="Resources\list_box.png" />
