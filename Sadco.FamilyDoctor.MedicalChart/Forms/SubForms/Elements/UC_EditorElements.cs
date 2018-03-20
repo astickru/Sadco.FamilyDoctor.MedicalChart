@@ -11,7 +11,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
     public partial class UC_EditorElements : UserControl
     {
-        public const string m_WinTitle = "Редактор элементов v0.5";
+        public const string m_WinTitle = "Редактор элементов v0.6";
         private UI_PanelManager m_PanelManager = null;
 
         public UC_EditorElements()

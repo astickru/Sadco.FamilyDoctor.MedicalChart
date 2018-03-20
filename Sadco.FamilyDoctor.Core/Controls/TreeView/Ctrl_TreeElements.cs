@@ -80,7 +80,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             else
             {
                 ctrl_ElementNew.Visible = true;
-                ctrl_ElementNew.Visible = false;
+                ctrl_ImageNew.Visible = true;
                 ctrl_ElementDelete.Visible = false;
             }
         }
