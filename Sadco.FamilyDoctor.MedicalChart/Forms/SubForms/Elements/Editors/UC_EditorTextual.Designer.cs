@@ -25,14 +25,12 @@
 		/// содержимое этого метода с помощью редактора кода.
 		/// </summary>
 		private void InitializeComponent() {
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.ctrl_ControlsConteiner = new System.Windows.Forms.Panel();
             this.SelectTypePanel = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.ctrl_Default = new Sadco.FamilyDoctor.Core.Controls.Ctrl_SeparatorCombobox();
             this.ctrl_Note = new System.Windows.Forms.RichTextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.ctrl_Default = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.ctrl_Number = new System.Windows.Forms.Panel();
             this.ctrl_NumberParams = new System.Windows.Forms.Panel();
@@ -49,20 +47,26 @@
             this.ctrl_Symmetry2 = new System.Windows.Forms.TextBox();
             this.ctrl_IsSymmentry = new System.Windows.Forms.CheckBox();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.ctrl_VisibilityFormula = new System.Windows.Forms.RichTextBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.ctrl_Version = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ctrl_IsChangeNotNormValues = new System.Windows.Forms.CheckBox();
+            this.ctrl_PatValues = new System.Windows.Forms.RichTextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.ctrl_NormValues = new System.Windows.Forms.RichTextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.ctrl_PartLocationsValue = new System.Windows.Forms.RichTextBox();
             this.ctrl_IsPartLocationsMulti = new System.Windows.Forms.CheckBox();
-            this.ctrl_PartNormRangeValue = new System.Windows.Forms.TextBox();
             this.ctrl_IsPartNormRange = new System.Windows.Forms.CheckBox();
-            this.ctrl_PartNormValue = new System.Windows.Forms.TextBox();
             this.ctrl_IsPartNorm = new System.Windows.Forms.CheckBox();
             this.ctrl_IsPartLocations = new System.Windows.Forms.CheckBox();
             this.ctrl_PartPostValue = new System.Windows.Forms.TextBox();
             this.ctrl_IsPartPost = new System.Windows.Forms.CheckBox();
             this.ctrl_PartPreValue = new System.Windows.Forms.TextBox();
             this.ctrl_IsPartPre = new System.Windows.Forms.CheckBox();
+            this.ctrl_ControlType = new Sadco.FamilyDoctor.Core.Controls.Ctrl_RadioButtonList();
             this.ctrl_IsMultiSelect = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.ctrlTag = new System.Windows.Forms.TextBox();
@@ -75,18 +79,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.ctrl_Hint = new System.Windows.Forms.TextBox();
             this.ctrl_TypeDescription = new System.Windows.Forms.Label();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.ctrl_VisibilityFormula = new System.Windows.Forms.RichTextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.ctrl_PatValues = new System.Windows.Forms.RichTextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.ctrl_IsChangeNotNormValues = new System.Windows.Forms.CheckBox();
-            this.ctrl_NormValues = new System.Windows.Forms.RichTextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.ctrl_ControlType = new Sadco.FamilyDoctor.Core.Controls.Ctrl_RadioButtonList();
-            this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
+            this.ctrl_PartNormValue = new System.Windows.Forms.RichTextBox();
+            this.ctrl_PartNormRangeValue = new System.Windows.Forms.RichTextBox();
             this.ctrl_ControlsConteiner.SuspendLayout();
             this.SelectTypePanel.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -97,65 +91,57 @@
             this.ctrl_SymmetryVals.SuspendLayout();
             this.panel3.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(602, 685);
-            this.tabControl1.TabIndex = 18;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.ctrl_ControlsConteiner);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(0);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage1.Size = new System.Drawing.Size(594, 659);
-            this.tabPage1.TabIndex = 1;
-            this.tabPage1.Text = "Параметры элемента";
-            this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // ctrl_ControlsConteiner
             // 
+            this.ctrl_ControlsConteiner.AutoSize = true;
             this.ctrl_ControlsConteiner.Controls.Add(this.SelectTypePanel);
-            this.ctrl_ControlsConteiner.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ctrl_ControlsConteiner.Location = new System.Drawing.Point(2, 2);
+            this.ctrl_ControlsConteiner.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ctrl_ControlsConteiner.Location = new System.Drawing.Point(0, 0);
             this.ctrl_ControlsConteiner.Name = "ctrl_ControlsConteiner";
-            this.ctrl_ControlsConteiner.Size = new System.Drawing.Size(590, 655);
-            this.ctrl_ControlsConteiner.TabIndex = 21;
+            this.ctrl_ControlsConteiner.Size = new System.Drawing.Size(658, 862);
+            this.ctrl_ControlsConteiner.TabIndex = 22;
             // 
             // SelectTypePanel
             // 
+            this.SelectTypePanel.AutoSize = true;
             this.SelectTypePanel.Controls.Add(this.panel2);
             this.SelectTypePanel.Controls.Add(this.ctrl_Number);
             this.SelectTypePanel.Controls.Add(this.ctrl_Symmetry);
             this.SelectTypePanel.Controls.Add(this.panel3);
-            this.SelectTypePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SelectTypePanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.SelectTypePanel.Location = new System.Drawing.Point(0, 0);
             this.SelectTypePanel.Name = "SelectTypePanel";
-            this.SelectTypePanel.Size = new System.Drawing.Size(590, 655);
+            this.SelectTypePanel.Size = new System.Drawing.Size(658, 862);
             this.SelectTypePanel.TabIndex = 24;
             // 
             // panel2
             // 
+            this.panel2.AutoSize = true;
+            this.panel2.Controls.Add(this.ctrl_Default);
             this.panel2.Controls.Add(this.ctrl_Note);
             this.panel2.Controls.Add(this.label6);
-            this.panel2.Controls.Add(this.ctrl_Default);
             this.panel2.Controls.Add(this.label9);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(0, 553);
+            this.panel2.Location = new System.Drawing.Point(0, 768);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(590, 102);
+            this.panel2.Size = new System.Drawing.Size(658, 94);
             this.panel2.TabIndex = 81;
+            // 
+            // ctrl_Default
+            // 
+            this.ctrl_Default.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.ctrl_Default.FormattingEnabled = true;
+            this.ctrl_Default.Location = new System.Drawing.Point(140, 1);
+            this.ctrl_Default.Name = "ctrl_Default";
+            this.ctrl_Default.p_AutoAdjustItemHeight = false;
+            this.ctrl_Default.p_SeparatorColor = System.Drawing.Color.Black;
+            this.ctrl_Default.p_SeparatorMargin = 1;
+            this.ctrl_Default.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            this.ctrl_Default.p_SeparatorWidth = 1;
+            this.ctrl_Default.Size = new System.Drawing.Size(266, 21);
+            this.ctrl_Default.TabIndex = 79;
             // 
             // ctrl_Note
             // 
@@ -175,14 +161,6 @@
             this.label6.TabIndex = 76;
             this.label6.Text = "Значение по-умолчанию ";
             // 
-            // ctrl_Default
-            // 
-            this.ctrl_Default.Location = new System.Drawing.Point(140, 2);
-            this.ctrl_Default.Margin = new System.Windows.Forms.Padding(0);
-            this.ctrl_Default.Name = "ctrl_Default";
-            this.ctrl_Default.Size = new System.Drawing.Size(163, 20);
-            this.ctrl_Default.TabIndex = 77;
-            // 
             // label9
             // 
             this.label9.AutoSize = true;
@@ -199,9 +177,9 @@
             this.ctrl_Number.Controls.Add(this.ctrl_NumberParams);
             this.ctrl_Number.Controls.Add(this.ctrl_IsNumber);
             this.ctrl_Number.Dock = System.Windows.Forms.DockStyle.Top;
-            this.ctrl_Number.Location = new System.Drawing.Point(0, 448);
+            this.ctrl_Number.Location = new System.Drawing.Point(0, 663);
             this.ctrl_Number.Name = "ctrl_Number";
-            this.ctrl_Number.Size = new System.Drawing.Size(590, 105);
+            this.ctrl_Number.Size = new System.Drawing.Size(658, 105);
             this.ctrl_Number.TabIndex = 80;
             // 
             // ctrl_NumberParams
@@ -213,7 +191,7 @@
             this.ctrl_NumberParams.Dock = System.Windows.Forms.DockStyle.Top;
             this.ctrl_NumberParams.Location = new System.Drawing.Point(0, 17);
             this.ctrl_NumberParams.Name = "ctrl_NumberParams";
-            this.ctrl_NumberParams.Size = new System.Drawing.Size(590, 88);
+            this.ctrl_NumberParams.Size = new System.Drawing.Size(658, 88);
             this.ctrl_NumberParams.TabIndex = 79;
             // 
             // ctrl_NumberRound
@@ -264,11 +242,12 @@
             this.ctrl_IsNumber.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsNumber.Name = "ctrl_IsNumber";
             this.ctrl_IsNumber.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.ctrl_IsNumber.Size = new System.Drawing.Size(590, 17);
+            this.ctrl_IsNumber.Size = new System.Drawing.Size(658, 17);
             this.ctrl_IsNumber.TabIndex = 77;
             this.ctrl_IsNumber.Text = "Является числовым";
             this.ctrl_IsNumber.UseVisualStyleBackColor = true;
             this.ctrl_IsNumber.CheckedChanged += new System.EventHandler(this.ctrl_CB_IsNumber_CheckedChanged);
+            this.ctrl_IsNumber.TextChanged += new System.EventHandler(this.ctrl_CB_IsNumber_CheckedChanged);
             // 
             // ctrl_Symmetry
             // 
@@ -276,9 +255,9 @@
             this.ctrl_Symmetry.Controls.Add(this.ctrl_SymmetryVals);
             this.ctrl_Symmetry.Controls.Add(this.ctrl_IsSymmentry);
             this.ctrl_Symmetry.Dock = System.Windows.Forms.DockStyle.Top;
-            this.ctrl_Symmetry.Location = new System.Drawing.Point(0, 378);
+            this.ctrl_Symmetry.Location = new System.Drawing.Point(0, 593);
             this.ctrl_Symmetry.Name = "ctrl_Symmetry";
-            this.ctrl_Symmetry.Size = new System.Drawing.Size(590, 70);
+            this.ctrl_Symmetry.Size = new System.Drawing.Size(658, 70);
             this.ctrl_Symmetry.TabIndex = 64;
             // 
             // ctrl_SymmetryVals
@@ -290,7 +269,7 @@
             this.ctrl_SymmetryVals.Dock = System.Windows.Forms.DockStyle.Top;
             this.ctrl_SymmetryVals.Location = new System.Drawing.Point(0, 17);
             this.ctrl_SymmetryVals.Name = "ctrl_SymmetryVals";
-            this.ctrl_SymmetryVals.Size = new System.Drawing.Size(590, 53);
+            this.ctrl_SymmetryVals.Size = new System.Drawing.Size(658, 53);
             this.ctrl_SymmetryVals.TabIndex = 58;
             // 
             // label7
@@ -337,14 +316,16 @@
             this.ctrl_IsSymmentry.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsSymmentry.Name = "ctrl_IsSymmentry";
             this.ctrl_IsSymmentry.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.ctrl_IsSymmentry.Size = new System.Drawing.Size(590, 17);
+            this.ctrl_IsSymmentry.Size = new System.Drawing.Size(658, 17);
             this.ctrl_IsSymmentry.TabIndex = 57;
             this.ctrl_IsSymmentry.Text = "Признак симметричности";
             this.ctrl_IsSymmentry.UseVisualStyleBackColor = true;
-            this.ctrl_IsSymmentry.CheckedChanged += new System.EventHandler(this.ctrl_CB_IsSymmentry_CheckedChanged);
+            this.ctrl_IsSymmentry.CheckedChanged += new System.EventHandler(this.ctrl_IsSymmentry_CheckedChanged);
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.ctrl_VisibilityFormula);
+            this.panel3.Controls.Add(this.label11);
             this.panel3.Controls.Add(this.label2);
             this.panel3.Controls.Add(this.ctrl_Version);
             this.panel3.Controls.Add(this.groupBox1);
@@ -364,13 +345,31 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(590, 378);
+            this.panel3.Size = new System.Drawing.Size(658, 593);
             this.panel3.TabIndex = 63;
+            // 
+            // ctrl_VisibilityFormula
+            // 
+            this.ctrl_VisibilityFormula.Location = new System.Drawing.Point(150, 543);
+            this.ctrl_VisibilityFormula.Name = "ctrl_VisibilityFormula";
+            this.ctrl_VisibilityFormula.Size = new System.Drawing.Size(496, 45);
+            this.ctrl_VisibilityFormula.TabIndex = 81;
+            this.ctrl_VisibilityFormula.Text = "";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(10, 544);
+            this.label11.Margin = new System.Windows.Forms.Padding(0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(115, 13);
+            this.label11.TabIndex = 80;
+            this.label11.Text = "Условная видимость";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(504, 7);
+            this.label2.Location = new System.Drawing.Point(570, 7);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(47, 13);
             this.label2.TabIndex = 63;
@@ -380,7 +379,7 @@
             // ctrl_Version
             // 
             this.ctrl_Version.AutoSize = true;
-            this.ctrl_Version.Location = new System.Drawing.Point(552, 7);
+            this.ctrl_Version.Location = new System.Drawing.Point(618, 7);
             this.ctrl_Version.Name = "ctrl_Version";
             this.ctrl_Version.Size = new System.Drawing.Size(13, 13);
             this.ctrl_Version.TabIndex = 62;
@@ -389,11 +388,16 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.ctrl_PartNormRangeValue);
+            this.groupBox1.Controls.Add(this.ctrl_PartNormValue);
+            this.groupBox1.Controls.Add(this.ctrl_IsChangeNotNormValues);
+            this.groupBox1.Controls.Add(this.ctrl_PatValues);
+            this.groupBox1.Controls.Add(this.label10);
+            this.groupBox1.Controls.Add(this.ctrl_NormValues);
+            this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.ctrl_PartLocationsValue);
             this.groupBox1.Controls.Add(this.ctrl_IsPartLocationsMulti);
-            this.groupBox1.Controls.Add(this.ctrl_PartNormRangeValue);
             this.groupBox1.Controls.Add(this.ctrl_IsPartNormRange);
-            this.groupBox1.Controls.Add(this.ctrl_PartNormValue);
             this.groupBox1.Controls.Add(this.ctrl_IsPartNorm);
             this.groupBox1.Controls.Add(this.ctrl_IsPartLocations);
             this.groupBox1.Controls.Add(this.ctrl_PartPostValue);
@@ -402,23 +406,73 @@
             this.groupBox1.Controls.Add(this.ctrl_IsPartPre);
             this.groupBox1.Location = new System.Drawing.Point(3, 125);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(574, 163);
+            this.groupBox1.Size = new System.Drawing.Size(643, 324);
             this.groupBox1.TabIndex = 61;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Часть";
             // 
+            // ctrl_IsChangeNotNormValues
+            // 
+            this.ctrl_IsChangeNotNormValues.AutoSize = true;
+            this.ctrl_IsChangeNotNormValues.Location = new System.Drawing.Point(4, 206);
+            this.ctrl_IsChangeNotNormValues.Margin = new System.Windows.Forms.Padding(0);
+            this.ctrl_IsChangeNotNormValues.Name = "ctrl_IsChangeNotNormValues";
+            this.ctrl_IsChangeNotNormValues.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.ctrl_IsChangeNotNormValues.Size = new System.Drawing.Size(187, 17);
+            this.ctrl_IsChangeNotNormValues.TabIndex = 84;
+            this.ctrl_IsChangeNotNormValues.Text = "Ввод не стандартных значений";
+            this.ctrl_IsChangeNotNormValues.UseVisualStyleBackColor = true;
+            // 
+            // ctrl_PatValues
+            // 
+            this.ctrl_PatValues.Location = new System.Drawing.Point(145, 273);
+            this.ctrl_PatValues.Name = "ctrl_PatValues";
+            this.ctrl_PatValues.Size = new System.Drawing.Size(341, 45);
+            this.ctrl_PatValues.TabIndex = 83;
+            this.ctrl_PatValues.Text = "";
+            this.ctrl_PatValues.TextChanged += new System.EventHandler(this.ctrl_PatValues_TextChanged);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(4, 273);
+            this.label10.Margin = new System.Windows.Forms.Padding(0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(140, 13);
+            this.label10.TabIndex = 82;
+            this.label10.Text = "Патологические значения";
+            // 
+            // ctrl_NormValues
+            // 
+            this.ctrl_NormValues.Location = new System.Drawing.Point(145, 226);
+            this.ctrl_NormValues.Name = "ctrl_NormValues";
+            this.ctrl_NormValues.Size = new System.Drawing.Size(341, 45);
+            this.ctrl_NormValues.TabIndex = 81;
+            this.ctrl_NormValues.Text = "";
+            this.ctrl_NormValues.TextChanged += new System.EventHandler(this.ctrl_NormValues_TextChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(4, 226);
+            this.label3.Margin = new System.Windows.Forms.Padding(0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(123, 13);
+            this.label3.TabIndex = 80;
+            this.label3.Text = "Нормальные значения";
+            // 
             // ctrl_PartLocationsValue
             // 
-            this.ctrl_PartLocationsValue.Location = new System.Drawing.Point(137, 62);
+            this.ctrl_PartLocationsValue.Location = new System.Drawing.Point(145, 62);
             this.ctrl_PartLocationsValue.Name = "ctrl_PartLocationsValue";
-            this.ctrl_PartLocationsValue.Size = new System.Drawing.Size(266, 47);
+            this.ctrl_PartLocationsValue.Size = new System.Drawing.Size(341, 47);
             this.ctrl_PartLocationsValue.TabIndex = 79;
             this.ctrl_PartLocationsValue.Text = "";
             // 
             // ctrl_IsPartLocationsMulti
             // 
             this.ctrl_IsPartLocationsMulti.AutoSize = true;
-            this.ctrl_IsPartLocationsMulti.Location = new System.Drawing.Point(406, 64);
+            this.ctrl_IsPartLocationsMulti.Location = new System.Drawing.Point(489, 64);
             this.ctrl_IsPartLocationsMulti.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsPartLocationsMulti.Name = "ctrl_IsPartLocationsMulti";
             this.ctrl_IsPartLocationsMulti.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -427,17 +481,10 @@
             this.ctrl_IsPartLocationsMulti.Text = "Множественный выбор ";
             this.ctrl_IsPartLocationsMulti.UseVisualStyleBackColor = true;
             // 
-            // ctrl_PartNormRangeValue
-            // 
-            this.ctrl_PartNormRangeValue.Location = new System.Drawing.Point(137, 135);
-            this.ctrl_PartNormRangeValue.Name = "ctrl_PartNormRangeValue";
-            this.ctrl_PartNormRangeValue.Size = new System.Drawing.Size(105, 20);
-            this.ctrl_PartNormRangeValue.TabIndex = 77;
-            // 
             // ctrl_IsPartNormRange
             // 
             this.ctrl_IsPartNormRange.AutoSize = true;
-            this.ctrl_IsPartNormRange.Location = new System.Drawing.Point(4, 134);
+            this.ctrl_IsPartNormRange.Location = new System.Drawing.Point(4, 159);
             this.ctrl_IsPartNormRange.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsPartNormRange.Name = "ctrl_IsPartNormRange";
             this.ctrl_IsPartNormRange.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -446,13 +493,6 @@
             this.ctrl_IsPartNormRange.Text = "Норма диапозон";
             this.ctrl_IsPartNormRange.UseVisualStyleBackColor = true;
             this.ctrl_IsPartNormRange.CheckedChanged += new System.EventHandler(this.ctrl_IsPartNormRange_CheckedChanged);
-            // 
-            // ctrl_PartNormValue
-            // 
-            this.ctrl_PartNormValue.Location = new System.Drawing.Point(137, 112);
-            this.ctrl_PartNormValue.Name = "ctrl_PartNormValue";
-            this.ctrl_PartNormValue.Size = new System.Drawing.Size(105, 20);
-            this.ctrl_PartNormValue.TabIndex = 75;
             // 
             // ctrl_IsPartNorm
             // 
@@ -482,9 +522,9 @@
             // 
             // ctrl_PartPostValue
             // 
-            this.ctrl_PartPostValue.Location = new System.Drawing.Point(137, 39);
+            this.ctrl_PartPostValue.Location = new System.Drawing.Point(145, 39);
             this.ctrl_PartPostValue.Name = "ctrl_PartPostValue";
-            this.ctrl_PartPostValue.Size = new System.Drawing.Size(105, 20);
+            this.ctrl_PartPostValue.Size = new System.Drawing.Size(97, 20);
             this.ctrl_PartPostValue.TabIndex = 59;
             // 
             // ctrl_IsPartPost
@@ -502,9 +542,9 @@
             // 
             // ctrl_PartPreValue
             // 
-            this.ctrl_PartPreValue.Location = new System.Drawing.Point(137, 16);
+            this.ctrl_PartPreValue.Location = new System.Drawing.Point(145, 16);
             this.ctrl_PartPreValue.Name = "ctrl_PartPreValue";
-            this.ctrl_PartPreValue.Size = new System.Drawing.Size(105, 20);
+            this.ctrl_PartPreValue.Size = new System.Drawing.Size(97, 20);
             this.ctrl_PartPreValue.TabIndex = 57;
             // 
             // ctrl_IsPartPre
@@ -520,10 +560,19 @@
             this.ctrl_IsPartPre.UseVisualStyleBackColor = true;
             this.ctrl_IsPartPre.CheckedChanged += new System.EventHandler(this.ctrl_IsPartPre_CheckedChanged);
             // 
+            // ctrl_ControlType
+            // 
+            this.ctrl_ControlType.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.ctrl_ControlType.FormattingEnabled = true;
+            this.ctrl_ControlType.Location = new System.Drawing.Point(150, 52);
+            this.ctrl_ControlType.Name = "ctrl_ControlType";
+            this.ctrl_ControlType.Size = new System.Drawing.Size(435, 45);
+            this.ctrl_ControlType.TabIndex = 60;
+            // 
             // ctrl_IsMultiSelect
             // 
             this.ctrl_IsMultiSelect.AutoSize = true;
-            this.ctrl_IsMultiSelect.Location = new System.Drawing.Point(0, 361);
+            this.ctrl_IsMultiSelect.Location = new System.Drawing.Point(6, 521);
             this.ctrl_IsMultiSelect.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsMultiSelect.Name = "ctrl_IsMultiSelect";
             this.ctrl_IsMultiSelect.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -544,7 +593,7 @@
             // 
             // ctrlTag
             // 
-            this.ctrlTag.Location = new System.Drawing.Point(140, 27);
+            this.ctrlTag.Location = new System.Drawing.Point(148, 27);
             this.ctrlTag.Margin = new System.Windows.Forms.Padding(0);
             this.ctrlTag.Name = "ctrlTag";
             this.ctrlTag.Size = new System.Drawing.Size(163, 20);
@@ -553,7 +602,7 @@
             // ctrl_IsVisiblePatient
             // 
             this.ctrl_IsVisiblePatient.AutoSize = true;
-            this.ctrl_IsVisiblePatient.Location = new System.Drawing.Point(0, 310);
+            this.ctrl_IsVisiblePatient.Location = new System.Drawing.Point(6, 470);
             this.ctrl_IsVisiblePatient.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsVisiblePatient.Name = "ctrl_IsVisiblePatient";
             this.ctrl_IsVisiblePatient.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -565,7 +614,7 @@
             // ctrl_IsRequiredFIeld
             // 
             this.ctrl_IsRequiredFIeld.AutoSize = true;
-            this.ctrl_IsRequiredFIeld.Location = new System.Drawing.Point(0, 327);
+            this.ctrl_IsRequiredFIeld.Location = new System.Drawing.Point(6, 487);
             this.ctrl_IsRequiredFIeld.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsRequiredFIeld.Name = "ctrl_IsRequiredFIeld";
             this.ctrl_IsRequiredFIeld.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -577,7 +626,7 @@
             // ctrl_IsEditing
             // 
             this.ctrl_IsEditing.AutoSize = true;
-            this.ctrl_IsEditing.Location = new System.Drawing.Point(0, 344);
+            this.ctrl_IsEditing.Location = new System.Drawing.Point(6, 504);
             this.ctrl_IsEditing.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsEditing.Name = "ctrl_IsEditing";
             this.ctrl_IsEditing.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -589,7 +638,7 @@
             // ctrl_IsVisible
             // 
             this.ctrl_IsVisible.AutoSize = true;
-            this.ctrl_IsVisible.Location = new System.Drawing.Point(0, 293);
+            this.ctrl_IsVisible.Location = new System.Drawing.Point(6, 453);
             this.ctrl_IsVisible.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsVisible.Name = "ctrl_IsVisible";
             this.ctrl_IsVisible.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -610,7 +659,7 @@
             // 
             // ctrl_Name
             // 
-            this.ctrl_Name.Location = new System.Drawing.Point(140, 4);
+            this.ctrl_Name.Location = new System.Drawing.Point(148, 4);
             this.ctrl_Name.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_Name.Name = "ctrl_Name";
             this.ctrl_Name.Size = new System.Drawing.Size(163, 20);
@@ -628,10 +677,10 @@
             // 
             // ctrl_Hint
             // 
-            this.ctrl_Hint.Location = new System.Drawing.Point(140, 102);
+            this.ctrl_Hint.Location = new System.Drawing.Point(148, 102);
             this.ctrl_Hint.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_Hint.Name = "ctrl_Hint";
-            this.ctrl_Hint.Size = new System.Drawing.Size(437, 20);
+            this.ctrl_Hint.Size = new System.Drawing.Size(498, 20);
             this.ctrl_Hint.TabIndex = 52;
             // 
             // ctrl_TypeDescription
@@ -644,117 +693,32 @@
             this.ctrl_TypeDescription.TabIndex = 47;
             this.ctrl_TypeDescription.Text = "Вид текстового элемента";
             // 
-            // tabPage2
+            // ctrl_PartNormValue
             // 
-            this.tabPage2.Controls.Add(this.panel1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage2.Size = new System.Drawing.Size(594, 659);
-            this.tabPage2.TabIndex = 0;
-            this.tabPage2.Text = "Дополнительно";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.ctrl_PartNormValue.Location = new System.Drawing.Point(145, 111);
+            this.ctrl_PartNormValue.Name = "ctrl_PartNormValue";
+            this.ctrl_PartNormValue.Size = new System.Drawing.Size(340, 45);
+            this.ctrl_PartNormValue.TabIndex = 85;
+            this.ctrl_PartNormValue.Text = "";
             // 
-            // panel1
+            // ctrl_PartNormRangeValue
             // 
-            this.panel1.Controls.Add(this.ctrl_VisibilityFormula);
-            this.panel1.Controls.Add(this.label11);
-            this.panel1.Controls.Add(this.ctrl_PatValues);
-            this.panel1.Controls.Add(this.label10);
-            this.panel1.Controls.Add(this.ctrl_IsChangeNotNormValues);
-            this.panel1.Controls.Add(this.ctrl_NormValues);
-            this.panel1.Controls.Add(this.label3);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(2, 2);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(590, 655);
-            this.panel1.TabIndex = 0;
-            // 
-            // ctrl_VisibilityFormula
-            // 
-            this.ctrl_VisibilityFormula.Location = new System.Drawing.Point(146, 215);
-            this.ctrl_VisibilityFormula.Name = "ctrl_VisibilityFormula";
-            this.ctrl_VisibilityFormula.Size = new System.Drawing.Size(429, 74);
-            this.ctrl_VisibilityFormula.TabIndex = 79;
-            this.ctrl_VisibilityFormula.Text = "";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 216);
-            this.label11.Margin = new System.Windows.Forms.Padding(0);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(115, 13);
-            this.label11.TabIndex = 78;
-            this.label11.Text = "Условная видимость";
-            // 
-            // ctrl_PatValues
-            // 
-            this.ctrl_PatValues.Location = new System.Drawing.Point(146, 125);
-            this.ctrl_PatValues.Name = "ctrl_PatValues";
-            this.ctrl_PatValues.Size = new System.Drawing.Size(250, 86);
-            this.ctrl_PatValues.TabIndex = 76;
-            this.ctrl_PatValues.Text = "";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(5, 125);
-            this.label10.Margin = new System.Windows.Forms.Padding(0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(140, 13);
-            this.label10.TabIndex = 75;
-            this.label10.Text = "Патологические значения";
-            // 
-            // ctrl_IsChangeNotNormValues
-            // 
-            this.ctrl_IsChangeNotNormValues.AutoSize = true;
-            this.ctrl_IsChangeNotNormValues.Location = new System.Drawing.Point(4, 10);
-            this.ctrl_IsChangeNotNormValues.Margin = new System.Windows.Forms.Padding(0);
-            this.ctrl_IsChangeNotNormValues.Name = "ctrl_IsChangeNotNormValues";
-            this.ctrl_IsChangeNotNormValues.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.ctrl_IsChangeNotNormValues.Size = new System.Drawing.Size(187, 17);
-            this.ctrl_IsChangeNotNormValues.TabIndex = 74;
-            this.ctrl_IsChangeNotNormValues.Text = "Ввод не стандартных значений";
-            this.ctrl_IsChangeNotNormValues.UseVisualStyleBackColor = true;
-            // 
-            // ctrl_NormValues
-            // 
-            this.ctrl_NormValues.Location = new System.Drawing.Point(146, 35);
-            this.ctrl_NormValues.Name = "ctrl_NormValues";
-            this.ctrl_NormValues.Size = new System.Drawing.Size(250, 86);
-            this.ctrl_NormValues.TabIndex = 73;
-            this.ctrl_NormValues.Text = "";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(5, 35);
-            this.label3.Margin = new System.Windows.Forms.Padding(0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(123, 13);
-            this.label3.TabIndex = 71;
-            this.label3.Text = "Нормальные значения";
-            // 
-            // ctrl_ControlType
-            // 
-            this.ctrl_ControlType.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.ctrl_ControlType.FormattingEnabled = true;
-            this.ctrl_ControlType.Location = new System.Drawing.Point(142, 52);
-            this.ctrl_ControlType.Name = "ctrl_ControlType";
-            this.ctrl_ControlType.Size = new System.Drawing.Size(435, 45);
-            this.ctrl_ControlType.TabIndex = 60;
+            this.ctrl_PartNormRangeValue.Location = new System.Drawing.Point(145, 158);
+            this.ctrl_PartNormRangeValue.Name = "ctrl_PartNormRangeValue";
+            this.ctrl_PartNormRangeValue.Size = new System.Drawing.Size(341, 45);
+            this.ctrl_PartNormRangeValue.TabIndex = 86;
+            this.ctrl_PartNormRangeValue.Text = "";
             // 
             // UC_EditorTextual
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.tabControl1);
+            this.AutoSize = true;
+            this.Controls.Add(this.ctrl_ControlsConteiner);
             this.Name = "UC_EditorTextual";
-            this.Size = new System.Drawing.Size(602, 685);
-            this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
+            this.Size = new System.Drawing.Size(658, 870);
             this.ctrl_ControlsConteiner.ResumeLayout(false);
+            this.ctrl_ControlsConteiner.PerformLayout();
             this.SelectTypePanel.ResumeLayout(false);
             this.SelectTypePanel.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -772,74 +736,68 @@
             this.panel3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 
-		#endregion
+        #endregion
 
-		private System.Windows.Forms.TabControl tabControl1;
-		private System.Windows.Forms.TabPage tabPage1;
-		private System.Windows.Forms.Panel ctrl_ControlsConteiner;
-		private System.Windows.Forms.TabPage tabPage2;
-		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.Panel SelectTypePanel;
-		private System.Windows.Forms.Panel ctrl_Symmetry;
-		private System.Windows.Forms.Panel ctrl_SymmetryVals;
-		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.TextBox ctrl_Symmetry1;
-		private System.Windows.Forms.Label label8;
-		private System.Windows.Forms.TextBox ctrl_Symmetry2;
-		private System.Windows.Forms.CheckBox ctrl_IsSymmentry;
-		private System.Windows.Forms.Panel panel3;
-		private System.Windows.Forms.CheckBox ctrl_IsMultiSelect;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox ctrlTag;
-		private System.Windows.Forms.CheckBox ctrl_IsVisiblePatient;
-		private System.Windows.Forms.CheckBox ctrl_IsRequiredFIeld;
-		private System.Windows.Forms.CheckBox ctrl_IsEditing;
-		private System.Windows.Forms.CheckBox ctrl_IsVisible;
-		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.TextBox ctrl_Name;
-		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.TextBox ctrl_Hint;
-		private System.Windows.Forms.Label ctrl_TypeDescription;
-		private System.Windows.Forms.Label label11;
-		private System.Windows.Forms.RichTextBox ctrl_PatValues;
-		private System.Windows.Forms.Label label10;
-		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.RichTextBox ctrl_VisibilityFormula;
-		private System.Windows.Forms.Panel ctrl_Number;
-		private System.Windows.Forms.Panel ctrl_NumberParams;
-		private System.Windows.Forms.Label label12;
-		private System.Windows.Forms.Label label13;
-		private System.Windows.Forms.CheckBox ctrl_IsNumber;
-		private System.Windows.Forms.Panel panel2;
-		private System.Windows.Forms.RichTextBox ctrl_Note;
-		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.TextBox ctrl_Default;
-		private System.Windows.Forms.Label label9;
-		private System.Windows.Forms.RichTextBox ctrl_NumberFormula;
-		private System.Windows.Forms.NumericUpDown ctrl_NumberRound;
-		private System.Windows.Forms.RichTextBox ctrl_NormValues;
-		private System.Windows.Forms.CheckBox ctrl_IsChangeNotNormValues;
-		private Core.Controls.Ctrl_RadioButtonList ctrl_ControlType;
+        private System.Windows.Forms.Panel ctrl_ControlsConteiner;
+        private System.Windows.Forms.Panel SelectTypePanel;
+        private System.Windows.Forms.Panel panel2;
+        private Core.Controls.Ctrl_SeparatorCombobox ctrl_Default;
+        private System.Windows.Forms.RichTextBox ctrl_Note;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Panel ctrl_Number;
+        private System.Windows.Forms.Panel ctrl_NumberParams;
+        private System.Windows.Forms.NumericUpDown ctrl_NumberRound;
+        private System.Windows.Forms.RichTextBox ctrl_NumberFormula;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.CheckBox ctrl_IsNumber;
+        private System.Windows.Forms.Panel ctrl_Symmetry;
+        private System.Windows.Forms.Panel ctrl_SymmetryVals;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox ctrl_Symmetry1;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox ctrl_Symmetry2;
+        private System.Windows.Forms.CheckBox ctrl_IsSymmentry;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.RichTextBox ctrl_VisibilityFormula;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label ctrl_Version;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox ctrl_PartNormRangeValue;
+        private System.Windows.Forms.CheckBox ctrl_IsChangeNotNormValues;
+        private System.Windows.Forms.RichTextBox ctrl_PatValues;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.RichTextBox ctrl_NormValues;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.RichTextBox ctrl_PartLocationsValue;
+        private System.Windows.Forms.CheckBox ctrl_IsPartLocationsMulti;
         private System.Windows.Forms.CheckBox ctrl_IsPartNormRange;
-        private System.Windows.Forms.TextBox ctrl_PartNormValue;
         private System.Windows.Forms.CheckBox ctrl_IsPartNorm;
         private System.Windows.Forms.CheckBox ctrl_IsPartLocations;
         private System.Windows.Forms.TextBox ctrl_PartPostValue;
         private System.Windows.Forms.CheckBox ctrl_IsPartPost;
         private System.Windows.Forms.TextBox ctrl_PartPreValue;
         private System.Windows.Forms.CheckBox ctrl_IsPartPre;
-        private System.Windows.Forms.CheckBox ctrl_IsPartLocationsMulti;
-        private System.Windows.Forms.RichTextBox ctrl_PartLocationsValue;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label ctrl_Version;
+        private Core.Controls.Ctrl_RadioButtonList ctrl_ControlType;
+        private System.Windows.Forms.CheckBox ctrl_IsMultiSelect;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox ctrlTag;
+        private System.Windows.Forms.CheckBox ctrl_IsVisiblePatient;
+        private System.Windows.Forms.CheckBox ctrl_IsRequiredFIeld;
+        private System.Windows.Forms.CheckBox ctrl_IsEditing;
+        private System.Windows.Forms.CheckBox ctrl_IsVisible;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox ctrl_Name;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox ctrl_Hint;
+        private System.Windows.Forms.Label ctrl_TypeDescription;
+        private System.Windows.Forms.RichTextBox ctrl_PartNormValue;
+        private System.Windows.Forms.RichTextBox ctrl_PartNormRangeValue;
     }
 }

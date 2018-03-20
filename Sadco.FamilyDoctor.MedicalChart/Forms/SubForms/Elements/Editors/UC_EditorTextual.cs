@@ -17,7 +17,17 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         public UC_EditorTextual()
         {
             InitializeComponent();
+            ctrl_Default.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Dash;
             ctrl_ControlType.f_SetEnum(typeof(E_TextTypes));
+        }
+
+        private bool m_ReadOnly = true;
+        public bool p_ReadOnly {
+            get { return m_ReadOnly; }
+            set {
+                m_ReadOnly = value;
+                Enabled = m_ReadOnly;
+            }
         }
 
         public object f_ConfirmChanges()
@@ -89,8 +99,10 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             if (a_Element == null || !a_Element.f_IsText()) return;
             p_EditingElement = a_Element;
-
-            ctrl_Version.Text = p_EditingElement.p_Version.ToString();
+            if (p_EditingElement.p_Version == 0)
+                ctrl_Version.Text = "Черновик";
+            else
+                ctrl_Version.Text = p_EditingElement.p_Version.ToString();
             ctrl_ControlType.f_SetSelectedItem(p_EditingElement.p_ElementType);
 
             ctrl_Name.Text = p_EditingElement.p_Name;
@@ -129,7 +141,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             ctrl_VisibilityFormula.Text = p_EditingElement.p_VisibilityFormula;
         }
         #region CheckedChanged
-        private void ctrl_CB_IsSymmentry_CheckedChanged(object sender, EventArgs e)
+        private void ctrl_IsSymmentry_CheckedChanged(object sender, EventArgs e)
         {
             ctrl_SymmetryVals.Visible = ctrl_IsSymmentry.Checked;
         }
@@ -163,6 +175,34 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         private void ctrl_IsPartNormRange_CheckedChanged(object sender, EventArgs e)
         {
             ctrl_PartNormRangeValue.Enabled = ctrl_IsPartNormRange.Checked;
+        }
+        #endregion
+
+        #region Default
+        private void f_SetDataDefault()
+        {
+            ctrl_Default.f_Clear();
+            foreach (string val in ctrl_NormValues.Lines)
+            {
+                if (!string.IsNullOrWhiteSpace(val))
+                    ctrl_Default.f_AddString(val);
+            }
+            ctrl_Default.f_SetSeparator(ctrl_NormValues.Lines.Length);
+            foreach (string val in ctrl_PatValues.Lines)
+            {
+                if (!string.IsNullOrWhiteSpace(val))
+                    ctrl_Default.f_AddString(val);
+            }
+        }
+
+        private void ctrl_NormValues_TextChanged(object sender, EventArgs e)
+        {
+            f_SetDataDefault();
+        }
+
+        private void ctrl_PatValues_TextChanged(object sender, EventArgs e)
+        {
+            f_SetDataDefault();
         }
         #endregion
     }

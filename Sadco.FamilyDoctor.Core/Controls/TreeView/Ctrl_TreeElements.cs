@@ -15,6 +15,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
         private System.ComponentModel.IContainer components;
         private System.Windows.Forms.ToolStripMenuItem ctrl_ElementNew;
+        private System.Windows.Forms.ToolStripMenuItem ctrl_ImageNew;
         private System.Windows.Forms.ToolStripMenuItem ctrl_ElementDelete;
         public Ctrl_TreeNodeElement p_SelectedElement {
             get { return SelectedNode as Ctrl_TreeNodeElement; }
@@ -24,9 +25,10 @@ namespace Sadco.FamilyDoctor.Core.Controls
         {
             this.components = new System.ComponentModel.Container();
             this.ctrl_ElementNew = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctrl_ImageNew = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_ElementDelete = new System.Windows.Forms.ToolStripMenuItem();
             // 
-            // ctrl_MIControlNew
+            // ctrl_ElementNew
             // 
             this.ctrl_ElementNew.Name = "ctrl_ElementNew";
             this.ctrl_ElementNew.Size = new System.Drawing.Size(175, 22);
@@ -34,27 +36,37 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.ctrl_ElementNew.Text = "Добавить элемент";
             this.ctrl_ElementNew.Click += Ctrl_ElementNew_Click;
             // 
-            // ctrl_MIControlDelete
+            // ctrl_ImageNew
+            // 
+            this.ctrl_ImageNew.Name = "ctrl_ImageNew";
+            this.ctrl_ImageNew.Size = new System.Drawing.Size(175, 22);
+            this.ctrl_ImageNew.Tag = "ImageNew";
+            this.ctrl_ImageNew.Text = "Добавить рисунок";
+            this.ctrl_ImageNew.Click += Ctrl_ImageNew_Click;
+            // 
+            // ctrl_ElementDelete
             // 
             this.ctrl_ElementDelete.Name = "ctrl_ElementDelete";
             this.ctrl_ElementDelete.Size = new System.Drawing.Size(175, 22);
             this.ctrl_ElementDelete.Tag = "ElementDelete";
             this.ctrl_ElementDelete.Text = "Удалить элемент";
-            this.ctrl_ElementDelete.Click += Ctrl_ElementNew_Click;
+            this.ctrl_ElementDelete.Click += Ctrl_ElementDelete_Click;
             // 
-            // ctrl_CMTree
+            // ctrl_Tree
             // 
-            this.ImageList.Images.Add("label", Properties.Resources.label);
-            this.ImageList.Images.Add("check_box", Properties.Resources.check_box);
-            this.ImageList.Images.Add("combo_box", Properties.Resources.combo_box);
+            this.ImageList.Images.Add("FLOAT_16", Properties.Resources.FLOAT_16);
+            this.ImageList.Images.Add("LINE_16", Properties.Resources.LINE_16);
+            this.ImageList.Images.Add("BIGBOX_16", Properties.Resources.BIGBOX_16);
+            this.ImageList.Images.Add("IMAGE_16", Properties.Resources.IMAGE_16);
             this.ctrl_Tree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ctrl_ElementNew,
+            this.ctrl_ImageNew,
             this.ctrl_ElementDelete });
 
             this.ResumeLayout(false);
         }
 
-
+        protected override Cl_Group.E_Type p_Type => Cl_Group.E_Type.Elements;
 
         protected override void f_Tree_Opening(object sender, CancelEventArgs e)
         {
@@ -62,11 +74,13 @@ namespace Sadco.FamilyDoctor.Core.Controls
             if (p_SelectedElement != null)
             {
                 ctrl_ElementNew.Visible = false;
+                ctrl_ImageNew.Visible = false;
                 ctrl_ElementDelete.Visible = true;
             }
             else
             {
                 ctrl_ElementNew.Visible = true;
+                ctrl_ElementNew.Visible = false;
                 ctrl_ElementDelete.Visible = false;
             }
         }
@@ -105,7 +119,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
         private void Ctrl_ElementNew_Click(object sender, EventArgs e)
         {
             Cl_Element newElement = (Cl_Element)Activator.CreateInstance(typeof(Cl_Element));
-            Cl_GroupElements group = null;
+            Cl_Group group = null;
             if (p_SelectedGroup != null && p_SelectedGroup.p_Group != null)
             {
                 group = p_SelectedGroup.p_Group;
@@ -123,10 +137,38 @@ namespace Sadco.FamilyDoctor.Core.Controls
             newElement.p_ElementType = (Cl_Element.E_ElementsTypes)dlg.ctrl_CB_ControlType.f_GetSelectedItem();
             Cl_App.m_DataContext.p_Elements.Add(newElement);
             Cl_App.m_DataContext.SaveChanges();
+            newElement.p_ElementID = newElement.p_ID;
+            Cl_App.m_DataContext.SaveChanges();
             SelectedNode.Nodes.Add(new Ctrl_TreeNodeElement(group, newElement));
         }
 
-        private void Ctrl_ElementNewDelete_Click(object sender, EventArgs e)
+        private void Ctrl_ImageNew_Click(object sender, EventArgs e)
+        {
+            Cl_Element newElement = (Cl_Element)Activator.CreateInstance(typeof(Cl_Element));
+            Cl_Group group = null;
+            if (p_SelectedGroup != null && p_SelectedGroup.p_Group != null)
+            {
+                group = p_SelectedGroup.p_Group;
+            }
+            Dlg_EditorImage dlg = new Dlg_EditorImage();
+            dlg.Text = "Новый рисунок";
+            if (group != null)
+            {
+                newElement.p_ParentGroup = p_SelectedGroup.p_Group;
+                dlg.ctrl_LGroupValue.Text = p_SelectedGroup.p_Group.f_GetFullName();
+            }
+            if (dlg.ShowDialog() != DialogResult.OK) return;
+            newElement.p_Name = dlg.ctrl_TBName.Text;
+            newElement.p_Comment = dlg.ctrl_TBDecs.Text;
+            newElement.p_ElementType = Cl_Element.E_ElementsTypes.Image;
+            Cl_App.m_DataContext.p_Elements.Add(newElement);
+            Cl_App.m_DataContext.SaveChanges();
+            newElement.p_ElementID = newElement.p_ID;
+            Cl_App.m_DataContext.SaveChanges();
+            SelectedNode.Nodes.Add(new Ctrl_TreeNodeElement(group, newElement));
+        }
+
+        private void Ctrl_ElementDelete_Click(object sender, EventArgs e)
         {
             if (p_SelectedElement == null && p_SelectedElement.p_Element == null) return;
 
@@ -147,7 +189,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             }
             else
             {
-                throw new Exception("Не найдена элемент для шаблонов");
+                throw new Exception("Не найдена элемент");
             }
         }
     }

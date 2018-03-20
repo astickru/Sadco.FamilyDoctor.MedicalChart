@@ -48,7 +48,7 @@
             this.ctrlMIInfo});
             this.ctrlMIMenu.Location = new System.Drawing.Point(0, 0);
             this.ctrlMIMenu.Name = "ctrlMIMenu";
-            this.ctrlMIMenu.Size = new System.Drawing.Size(892, 24);
+            this.ctrlMIMenu.Size = new System.Drawing.Size(996, 24);
             this.ctrlMIMenu.TabIndex = 1;
             this.ctrlMIMenu.Text = "Menu";
             // 
@@ -114,7 +114,7 @@
             this.MainPanel.Margin = new System.Windows.Forms.Padding(0);
             this.MainPanel.Name = "MainPanel";
             this.MainPanel.Padding = new System.Windows.Forms.Padding(5, 0, 5, 5);
-            this.MainPanel.Size = new System.Drawing.Size(892, 749);
+            this.MainPanel.Size = new System.Drawing.Size(996, 749);
             this.MainPanel.TabIndex = 2;
             // 
             // ctrl_CustomControls
@@ -125,7 +125,7 @@
             this.ctrl_CustomControls.Location = new System.Drawing.Point(5, 0);
             this.ctrl_CustomControls.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_CustomControls.Name = "ctrl_CustomControls";
-            this.ctrl_CustomControls.Size = new System.Drawing.Size(882, 744);
+            this.ctrl_CustomControls.Size = new System.Drawing.Size(986, 744);
             this.ctrl_CustomControls.TabIndex = 0;
             // 
             // F_Main
@@ -133,7 +133,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(892, 773);
+            this.ClientSize = new System.Drawing.Size(996, 773);
             this.Controls.Add(this.MainPanel);
             this.Controls.Add(this.ctrlMIMenu);
             this.MinimumSize = new System.Drawing.Size(650, 350);

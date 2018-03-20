@@ -41,14 +41,14 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms
 			UI_Helper.InitTreeView(ctrl_TVControls);
 			UI_Helper.InitTreeView(ctrl_TreeElements);
 
-			Cl_GroupElements[] groups = Cl_App.m_DataContext.p_GroupsElements.Include(g => g.p_SubGroups).Where(e => e.p_ParentID == null).ToArray();
-			foreach (Cl_GroupElements group in groups) {
+            Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(e => e.p_Type == Cl_Group.E_Type.Elements && e.p_ParentID == null).ToArray();
+			foreach (Cl_Group group in groups) {
 				f_PopulateTVControls(group, ctrl_TVControls.Nodes);
 				f_PopulateTVControls(group, ctrl_TreeElements.Nodes);
 			}
 		}
 
-		private void f_PopulateTVControls(Cl_GroupElements a_Group, TreeNodeCollection a_TreeNodes) {
+		private void f_PopulateTVControls(Cl_Group a_Group, TreeNodeCollection a_TreeNodes) {
 			TreeNode node = UI_Helper.CreateNodeGroup(a_Group, a_TreeNodes);
 			// Загрузка контролов
 			//foreach (Cl_CtrlImage control in Cl_App.m_DataContext.p_Elms_Image.Include(el => el.p_BaseControl).Where(t => t.p_BaseControl.p_ParentGroupID == a_Group.p_ID)) {
@@ -60,7 +60,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms
 			var dcGroups = Cl_App.m_DataContext.Entry(a_Group).Collection(c => c.p_SubGroups);
 			if (!dcGroups.IsLoaded) dcGroups.Load();
 			// Загрузка групп
-			foreach (Cl_GroupElements group in a_Group.p_SubGroups) {
+			foreach (Cl_Group group in a_Group.p_SubGroups) {
 				f_PopulateTVControls(group, node.Nodes);
 			}
 		}

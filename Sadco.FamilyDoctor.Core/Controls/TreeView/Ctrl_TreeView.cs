@@ -83,13 +83,16 @@ namespace Sadco.FamilyDoctor.Core.Controls
             // 
             this.ContextMenuStrip = this.ctrl_Tree;
             this.ImageList = new ImageList();
-            this.ImageList.Images.Add("folder", Properties.Resources.folder);
-            this.ImageKey = "folder";
-            this.SelectedImageKey = "folder";
+            this.ImageList.Images.Add("FOLDER_16", Properties.Resources.FOLDER);
+            this.ImageKey = "FOLDER_16";
+            this.SelectedImageKey = "FOLDER_16";
             this.LineColor = System.Drawing.Color.Black;
             this.ctrl_Tree.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+
+        /// <summary>Тип группы</summary>
+        protected virtual Cl_Group.E_Type p_Type { get; }
 
         private void Ctrl_CMTree_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -146,11 +149,12 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 dlg.ctrl_LGroupValue.Text = p_SelectedGroup.p_Group.f_GetFullName();
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                Cl_GroupElements group = new Cl_GroupElements();
+                Cl_Group group = new Cl_Group();
+                group.p_Type = p_Type;
                 group.p_Name = dlg.ctrl_TBName.Text;
                 if (p_SelectedGroup.p_Group != null)
                     group.p_ParentID = p_SelectedGroup.p_Group.p_ID;
-                Cl_App.m_DataContext.p_GroupsElements.Add(group);
+                Cl_App.m_DataContext.p_Groups.Add(group);
                 Cl_App.m_DataContext.SaveChanges();
                 if (p_SelectedGroup != null)
                 {
@@ -173,7 +177,6 @@ namespace Sadco.FamilyDoctor.Core.Controls
             dlg.ctrl_TBName.Text = p_SelectedGroup.p_Group.p_Name;
             if (dlg.ShowDialog() != DialogResult.OK) return;
             p_SelectedGroup.f_SetGroupName(dlg.ctrl_TBName.Text);
-            Cl_App.m_DataContext.p_GroupsElements.Remove(p_SelectedGroup.p_Group);
             Cl_App.m_DataContext.SaveChanges();
         }
 
@@ -181,9 +184,9 @@ namespace Sadco.FamilyDoctor.Core.Controls
         private void f_DeleteGroup()
         {
             if (p_SelectedGroup == null && p_SelectedGroup.p_Group == null) return;
-            Cl_GroupElements parentGroup = p_SelectedGroup.p_Group.p_Parent;
+            Cl_Group parentGroup = p_SelectedGroup.p_Group.p_Parent;
             if (parentGroup == null) return;
-            Cl_App.m_DataContext.p_GroupsElements.Remove(p_SelectedGroup.p_Group);
+            p_SelectedGroup.p_Group.p_IsArhive = true;
             Cl_App.m_DataContext.SaveChanges();
             SelectedNode.Remove();
         }
@@ -259,7 +262,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 {
                     if (e.Effect == DragDropEffects.Move)
                     {
-                        Cl_GroupElements groupDragged = Cl_App.m_DataContext.p_GroupsElements.FirstOrDefault(g => g.p_ID == draggedNodeGroup.p_Group.p_ID);
+                        Cl_Group groupDragged = Cl_App.m_DataContext.p_Groups.FirstOrDefault(g => g.p_ID == draggedNodeGroup.p_Group.p_ID);
                         if (groupDragged != null)
                         {
                             if (targetNodeGroup == null)

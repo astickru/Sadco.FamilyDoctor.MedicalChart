@@ -56,6 +56,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.AccessibleName = "";
+            this.splitContainer1.Panel2.AutoScroll = true;
             this.splitContainer1.Panel2.Controls.Add(this.ctrl_P_ElementProperty);
             this.splitContainer1.Size = new System.Drawing.Size(328, 191);
             this.splitContainer1.SplitterDistance = 104;
@@ -63,6 +64,8 @@
             // 
             // ctrl_TreeElements
             // 
+            this.ctrl_TreeElements.AllowDrop = true;
+            this.ctrl_TreeElements.BackColor = System.Drawing.SystemColors.Window;
             this.ctrl_TreeElements.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ctrl_TreeElements.ImageKey = "folder";
             this.ctrl_TreeElements.Location = new System.Drawing.Point(0, 0);
@@ -73,7 +76,6 @@
             // 
             // ctrl_P_ElementProperty
             // 
-            this.ctrl_P_ElementProperty.AutoScroll = true;
             this.ctrl_P_ElementProperty.AutoSize = true;
             this.ctrl_P_ElementProperty.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ctrl_P_ElementProperty.Location = new System.Drawing.Point(0, 0);

@@ -27,7 +27,6 @@
 		private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.ctrl_TVTemplates = new System.Windows.Forms.TreeView();
             this.ctrl_CMTemplate = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctrl_MIGroupNew = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_MIGroupEdit = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,6 +38,7 @@
             this.ctrl_LVTemplates = new System.Windows.Forms.ListView();
             this.chName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chDesc = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.ctrl_TreeTemplates = new Sadco.FamilyDoctor.Core.Controls.Ctrl_TreeTemplates();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -55,7 +55,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.ctrl_TVTemplates);
+            this.splitContainer1.Panel1.Controls.Add(this.ctrl_TreeTemplates);
             // 
             // splitContainer1.Panel2
             // 
@@ -63,22 +63,6 @@
             this.splitContainer1.Size = new System.Drawing.Size(692, 329);
             this.splitContainer1.SplitterDistance = 207;
             this.splitContainer1.TabIndex = 2;
-            // 
-            // ctrl_TVTemplates
-            // 
-            this.ctrl_TVTemplates.AllowDrop = true;
-            this.ctrl_TVTemplates.ContextMenuStrip = this.ctrl_CMTemplate;
-            this.ctrl_TVTemplates.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ctrl_TVTemplates.Location = new System.Drawing.Point(0, 0);
-            this.ctrl_TVTemplates.Margin = new System.Windows.Forms.Padding(3, 2, 3, 3);
-            this.ctrl_TVTemplates.Name = "ctrl_TVTemplates";
-            this.ctrl_TVTemplates.Size = new System.Drawing.Size(207, 329);
-            this.ctrl_TVTemplates.TabIndex = 3;
-            this.ctrl_TVTemplates.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.ctrl_TVTemplates_ItemDrag);
-            this.ctrl_TVTemplates.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ctrl_TVTemplates_AfterSelect);
-            this.ctrl_TVTemplates.DragDrop += new System.Windows.Forms.DragEventHandler(this.ctrl_TVTemplates_DragDrop);
-            this.ctrl_TVTemplates.DragEnter += new System.Windows.Forms.DragEventHandler(this.ctrl_TVTemplates_DragEnter);
-            this.ctrl_TVTemplates.DragOver += new System.Windows.Forms.DragEventHandler(this.ctrl_TVTemplates_DragOver);
             // 
             // ctrl_CMTemplate
             // 
@@ -91,7 +75,6 @@
             this.ctrl_MITemplateDelete});
             this.ctrl_CMTemplate.Name = "ctrl_CMTemplate";
             this.ctrl_CMTemplate.Size = new System.Drawing.Size(177, 136);
-            this.ctrl_CMTemplate.Opening += new System.ComponentModel.CancelEventHandler(this.Ctrl_CMTemplate_Opening);
             // 
             // ctrl_MIGroupNew
             // 
@@ -99,7 +82,6 @@
             this.ctrl_MIGroupNew.Size = new System.Drawing.Size(176, 22);
             this.ctrl_MIGroupNew.Tag = "MI_GroupNew";
             this.ctrl_MIGroupNew.Text = "Добавить группу";
-            this.ctrl_MIGroupNew.Click += new System.EventHandler(this.ctrl_MITemplates_Click);
             // 
             // ctrl_MIGroupEdit
             // 
@@ -107,7 +89,6 @@
             this.ctrl_MIGroupEdit.Size = new System.Drawing.Size(176, 22);
             this.ctrl_MIGroupEdit.Tag = "MI_GroupEdit";
             this.ctrl_MIGroupEdit.Text = "Изменить группу";
-            this.ctrl_MIGroupEdit.Click += new System.EventHandler(this.ctrl_MITemplates_Click);
             // 
             // ctrl_MIGroupDelete
             // 
@@ -115,7 +96,6 @@
             this.ctrl_MIGroupDelete.Size = new System.Drawing.Size(176, 22);
             this.ctrl_MIGroupDelete.Tag = "MI_GroupDelete";
             this.ctrl_MIGroupDelete.Text = "Удалить группу";
-            this.ctrl_MIGroupDelete.Click += new System.EventHandler(this.ctrl_MITemplates_Click);
             // 
             // ctrl_MITemplateNew
             // 
@@ -123,7 +103,6 @@
             this.ctrl_MITemplateNew.Size = new System.Drawing.Size(176, 22);
             this.ctrl_MITemplateNew.Tag = "MI_TemplateNew";
             this.ctrl_MITemplateNew.Text = "Добавить шаблон";
-            this.ctrl_MITemplateNew.Click += new System.EventHandler(this.ctrl_MITemplates_Click);
             // 
             // ctrl_MITemplateEdit
             // 
@@ -131,7 +110,6 @@
             this.ctrl_MITemplateEdit.Size = new System.Drawing.Size(176, 22);
             this.ctrl_MITemplateEdit.Tag = "MI_TemplateEdit";
             this.ctrl_MITemplateEdit.Text = "Изменить шаблон";
-            this.ctrl_MITemplateEdit.Click += new System.EventHandler(this.ctrl_MITemplates_Click);
             // 
             // ctrl_MITemplateDelete
             // 
@@ -139,7 +117,6 @@
             this.ctrl_MITemplateDelete.Size = new System.Drawing.Size(176, 22);
             this.ctrl_MITemplateDelete.Tag = "MI_TemplateDelete";
             this.ctrl_MITemplateDelete.Text = "Удалить шаблон";
-            this.ctrl_MITemplateDelete.Click += new System.EventHandler(this.ctrl_MITemplates_Click);
             // 
             // P_
             // 
@@ -177,6 +154,17 @@
             this.chDesc.Text = "Описание";
             this.chDesc.Width = 210;
             // 
+            // ctrl_TreeTemplates
+            // 
+            this.ctrl_TreeTemplates.AllowDrop = true;
+            this.ctrl_TreeTemplates.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ctrl_TreeTemplates.ImageKey = "FOLDER_16";
+            this.ctrl_TreeTemplates.Location = new System.Drawing.Point(0, 0);
+            this.ctrl_TreeTemplates.Name = "ctrl_TreeTemplates";
+            this.ctrl_TreeTemplates.SelectedImageKey = "FOLDER_16";
+            this.ctrl_TreeTemplates.Size = new System.Drawing.Size(207, 329);
+            this.ctrl_TreeTemplates.TabIndex = 0;
+            // 
             // UC_EditorTemplates
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -198,7 +186,6 @@
 		#endregion
 
 		private System.Windows.Forms.SplitContainer splitContainer1;
-		private System.Windows.Forms.TreeView ctrl_TVTemplates;
 		private System.Windows.Forms.ContextMenuStrip ctrl_CMTemplate;
 		private System.Windows.Forms.ToolStripMenuItem ctrl_MIGroupNew;
 		private System.Windows.Forms.ToolStripMenuItem ctrl_MIGroupDelete;
@@ -210,5 +197,6 @@
 		private System.Windows.Forms.ColumnHeader chDesc;
 		private System.Windows.Forms.ToolStripMenuItem ctrl_MIGroupEdit;
 		private System.Windows.Forms.ToolStripMenuItem ctrl_MITemplateEdit;
-	}
+        private Core.Controls.Ctrl_TreeTemplates ctrl_TreeTemplates;
+    }
 }

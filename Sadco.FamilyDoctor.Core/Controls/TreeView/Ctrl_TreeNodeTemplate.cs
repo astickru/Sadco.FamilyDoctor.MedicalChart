@@ -6,14 +6,14 @@ namespace Sadco.FamilyDoctor.Core.Controls
 {
     public class Ctrl_TreeNodeTemplate : TreeNode
     {
-        public Ctrl_TreeNodeTemplate(Cl_GroupElements a_Group, Cl_Template a_Template)
+        public Ctrl_TreeNodeTemplate(Cl_Group a_Group, Cl_Template a_Template)
         {
             p_Group = a_Group;
             p_Template = a_Template;
             ForeColor = Color.Blue;
         }
 
-        public Cl_GroupElements p_Group { get; private set; }
+        public Cl_Group p_Group { get; private set; }
         public Cl_Template m_Template = null;
         public Cl_Template p_Template {
             get {

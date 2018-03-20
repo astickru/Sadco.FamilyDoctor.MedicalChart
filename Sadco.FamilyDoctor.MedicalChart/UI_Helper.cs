@@ -46,7 +46,7 @@ namespace Sadco.FamilyDoctor.MedicalChart
         /// <param name="group">Объект создаваемой группы</param>
         /// <param name="nodes">Колекция, в которую помещается новый элемент</param>
         /// <returns></returns>
-        public static TreeNode CreateNodeGroup(I_Group group, TreeNodeCollection nodes)
+        public static TreeNode CreateNodeGroup(Cl_Group group, TreeNodeCollection nodes)
         {
             return nodes.Add(group.p_ID.ToString(), group.p_Name);
         }

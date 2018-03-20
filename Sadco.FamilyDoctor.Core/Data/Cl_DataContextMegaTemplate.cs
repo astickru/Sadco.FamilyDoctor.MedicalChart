@@ -18,10 +18,8 @@ namespace Sadco.FamilyDoctor.Core.Data
         }
 
         public DbSet<Cl_Group> p_Groups { get; set; }
-        //public DbSet<Cl_GroupTemplate> p_GroupsTemplate { get; set; }
         public DbSet<Cl_Template> p_Templates { get; set; }
         public DbSet<Cl_TemplatesElements> p_TemplatesElements { get; set; }
-        //public DbSet<Cl_GroupElements> p_GroupsElements { get; set; }
         public DbSet<Cl_ElementsParams> p_ElementsParams { get; set; }
         public DbSet<Cl_Element> p_Elements { get; set; }
 
@@ -33,9 +31,9 @@ namespace Sadco.FamilyDoctor.Core.Data
 
         public void f_Init()
         {
-            p_GroupsTemplate.Load();
-            if (!p_GroupsTemplate.Any()) p_GroupsTemplate.Add(new Cl_GroupTemplate() { p_Name = "Root" });
-            if (!p_GroupsElements.Any()) p_GroupsElements.Add(new Cl_GroupElements() { p_Name = "Root" });
+            p_Groups.Load();
+            if (!p_Groups.Any(g => g.p_Type == Cl_Group.E_Type.Templates)) p_Groups.Add(new Cl_Group() { p_Type = Cl_Group.E_Type.Templates, p_Name = "Root" });
+            if (!p_Groups.Any(g => g.p_Type == Cl_Group.E_Type.Elements)) p_Groups.Add(new Cl_Group() { p_Type = Cl_Group.E_Type.Elements, p_Name = "Root" });
 
             m_GetAvailableControls = new Dictionary<string, Type>();
             Type type = typeof(Cl_Element);

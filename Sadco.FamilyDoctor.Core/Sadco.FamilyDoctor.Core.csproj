@@ -68,12 +68,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cl_App.cs" />
+    <Compile Include="Controls\Ctrl_SeparatorCombobox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\TreeView\Ctrl_TreeNodeTemplate.cs" />
     <Compile Include="Controls\TreeView\Ctrl_TreeElements.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\TreeView\Ctrl_TreeNodeElement.cs" />
     <Compile Include="Controls\TreeView\Ctrl_TreeNodeGroup.cs" />
+    <Compile Include="Controls\TreeView\Ctrl_TreeTemplates.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\TreeView\Ctrl_TreeView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -93,6 +99,12 @@
     <Compile Include="Controls\DesignerPanel\Cl_NameCreationService.cs" />
     <Compile Include="Controls\DesignerPanel\Ctrl_ToolboxService.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\TreeView\Dlg_EditorImage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\TreeView\Dlg_EditorImage.Designer.cs">
+      <DependentUpon>Dlg_EditorImage.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\TreeView\Dlg_EditorTemplate.cs">
       <SubType>Form</SubType>
@@ -118,12 +130,11 @@
     <Compile Include="Entities\Cl_Template.cs" />
     <Compile Include="Data\Cl_DataContextMegaTemplate.cs" />
     <Compile Include="Entities\Cl_Element.cs" />
-    <Compile Include="Controls\I_Group.cs" />
     <Compile Include="Entities\I_Archive.cs" />
     <Compile Include="Entities\I_Version.cs" />
-    <Compile Include="Migrations\201803191302142_appInit.cs" />
-    <Compile Include="Migrations\201803191302142_appInit.Designer.cs">
-      <DependentUpon>201803191302142_appInit.cs</DependentUpon>
+    <Compile Include="Migrations\201803191601236_appInit.cs" />
+    <Compile Include="Migrations\201803191601236_appInit.Designer.cs">
+      <DependentUpon>201803191601236_appInit.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -157,8 +168,14 @@
     <EmbeddedResource Include="Controls\Ctrl_DesignerPanel.resx">
       <DependentUpon>Ctrl_DesignerPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Ctrl_SeparatorCombobox.resx">
+      <DependentUpon>Ctrl_SeparatorCombobox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\TreeView\Ctrl_TreeView.resx">
       <DependentUpon>Ctrl_TreeView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TreeView\Dlg_EditorImage.resx">
+      <DependentUpon>Dlg_EditorImage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\TreeView\Dlg_EditorTemplate.resx">
       <DependentUpon>Dlg_EditorTemplate.cs</DependentUpon>
@@ -169,8 +186,8 @@
     <EmbeddedResource Include="Controls\TreeView\Dlg_EditorGroup.resx">
       <DependentUpon>Dlg_EditorGroup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803191302142_appInit.resx">
-      <DependentUpon>201803191302142_appInit.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201803191601236_appInit.resx">
+      <DependentUpon>201803191601236_appInit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -193,6 +210,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Data\manual.txt" />
+    <None Include="Resources\AlignJustify_16x16.png" />
+    <None Include="Resources\AlignJustify_32x32.png" />
+    <None Include="Resources\ListBullets_16x16.png" />
+    <None Include="Resources\ListBullets_32x32.png" />
+    <None Include="Resources\Image_16x16.png" />
+    <None Include="Resources\Image_32x32.png" />
+    <None Include="Resources\Edit_16x16.png" />
+    <None Include="Resources\Edit_32x32.png" />
     <None Include="Resources\folder.png" />
     <None Include="Resources\check_box.png" />
     <None Include="Resources\image.png" />

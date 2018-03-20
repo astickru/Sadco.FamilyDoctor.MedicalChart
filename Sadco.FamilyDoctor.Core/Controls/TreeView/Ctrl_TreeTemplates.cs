@@ -58,9 +58,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             // 
             // ctrl_Tree
             // 
-            this.ImageList.Images.Add("label", Properties.Resources.label);
-            this.ImageList.Images.Add("check_box", Properties.Resources.check_box);
-            this.ImageList.Images.Add("combo_box", Properties.Resources.combo_box);
+            this.ImageList.Images.Add("TEMPLATE_16", Properties.Resources.TEMPLATE_16);
             this.ctrl_Tree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ctrl_TemplateNew,
             this.ctrl_TemplateEdit,
@@ -69,22 +67,22 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.ResumeLayout(false);
         }
 
-
+        protected override Cl_Group.E_Type p_Type => Cl_Group.E_Type.Templates;
 
         protected override void f_Tree_Opening(object sender, CancelEventArgs e)
         {
             base.f_Tree_Opening(sender, e);
             if (p_SelectedGroup != null)
             {
-                ctrl_TemplateNew.Visible = false;
-                ctrl_TemplateEdit.Visible = true;
-                ctrl_TemplateDelete.Visible = true;
-            }
-            else
-            {
                 ctrl_TemplateNew.Visible = true;
                 ctrl_TemplateEdit.Visible = false;
                 ctrl_TemplateDelete.Visible = false;
+            }
+            else if (p_SelectedTemplate != null)
+            {
+                ctrl_TemplateNew.Visible = false;
+                ctrl_TemplateEdit.Visible = true;
+                ctrl_TemplateDelete.Visible = true;
             }
         }
 
@@ -122,7 +120,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
         private void ctrl_TemplateNew_Click(object sender, EventArgs e)
         {
             Cl_Template newTemplate = (Cl_Template)Activator.CreateInstance(typeof(Cl_Template));
-            Cl_GroupElements group = null;
+            Cl_Group group = null;
             if (p_SelectedGroup != null && p_SelectedGroup.p_Group != null)
             {
                 group = p_SelectedGroup.p_Group;
@@ -138,6 +136,8 @@ namespace Sadco.FamilyDoctor.Core.Controls
             newTemplate.p_Name = dlg.ctrl_TBName.Text;
             Cl_App.m_DataContext.p_Templates.Add(newTemplate);
             Cl_App.m_DataContext.SaveChanges();
+            newTemplate.p_TemplateID = newTemplate.p_TemplateID;
+            Cl_App.m_DataContext.SaveChanges();
             SelectedNode.Nodes.Add(new Ctrl_TreeNodeTemplate(group, newTemplate));
         }
 
@@ -148,9 +148,9 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
         private void ctrl_TemplateDelete_Click(object sender, EventArgs e)
         {
-            if (p_SelectedGroup == null && p_SelectedGroup.p_Group == null) return;
+            if (p_SelectedTemplate == null && p_SelectedTemplate.p_Template == null) return;
 
-            var els = Cl_App.m_DataContext.p_Templates.Where(el => el.p_TemplateID == p_SelectedGroup.p_Element.p_ElementID);
+            var els = Cl_App.m_DataContext.p_Templates.Where(el => el.p_TemplateID == p_SelectedTemplate.p_Template.p_TemplateID);
             if (els != null)
             {
                 bool isChange = false;

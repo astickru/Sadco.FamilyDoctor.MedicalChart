@@ -150,11 +150,11 @@
     <Compile Include="Forms\SubForms\Elements\UC_EditorElements.Designer.cs">
       <DependentUpon>UC_EditorElements.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SubForms\Templates\UC_Templates.cs">
+    <Compile Include="Forms\SubForms\Templates\UC_EditorTemplates.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\SubForms\Templates\UC_Templates.Designer.cs">
-      <DependentUpon>UC_Templates.cs</DependentUpon>
+    <Compile Include="Forms\SubForms\Templates\UC_EditorTemplates.Designer.cs">
+      <DependentUpon>UC_EditorTemplates.cs</DependentUpon>
     </Compile>
     <Compile Include="UI_Helper.cs" />
     <Compile Include="UI_PanelManager.cs" />
@@ -195,8 +195,8 @@
     <EmbeddedResource Include="Forms\SubForms\Elements\UC_EditorElements.resx">
       <DependentUpon>UC_EditorElements.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SubForms\Templates\UC_Templates.resx">
-      <DependentUpon>UC_Templates.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\SubForms\Templates\UC_EditorTemplates.resx">
+      <DependentUpon>UC_EditorTemplates.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config" />
   </ItemGroup>

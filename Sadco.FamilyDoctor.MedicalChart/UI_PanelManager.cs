@@ -8,6 +8,7 @@ namespace Sadco.FamilyDoctor.MedicalChart
     {
         object f_ConfirmChanges();
         void f_SetElement(Cl_Element a_Element);
+        bool p_ReadOnly { get; set; }
     }
 
     public class UI_PanelManager

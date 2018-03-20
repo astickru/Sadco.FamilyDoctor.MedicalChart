@@ -47,7 +47,7 @@ namespace Sadco.FamilyDoctor.Core.Migrations
                         F_ISARHIVE = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.F_ID)
-                .ForeignKey("dbo.T_GROUPS_ELEMENTS", t => t.F_GROUP_ID, cascadeDelete: true)
+                .ForeignKey("dbo.T_GROUPS", t => t.F_GROUP_ID, cascadeDelete: true)
                 .Index(t => t.F_GROUP_ID);
             
             CreateTable(
@@ -73,29 +73,17 @@ namespace Sadco.FamilyDoctor.Core.Migrations
                 .Index(t => t.Cl_Element_p_ID2);
             
             CreateTable(
-                "dbo.T_GROUPS_ELEMENTS",
+                "dbo.T_GROUPS",
                 c => new
                     {
                         F_ID = c.Int(nullable: false, identity: true),
+                        F_TYPE = c.Byte(nullable: false),
                         F_NAME = c.String(maxLength: 100, unicode: false),
                         F_PARENT_ID = c.Int(),
                         F_ISARHIVE = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.F_ID)
-                .ForeignKey("dbo.T_GROUPS_ELEMENTS", t => t.F_PARENT_ID)
-                .Index(t => t.F_PARENT_ID);
-            
-            CreateTable(
-                "dbo.T_GROUPS_TEMPLATES",
-                c => new
-                    {
-                        F_ID = c.Int(nullable: false, identity: true),
-                        F_NAME = c.String(maxLength: 100, unicode: false),
-                        F_PARENT_ID = c.Int(),
-                        F_ISARHIVE = c.Boolean(nullable: false),
-                    })
-                .PrimaryKey(t => t.F_ID)
-                .ForeignKey("dbo.T_GROUPS_TEMPLATES", t => t.F_PARENT_ID)
+                .ForeignKey("dbo.T_GROUPS", t => t.F_PARENT_ID)
                 .Index(t => t.F_PARENT_ID);
             
             CreateTable(
@@ -111,7 +99,7 @@ namespace Sadco.FamilyDoctor.Core.Migrations
                         F_ISARHIVE = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.F_ID)
-                .ForeignKey("dbo.T_GROUPS_TEMPLATES", t => t.F_GROUP_ID, cascadeDelete: true)
+                .ForeignKey("dbo.T_GROUPS", t => t.F_GROUP_ID, cascadeDelete: true)
                 .Index(t => t.F_GROUP_ID);
             
             CreateTable(
@@ -138,21 +126,19 @@ namespace Sadco.FamilyDoctor.Core.Migrations
         
         public override void Down()
         {
-            DropForeignKey("dbo.T_GROUPS_TEMPLATES", "F_PARENT_ID", "dbo.T_GROUPS_TEMPLATES");
             DropForeignKey("dbo.T_TEMPLATESELEMENTS", "F_TEMPLATE_ID", "dbo.T_TEMPLATES");
             DropForeignKey("dbo.T_TEMPLATESELEMENTS", "p_Element_p_ID", "dbo.T_ELEMENTS");
-            DropForeignKey("dbo.T_TEMPLATES", "F_GROUP_ID", "dbo.T_GROUPS_TEMPLATES");
+            DropForeignKey("dbo.T_TEMPLATES", "F_GROUP_ID", "dbo.T_GROUPS");
             DropForeignKey("dbo.T_ELEMENTSPRMS", "Cl_Element_p_ID2", "dbo.T_ELEMENTS");
             DropForeignKey("dbo.T_ELEMENTSPRMS", "Cl_Element_p_ID1", "dbo.T_ELEMENTS");
-            DropForeignKey("dbo.T_ELEMENTS", "F_GROUP_ID", "dbo.T_GROUPS_ELEMENTS");
-            DropForeignKey("dbo.T_GROUPS_ELEMENTS", "F_PARENT_ID", "dbo.T_GROUPS_ELEMENTS");
+            DropForeignKey("dbo.T_ELEMENTS", "F_GROUP_ID", "dbo.T_GROUPS");
+            DropForeignKey("dbo.T_GROUPS", "F_PARENT_ID", "dbo.T_GROUPS");
             DropForeignKey("dbo.T_ELEMENTSPRMS", "Cl_Element_p_ID", "dbo.T_ELEMENTS");
             DropForeignKey("dbo.T_ELEMENTSPRMS", "F_ELEMENT_ID", "dbo.T_ELEMENTS");
             DropIndex("dbo.T_TEMPLATESELEMENTS", new[] { "p_Element_p_ID" });
             DropIndex("dbo.T_TEMPLATESELEMENTS", new[] { "F_TEMPLATE_ID" });
             DropIndex("dbo.T_TEMPLATES", new[] { "F_GROUP_ID" });
-            DropIndex("dbo.T_GROUPS_TEMPLATES", new[] { "F_PARENT_ID" });
-            DropIndex("dbo.T_GROUPS_ELEMENTS", new[] { "F_PARENT_ID" });
+            DropIndex("dbo.T_GROUPS", new[] { "F_PARENT_ID" });
             DropIndex("dbo.T_ELEMENTSPRMS", new[] { "Cl_Element_p_ID2" });
             DropIndex("dbo.T_ELEMENTSPRMS", new[] { "Cl_Element_p_ID1" });
             DropIndex("dbo.T_ELEMENTSPRMS", new[] { "Cl_Element_p_ID" });
@@ -160,8 +146,7 @@ namespace Sadco.FamilyDoctor.Core.Migrations
             DropIndex("dbo.T_ELEMENTS", new[] { "F_GROUP_ID" });
             DropTable("dbo.T_TEMPLATESELEMENTS");
             DropTable("dbo.T_TEMPLATES");
-            DropTable("dbo.T_GROUPS_TEMPLATES");
-            DropTable("dbo.T_GROUPS_ELEMENTS");
+            DropTable("dbo.T_GROUPS");
             DropTable("dbo.T_ELEMENTSPRMS");
             DropTable("dbo.T_ELEMENTS");
         }

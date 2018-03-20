@@ -25,7 +25,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [ForeignKey("p_ParentGroup")]
         public int p_ParentGroupID { get; set; }
         /// <summary>Группа шаблонов</summary>
-        public Cl_GroupTemplate p_ParentGroup { get; set; }
+        public Cl_Group p_ParentGroup { get; set; }
 
         /// <summary>Системное имя шаблона</summary>
         [Column("F_NAME", TypeName ="varchar")]
@@ -50,20 +50,6 @@ namespace Sadco.FamilyDoctor.Core.Entities
         public bool p_IsArhive { get; set; }
 
         /// <summary>Системное наименование иконки</summary>
-        public string p_IconName { get { return "template"; } }
-
-        public Bitmap p_Icon {
-            get {
-                try
-                {
-                    object obj = Properties.Resources.ResourceManager.GetObject(p_IconName);
-                    return ((Bitmap)obj);
-                }
-                catch
-                {
-                    return null;
-                }
-            }
-        }
+        public string p_IconName { get { return "TEMPLATE_16"; } }
     }
 }

@@ -76,20 +76,24 @@ namespace Sadco.FamilyDoctor.Core.Entities
                 switch (m_Types)
                 {
                     case E_ElementsTypes.Float:
-                        p_IconName = "label";
+                        p_IconName = "FLOAT_16";
                         p_IsMulti = false;
                         break;
                     case E_ElementsTypes.Line:
-                        p_IconName = "check_box";
+                        p_IconName = "LINE_16";
                         p_IsMulti = false;
                         break;
                     case E_ElementsTypes.Bigbox:
-                        p_IconName = "combo_box";
+                        p_IconName = "BIGBOX_16";
                         p_IsMulti = true;
+                        break;
+                    case E_ElementsTypes.Image:
+                        p_IconName = "IMAGE_16";
+                        p_IsMulti = false;
                         break;
                     default:
                         p_ElementType = E_ElementsTypes.Float;
-                        p_IconName = "label";
+                        p_IconName = "FLOAT_16";
                         p_IsMulti = false;
                         break;
                 }
@@ -264,7 +268,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [ForeignKey("p_ParentGroup")]
         public int p_ParentGroupID { get; set; }
         /// <summary>Группа элементов</summary>
-        public Cl_GroupElements p_ParentGroup { get; set; }
+        public Cl_Group p_ParentGroup { get; set; }
 
         /// <summary>Флаг нахождения элемента в архиве</summary>
         [Column("F_ISARHIVE")]
