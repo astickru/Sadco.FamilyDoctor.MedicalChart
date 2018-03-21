@@ -94,6 +94,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Controls\Cl_CtrlTemplateNode.cs" />
+    <Compile Include="Forms\SubForms\Elements\Editors\F_EditorСondition.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SubForms\Elements\Editors\F_EditorСondition.designer.cs">
+      <DependentUpon>F_EditorСondition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SubForms\Elements\Editors\F_EditorFormula.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SubForms\Elements\Editors\F_EditorFormula.designer.cs">
+      <DependentUpon>F_EditorFormula.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SubForms\Elements\Editors\UC_ElementsPropertyPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -166,6 +178,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MegaTemplate\F_Template.resx">
       <DependentUpon>F_Template.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SubForms\Elements\Editors\F_EditorСondition.resx">
+      <DependentUpon>F_EditorСondition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SubForms\Elements\Editors\F_EditorFormula.resx">
+      <DependentUpon>F_EditorFormula.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SubForms\Elements\Editors\UC_EditorImage.resx">
       <DependentUpon>UC_EditorImage.cs</DependentUpon>

@@ -1,6 +1,7 @@
 ﻿using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.MedicalChart.Forms.SubForms;
 using System;
+using System.Configuration;
 using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.MedicalChart
@@ -10,7 +11,8 @@ namespace Sadco.FamilyDoctor.MedicalChart
 		private UI_PanelManager p_PanelManager = null;
 
 		public F_Main() {
-			Cl_App.Initialize();
+            Tag = string.Format("Мегашаблон v{0}", ConfigurationManager.AppSettings["Version"]);
+            Cl_App.Initialize();
 			InitializeComponent();
 			p_PanelManager = new UI_PanelManager(ctrl_CustomControls);
 			setControl<UC_EditorTemplates>();

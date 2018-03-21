@@ -2,6 +2,7 @@
 using Sadco.FamilyDoctor.Core.Controls;
 using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Elements.Editors;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
@@ -11,12 +12,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
     public partial class UC_EditorElements : UserControl
     {
-        public const string m_WinTitle = "Редактор элементов v0.6";
         private UI_PanelManager m_PanelManager = null;
 
         public UC_EditorElements()
         {
-            Tag = m_WinTitle;
+            Tag = string.Format("Редактор элементов v{0}", ConfigurationManager.AppSettings["Version"]);
             InitializeComponent();
             f_InitTreeView();
             m_PanelManager = new UI_PanelManager(ctrl_P_ElementProperty);

@@ -1,9 +1,9 @@
 ﻿using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Entities;
-using Sadco.FamilyDoctor.MedicalChart.Entities.Controls;
 using Sadco.FamilyDoctor.MedicalChart.Forms.SubForms;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.MedicalChart.Forms
 {
-	public partial class F_LocationEditor : Form
+    public partial class F_LocationEditor : Form
 	{
 		private UC_TemplateDesigner templateDesigner = null;
 
@@ -20,7 +20,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms
 		private List<Cl_TemplatesElements> m_newTemplateControls = new List<Cl_TemplatesElements>();
 
 		public F_LocationEditor() {
-			InitializeComponent();
+            Tag = string.Format("Дизайнер шаблона v{0}", ConfigurationManager.AppSettings["Version"]);
+            InitializeComponent();
 			f_InitTVControls();
 
 			this.Load += F_LocationEditor_Load;

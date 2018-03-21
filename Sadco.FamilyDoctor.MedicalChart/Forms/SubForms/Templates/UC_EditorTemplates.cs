@@ -1,33 +1,19 @@
 ﻿using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Controls;
 using Sadco.FamilyDoctor.Core.Entities;
-using Sadco.FamilyDoctor.MedicalChart.Entities.Controls;
-using Sadco.FamilyDoctor.MedicalChart.Forms.MegaTemplate;
-using System;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
-	public partial class UC_EditorTemplates : UserControl
+    public partial class UC_EditorTemplates : UserControl
 	{
-		public const string m_WinTitle = "Редактор шаблонов v0.3";
-
-		//private Cl_CtrlTemplateNode m_CurrentControl = null;
-
-		//private enum Em_NodeTypes
-		//{
-		//	Nothing,
-		//	Group,
-		//	Template
-		//}
-
 		public UC_EditorTemplates() {
-			Tag = m_WinTitle;
-			InitializeComponent();
+            Tag = string.Format("Редактор шаблонов v{0}", ConfigurationManager.AppSettings["Version"]);
+            InitializeComponent();
 			f_InitTreeView();
 		}
 

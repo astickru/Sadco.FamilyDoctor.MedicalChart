@@ -209,5 +209,27 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             f_SetDataDefault();
         }
         #endregion
+
+        private void ctrlBEditFormula_Click(object sender, EventArgs e)
+        {
+            F_EditorFormula fEditor = new F_EditorFormula();
+            fEditor.Text = string.Format("Редактор формулы числового элемента \"{0}\"", p_EditingElement.p_Name);
+            fEditor.f_SetFormula(ctrl_NumberFormula.Text);
+            if (fEditor.ShowDialog(this) == DialogResult.OK)
+            {
+                ctrl_NumberFormula.Text = fEditor.f_GetFormula();
+            }
+        }
+
+        private void ctrlBEditHideFormula_Click(object sender, EventArgs e)
+        {
+            F_EditorСondition fEditor = new F_EditorСondition();
+            fEditor.Text = string.Format("Редактор формулы видимости элемента \"{0}\"", p_EditingElement.p_Name);
+            fEditor.f_SetFormula(ctrl_VisibilityFormula.Text);
+            if (fEditor.ShowDialog(this) == DialogResult.OK)
+            {
+                ctrl_VisibilityFormula.Text = fEditor.f_GetFormula();
+            }
+        }
     }
 }

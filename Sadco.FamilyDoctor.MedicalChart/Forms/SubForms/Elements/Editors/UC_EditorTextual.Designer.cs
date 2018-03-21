@@ -34,6 +34,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.ctrl_Number = new System.Windows.Forms.Panel();
             this.ctrl_NumberParams = new System.Windows.Forms.Panel();
+            this.ctrlBEditFormula = new System.Windows.Forms.Button();
             this.ctrl_NumberRound = new System.Windows.Forms.NumericUpDown();
             this.ctrl_NumberFormula = new System.Windows.Forms.RichTextBox();
             this.label12 = new System.Windows.Forms.Label();
@@ -81,6 +82,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.ctrl_Hint = new System.Windows.Forms.TextBox();
             this.ctrl_TypeDescription = new System.Windows.Forms.Label();
+            this.ctrlBEditHideFormula = new System.Windows.Forms.Button();
             this.ctrl_ControlsConteiner.SuspendLayout();
             this.SelectTypePanel.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -100,7 +102,7 @@
             this.ctrl_ControlsConteiner.Dock = System.Windows.Forms.DockStyle.Top;
             this.ctrl_ControlsConteiner.Location = new System.Drawing.Point(0, 0);
             this.ctrl_ControlsConteiner.Name = "ctrl_ControlsConteiner";
-            this.ctrl_ControlsConteiner.Size = new System.Drawing.Size(658, 862);
+            this.ctrl_ControlsConteiner.Size = new System.Drawing.Size(658, 832);
             this.ctrl_ControlsConteiner.TabIndex = 22;
             // 
             // SelectTypePanel
@@ -113,7 +115,7 @@
             this.SelectTypePanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.SelectTypePanel.Location = new System.Drawing.Point(0, 0);
             this.SelectTypePanel.Name = "SelectTypePanel";
-            this.SelectTypePanel.Size = new System.Drawing.Size(658, 862);
+            this.SelectTypePanel.Size = new System.Drawing.Size(658, 832);
             this.SelectTypePanel.TabIndex = 24;
             // 
             // panel2
@@ -124,9 +126,9 @@
             this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.label9);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(0, 768);
+            this.panel2.Location = new System.Drawing.Point(0, 755);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(658, 94);
+            this.panel2.Size = new System.Drawing.Size(658, 77);
             this.panel2.TabIndex = 81;
             // 
             // ctrl_Default
@@ -147,7 +149,7 @@
             // 
             this.ctrl_Note.Location = new System.Drawing.Point(140, 25);
             this.ctrl_Note.Name = "ctrl_Note";
-            this.ctrl_Note.Size = new System.Drawing.Size(437, 66);
+            this.ctrl_Note.Size = new System.Drawing.Size(506, 49);
             this.ctrl_Note.TabIndex = 78;
             this.ctrl_Note.Text = "";
             // 
@@ -179,11 +181,12 @@
             this.ctrl_Number.Dock = System.Windows.Forms.DockStyle.Top;
             this.ctrl_Number.Location = new System.Drawing.Point(0, 663);
             this.ctrl_Number.Name = "ctrl_Number";
-            this.ctrl_Number.Size = new System.Drawing.Size(658, 105);
+            this.ctrl_Number.Size = new System.Drawing.Size(658, 92);
             this.ctrl_Number.TabIndex = 80;
             // 
             // ctrl_NumberParams
             // 
+            this.ctrl_NumberParams.Controls.Add(this.ctrlBEditFormula);
             this.ctrl_NumberParams.Controls.Add(this.ctrl_NumberRound);
             this.ctrl_NumberParams.Controls.Add(this.ctrl_NumberFormula);
             this.ctrl_NumberParams.Controls.Add(this.label12);
@@ -191,8 +194,18 @@
             this.ctrl_NumberParams.Dock = System.Windows.Forms.DockStyle.Top;
             this.ctrl_NumberParams.Location = new System.Drawing.Point(0, 17);
             this.ctrl_NumberParams.Name = "ctrl_NumberParams";
-            this.ctrl_NumberParams.Size = new System.Drawing.Size(658, 88);
+            this.ctrl_NumberParams.Size = new System.Drawing.Size(658, 75);
             this.ctrl_NumberParams.TabIndex = 79;
+            // 
+            // ctrlBEditFormula
+            // 
+            this.ctrlBEditFormula.Location = new System.Drawing.Point(554, 26);
+            this.ctrlBEditFormula.Name = "ctrlBEditFormula";
+            this.ctrlBEditFormula.Size = new System.Drawing.Size(92, 25);
+            this.ctrlBEditFormula.TabIndex = 83;
+            this.ctrlBEditFormula.Text = "Изменить";
+            this.ctrlBEditFormula.UseVisualStyleBackColor = true;
+            this.ctrlBEditFormula.Click += new System.EventHandler(this.ctrlBEditFormula_Click);
             // 
             // ctrl_NumberRound
             // 
@@ -210,7 +223,8 @@
             // 
             this.ctrl_NumberFormula.Location = new System.Drawing.Point(120, 26);
             this.ctrl_NumberFormula.Name = "ctrl_NumberFormula";
-            this.ctrl_NumberFormula.Size = new System.Drawing.Size(457, 56);
+            this.ctrl_NumberFormula.ReadOnly = true;
+            this.ctrl_NumberFormula.Size = new System.Drawing.Size(428, 45);
             this.ctrl_NumberFormula.TabIndex = 81;
             this.ctrl_NumberFormula.Text = "";
             // 
@@ -324,6 +338,7 @@
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.ctrlBEditHideFormula);
             this.panel3.Controls.Add(this.ctrl_VisibilityFormula);
             this.panel3.Controls.Add(this.label11);
             this.panel3.Controls.Add(this.label2);
@@ -352,7 +367,8 @@
             // 
             this.ctrl_VisibilityFormula.Location = new System.Drawing.Point(150, 543);
             this.ctrl_VisibilityFormula.Name = "ctrl_VisibilityFormula";
-            this.ctrl_VisibilityFormula.Size = new System.Drawing.Size(496, 45);
+            this.ctrl_VisibilityFormula.ReadOnly = true;
+            this.ctrl_VisibilityFormula.Size = new System.Drawing.Size(398, 45);
             this.ctrl_VisibilityFormula.TabIndex = 81;
             this.ctrl_VisibilityFormula.Text = "";
             // 
@@ -714,6 +730,16 @@
             this.ctrl_TypeDescription.TabIndex = 47;
             this.ctrl_TypeDescription.Text = "Вид текстового элемента";
             // 
+            // ctrlBEditHideFormula
+            // 
+            this.ctrlBEditHideFormula.Location = new System.Drawing.Point(554, 543);
+            this.ctrlBEditHideFormula.Name = "ctrlBEditHideFormula";
+            this.ctrlBEditHideFormula.Size = new System.Drawing.Size(92, 25);
+            this.ctrlBEditHideFormula.TabIndex = 84;
+            this.ctrlBEditHideFormula.Text = "Изменить";
+            this.ctrlBEditHideFormula.UseVisualStyleBackColor = true;
+            this.ctrlBEditHideFormula.Click += new System.EventHandler(this.ctrlBEditHideFormula_Click);
+            // 
             // UC_EditorTextual
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -804,5 +830,7 @@
         private System.Windows.Forms.Label ctrl_TypeDescription;
         private System.Windows.Forms.RichTextBox ctrl_PartNormValue;
         private System.Windows.Forms.RichTextBox ctrl_PartNormRangeValue;
+        private System.Windows.Forms.Button ctrlBEditFormula;
+        private System.Windows.Forms.Button ctrlBEditHideFormula;
     }
 }

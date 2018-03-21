@@ -1,20 +1,12 @@
 ﻿using Sadco.FamilyDoctor.Core.Controls.DesignerPanel;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
-using System.Diagnostics;
-using System.Drawing;
 using System.Drawing.Design;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.Design;
 
-namespace Sadco.FamilyDoctor.Core.Controls {
-	public partial class Ctrl_DesignerPanel : Panel {
+namespace Sadco.FamilyDoctor.Core.Controls
+{
+    public partial class Ctrl_DesignerPanel : Panel {
 		public Ctrl_DesignerPanel() {
 			InitializeComponent();
 			Initialize();
