@@ -58,19 +58,10 @@ namespace Sadco.FamilyDoctor.Core.Migrations
                         F_ELEMENT_ID = c.Int(nullable: false),
                         F_TYPEPARAM = c.Byte(nullable: false),
                         F_VALUE = c.String(),
-                        Cl_Element_p_ID = c.Int(),
-                        Cl_Element_p_ID1 = c.Int(),
-                        Cl_Element_p_ID2 = c.Int(),
                     })
                 .PrimaryKey(t => t.F_ID)
                 .ForeignKey("dbo.T_ELEMENTS", t => t.F_ELEMENT_ID, cascadeDelete: true)
-                .ForeignKey("dbo.T_ELEMENTS", t => t.Cl_Element_p_ID)
-                .ForeignKey("dbo.T_ELEMENTS", t => t.Cl_Element_p_ID1)
-                .ForeignKey("dbo.T_ELEMENTS", t => t.Cl_Element_p_ID2)
-                .Index(t => t.F_ELEMENT_ID)
-                .Index(t => t.Cl_Element_p_ID)
-                .Index(t => t.Cl_Element_p_ID1)
-                .Index(t => t.Cl_Element_p_ID2);
+                .Index(t => t.F_ELEMENT_ID);
             
             CreateTable(
                 "dbo.T_GROUPS",
@@ -129,19 +120,13 @@ namespace Sadco.FamilyDoctor.Core.Migrations
             DropForeignKey("dbo.T_TEMPLATESELEMENTS", "F_TEMPLATE_ID", "dbo.T_TEMPLATES");
             DropForeignKey("dbo.T_TEMPLATESELEMENTS", "p_Element_p_ID", "dbo.T_ELEMENTS");
             DropForeignKey("dbo.T_TEMPLATES", "F_GROUP_ID", "dbo.T_GROUPS");
-            DropForeignKey("dbo.T_ELEMENTSPRMS", "Cl_Element_p_ID2", "dbo.T_ELEMENTS");
-            DropForeignKey("dbo.T_ELEMENTSPRMS", "Cl_Element_p_ID1", "dbo.T_ELEMENTS");
             DropForeignKey("dbo.T_ELEMENTS", "F_GROUP_ID", "dbo.T_GROUPS");
             DropForeignKey("dbo.T_GROUPS", "F_PARENT_ID", "dbo.T_GROUPS");
-            DropForeignKey("dbo.T_ELEMENTSPRMS", "Cl_Element_p_ID", "dbo.T_ELEMENTS");
             DropForeignKey("dbo.T_ELEMENTSPRMS", "F_ELEMENT_ID", "dbo.T_ELEMENTS");
             DropIndex("dbo.T_TEMPLATESELEMENTS", new[] { "p_Element_p_ID" });
             DropIndex("dbo.T_TEMPLATESELEMENTS", new[] { "F_TEMPLATE_ID" });
             DropIndex("dbo.T_TEMPLATES", new[] { "F_GROUP_ID" });
             DropIndex("dbo.T_GROUPS", new[] { "F_PARENT_ID" });
-            DropIndex("dbo.T_ELEMENTSPRMS", new[] { "Cl_Element_p_ID2" });
-            DropIndex("dbo.T_ELEMENTSPRMS", new[] { "Cl_Element_p_ID1" });
-            DropIndex("dbo.T_ELEMENTSPRMS", new[] { "Cl_Element_p_ID" });
             DropIndex("dbo.T_ELEMENTSPRMS", new[] { "F_ELEMENT_ID" });
             DropIndex("dbo.T_ELEMENTS", new[] { "F_GROUP_ID" });
             DropTable("dbo.T_TEMPLATESELEMENTS");

@@ -29,13 +29,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Elements.Editors
                     ctrl_BCancel.Visible = ctrl_BSave.Visible = false;
                     ctrl_BEdit.Visible = true;
                     p_EditPanel.p_ReadOnly = false;
-                    //ctrl_P_ControlConteiner.Enabled = false;
                 }
                 else
                 {
                     ctrl_BCancel.Visible = ctrl_BSave.Visible = true;
                     ctrl_BEdit.Visible = false;
-                    //ctrl_P_ControlConteiner.Enabled = true;
                     p_EditPanel.p_ReadOnly = true;
                 }
             }

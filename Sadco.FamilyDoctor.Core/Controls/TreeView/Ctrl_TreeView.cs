@@ -254,8 +254,6 @@ namespace Sadco.FamilyDoctor.Core.Controls
             Point targetPoint = PointToClient(new Point(e.X, e.Y));
             Ctrl_TreeNodeGroup targetNodeGroup = GetNodeAt(targetPoint) as Ctrl_TreeNodeGroup;
             Ctrl_TreeNodeGroup draggedNodeGroup = (Ctrl_TreeNodeGroup)e.Data.GetData(typeof(Ctrl_TreeNodeGroup));
-            if (p_SelectedGroup == null && draggedNodeGroup.Name == "1")
-                return;
             if (draggedNodeGroup != null)
             {
                 if (!draggedNodeGroup.Equals(targetNodeGroup) && !f_ContainsNode(draggedNodeGroup, targetNodeGroup))

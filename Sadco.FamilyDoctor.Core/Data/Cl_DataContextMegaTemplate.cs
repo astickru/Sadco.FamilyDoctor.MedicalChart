@@ -20,8 +20,9 @@ namespace Sadco.FamilyDoctor.Core.Data
         public DbSet<Cl_Group> p_Groups { get; set; }
         public DbSet<Cl_Template> p_Templates { get; set; }
         public DbSet<Cl_TemplatesElements> p_TemplatesElements { get; set; }
-        public DbSet<Cl_ElementsParams> p_ElementsParams { get; set; }
+
         public DbSet<Cl_Element> p_Elements { get; set; }
+        public DbSet<Cl_ElementsParams> p_ElementsParams { get; set; }
 
         private Dictionary<string, Type> m_GetAvailableControls { get; set; }
         public Dictionary<string, Type> f_GetAvailableControls()

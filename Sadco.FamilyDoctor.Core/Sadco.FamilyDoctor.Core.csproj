@@ -132,9 +132,9 @@
     <Compile Include="Entities\Cl_Element.cs" />
     <Compile Include="Entities\I_Archive.cs" />
     <Compile Include="Entities\I_Version.cs" />
-    <Compile Include="Migrations\201803191601236_appInit.cs" />
-    <Compile Include="Migrations\201803191601236_appInit.Designer.cs">
-      <DependentUpon>201803191601236_appInit.cs</DependentUpon>
+    <Compile Include="Migrations\201803210706012_appInit.cs" />
+    <Compile Include="Migrations\201803210706012_appInit.Designer.cs">
+      <DependentUpon>201803210706012_appInit.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -186,8 +186,8 @@
     <EmbeddedResource Include="Controls\TreeView\Dlg_EditorGroup.resx">
       <DependentUpon>Dlg_EditorGroup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803191601236_appInit.resx">
-      <DependentUpon>201803191601236_appInit.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201803210706012_appInit.resx">
+      <DependentUpon>201803210706012_appInit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

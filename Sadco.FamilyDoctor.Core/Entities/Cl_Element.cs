@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace Sadco.FamilyDoctor.Core.Entities
 {
@@ -49,8 +50,8 @@ namespace Sadco.FamilyDoctor.Core.Entities
         private bool m_Symmetrical = false;
 
         /// <summary>Ключ элемента шаблона</summary>
-        [Column("F_ID")]
         [Key]
+        [Column("F_ID")]
         public int p_ID { get; set; }
 
         /// <summary>ID элемента шаблона для всех версий</summary>
@@ -209,13 +210,6 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Column("F_ISPARTLOCATIONSMULTI")]
         public bool p_IsPartLocationsMulti { get; set; }
 
-        private List<Cl_ElementsParams> m_PartLocations = new List<Cl_ElementsParams>();
-        /// <summary>Часть. Возможные локации</summary>
-        public List<Cl_ElementsParams> p_PartLocations {
-            get { return m_PartLocations; }
-            set { m_PartLocations = value; }
-        }
-
         /// <summary>Часть. Использование нормы</summary>
         [Column("F_ISPARTNORM")]
         public bool p_IsPartNorm { get; set; }
@@ -239,20 +233,29 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Column("F_ISCHANGENOTNORM")]
         public bool p_IsChangeNotNormValues { get; set; }
 
-        private List<Cl_ElementsParams> m_NormValues = new List<Cl_ElementsParams>();
-        /// <summary>Список стандартных нормальных значений</summary>
-        public List<Cl_ElementsParams> p_NormValues {
-            get { return m_NormValues; }
-            set { m_NormValues = value; }
+        private List<Cl_ElementsParams> m_ParamsValues = new List<Cl_ElementsParams>();
+        /// <summary>Список значений параметров</summary>
+        [ForeignKey("p_ElementID")]
+        public List<Cl_ElementsParams> p_ParamsValues {
+            get { return m_ParamsValues; }
+            set { m_ParamsValues = value; }
         }
 
-        private List<Cl_ElementsParams> m_PatValues = new List<Cl_ElementsParams>();
-        /// <summary>Список стандартных патологических значений</summary>
-        public List<Cl_ElementsParams> p_PatValues {
-            get { return m_PatValues; }
-            set { m_PatValues = value; }
+        /// <summary>Часть. Возможные локации</summary>
+        public Cl_ElementsParams[] p_PartLocations {
+            get { return m_ParamsValues.Where(p => p.p_TypeParam == Cl_ElementsParams.E_TypeParam.Location).ToArray(); }
         }
-        
+
+        /// <summary>Список стандартных нормальных значений</summary>
+        public Cl_ElementsParams[] p_NormValues {
+            get { return m_ParamsValues.Where(p => p.p_TypeParam == Cl_ElementsParams.E_TypeParam.NormValues).ToArray(); }
+        }
+
+        /// <summary>Список стандартных патологических значений</summary>
+        public Cl_ElementsParams[] p_PatValues {
+            get { return m_ParamsValues.Where(p => p.p_TypeParam == Cl_ElementsParams.E_TypeParam.PatValues).ToArray(); }
+        }
+
         /// <summary>Условная видимость</summary>
         [Column("F_VISIBILITYFORMULA", TypeName = "varchar")]
         [MaxLength(1000)]
@@ -274,27 +277,14 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Column("F_ISARHIVE")]
         public bool p_IsArhive { get; set; }
 
-        /// <summary>Установка списка значений для поля массива</summary>
-        public void f_SetValues(Cl_ElementsParams.E_TypeParam a_TypeParam, string[] a_Values)
+        /// <summary>Добавление значений для поля массива</summary>
+        public void f_AddValues(Cl_ElementsParams.E_TypeParam a_TypeParam, string[] a_Values)
         {
-            List<Cl_ElementsParams> elParams = new List<Cl_ElementsParams>();
             if (a_Values != null)
             {
                 foreach (string val in a_Values)
                 {
-                    elParams.Add(new Cl_ElementsParams() { p_ElementID = p_ID, p_TypeParam = a_TypeParam, p_Value = val });
-                }
-                if (a_TypeParam == Cl_ElementsParams.E_TypeParam.Location)
-                {
-                    p_PartLocations = elParams;
-                }
-                else if (a_TypeParam == Cl_ElementsParams.E_TypeParam.NormValues)
-                {
-                    p_NormValues = elParams;
-                }
-                else if (a_TypeParam == Cl_ElementsParams.E_TypeParam.PatValues)
-                {
-                    p_PatValues = elParams;
+                    p_ParamsValues.Add(new Cl_ElementsParams() { p_ElementID = p_ID, p_TypeParam = a_TypeParam, p_Value = val });
                 }
             }
         }

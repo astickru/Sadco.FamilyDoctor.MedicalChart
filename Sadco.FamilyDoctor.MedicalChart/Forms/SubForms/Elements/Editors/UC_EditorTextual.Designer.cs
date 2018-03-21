@@ -52,6 +52,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.ctrl_Version = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ctrl_PartNormRangeValue = new System.Windows.Forms.RichTextBox();
+            this.ctrl_PartNormValue = new System.Windows.Forms.RichTextBox();
             this.ctrl_IsChangeNotNormValues = new System.Windows.Forms.CheckBox();
             this.ctrl_PatValues = new System.Windows.Forms.RichTextBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -79,8 +81,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.ctrl_Hint = new System.Windows.Forms.TextBox();
             this.ctrl_TypeDescription = new System.Windows.Forms.Label();
-            this.ctrl_PartNormValue = new System.Windows.Forms.RichTextBox();
-            this.ctrl_PartNormRangeValue = new System.Windows.Forms.RichTextBox();
             this.ctrl_ControlsConteiner.SuspendLayout();
             this.SelectTypePanel.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -369,9 +369,11 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(570, 7);
+            this.label2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.label2.Location = new System.Drawing.Point(588, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(47, 13);
+            this.label2.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.label2.Size = new System.Drawing.Size(47, 18);
             this.label2.TabIndex = 63;
             this.label2.Text = "Версия:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -379,9 +381,12 @@
             // ctrl_Version
             // 
             this.ctrl_Version.AutoSize = true;
-            this.ctrl_Version.Location = new System.Drawing.Point(618, 7);
+            this.ctrl_Version.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ctrl_Version.Location = new System.Drawing.Point(635, 0);
+            this.ctrl_Version.Margin = new System.Windows.Forms.Padding(3, 0, 30, 0);
             this.ctrl_Version.Name = "ctrl_Version";
-            this.ctrl_Version.Size = new System.Drawing.Size(13, 13);
+            this.ctrl_Version.Padding = new System.Windows.Forms.Padding(0, 5, 10, 0);
+            this.ctrl_Version.Size = new System.Drawing.Size(23, 18);
             this.ctrl_Version.TabIndex = 62;
             this.ctrl_Version.Text = "0";
             this.ctrl_Version.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -410,6 +415,22 @@
             this.groupBox1.TabIndex = 61;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Часть";
+            // 
+            // ctrl_PartNormRangeValue
+            // 
+            this.ctrl_PartNormRangeValue.Location = new System.Drawing.Point(145, 158);
+            this.ctrl_PartNormRangeValue.Name = "ctrl_PartNormRangeValue";
+            this.ctrl_PartNormRangeValue.Size = new System.Drawing.Size(341, 45);
+            this.ctrl_PartNormRangeValue.TabIndex = 86;
+            this.ctrl_PartNormRangeValue.Text = "";
+            // 
+            // ctrl_PartNormValue
+            // 
+            this.ctrl_PartNormValue.Location = new System.Drawing.Point(145, 111);
+            this.ctrl_PartNormValue.Name = "ctrl_PartNormValue";
+            this.ctrl_PartNormValue.Size = new System.Drawing.Size(340, 45);
+            this.ctrl_PartNormValue.TabIndex = 85;
+            this.ctrl_PartNormValue.Text = "";
             // 
             // ctrl_IsChangeNotNormValues
             // 
@@ -692,22 +713,6 @@
             this.ctrl_TypeDescription.Size = new System.Drawing.Size(138, 16);
             this.ctrl_TypeDescription.TabIndex = 47;
             this.ctrl_TypeDescription.Text = "Вид текстового элемента";
-            // 
-            // ctrl_PartNormValue
-            // 
-            this.ctrl_PartNormValue.Location = new System.Drawing.Point(145, 111);
-            this.ctrl_PartNormValue.Name = "ctrl_PartNormValue";
-            this.ctrl_PartNormValue.Size = new System.Drawing.Size(340, 45);
-            this.ctrl_PartNormValue.TabIndex = 85;
-            this.ctrl_PartNormValue.Text = "";
-            // 
-            // ctrl_PartNormRangeValue
-            // 
-            this.ctrl_PartNormRangeValue.Location = new System.Drawing.Point(145, 158);
-            this.ctrl_PartNormRangeValue.Name = "ctrl_PartNormRangeValue";
-            this.ctrl_PartNormRangeValue.Size = new System.Drawing.Size(341, 45);
-            this.ctrl_PartNormRangeValue.TabIndex = 86;
-            this.ctrl_PartNormRangeValue.Text = "";
             // 
             // UC_EditorTextual
             // 

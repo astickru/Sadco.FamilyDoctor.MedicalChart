@@ -62,7 +62,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             if (el.p_IsPartLocations)
             {
                 el.p_IsPartLocationsMulti = ctrl_IsPartLocationsMulti.Checked;
-                el.f_SetValues(Cl_ElementsParams.E_TypeParam.Location, ctrl_PartLocationsValue.Lines);
             }
             el.p_IsPartNorm = ctrl_IsPartNorm.Checked;
             if (el.p_IsPartNorm)
@@ -71,6 +70,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             if (el.p_IsPartNormRange)
                 el.p_PartNormRange = ctrl_PartNormRangeValue.Text;
 
+            el.p_IsChangeNotNormValues = ctrl_IsChangeNotNormValues.Checked;
             el.p_Visible = ctrl_IsVisible.Checked;
             el.p_VisiblePatient = ctrl_IsVisiblePatient.Checked;
             el.p_Required = ctrl_IsRequiredFIeld.Checked;
@@ -83,13 +83,17 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             el.p_NumberRound = Convert.ToByte(ctrl_NumberRound.Value);
             el.p_NumberFormula = ctrl_NumberFormula.Text;
             el.p_Default = ctrl_Default.Text;
+            el.p_VisibilityFormula = ctrl_VisibilityFormula.Text;
             el.p_Comment = ctrl_Note.Text;
 
-            el.p_IsChangeNotNormValues = ctrl_IsChangeNotNormValues.Checked;
-            el.f_SetValues(Cl_ElementsParams.E_TypeParam.NormValues, ctrl_NormValues.Lines);
-            el.f_SetValues(Cl_ElementsParams.E_TypeParam.PatValues, ctrl_PatValues.Lines);
-            el.p_VisibilityFormula = ctrl_VisibilityFormula.Text;
-
+            Cl_App.m_DataContext.SaveChanges();
+            el.p_ParamsValues.Clear();
+            if (el.p_IsPartLocations)
+            {
+                el.f_AddValues(Cl_ElementsParams.E_TypeParam.Location, ctrl_PartLocationsValue.Lines);
+            }
+            el.f_AddValues(Cl_ElementsParams.E_TypeParam.NormValues, ctrl_NormValues.Lines);
+            el.f_AddValues(Cl_ElementsParams.E_TypeParam.PatValues, ctrl_PatValues.Lines);
             Cl_App.m_DataContext.SaveChanges();
             f_SetElement(el);
             return el;
@@ -115,11 +119,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             ctrl_PartPostValue.Text = p_EditingElement.p_PartPost;
             ctrl_IsPartLocations.Checked = ctrl_PartLocationsValue.Enabled = ctrl_IsPartLocationsMulti.Enabled = p_EditingElement.p_IsPartLocations;
             ctrl_IsPartLocationsMulti.Checked = p_EditingElement.p_IsPartLocationsMulti;
-            ctrl_PartLocationsValue.Text = string.Join("\n", p_EditingElement.p_PartLocations);
             ctrl_IsPartNorm.Checked = ctrl_PartNormValue.Enabled = p_EditingElement.p_IsPartNorm;
             ctrl_PartNormValue.Text = p_EditingElement.p_PartNorm;
             ctrl_IsPartNormRange.Checked = ctrl_PartNormRangeValue.Enabled = p_EditingElement.p_IsPartNormRange;
             ctrl_PartNormRangeValue.Text = p_EditingElement.p_PartNormRange;
+            ctrl_IsChangeNotNormValues.Checked = p_EditingElement.p_IsChangeNotNormValues;
 
             ctrl_IsVisible.Checked = p_EditingElement.p_Visible;
             ctrl_IsVisiblePatient.Checked = p_EditingElement.p_VisiblePatient;
@@ -132,13 +136,13 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             ctrl_NumberParams.Visible = ctrl_IsNumber.Checked = p_EditingElement.p_IsNumber;
             ctrl_NumberRound.Value = p_EditingElement.p_NumberRound;
             ctrl_NumberFormula.Text = p_EditingElement.p_NumberFormula;
+            ctrl_VisibilityFormula.Text = p_EditingElement.p_VisibilityFormula;
             ctrl_Default.Text = p_EditingElement.p_Default;
             ctrl_Note.Text = p_EditingElement.p_Comment;
 
-            ctrl_IsChangeNotNormValues.Checked = p_EditingElement.p_IsChangeNotNormValues;
-            ctrl_NormValues.Text = string.Join("\n", p_EditingElement.p_NormValues);
-            ctrl_PatValues.Text = string.Join("\n", p_EditingElement.p_PatValues);
-            ctrl_VisibilityFormula.Text = p_EditingElement.p_VisibilityFormula;
+            ctrl_PartLocationsValue.Text = string.Join("\n", p_EditingElement.p_PartLocations.ToList());
+            ctrl_NormValues.Text = string.Join("\n", p_EditingElement.p_NormValues.ToList());
+            ctrl_PatValues.Text = string.Join("\n", p_EditingElement.p_PatValues.ToList());
         }
         #region CheckedChanged
         private void ctrl_IsSymmentry_CheckedChanged(object sender, EventArgs e)

@@ -26,8 +26,8 @@ namespace Sadco.FamilyDoctor.Core.Entities
         }
 
         /// <summary>ID группы</summary>
-		[Column("F_ID")]
         [Key]
+        [Column("F_ID")]
         public int p_ID { get; set; }
 
         /// <summary>Тип группы</summary>

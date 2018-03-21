@@ -37,11 +37,10 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             TreeNode node = new Ctrl_TreeNodeGroup(a_Group);
             a_TreeNodes.Add(node);
             var els = Cl_App.m_DataContext.p_Elements
-                .Include(e => e.p_PartLocations).Include(e => e.p_NormValues).Include(e => e.p_PatValues)
                 .Where(e => e.p_ParentGroupID == a_Group.p_ID && !e.p_IsArhive).GroupBy(e => e.p_ElementID)
                     .Select(grp => grp
-                        .OrderByDescending(v => v.p_Version)
-                        .FirstOrDefault());
+                        .OrderByDescending(v => v.p_Version).FirstOrDefault())
+                        .Include(e => e.p_ParamsValues);
             foreach (Cl_Element el in els)
             {
                 node.Nodes.Add(new Ctrl_TreeNodeElement(a_Group, el));

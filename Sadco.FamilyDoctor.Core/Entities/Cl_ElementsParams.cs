@@ -23,15 +23,14 @@ namespace Sadco.FamilyDoctor.Core.Entities
         }
 
         /// <summary>ID параметров элементов шаблона</summary>
-        [Column("F_ID")]
         [Key]
+        [Column("F_ID")]
         public int p_ID { get; set; }
 
         /// <summary>ID элемента</summary>
         [Column("F_ELEMENT_ID")]
         [ForeignKey("p_Element")]
         public int p_ElementID { get; set; }
-
         /// <summary>Элемент</summary>
         public Cl_Element p_Element { get; set; }
 
