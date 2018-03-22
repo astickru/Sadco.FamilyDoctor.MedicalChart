@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.panel2 = new System.Windows.Forms.Panel();
+			this.panel_Main = new System.Windows.Forms.Panel();
+			this.panel_Actions = new System.Windows.Forms.Panel();
 			this.ctrlBOperOr = new System.Windows.Forms.Button();
 			this.ctrlBOperAnd = new System.Windows.Forms.Button();
 			this.ctrlBOperNotEquals = new System.Windows.Forms.Button();
@@ -45,48 +45,46 @@
 			this.ctrlRTBFormula = new System.Windows.Forms.RichTextBox();
 			this.ctrlBDelLastAction = new System.Windows.Forms.Button();
 			this.ctrlBAddTag = new System.Windows.Forms.Button();
-			this.panel1.SuspendLayout();
-			this.panel2.SuspendLayout();
+			this.panel_Result = new System.Windows.Forms.Panel();
+			this.panel_Editor = new System.Windows.Forms.Panel();
+			this.panel_Operators = new System.Windows.Forms.Panel();
+			this.panel_Main.SuspendLayout();
+			this.panel_Actions.SuspendLayout();
+			this.panel_Result.SuspendLayout();
+			this.panel_Editor.SuspendLayout();
+			this.panel_Operators.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// panel1
+			// panel_Main
 			// 
-			this.panel1.Controls.Add(this.panel2);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(0, 0);
-			this.panel1.Name = "panel1";
-			this.panel1.Padding = new System.Windows.Forms.Padding(5);
-			this.panel1.Size = new System.Drawing.Size(609, 330);
-			this.panel1.TabIndex = 1;
+			this.panel_Main.Controls.Add(this.panel_Editor);
+			this.panel_Main.Controls.Add(this.panel_Actions);
+			this.panel_Main.Controls.Add(this.panel_Operators);
+			this.panel_Main.Controls.Add(this.panel_Result);
+			this.panel_Main.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel_Main.Location = new System.Drawing.Point(5, 5);
+			this.panel_Main.Name = "panel_Main";
+			this.panel_Main.Padding = new System.Windows.Forms.Padding(5);
+			this.panel_Main.Size = new System.Drawing.Size(574, 251);
+			this.panel_Main.TabIndex = 1;
 			// 
-			// panel2
+			// panel_Actions
 			// 
-			this.panel2.Controls.Add(this.ctrlBOperOr);
-			this.panel2.Controls.Add(this.ctrlBOperAnd);
-			this.panel2.Controls.Add(this.ctrlBOperNotEquals);
-			this.panel2.Controls.Add(this.ctrlBOperEquals);
-			this.panel2.Controls.Add(this.ctrlBOperLess);
-			this.panel2.Controls.Add(this.ctrlBOperMore);
-			this.panel2.Controls.Add(this.ctrlCBAddElement);
-			this.panel2.Controls.Add(this.ctrlBClear);
-			this.panel2.Controls.Add(this.ctrlBCancel);
-			this.panel2.Controls.Add(this.ctrlBEdit);
-			this.panel2.Controls.Add(this.ctrlBAddValue);
-			this.panel2.Controls.Add(this.ctrlTBValue);
-			this.panel2.Controls.Add(this.ctrlRTBFormula);
-			this.panel2.Controls.Add(this.ctrlBDelLastAction);
-			this.panel2.Controls.Add(this.ctrlBAddTag);
-			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel2.Location = new System.Drawing.Point(5, 5);
-			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(599, 320);
-			this.panel2.TabIndex = 2;
+			this.panel_Actions.Controls.Add(this.ctrlBDelLastAction);
+			this.panel_Actions.Controls.Add(this.ctrlCBAddElement);
+			this.panel_Actions.Controls.Add(this.ctrlBAddTag);
+			this.panel_Actions.Controls.Add(this.ctrlBClear);
+			this.panel_Actions.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panel_Actions.Location = new System.Drawing.Point(5, 5);
+			this.panel_Actions.Name = "panel_Actions";
+			this.panel_Actions.Size = new System.Drawing.Size(564, 29);
+			this.panel_Actions.TabIndex = 2;
 			// 
 			// ctrlBOperOr
 			// 
-			this.ctrlBOperOr.Location = new System.Drawing.Point(519, 177);
+			this.ctrlBOperOr.Location = new System.Drawing.Point(307, 0);
 			this.ctrlBOperOr.Name = "ctrlBOperOr";
-			this.ctrlBOperOr.Size = new System.Drawing.Size(75, 23);
+			this.ctrlBOperOr.Size = new System.Drawing.Size(60, 23);
 			this.ctrlBOperOr.TabIndex = 22;
 			this.ctrlBOperOr.Tag = "";
 			this.ctrlBOperOr.Text = "или";
@@ -95,9 +93,9 @@
 			// 
 			// ctrlBOperAnd
 			// 
-			this.ctrlBOperAnd.Location = new System.Drawing.Point(519, 148);
+			this.ctrlBOperAnd.Location = new System.Drawing.Point(373, 0);
 			this.ctrlBOperAnd.Name = "ctrlBOperAnd";
-			this.ctrlBOperAnd.Size = new System.Drawing.Size(75, 23);
+			this.ctrlBOperAnd.Size = new System.Drawing.Size(60, 23);
 			this.ctrlBOperAnd.TabIndex = 21;
 			this.ctrlBOperAnd.Tag = "";
 			this.ctrlBOperAnd.Text = "и";
@@ -106,9 +104,9 @@
 			// 
 			// ctrlBOperNotEquals
 			// 
-			this.ctrlBOperNotEquals.Location = new System.Drawing.Point(519, 119);
+			this.ctrlBOperNotEquals.Location = new System.Drawing.Point(66, 0);
 			this.ctrlBOperNotEquals.Name = "ctrlBOperNotEquals";
-			this.ctrlBOperNotEquals.Size = new System.Drawing.Size(75, 23);
+			this.ctrlBOperNotEquals.Size = new System.Drawing.Size(60, 23);
 			this.ctrlBOperNotEquals.TabIndex = 20;
 			this.ctrlBOperNotEquals.Tag = "";
 			this.ctrlBOperNotEquals.Text = "не равно";
@@ -117,9 +115,9 @@
 			// 
 			// ctrlBOperEquals
 			// 
-			this.ctrlBOperEquals.Location = new System.Drawing.Point(519, 90);
+			this.ctrlBOperEquals.Location = new System.Drawing.Point(0, 0);
 			this.ctrlBOperEquals.Name = "ctrlBOperEquals";
-			this.ctrlBOperEquals.Size = new System.Drawing.Size(75, 23);
+			this.ctrlBOperEquals.Size = new System.Drawing.Size(60, 23);
 			this.ctrlBOperEquals.TabIndex = 19;
 			this.ctrlBOperEquals.Tag = "";
 			this.ctrlBOperEquals.Text = "равно";
@@ -128,9 +126,9 @@
 			// 
 			// ctrlBOperLess
 			// 
-			this.ctrlBOperLess.Location = new System.Drawing.Point(519, 61);
+			this.ctrlBOperLess.Location = new System.Drawing.Point(198, 0);
 			this.ctrlBOperLess.Name = "ctrlBOperLess";
-			this.ctrlBOperLess.Size = new System.Drawing.Size(75, 23);
+			this.ctrlBOperLess.Size = new System.Drawing.Size(60, 23);
 			this.ctrlBOperLess.TabIndex = 18;
 			this.ctrlBOperLess.Tag = "";
 			this.ctrlBOperLess.Text = "меньше";
@@ -139,9 +137,9 @@
 			// 
 			// ctrlBOperMore
 			// 
-			this.ctrlBOperMore.Location = new System.Drawing.Point(519, 32);
+			this.ctrlBOperMore.Location = new System.Drawing.Point(132, 0);
 			this.ctrlBOperMore.Name = "ctrlBOperMore";
-			this.ctrlBOperMore.Size = new System.Drawing.Size(75, 23);
+			this.ctrlBOperMore.Size = new System.Drawing.Size(60, 23);
 			this.ctrlBOperMore.TabIndex = 17;
 			this.ctrlBOperMore.Tag = "";
 			this.ctrlBOperMore.Text = "больше";
@@ -151,26 +149,26 @@
 			// ctrlCBAddElement
 			// 
 			this.ctrlCBAddElement.FormattingEnabled = true;
-			this.ctrlCBAddElement.Location = new System.Drawing.Point(3, 3);
+			this.ctrlCBAddElement.Location = new System.Drawing.Point(3, 4);
 			this.ctrlCBAddElement.Name = "ctrlCBAddElement";
 			this.ctrlCBAddElement.Size = new System.Drawing.Size(226, 21);
 			this.ctrlCBAddElement.TabIndex = 16;
 			// 
 			// ctrlBClear
 			// 
-			this.ctrlBClear.Location = new System.Drawing.Point(518, 253);
+			this.ctrlBClear.Location = new System.Drawing.Point(485, 3);
 			this.ctrlBClear.Name = "ctrlBClear";
 			this.ctrlBClear.Size = new System.Drawing.Size(75, 23);
 			this.ctrlBClear.TabIndex = 13;
 			this.ctrlBClear.Tag = "*";
-			this.ctrlBClear.Text = "очистить";
+			this.ctrlBClear.Text = "Очистить";
 			this.ctrlBClear.UseVisualStyleBackColor = true;
 			this.ctrlBClear.Click += new System.EventHandler(this.ctrlBClear_Click);
 			// 
 			// ctrlBCancel
 			// 
 			this.ctrlBCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.ctrlBCancel.Location = new System.Drawing.Point(515, 285);
+			this.ctrlBCancel.Location = new System.Drawing.Point(482, 0);
 			this.ctrlBCancel.Name = "ctrlBCancel";
 			this.ctrlBCancel.Size = new System.Drawing.Size(78, 28);
 			this.ctrlBCancel.TabIndex = 12;
@@ -180,7 +178,7 @@
 			// ctrlBEdit
 			// 
 			this.ctrlBEdit.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.ctrlBEdit.Location = new System.Drawing.Point(431, 285);
+			this.ctrlBEdit.Location = new System.Drawing.Point(398, 0);
 			this.ctrlBEdit.Name = "ctrlBEdit";
 			this.ctrlBEdit.Size = new System.Drawing.Size(78, 28);
 			this.ctrlBEdit.TabIndex = 11;
@@ -189,34 +187,36 @@
 			// 
 			// ctrlBAddValue
 			// 
-			this.ctrlBAddValue.Location = new System.Drawing.Point(569, 223);
+			this.ctrlBAddValue.Location = new System.Drawing.Point(501, 0);
 			this.ctrlBAddValue.Name = "ctrlBAddValue";
-			this.ctrlBAddValue.Size = new System.Drawing.Size(24, 23);
+			this.ctrlBAddValue.Size = new System.Drawing.Size(60, 23);
 			this.ctrlBAddValue.TabIndex = 10;
+			this.ctrlBAddValue.Text = "число";
 			this.ctrlBAddValue.UseVisualStyleBackColor = true;
 			this.ctrlBAddValue.Click += new System.EventHandler(this.ctrlBAddValue_Click);
 			// 
 			// ctrlTBValue
 			// 
-			this.ctrlTBValue.Location = new System.Drawing.Point(519, 225);
+			this.ctrlTBValue.Location = new System.Drawing.Point(458, 1);
 			this.ctrlTBValue.Name = "ctrlTBValue";
-			this.ctrlTBValue.Size = new System.Drawing.Size(49, 20);
+			this.ctrlTBValue.Size = new System.Drawing.Size(40, 20);
 			this.ctrlTBValue.TabIndex = 9;
 			this.ctrlTBValue.Text = "10";
 			// 
 			// ctrlRTBFormula
 			// 
+			this.ctrlRTBFormula.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlRTBFormula.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.ctrlRTBFormula.Location = new System.Drawing.Point(3, 29);
+			this.ctrlRTBFormula.Location = new System.Drawing.Point(0, 0);
 			this.ctrlRTBFormula.Name = "ctrlRTBFormula";
 			this.ctrlRTBFormula.ReadOnly = true;
-			this.ctrlRTBFormula.Size = new System.Drawing.Size(509, 250);
+			this.ctrlRTBFormula.Size = new System.Drawing.Size(564, 151);
 			this.ctrlRTBFormula.TabIndex = 3;
 			this.ctrlRTBFormula.Text = "";
 			// 
 			// ctrlBDelLastAction
 			// 
-			this.ctrlBDelLastAction.Location = new System.Drawing.Point(518, 2);
+			this.ctrlBDelLastAction.Location = new System.Drawing.Point(404, 3);
 			this.ctrlBDelLastAction.Name = "ctrlBDelLastAction";
 			this.ctrlBDelLastAction.Size = new System.Drawing.Size(75, 23);
 			this.ctrlBDelLastAction.TabIndex = 2;
@@ -227,7 +227,7 @@
 			// ctrlBAddTag
 			// 
 			this.ctrlBAddTag.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-			this.ctrlBAddTag.Location = new System.Drawing.Point(235, 2);
+			this.ctrlBAddTag.Location = new System.Drawing.Point(235, 3);
 			this.ctrlBAddTag.Name = "ctrlBAddTag";
 			this.ctrlBAddTag.Size = new System.Drawing.Size(75, 23);
 			this.ctrlBAddTag.TabIndex = 1;
@@ -235,26 +235,68 @@
 			this.ctrlBAddTag.UseVisualStyleBackColor = true;
 			this.ctrlBAddTag.Click += new System.EventHandler(this.ctrlBAddTag_Click);
 			// 
+			// panel_Result
+			// 
+			this.panel_Result.AutoSize = true;
+			this.panel_Result.Controls.Add(this.ctrlBEdit);
+			this.panel_Result.Controls.Add(this.ctrlBCancel);
+			this.panel_Result.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.panel_Result.Location = new System.Drawing.Point(5, 215);
+			this.panel_Result.Name = "panel_Result";
+			this.panel_Result.Size = new System.Drawing.Size(564, 31);
+			this.panel_Result.TabIndex = 17;
+			// 
+			// panel_Editor
+			// 
+			this.panel_Editor.Controls.Add(this.ctrlRTBFormula);
+			this.panel_Editor.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel_Editor.Location = new System.Drawing.Point(5, 34);
+			this.panel_Editor.Name = "panel_Editor";
+			this.panel_Editor.Size = new System.Drawing.Size(564, 151);
+			this.panel_Editor.TabIndex = 17;
+			// 
+			// panel_Operators
+			// 
+			this.panel_Operators.Controls.Add(this.ctrlBOperEquals);
+			this.panel_Operators.Controls.Add(this.ctrlBOperNotEquals);
+			this.panel_Operators.Controls.Add(this.ctrlBOperAnd);
+			this.panel_Operators.Controls.Add(this.ctrlBOperMore);
+			this.panel_Operators.Controls.Add(this.ctrlBAddValue);
+			this.panel_Operators.Controls.Add(this.ctrlTBValue);
+			this.panel_Operators.Controls.Add(this.ctrlBOperLess);
+			this.panel_Operators.Controls.Add(this.ctrlBOperOr);
+			this.panel_Operators.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.panel_Operators.Location = new System.Drawing.Point(5, 185);
+			this.panel_Operators.Name = "panel_Operators";
+			this.panel_Operators.Size = new System.Drawing.Size(564, 30);
+			this.panel_Operators.TabIndex = 4;
+			// 
 			// F_EditorСondition
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(609, 330);
-			this.Controls.Add(this.panel1);
+			this.ClientSize = new System.Drawing.Size(584, 261);
+			this.Controls.Add(this.panel_Main);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.Name = "F_EditorСondition";
+			this.Padding = new System.Windows.Forms.Padding(5);
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "F_EditorСondition";
-			this.panel1.ResumeLayout(false);
-			this.panel2.ResumeLayout(false);
-			this.panel2.PerformLayout();
+			this.panel_Main.ResumeLayout(false);
+			this.panel_Main.PerformLayout();
+			this.panel_Actions.ResumeLayout(false);
+			this.panel_Result.ResumeLayout(false);
+			this.panel_Editor.ResumeLayout(false);
+			this.panel_Operators.ResumeLayout(false);
+			this.panel_Operators.PerformLayout();
 			this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel_Main;
+        private System.Windows.Forms.Panel panel_Actions;
         private System.Windows.Forms.ComboBox ctrlCBAddElement;
         private System.Windows.Forms.Button ctrlBClear;
         private System.Windows.Forms.Button ctrlBCancel;
@@ -270,6 +312,9 @@
         private System.Windows.Forms.Button ctrlBOperEquals;
         private System.Windows.Forms.Button ctrlBOperLess;
         private System.Windows.Forms.Button ctrlBOperMore;
-    }
+		private System.Windows.Forms.Panel panel_Result;
+		private System.Windows.Forms.Panel panel_Editor;
+		private System.Windows.Forms.Panel panel_Operators;
+	}
 }
 

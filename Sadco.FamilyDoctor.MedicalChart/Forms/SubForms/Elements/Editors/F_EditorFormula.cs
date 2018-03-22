@@ -11,6 +11,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
 	public partial class F_EditorFormula : Form
 	{
+		private const string operatorTag = "тег_";
 		private const string operatorPlus = "+";
 		private const string operatorMinus = "-";
 		private const string operatorCarve = "/";
@@ -47,7 +48,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 			if (ctrlCBAddElement.SelectedItem == null && !(ctrlCBAddElement.SelectedItem is Cl_Element)) return;
 			Cl_Element el = (Cl_Element)ctrlCBAddElement.SelectedItem;
 			if (string.IsNullOrWhiteSpace(el.p_Tag)) return;
-			m_ItemsFormula.Add(f_AppendText("#" + el.p_Tag, Color.DarkGoldenrod));
+			m_ItemsFormula.Add(f_AppendText(operatorTag + el.p_Tag, Color.DarkGoldenrod));
 			f_UpdateVisibilityFormula(true);
 		}
 
@@ -74,6 +75,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 		}
 
 		private void ctrlBClear_Click(object sender, EventArgs e) {
+			if (MessageBox.Show("Очистить формулу?", "Очистка", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+
 			m_ItemsFormula.Clear();
 			f_UpdateVisibilityFormula(false);
 			f_ClearText();
@@ -146,7 +149,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 			string[] blocks = f_getOperators(a_Formula);
 
 			for (int i = 0; i < blocks.Count(); i++) {
-				string opParts = blocks[i];
+				string opParts = blocks[i].Trim();
 
 				if (i > 0) {
 					int pos = a_Formula.IndexOf(opParts, lastPos);
@@ -157,7 +160,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 					lastPos = pos;
 				}
 
-				if (opParts.Substring(0, 1) == "#") {
+				if (opParts.Length > operatorTag.Length && opParts.Substring(0, operatorTag.Length) == operatorTag) {
 					m_ItemsFormula.Add(f_AppendText(opParts, Color.DarkGoldenrod));
 				} else {
 					m_ItemsFormula.Add(f_AppendText(opParts, Color.Blue));
@@ -166,6 +169,15 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
 				lastPos += opParts.Length;
 			}
+
+			if (a_Formula.Length > lastPos) {
+				string lastOp = a_Formula.Substring(lastPos, a_Formula.Length - lastPos).Trim();
+
+				if (!string.IsNullOrEmpty(lastOp)) {
+					m_ItemsFormula.Add(f_AppendText(" " + lastOp + " ", Color.Red));
+					f_UpdateVisibilityFormula(false);
+				}
+			}
 		}
 
 		private string[] f_getOperators(string comparePart) {
@@ -173,10 +185,10 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 				return new string[0];
 
 			return comparePart.Trim().Split(new string[] {
-				" " + operatorPlus + " ",
-				" " + operatorMinus + " ",
-				" " + operatorCarve + " ",
-				" " + operatorMultiply + " " }, StringSplitOptions.None);
+				" " + operatorPlus,
+				" " + operatorMinus,
+				" " + operatorCarve,
+				" " + operatorMultiply}, StringSplitOptions.RemoveEmptyEntries);
 		}
 	}
 }

@@ -11,6 +11,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
 	public partial class F_EditorСondition : Form
 	{
+		private const string operatorTag = "тег_";
 		private const string operatorMore = ">";
 		private const string operatorLess = "<";
 		private const string operatorEquals = "=";
@@ -51,7 +52,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 			if (ctrlCBAddElement.SelectedItem == null && !(ctrlCBAddElement.SelectedItem is Cl_Element)) return;
 			Cl_Element el = (Cl_Element)ctrlCBAddElement.SelectedItem;
 			if (string.IsNullOrWhiteSpace(el.p_Tag)) return;
-			m_ItemsFormula.Add(f_AppendText("#" + el.p_Tag, Color.DarkGoldenrod));
+			m_ItemsFormula.Add(f_AppendText(operatorTag + el.p_Tag, Color.DarkGoldenrod));
 			f_UpdateVisibilityHide(++m_VisibilityHide);
 		}
 
@@ -78,6 +79,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 		}
 
 		private void ctrlBClear_Click(object sender, EventArgs e) {
+			if (MessageBox.Show("Очистить формулу?", "Очистка", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+
 			m_ItemsFormula.Clear();
 			m_VisibilityHide = 1;
 			f_UpdateVisibilityHide(m_VisibilityHide);
@@ -177,9 +180,21 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 			string[] blocks = f_getSelectOperator(a_Formula);
 
 			for (int i = 0; i < blocks.Count(); i++) {
-				string opParts = blocks[i];
+				string opParts = blocks[i].Trim();
 				string[] compareValues = f_getCompareOperators(opParts);
-				string compareOperator = opParts.Substring(compareValues[0].Length, opParts.Length - compareValues[1].Length - compareValues[0].Length).Trim();
+				string compareOperator = "";
+				string firstTag = "";
+				string secondTag = "";
+
+				firstTag = compareValues[0].Trim();
+				if (compareValues.Count() > 1) {
+					secondTag = compareValues[1].Trim();
+					compareOperator = opParts.Substring(firstTag.Length, opParts.Length - secondTag.Length - firstTag.Length).Trim();
+				} else {
+					if (opParts.Length > firstTag.Length) {
+						compareOperator = opParts.Substring(firstTag.Length, opParts.Length - firstTag.Length).Trim();
+					}
+				}
 
 				if (i > 0) {
 					int pos = a_Formula.IndexOf(opParts, lastPos);
@@ -190,24 +205,37 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 					lastPos = pos;
 				}
 
-				if (compareValues[0].Substring(0, 1) == "#") {
-					m_ItemsFormula.Add(f_AppendText(compareValues[0], Color.DarkGoldenrod));
+				if (firstTag.Length > operatorTag.Length && firstTag.Substring(0, operatorTag.Length) == operatorTag) {
+					m_ItemsFormula.Add(f_AppendText(firstTag, Color.DarkGoldenrod));
 				} else {
-					m_ItemsFormula.Add(f_AppendText(compareValues[0], Color.Blue));
+					m_ItemsFormula.Add(f_AppendText(firstTag, Color.Blue));
 				}
 				f_UpdateVisibilityHide(++m_VisibilityHide);
 
-				m_ItemsFormula.Add(f_AppendText(" " + compareOperator + " ", Color.Red));
-				f_UpdateVisibilityHide(++m_VisibilityHide);
-
-				if (compareValues[1].Substring(0, 1) == "#") {
-					m_ItemsFormula.Add(f_AppendText(compareValues[1], Color.DarkGoldenrod));
-				} else {
-					m_ItemsFormula.Add(f_AppendText(compareValues[1], Color.Blue));
+				if (!string.IsNullOrEmpty(compareOperator)) {
+					m_ItemsFormula.Add(f_AppendText(" " + compareOperator + " ", Color.Red));
+					f_UpdateVisibilityHide(++m_VisibilityHide);
 				}
-				f_UpdateVisibilityHide(++m_VisibilityHide);
+
+				if (!string.IsNullOrEmpty(secondTag)) {
+					if (secondTag.Length > operatorTag.Length && secondTag.Substring(0, operatorTag.Length) == operatorTag) {
+						m_ItemsFormula.Add(f_AppendText(secondTag.Trim(), Color.DarkGoldenrod));
+					} else {
+						m_ItemsFormula.Add(f_AppendText(secondTag.Trim(), Color.Blue));
+					}
+					f_UpdateVisibilityHide(++m_VisibilityHide);
+				}
 
 				lastPos += opParts.Length;
+			}
+
+			if (a_Formula.Length > lastPos) {
+				string lastOp = a_Formula.Substring(lastPos, a_Formula.Length - lastPos).Trim();
+
+				if (!string.IsNullOrEmpty(lastOp)) {
+					m_ItemsFormula.Add(f_AppendText(" " + lastOp + " ", Color.Red));
+					f_UpdateVisibilityHide(++m_VisibilityHide);
+				}
 			}
 		}
 
@@ -216,8 +244,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 				return new string[0];
 
 			return formula.Trim().Split(new string[] {
-				" " + operatorAnd + " ",
-				" " + operatorOr + " " }, StringSplitOptions.None);
+				" " + operatorOr,
+				" " + operatorAnd}, StringSplitOptions.RemoveEmptyEntries);
 		}
 
 		private string[] f_getCompareOperators(string comparePart) {
@@ -225,10 +253,10 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 				return new string[0];
 
 			return comparePart.Trim().Split(new string[] {
-				" " + operatorEquals + " ",
-				" " + operatorLess + " ",
-				" " + operatorMore + " ",
-				" " + operatorNotEquals + " " }, StringSplitOptions.None);
+				" " + operatorEquals,
+				" " + operatorLess,
+				" " + operatorMore,
+				" " + operatorNotEquals}, StringSplitOptions.RemoveEmptyEntries);
 		}
 	}
 }

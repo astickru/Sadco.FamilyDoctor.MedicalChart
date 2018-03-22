@@ -28,8 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.panel2 = new System.Windows.Forms.Panel();
+			this.panel_Main = new System.Windows.Forms.Panel();
 			this.ctrlCBAddElement = new System.Windows.Forms.ComboBox();
 			this.ctrlBClear = new System.Windows.Forms.Button();
 			this.ctrlBCancel = new System.Windows.Forms.Button();
@@ -43,40 +42,29 @@
 			this.ctrlRTBFormula = new System.Windows.Forms.RichTextBox();
 			this.ctrlBDelLastAction = new System.Windows.Forms.Button();
 			this.ctrlBAddTag = new System.Windows.Forms.Button();
-			this.panel1.SuspendLayout();
-			this.panel2.SuspendLayout();
+			this.panel_Result = new System.Windows.Forms.Panel();
+			this.panel_Operators = new System.Windows.Forms.Panel();
+			this.panel_Editor = new System.Windows.Forms.Panel();
+			this.panel_Actions = new System.Windows.Forms.Panel();
+			this.panel_Main.SuspendLayout();
+			this.panel_Result.SuspendLayout();
+			this.panel_Operators.SuspendLayout();
+			this.panel_Editor.SuspendLayout();
+			this.panel_Actions.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// panel1
+			// panel_Main
 			// 
-			this.panel1.Controls.Add(this.panel2);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(0, 0);
-			this.panel1.Name = "panel1";
-			this.panel1.Padding = new System.Windows.Forms.Padding(5);
-			this.panel1.Size = new System.Drawing.Size(609, 330);
-			this.panel1.TabIndex = 1;
-			// 
-			// panel2
-			// 
-			this.panel2.Controls.Add(this.ctrlCBAddElement);
-			this.panel2.Controls.Add(this.ctrlBClear);
-			this.panel2.Controls.Add(this.ctrlBCancel);
-			this.panel2.Controls.Add(this.ctrlBEdit);
-			this.panel2.Controls.Add(this.ctrlBAddValue);
-			this.panel2.Controls.Add(this.ctrlTBValue);
-			this.panel2.Controls.Add(this.ctrlBMultiply);
-			this.panel2.Controls.Add(this.ctrlBCarve);
-			this.panel2.Controls.Add(this.ctrlBMinus);
-			this.panel2.Controls.Add(this.ctrlBPlus);
-			this.panel2.Controls.Add(this.ctrlRTBFormula);
-			this.panel2.Controls.Add(this.ctrlBDelLastAction);
-			this.panel2.Controls.Add(this.ctrlBAddTag);
-			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel2.Location = new System.Drawing.Point(5, 5);
-			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(599, 320);
-			this.panel2.TabIndex = 2;
+			this.panel_Main.Controls.Add(this.panel_Editor);
+			this.panel_Main.Controls.Add(this.panel_Actions);
+			this.panel_Main.Controls.Add(this.panel_Operators);
+			this.panel_Main.Controls.Add(this.panel_Result);
+			this.panel_Main.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel_Main.Location = new System.Drawing.Point(5, 5);
+			this.panel_Main.Name = "panel_Main";
+			this.panel_Main.Padding = new System.Windows.Forms.Padding(5);
+			this.panel_Main.Size = new System.Drawing.Size(574, 251);
+			this.panel_Main.TabIndex = 1;
 			// 
 			// ctrlCBAddElement
 			// 
@@ -88,19 +76,19 @@
 			// 
 			// ctrlBClear
 			// 
-			this.ctrlBClear.Location = new System.Drawing.Point(518, 176);
+			this.ctrlBClear.Location = new System.Drawing.Point(486, 3);
 			this.ctrlBClear.Name = "ctrlBClear";
 			this.ctrlBClear.Size = new System.Drawing.Size(75, 23);
 			this.ctrlBClear.TabIndex = 13;
-			this.ctrlBClear.Tag = "*";
-			this.ctrlBClear.Text = "очистить";
+			this.ctrlBClear.Tag = "";
+			this.ctrlBClear.Text = "Очистить";
 			this.ctrlBClear.UseVisualStyleBackColor = true;
 			this.ctrlBClear.Click += new System.EventHandler(this.ctrlBClear_Click);
 			// 
 			// ctrlBCancel
 			// 
 			this.ctrlBCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.ctrlBCancel.Location = new System.Drawing.Point(515, 285);
+			this.ctrlBCancel.Location = new System.Drawing.Point(483, 0);
 			this.ctrlBCancel.Name = "ctrlBCancel";
 			this.ctrlBCancel.Size = new System.Drawing.Size(78, 28);
 			this.ctrlBCancel.TabIndex = 12;
@@ -110,7 +98,7 @@
 			// ctrlBEdit
 			// 
 			this.ctrlBEdit.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.ctrlBEdit.Location = new System.Drawing.Point(431, 285);
+			this.ctrlBEdit.Location = new System.Drawing.Point(399, 0);
 			this.ctrlBEdit.Name = "ctrlBEdit";
 			this.ctrlBEdit.Size = new System.Drawing.Size(78, 28);
 			this.ctrlBEdit.TabIndex = 11;
@@ -119,16 +107,17 @@
 			// 
 			// ctrlBAddValue
 			// 
-			this.ctrlBAddValue.Location = new System.Drawing.Point(569, 146);
+			this.ctrlBAddValue.Location = new System.Drawing.Point(501, 3);
 			this.ctrlBAddValue.Name = "ctrlBAddValue";
-			this.ctrlBAddValue.Size = new System.Drawing.Size(24, 23);
+			this.ctrlBAddValue.Size = new System.Drawing.Size(60, 23);
 			this.ctrlBAddValue.TabIndex = 10;
+			this.ctrlBAddValue.Text = "число";
 			this.ctrlBAddValue.UseVisualStyleBackColor = true;
 			this.ctrlBAddValue.Click += new System.EventHandler(this.ctrlBAddValue_Click);
 			// 
 			// ctrlTBValue
 			// 
-			this.ctrlTBValue.Location = new System.Drawing.Point(519, 148);
+			this.ctrlTBValue.Location = new System.Drawing.Point(446, 4);
 			this.ctrlTBValue.Name = "ctrlTBValue";
 			this.ctrlTBValue.Size = new System.Drawing.Size(49, 20);
 			this.ctrlTBValue.TabIndex = 9;
@@ -136,7 +125,7 @@
 			// 
 			// ctrlBMultiply
 			// 
-			this.ctrlBMultiply.Location = new System.Drawing.Point(518, 118);
+			this.ctrlBMultiply.Location = new System.Drawing.Point(216, 3);
 			this.ctrlBMultiply.Name = "ctrlBMultiply";
 			this.ctrlBMultiply.Size = new System.Drawing.Size(75, 23);
 			this.ctrlBMultiply.TabIndex = 7;
@@ -147,7 +136,7 @@
 			// 
 			// ctrlBCarve
 			// 
-			this.ctrlBCarve.Location = new System.Drawing.Point(518, 89);
+			this.ctrlBCarve.Location = new System.Drawing.Point(135, 3);
 			this.ctrlBCarve.Name = "ctrlBCarve";
 			this.ctrlBCarve.Size = new System.Drawing.Size(75, 23);
 			this.ctrlBCarve.TabIndex = 6;
@@ -158,9 +147,9 @@
 			// 
 			// ctrlBMinus
 			// 
-			this.ctrlBMinus.Location = new System.Drawing.Point(518, 60);
+			this.ctrlBMinus.Location = new System.Drawing.Point(69, 3);
 			this.ctrlBMinus.Name = "ctrlBMinus";
-			this.ctrlBMinus.Size = new System.Drawing.Size(75, 23);
+			this.ctrlBMinus.Size = new System.Drawing.Size(60, 23);
 			this.ctrlBMinus.TabIndex = 5;
 			this.ctrlBMinus.Tag = "";
 			this.ctrlBMinus.Text = "минус";
@@ -169,9 +158,9 @@
 			// 
 			// ctrlBPlus
 			// 
-			this.ctrlBPlus.Location = new System.Drawing.Point(518, 31);
+			this.ctrlBPlus.Location = new System.Drawing.Point(3, 3);
 			this.ctrlBPlus.Name = "ctrlBPlus";
-			this.ctrlBPlus.Size = new System.Drawing.Size(75, 23);
+			this.ctrlBPlus.Size = new System.Drawing.Size(60, 23);
 			this.ctrlBPlus.TabIndex = 4;
 			this.ctrlBPlus.Tag = "";
 			this.ctrlBPlus.Text = "плюс";
@@ -180,17 +169,18 @@
 			// 
 			// ctrlRTBFormula
 			// 
+			this.ctrlRTBFormula.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlRTBFormula.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.ctrlRTBFormula.Location = new System.Drawing.Point(3, 29);
+			this.ctrlRTBFormula.Location = new System.Drawing.Point(0, 0);
 			this.ctrlRTBFormula.Name = "ctrlRTBFormula";
 			this.ctrlRTBFormula.ReadOnly = true;
-			this.ctrlRTBFormula.Size = new System.Drawing.Size(509, 250);
+			this.ctrlRTBFormula.Size = new System.Drawing.Size(564, 151);
 			this.ctrlRTBFormula.TabIndex = 3;
 			this.ctrlRTBFormula.Text = "";
 			// 
 			// ctrlBDelLastAction
 			// 
-			this.ctrlBDelLastAction.Location = new System.Drawing.Point(518, 2);
+			this.ctrlBDelLastAction.Location = new System.Drawing.Point(405, 3);
 			this.ctrlBDelLastAction.Name = "ctrlBDelLastAction";
 			this.ctrlBDelLastAction.Size = new System.Drawing.Size(75, 23);
 			this.ctrlBDelLastAction.TabIndex = 2;
@@ -209,26 +199,75 @@
 			this.ctrlBAddTag.UseVisualStyleBackColor = true;
 			this.ctrlBAddTag.Click += new System.EventHandler(this.ctrlBAddTag_Click);
 			// 
+			// panel_Result
+			// 
+			this.panel_Result.Controls.Add(this.ctrlBEdit);
+			this.panel_Result.Controls.Add(this.ctrlBCancel);
+			this.panel_Result.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.panel_Result.Location = new System.Drawing.Point(5, 215);
+			this.panel_Result.Name = "panel_Result";
+			this.panel_Result.Size = new System.Drawing.Size(564, 31);
+			this.panel_Result.TabIndex = 17;
+			// 
+			// panel_Operators
+			// 
+			this.panel_Operators.Controls.Add(this.ctrlBAddValue);
+			this.panel_Operators.Controls.Add(this.ctrlTBValue);
+			this.panel_Operators.Controls.Add(this.ctrlBCarve);
+			this.panel_Operators.Controls.Add(this.ctrlBPlus);
+			this.panel_Operators.Controls.Add(this.ctrlBMultiply);
+			this.panel_Operators.Controls.Add(this.ctrlBMinus);
+			this.panel_Operators.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.panel_Operators.Location = new System.Drawing.Point(5, 185);
+			this.panel_Operators.Name = "panel_Operators";
+			this.panel_Operators.Size = new System.Drawing.Size(564, 30);
+			this.panel_Operators.TabIndex = 18;
+			// 
+			// panel_Editor
+			// 
+			this.panel_Editor.Controls.Add(this.ctrlRTBFormula);
+			this.panel_Editor.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel_Editor.Location = new System.Drawing.Point(5, 34);
+			this.panel_Editor.Name = "panel_Editor";
+			this.panel_Editor.Size = new System.Drawing.Size(564, 151);
+			this.panel_Editor.TabIndex = 0;
+			// 
+			// panel_Actions
+			// 
+			this.panel_Actions.Controls.Add(this.ctrlBClear);
+			this.panel_Actions.Controls.Add(this.ctrlBDelLastAction);
+			this.panel_Actions.Controls.Add(this.ctrlBAddTag);
+			this.panel_Actions.Controls.Add(this.ctrlCBAddElement);
+			this.panel_Actions.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panel_Actions.Location = new System.Drawing.Point(5, 5);
+			this.panel_Actions.Name = "panel_Actions";
+			this.panel_Actions.Size = new System.Drawing.Size(564, 29);
+			this.panel_Actions.TabIndex = 0;
+			// 
 			// F_EditorFormula
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(609, 330);
-			this.Controls.Add(this.panel1);
+			this.ClientSize = new System.Drawing.Size(584, 261);
+			this.Controls.Add(this.panel_Main);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.Name = "F_EditorFormula";
+			this.Padding = new System.Windows.Forms.Padding(5);
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "F_EditorFormula";
-			this.panel1.ResumeLayout(false);
-			this.panel2.ResumeLayout(false);
-			this.panel2.PerformLayout();
+			this.panel_Main.ResumeLayout(false);
+			this.panel_Result.ResumeLayout(false);
+			this.panel_Operators.ResumeLayout(false);
+			this.panel_Operators.PerformLayout();
+			this.panel_Editor.ResumeLayout(false);
+			this.panel_Actions.ResumeLayout(false);
 			this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel_Main;
         private System.Windows.Forms.ComboBox ctrlCBAddElement;
         private System.Windows.Forms.Button ctrlBClear;
         private System.Windows.Forms.Button ctrlBCancel;
@@ -242,6 +281,10 @@
         private System.Windows.Forms.RichTextBox ctrlRTBFormula;
         private System.Windows.Forms.Button ctrlBDelLastAction;
         private System.Windows.Forms.Button ctrlBAddTag;
-    }
+		private System.Windows.Forms.Panel panel_Editor;
+		private System.Windows.Forms.Panel panel_Actions;
+		private System.Windows.Forms.Panel panel_Operators;
+		private System.Windows.Forms.Panel panel_Result;
+	}
 }
 
