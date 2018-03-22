@@ -90,9 +90,12 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Elements.Editors
 
         private void ctrl_BSave_Click(object sender, EventArgs e)
         {
-            Cl_Element el = (Cl_Element)p_EditPanel.f_ConfirmChanges();
-            m_EditableElement.p_Element = el;
-            p_IsReadOnly = true;
+            Cl_Element el = p_EditPanel.f_ConfirmChanges() as Cl_Element;
+            if (el != null)
+            {
+                m_EditableElement.p_Element = el;
+                p_IsReadOnly = true;
+            }
         }
     }
 }

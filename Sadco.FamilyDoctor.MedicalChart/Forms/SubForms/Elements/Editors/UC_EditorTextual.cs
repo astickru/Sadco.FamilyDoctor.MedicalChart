@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using Sadco.FamilyDoctor.Core;
+using Sadco.FamilyDoctor.Core.Controls;
 using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.MedicalChart.Forms.MegaTemplate;
 using static Sadco.FamilyDoctor.Core.Entities.Cl_Element;
@@ -32,6 +33,22 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         public object f_ConfirmChanges()
         {
+            if (!f_ValidNumber(ctrl_NormValues.Lines))
+            {
+                MessageBox.Show("Нормальные значения не являются числовыми или не соответствуют точности числа");
+                return null;
+            }
+            if (!f_ValidNumber(ctrl_PatValues.Lines))
+            {
+                MessageBox.Show("Патологические значения не являются числовыми или не соответствуют точности числа");
+                return null;
+            }
+            if (!f_ValidNumber(new string[] { ctrl_Default.Text }))
+            {
+                MessageBox.Show("Значение по-умолчанию не является числовым или не соответствует точности числа");
+                return null;
+            }
+
             Cl_Element el = null;
             if (p_EditingElement.p_Version == 0)
             {
@@ -182,6 +199,79 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         }
         #endregion
 
+        #region Number
+        private bool f_ValidNumber(string[] a_Texts)
+        {
+            bool valid = true;
+            if (ctrl_IsNumber.Checked)
+            {
+                if (a_Texts != null && a_Texts.Length > 0)
+                {
+                    foreach (string txt in a_Texts)
+                    {
+                        decimal x;
+                        valid = decimal.TryParse(txt, out x);
+                        if (valid)
+                        {
+                            int index = txt.IndexOf(",");
+                            if (index >= 0)
+                            {
+                                if ((int)ctrl_NumberRound.Value > 0)
+                                {
+                                    valid = index + (int)ctrl_NumberRound.Value >= txt.Length - 1;
+                                }
+                                else
+                                {
+                                    valid = false;
+                                }
+                            }
+                        }
+                        if (!valid)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return valid;
+        }
+
+        private void ctrl_ValidNumber_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            RichTextBox el = ((RichTextBox)sender);
+            if (ctrl_IsNumber.Checked)
+            {
+                int pos = el.SelectionStart - el.GetFirstCharIndexOfCurrentLine();
+                string txt = el.Text;
+                if (el.Lines.Length > 0)
+                {
+                    txt = el.Lines.ElementAt(el.GetLineFromCharIndex(el.SelectionStart));
+                }
+                txt = string.Format("{0}{1}{2}", txt.Substring(0, pos), e.KeyChar, txt.Substring(pos, txt.Length - pos));
+                e.Handled = !f_ValidNumber(new string[] { txt });
+            }
+            else
+            {
+                e.Handled = false;
+            }
+        }
+
+        private void ctrl_NormValues_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            ctrl_ValidNumber_KeyPress(sender, e);
+        }
+
+        private void ctrl_PatValues_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            ctrl_ValidNumber_KeyPress(sender, e);
+        }
+
+        private void ctrl_Default_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+        #endregion
+
         #region Default
         private void f_SetDataDefault()
         {
@@ -230,6 +320,22 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 ctrl_VisibilityFormula.Text = fEditor.f_GetFormula();
             }
+        }
+
+        private void ctrl_ControlType_Click(object sender, EventArgs e)
+        {
+            E_TextTypes textType = (E_TextTypes)ctrl_ControlType.f_GetSelectedItem();
+            bool enable = true;
+            if (textType == E_TextTypes.Bigbox)
+                enable = false;
+            ctrl_IsChangeNotNormValues.Enabled = enable;
+            ctrl_LNormValues.Enabled = ctrl_NormValues.Enabled = enable;
+            ctrl_LPatValues.Enabled = ctrl_PatValues.Enabled = enable;
+            ctrl_IsPartLocations.Enabled = ctrl_PartLocationsValue.Enabled = ctrl_IsPartLocationsMulti.Enabled = enable;
+            ctrl_IsMultiSelect.Enabled = enable;
+            ctrl_IsPartPost.Enabled = enable;
+            ctrl_PartPostValue.Enabled = enable;
+            ctrl_IsNumber.Visible = ctrl_NumberParams.Visible = enable;
         }
     }
 }
