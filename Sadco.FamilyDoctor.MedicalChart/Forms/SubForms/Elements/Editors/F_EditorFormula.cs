@@ -157,6 +157,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 					m_ItemsFormula.Add(f_AppendText(" " + selectOp + " ", Color.Red));
 					f_UpdateVisibilityFormula(false);
 
+
 					lastPos = pos;
 				}
 
