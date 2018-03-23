@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using Sadco.FamilyDoctor.Core;
@@ -49,6 +50,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 return null;
             }
 
+            decimal dVal = 0;
             Cl_Element el = null;
             if (p_EditingElement.p_Version == 0)
             {
@@ -82,10 +84,24 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
             el.p_IsPartNorm = ctrl_IsPartNorm.Checked;
             if (el.p_IsPartNorm)
-                el.p_PartNorm = ctrl_PartNormValue.Text;
+            {
+                if (decimal.TryParse(ctrl_PartNormValue.Text, out dVal))
+                {
+                    if (f_ValidNumber(new string[] { dVal.ToString() }))
+                        el.p_PartNorm = dVal;
+                    else
+                    {
+                        MessageBox.Show("Значение поля \"Норма\" не соответствует точности!");
+                        return null;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Значение поля \"Норма\" не корректное!");
+                    return null;
+                }
+            }
             el.p_IsPartNormRange = ctrl_IsPartNormRange.Checked;
-            if (el.p_IsPartNormRange)
-                el.p_PartNormRange = ctrl_PartNormRangeValue.Text;
 
             el.p_IsChangeNotNormValues = ctrl_IsChangeNotNormValues.Checked;
             el.p_Visible = ctrl_IsVisible.Checked;
@@ -111,6 +127,150 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
             el.f_AddValues(Cl_ElementsParams.E_TypeParam.NormValues, ctrl_NormValues.Lines);
             el.f_AddValues(Cl_ElementsParams.E_TypeParam.PatValues, ctrl_PatValues.Lines);
+
+            el.p_PartAgeNorms.Clear();
+            if (el.p_IsPartNormRange)
+            {
+                if (ctrl_TPartNormRangeValues.DataSource is DataTable)
+                {
+                    DataTable dt = (DataTable)ctrl_TPartNormRangeValues.DataSource;
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        Cl_AgeNorm norm = new Cl_AgeNorm();
+                        byte bVal = 0;
+                        if (row["p_AgeFrom"] == null)
+                        {
+                            MessageBox.Show("Поле \"Возраст от\" пустое!");
+                            return null;
+                        }
+                        else
+                        {
+                            if (byte.TryParse(row["p_AgeFrom"].ToString(), out bVal))
+                                norm.p_AgeFrom = bVal;
+                            else
+                            {
+                                MessageBox.Show("Значение поля \"Возраст от\" не корректное!");
+                                return null;
+                            }
+                        }
+                        if (row["p_AgeTo"] == null)
+                        {
+                            MessageBox.Show("Поле \"Возраст до\" пустое!");
+                            return null;
+                        }
+                        else
+                        {
+                            if (byte.TryParse(row["p_AgeTo"].ToString(), out bVal))
+                                norm.p_AgeTo = bVal;
+                            else
+                            {
+                                MessageBox.Show("Значение поля \"Возраст до\" не корректное!");
+                                return null;
+                            }
+                        }
+                        if (norm.p_AgeFrom > norm.p_AgeTo)
+                        {
+                            MessageBox.Show("Значение поля \"Возраст от\" больше значения поля \"Возраст до\"!");
+                            return null;
+                        }
+                        if (row["p_MaleMin"] == null)
+                        {
+                            MessageBox.Show("Поле \"Муж мин\" пустое!");
+                            return null;
+                        }
+                        else
+                        {
+                            if (decimal.TryParse(row["p_MaleMin"].ToString(), out dVal))
+                            {
+                                if (f_ValidNumber(new string[] { dVal.ToString() }))
+                                    norm.p_MaleMin = dVal;
+                                else
+                                {
+                                    MessageBox.Show("Значение поля \"Муж мин\" не соответствует точности!");
+                                    return null;
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("Значение поля \"Муж мин\" не корректное!");
+                                return null;
+                            }
+                        }
+                        if (row["p_MaleMax"] == null)
+                        {
+                            MessageBox.Show("Поле \"Муж макс\" пустое!");
+                            return null;
+                        }
+                        else
+                        {
+                            if (decimal.TryParse(row["p_MaleMax"].ToString(), out dVal))
+                            {
+                                if (f_ValidNumber(new string[] { dVal.ToString() }))
+                                    norm.p_MaleMax = dVal;
+                                else
+                                {
+                                    MessageBox.Show("Значение поля \"Муж макс\" не соответствует точности!");
+                                    return null;
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("Значение поля \"Муж макс\" не корректное!");
+                                return null;
+                            }
+                        }
+                        if (row["p_FemaleMin"] == null)
+                        {
+                            MessageBox.Show("Поле \"Жен мин\" пустое!");
+                            return null;
+                        }
+                        else
+                        {
+                            if (decimal.TryParse(row["p_FemaleMin"].ToString(), out dVal))
+                            {
+                                if (f_ValidNumber(new string[] { dVal.ToString() }))
+                                    norm.p_FemaleMin = dVal;
+                                else
+                                {
+                                    MessageBox.Show("Значение поля \"Жен мин\" не соответствует точности!");
+                                    return null;
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("Значение поля \"Жен мин\" не корректное!");
+                                return null;
+                            }
+                        }
+                        if (row["p_FemaleMax"] == null)
+                        {
+                            MessageBox.Show("Поле \"Жен макс\" пустое!");
+                            return null;
+                        }
+                        else
+                        {
+                            if (decimal.TryParse(row["p_FemaleMax"].ToString(), out dVal))
+                            {
+                                if (f_ValidNumber(new string[] { dVal.ToString() }))
+                                    norm.p_FemaleMax = dVal;
+                                else
+                                {
+                                    MessageBox.Show("Значение поля \"Жен макс\" не соответствует точности!");
+                                    return null;
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("Значение поля \"Жен макс\" не корректное!");
+                                return null;
+                            }
+                        }
+                        norm.p_ElementID = el.p_ID;
+                        el.p_PartAgeNorms.Add(norm);
+                    }
+                }
+
+            }
             Cl_App.m_DataContext.SaveChanges();
             f_SetElement(el);
             return el;
@@ -137,9 +297,35 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             ctrl_IsPartLocations.Checked = ctrl_PartLocationsValue.Enabled = ctrl_IsPartLocationsMulti.Enabled = p_EditingElement.p_IsPartLocations;
             ctrl_IsPartLocationsMulti.Checked = p_EditingElement.p_IsPartLocationsMulti;
             ctrl_IsPartNorm.Checked = ctrl_PartNormValue.Enabled = p_EditingElement.p_IsPartNorm;
-            ctrl_PartNormValue.Text = p_EditingElement.p_PartNorm;
-            ctrl_IsPartNormRange.Checked = ctrl_PartNormRangeValue.Enabled = p_EditingElement.p_IsPartNormRange;
-            ctrl_PartNormRangeValue.Text = p_EditingElement.p_PartNormRange;
+            ctrl_PartNormValue.Text = p_EditingElement.p_PartNorm.ToString();
+            ctrl_IsPartNormRange.Checked = ctrl_TPartNormRangeValues.Enabled = p_EditingElement.p_IsPartNormRange;
+
+            List<Cl_AgeNorm> ageNorms = Cl_App.m_DataContext.p_AgeNorms.Where(n => n.p_ElementID == a_Element.p_ID).ToList();
+            DataTable dt = new DataTable();
+            foreach (DataGridViewColumn col in ctrl_TPartNormRangeValues.Columns)
+            {
+                dt.Columns.Add(col.Name);
+                col.DataPropertyName = col.Name;
+            };
+            foreach (var norm in ageNorms)
+            {
+                var row = dt.NewRow();
+                row["p_AgeFrom"] = norm.p_AgeFrom;
+                row["p_AgeTo"] = norm.p_AgeTo;
+                row["p_MaleMin"] = norm.p_MaleMin;
+                row["p_MaleMax"] = norm.p_MaleMax;
+                row["p_FemaleMin"] = norm.p_FemaleMin;
+                row["p_FemaleMax"] = norm.p_FemaleMax;
+                dt.Rows.Add(row);
+            }
+            ctrl_TPartNormRangeValues.DataSource = dt;
+
+            //foreach (Cl_AgeNorm norm in ageNorms)
+            //{
+            //    ctrl_TPartNormRangeValues.Rows.Add(new DataGridViewRow() { Cells  });
+            //}
+
+            //ctrl_PartNormRangeValue.Text = p_EditingElement.p_PartNormRange;
             ctrl_IsChangeNotNormValues.Checked = p_EditingElement.p_IsChangeNotNormValues;
 
             ctrl_IsVisible.Checked = p_EditingElement.p_Visible;
@@ -160,6 +346,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             ctrl_PartLocationsValue.Text = string.Join("\n", p_EditingElement.p_PartLocations.ToList());
             ctrl_NormValues.Text = string.Join("\n", p_EditingElement.p_NormValues.ToList());
             ctrl_PatValues.Text = string.Join("\n", p_EditingElement.p_PatValues.ToList());
+
+            f_UpdateModeTextType((E_TextTypes)ctrl_ControlType.f_GetSelectedItem());
         }
         #region CheckedChanged
         private void ctrl_IsSymmentry_CheckedChanged(object sender, EventArgs e)
@@ -170,6 +358,9 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         private void ctrl_CB_IsNumber_CheckedChanged(object sender, EventArgs e)
         {
             ctrl_NumberParams.Visible = ctrl_IsNumber.Checked;
+            ctrl_IsPartNorm.Checked = ctrl_IsPartNormRange.Checked = false;
+            ctrl_IsPartNorm.Enabled = ctrl_IsPartNormRange.Enabled = ctrl_IsNumber.Checked;
+            ctrl_PartNormValue.Enabled = ctrl_TPartNormRangeValues.Enabled = false;
         }
 
         private void ctrl_IsPartPre_CheckedChanged(object sender, EventArgs e)
@@ -188,14 +379,27 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             ctrl_IsPartLocationsMulti.Enabled = ctrl_IsPartLocations.Checked;
         }
 
+        private bool m_IsBlockPartNorm = false;
         private void ctrl_IsPartNorm_CheckedChanged(object sender, EventArgs e)
         {
-            ctrl_PartNormValue.Enabled = ctrl_IsPartNorm.Checked;
+            if (!m_IsBlockPartNorm)
+            {
+                ctrl_PartNormValue.Enabled = ctrl_IsPartNorm.Checked;
+                m_IsBlockPartNorm = true;
+                ctrl_IsPartNormRange.Checked = ctrl_TPartNormRangeValues.Enabled = false;
+                m_IsBlockPartNorm = false;
+            }
         }
 
         private void ctrl_IsPartNormRange_CheckedChanged(object sender, EventArgs e)
         {
-            ctrl_PartNormRangeValue.Enabled = ctrl_IsPartNormRange.Checked;
+            if (!m_IsBlockPartNorm)
+            {
+                ctrl_TPartNormRangeValues.Enabled = ctrl_IsPartNormRange.Checked;
+                m_IsBlockPartNorm = true;
+                ctrl_IsPartNorm.Checked = ctrl_PartNormValue.Enabled = false;
+                m_IsBlockPartNorm = false;
+            }
         }
         #endregion
 
@@ -209,6 +413,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 {
                     foreach (string txt in a_Texts)
                     {
+                        if (string.IsNullOrWhiteSpace(txt)) continue;
                         decimal x;
                         valid = decimal.TryParse(txt, out x);
                         if (valid)
@@ -266,11 +471,22 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             ctrl_ValidNumber_KeyPress(sender, e);
         }
 
+        private void ctrl_PartNormValue_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            TextBox el = ((TextBox)sender);
+            e.Handled = !f_ValidNumber(new string[] { el.Text + e.KeyChar });
+        }
+
         private void ctrl_Default_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = true;
         }
         #endregion
+
+        private void ctrlTag_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = e.KeyChar != Keys.Back.GetHashCode() && e.KeyChar != Keys.Delete.GetHashCode() && (e.KeyChar < 65 || (e.KeyChar > 90 && e.KeyChar < 97) || e.KeyChar > 122);
+        }
 
         #region Default
         private void f_SetDataDefault()
@@ -322,20 +538,27 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
         }
 
-        private void ctrl_ControlType_Click(object sender, EventArgs e)
+        private void f_UpdateModeTextType(E_TextTypes a_TextType)
         {
-            E_TextTypes textType = (E_TextTypes)ctrl_ControlType.f_GetSelectedItem();
             bool enable = true;
-            if (textType == E_TextTypes.Bigbox)
+            if (a_TextType == E_TextTypes.Bigbox)
                 enable = false;
-            ctrl_IsChangeNotNormValues.Enabled = enable;
-            ctrl_LNormValues.Enabled = ctrl_NormValues.Enabled = enable;
             ctrl_LPatValues.Enabled = ctrl_PatValues.Enabled = enable;
-            ctrl_IsPartLocations.Enabled = ctrl_PartLocationsValue.Enabled = ctrl_IsPartLocationsMulti.Enabled = enable;
+            ctrl_IsPartLocations.Enabled = enable;
+            ctrl_PartLocationsValue.Enabled = ctrl_IsPartLocationsMulti.Enabled = ctrl_IsPartLocations.Enabled && ctrl_IsPartLocations.Checked;
             ctrl_IsMultiSelect.Enabled = enable;
             ctrl_IsPartPost.Enabled = enable;
-            ctrl_PartPostValue.Enabled = enable;
+            ctrl_PartPostValue.Enabled = ctrl_IsPartPost.Enabled && ctrl_IsPartPost.Checked;
             ctrl_IsNumber.Visible = ctrl_NumberParams.Visible = enable;
+            ctrl_IsPartNorm.Enabled = enable;
+            ctrl_PartNormValue.Enabled = ctrl_IsPartNorm.Enabled && ctrl_IsPartNorm.Checked;
+            ctrl_IsPartNormRange.Enabled = enable;
+            ctrl_IsChangeNotNormValues.Enabled = ctrl_IsPartNormRange.Enabled && ctrl_IsPartNormRange.Checked;
+        }
+
+        private void ctrl_ControlType_Click(object sender, EventArgs e)
+        {
+            f_UpdateModeTextType((E_TextTypes)ctrl_ControlType.f_GetSelectedItem());
         }
     }
 }

@@ -25,6 +25,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         private void f_InitTreeView()
         {
             ctrl_TreeElements.AfterSelect += Ctrl_TreeElements_AfterSelect;
+            ctrl_TreeElements.e_AfterCreateElement += Ctrl_TreeElements_e_AfterCreateElement;
             Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Elements && g.p_ParentID == null && !g.p_IsArhive).ToArray();
             foreach (Cl_Group group in groups)
             {
@@ -51,6 +52,16 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 if (!group.p_IsArhive)
                     f_PopulateTreeGroup(group, node.Nodes);
+            }
+        }
+
+        private void Ctrl_TreeElements_e_AfterCreateElement(object sender, TreeViewEventArgs e)
+        {
+            if (ctrl_TreeElements.p_SelectedElement != null && ctrl_TreeElements.p_SelectedElement.p_Element != null)
+            {
+                UC_ElementsPropertyPanel panel = m_PanelManager.f_SetElement<UC_ElementsPropertyPanel>();
+                panel.p_EditableElement = ctrl_TreeElements.p_SelectedElement;
+                panel.p_IsReadOnly = false;
             }
         }
 

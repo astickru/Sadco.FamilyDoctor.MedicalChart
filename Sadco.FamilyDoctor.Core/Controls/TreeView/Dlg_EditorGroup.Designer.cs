@@ -104,6 +104,7 @@
             this.Padding = new System.Windows.Forms.Padding(15);
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Группа";
             this.ResumeLayout(false);
             this.PerformLayout();

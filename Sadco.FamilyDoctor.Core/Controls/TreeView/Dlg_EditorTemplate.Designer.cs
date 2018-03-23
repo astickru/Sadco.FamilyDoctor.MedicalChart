@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.panel2 = new System.Windows.Forms.Panel();
-            this.ctrl_BCancel = new System.Windows.Forms.Button();
-            this.ctrl_BOk = new System.Windows.Forms.Button();
             this.ctrl_LGroupValue = new System.Windows.Forms.Label();
             this.ctrl_LTitleGroup = new System.Windows.Forms.Label();
             this.ctrl_TBName = new System.Windows.Forms.TextBox();
             this.ctrl_LTitleName = new System.Windows.Forms.Label();
+            this.ctrl_BCancel = new System.Windows.Forms.Button();
+            this.ctrl_BOk = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,26 +51,6 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(370, 119);
             this.panel2.TabIndex = 64;
-            // 
-            // ctrl_BCancel
-            // 
-            this.ctrl_BCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.ctrl_BCancel.Location = new System.Drawing.Point(268, 77);
-            this.ctrl_BCancel.Name = "ctrl_BCancel";
-            this.ctrl_BCancel.Size = new System.Drawing.Size(75, 23);
-            this.ctrl_BCancel.TabIndex = 23;
-            this.ctrl_BCancel.Text = "Отмена";
-            this.ctrl_BCancel.UseVisualStyleBackColor = true;
-            // 
-            // ctrl_BOk
-            // 
-            this.ctrl_BOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.ctrl_BOk.Location = new System.Drawing.Point(179, 77);
-            this.ctrl_BOk.Name = "ctrl_BOk";
-            this.ctrl_BOk.Size = new System.Drawing.Size(75, 23);
-            this.ctrl_BOk.TabIndex = 22;
-            this.ctrl_BOk.Text = "ОК";
-            this.ctrl_BOk.UseVisualStyleBackColor = true;
             // 
             // ctrl_LGroupValue
             // 
@@ -106,6 +86,26 @@
             this.ctrl_LTitleName.TabIndex = 67;
             this.ctrl_LTitleName.Text = "Наименование";
             // 
+            // ctrl_BCancel
+            // 
+            this.ctrl_BCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.ctrl_BCancel.Location = new System.Drawing.Point(268, 77);
+            this.ctrl_BCancel.Name = "ctrl_BCancel";
+            this.ctrl_BCancel.Size = new System.Drawing.Size(75, 23);
+            this.ctrl_BCancel.TabIndex = 23;
+            this.ctrl_BCancel.Text = "Отмена";
+            this.ctrl_BCancel.UseVisualStyleBackColor = true;
+            // 
+            // ctrl_BOk
+            // 
+            this.ctrl_BOk.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.ctrl_BOk.Location = new System.Drawing.Point(179, 77);
+            this.ctrl_BOk.Name = "ctrl_BOk";
+            this.ctrl_BOk.Size = new System.Drawing.Size(75, 23);
+            this.ctrl_BOk.TabIndex = 22;
+            this.ctrl_BOk.Text = "ОК";
+            this.ctrl_BOk.UseVisualStyleBackColor = true;
+            // 
             // Dlg_EditorTemplate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -114,6 +114,7 @@
             this.ClientSize = new System.Drawing.Size(370, 119);
             this.Controls.Add(this.panel2);
             this.Name = "Dlg_EditorTemplate";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Dlg_EditorTemplate";
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();

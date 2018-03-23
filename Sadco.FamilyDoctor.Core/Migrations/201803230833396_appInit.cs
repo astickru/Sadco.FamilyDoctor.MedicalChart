@@ -8,6 +8,23 @@ namespace Sadco.FamilyDoctor.Core.Migrations
         public override void Up()
         {
             CreateTable(
+                "dbo.T_AGENORMS",
+                c => new
+                    {
+                        F_ID = c.Int(nullable: false, identity: true),
+                        F_ELEMENT_ID = c.Int(nullable: false),
+                        F_AGEFROM = c.Byte(nullable: false),
+                        F_AGETO = c.Byte(nullable: false),
+                        F_MALEMIN = c.Decimal(nullable: false, precision: 10, scale: 6),
+                        F_MALEMAX = c.Decimal(nullable: false, precision: 10, scale: 6),
+                        F_FEMALEMIN = c.Decimal(nullable: false, precision: 10, scale: 6),
+                        F_FEMALEMAX = c.Decimal(nullable: false, precision: 10, scale: 6),
+                    })
+                .PrimaryKey(t => t.F_ID)
+                .ForeignKey("dbo.T_ELEMENTS", t => t.F_ELEMENT_ID, cascadeDelete: true)
+                .Index(t => t.F_ELEMENT_ID);
+            
+            CreateTable(
                 "dbo.T_ELEMENTS",
                 c => new
                     {
@@ -37,9 +54,8 @@ namespace Sadco.FamilyDoctor.Core.Migrations
                         F_ISPARTLOCATIONS = c.Boolean(nullable: false),
                         F_ISPARTLOCATIONSMULTI = c.Boolean(nullable: false),
                         F_ISPARTNORM = c.Boolean(nullable: false),
-                        F_PARTNORM = c.String(maxLength: 100, unicode: false),
+                        F_PARTNORM = c.Decimal(nullable: false, precision: 10, scale: 6),
                         F_ISPARTNORMRANGE = c.Boolean(nullable: false),
-                        F_PARTNORMRANGE = c.String(maxLength: 100, unicode: false),
                         F_ISCHANGENOTNORM = c.Boolean(nullable: false),
                         F_VISIBILITYFORMULA = c.String(maxLength: 1000, unicode: false),
                         F_COMMENT = c.String(maxLength: 100, unicode: false),
@@ -120,6 +136,7 @@ namespace Sadco.FamilyDoctor.Core.Migrations
             DropForeignKey("dbo.T_TEMPLATESELEMENTS", "F_TEMPLATE_ID", "dbo.T_TEMPLATES");
             DropForeignKey("dbo.T_TEMPLATESELEMENTS", "p_Element_p_ID", "dbo.T_ELEMENTS");
             DropForeignKey("dbo.T_TEMPLATES", "F_GROUP_ID", "dbo.T_GROUPS");
+            DropForeignKey("dbo.T_AGENORMS", "F_ELEMENT_ID", "dbo.T_ELEMENTS");
             DropForeignKey("dbo.T_ELEMENTS", "F_GROUP_ID", "dbo.T_GROUPS");
             DropForeignKey("dbo.T_GROUPS", "F_PARENT_ID", "dbo.T_GROUPS");
             DropForeignKey("dbo.T_ELEMENTSPRMS", "F_ELEMENT_ID", "dbo.T_ELEMENTS");
@@ -129,11 +146,13 @@ namespace Sadco.FamilyDoctor.Core.Migrations
             DropIndex("dbo.T_GROUPS", new[] { "F_PARENT_ID" });
             DropIndex("dbo.T_ELEMENTSPRMS", new[] { "F_ELEMENT_ID" });
             DropIndex("dbo.T_ELEMENTS", new[] { "F_GROUP_ID" });
+            DropIndex("dbo.T_AGENORMS", new[] { "F_ELEMENT_ID" });
             DropTable("dbo.T_TEMPLATESELEMENTS");
             DropTable("dbo.T_TEMPLATES");
             DropTable("dbo.T_GROUPS");
             DropTable("dbo.T_ELEMENTSPRMS");
             DropTable("dbo.T_ELEMENTS");
+            DropTable("dbo.T_AGENORMS");
         }
     }
 }

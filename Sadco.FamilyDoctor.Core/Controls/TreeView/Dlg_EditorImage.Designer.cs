@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             this.panel2 = new System.Windows.Forms.Panel();
-            this.ctrl_TBDecs = new System.Windows.Forms.TextBox();
-            this.ctrl_LTitleDesc = new System.Windows.Forms.Label();
-            this.ctrl_BCancel = new System.Windows.Forms.Button();
-            this.ctrl_BOk = new System.Windows.Forms.Button();
             this.ctrl_LGroupValue = new System.Windows.Forms.Label();
             this.ctrl_LTitleGroup = new System.Windows.Forms.Label();
             this.ctrl_TBName = new System.Windows.Forms.TextBox();
             this.ctrl_LTitleName = new System.Windows.Forms.Label();
+            this.ctrl_TBDecs = new System.Windows.Forms.TextBox();
+            this.ctrl_LTitleDesc = new System.Windows.Forms.Label();
+            this.ctrl_BCancel = new System.Windows.Forms.Button();
+            this.ctrl_BOk = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,6 +55,40 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(370, 145);
             this.panel2.TabIndex = 64;
+            // 
+            // ctrl_LGroupValue
+            // 
+            this.ctrl_LGroupValue.AutoSize = true;
+            this.ctrl_LGroupValue.Location = new System.Drawing.Point(161, 17);
+            this.ctrl_LGroupValue.Name = "ctrl_LGroupValue";
+            this.ctrl_LGroupValue.Size = new System.Drawing.Size(68, 13);
+            this.ctrl_LGroupValue.TabIndex = 70;
+            this.ctrl_LGroupValue.Text = "Неизвестно";
+            // 
+            // ctrl_LTitleGroup
+            // 
+            this.ctrl_LTitleGroup.AutoSize = true;
+            this.ctrl_LTitleGroup.Location = new System.Drawing.Point(14, 17);
+            this.ctrl_LTitleGroup.Name = "ctrl_LTitleGroup";
+            this.ctrl_LTitleGroup.Size = new System.Drawing.Size(42, 13);
+            this.ctrl_LTitleGroup.TabIndex = 69;
+            this.ctrl_LTitleGroup.Text = "Группа";
+            // 
+            // ctrl_TBName
+            // 
+            this.ctrl_TBName.Location = new System.Drawing.Point(164, 43);
+            this.ctrl_TBName.Name = "ctrl_TBName";
+            this.ctrl_TBName.Size = new System.Drawing.Size(192, 20);
+            this.ctrl_TBName.TabIndex = 68;
+            // 
+            // ctrl_LTitleName
+            // 
+            this.ctrl_LTitleName.AutoSize = true;
+            this.ctrl_LTitleName.Location = new System.Drawing.Point(14, 46);
+            this.ctrl_LTitleName.Name = "ctrl_LTitleName";
+            this.ctrl_LTitleName.Size = new System.Drawing.Size(83, 13);
+            this.ctrl_LTitleName.TabIndex = 67;
+            this.ctrl_LTitleName.Text = "Наименование";
             // 
             // ctrl_TBDecs
             // 
@@ -92,40 +126,6 @@
             this.ctrl_BOk.Text = "ОК";
             this.ctrl_BOk.UseVisualStyleBackColor = true;
             // 
-            // ctrl_LGroupValue
-            // 
-            this.ctrl_LGroupValue.AutoSize = true;
-            this.ctrl_LGroupValue.Location = new System.Drawing.Point(161, 17);
-            this.ctrl_LGroupValue.Name = "ctrl_LGroupValue";
-            this.ctrl_LGroupValue.Size = new System.Drawing.Size(68, 13);
-            this.ctrl_LGroupValue.TabIndex = 70;
-            this.ctrl_LGroupValue.Text = "Неизвестно";
-            // 
-            // ctrl_LTitleGroup
-            // 
-            this.ctrl_LTitleGroup.AutoSize = true;
-            this.ctrl_LTitleGroup.Location = new System.Drawing.Point(14, 17);
-            this.ctrl_LTitleGroup.Name = "ctrl_LTitleGroup";
-            this.ctrl_LTitleGroup.Size = new System.Drawing.Size(42, 13);
-            this.ctrl_LTitleGroup.TabIndex = 69;
-            this.ctrl_LTitleGroup.Text = "Группа";
-            // 
-            // ctrl_TBName
-            // 
-            this.ctrl_TBName.Location = new System.Drawing.Point(164, 43);
-            this.ctrl_TBName.Name = "ctrl_TBName";
-            this.ctrl_TBName.Size = new System.Drawing.Size(192, 20);
-            this.ctrl_TBName.TabIndex = 68;
-            // 
-            // ctrl_LTitleName
-            // 
-            this.ctrl_LTitleName.AutoSize = true;
-            this.ctrl_LTitleName.Location = new System.Drawing.Point(14, 46);
-            this.ctrl_LTitleName.Name = "ctrl_LTitleName";
-            this.ctrl_LTitleName.Size = new System.Drawing.Size(83, 13);
-            this.ctrl_LTitleName.TabIndex = 67;
-            this.ctrl_LTitleName.Text = "Наименование";
-            // 
             // Dlg_EditorImage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -134,6 +134,7 @@
             this.ClientSize = new System.Drawing.Size(370, 145);
             this.Controls.Add(this.panel2);
             this.Name = "Dlg_EditorImage";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Dlg_EditorImage";
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();

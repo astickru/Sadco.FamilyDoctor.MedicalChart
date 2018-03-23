@@ -20,6 +20,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
         public Ctrl_TreeNodeElement p_SelectedElement {
             get { return SelectedNode as Ctrl_TreeNodeElement; }
         }
+        public event TreeViewEventHandler e_AfterCreateElement;
 
         private void InitializeComponent()
         {
@@ -33,7 +34,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.ctrl_ElementNew.Name = "ctrl_ElementNew";
             this.ctrl_ElementNew.Size = new System.Drawing.Size(175, 22);
             this.ctrl_ElementNew.Tag = "ElementNew";
-            this.ctrl_ElementNew.Text = "Добавить элемент";
+            this.ctrl_ElementNew.Text = "Добавить текстовый элемент";
             this.ctrl_ElementNew.Click += Ctrl_ElementNew_Click;
             // 
             // ctrl_ImageNew
@@ -135,11 +136,25 @@ namespace Sadco.FamilyDoctor.Core.Controls
             newElement.p_Name = dlg.ctrl_TBName.Text;
             newElement.p_Comment = dlg.ctrl_TBDecs.Text;
             newElement.p_ElementType = (Cl_Element.E_ElementsTypes)dlg.ctrl_CB_ControlType.f_GetSelectedItem();
+            newElement.p_IsPartPre = true;
+            if (dlg.ctrl_TBName.Text.Length > 0)
+            {
+                newElement.p_PartPre = dlg.ctrl_TBName.Text[0].ToString().ToUpper();
+                if (dlg.ctrl_TBName.Text.Length > 1)
+                {
+                    newElement.p_PartPre += dlg.ctrl_TBName.Text.Substring(1, dlg.ctrl_TBName.Text.Length - 2);
+                }
+            }
+            newElement.p_SymmetryParamLeft = "Слева";
+            newElement.p_SymmetryParamRight = "Справа";
             Cl_App.m_DataContext.p_Elements.Add(newElement);
             Cl_App.m_DataContext.SaveChanges();
             newElement.p_ElementID = newElement.p_ID;
             Cl_App.m_DataContext.SaveChanges();
-            SelectedNode.Nodes.Add(new Ctrl_TreeNodeElement(group, newElement));
+            Ctrl_TreeNodeElement newNode = new Ctrl_TreeNodeElement(group, newElement);
+            SelectedNode.Nodes.Add(newNode);
+            SelectedNode = newNode;
+            e_AfterCreateElement?.Invoke(this, new TreeViewEventArgs(newNode));
         }
 
         private void Ctrl_ImageNew_Click(object sender, EventArgs e)
@@ -165,7 +180,10 @@ namespace Sadco.FamilyDoctor.Core.Controls
             Cl_App.m_DataContext.SaveChanges();
             newElement.p_ElementID = newElement.p_ID;
             Cl_App.m_DataContext.SaveChanges();
-            SelectedNode.Nodes.Add(new Ctrl_TreeNodeElement(group, newElement));
+            Ctrl_TreeNodeElement newNode = new Ctrl_TreeNodeElement(group, newElement);
+            SelectedNode.Nodes.Add(newNode);
+            SelectedNode = newNode;
+            e_AfterCreateElement?.Invoke(this, new TreeViewEventArgs(newNode));
         }
 
         private void Ctrl_ElementDelete_Click(object sender, EventArgs e)

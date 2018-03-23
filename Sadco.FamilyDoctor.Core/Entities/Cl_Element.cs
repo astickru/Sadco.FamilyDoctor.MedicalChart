@@ -62,7 +62,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Column("F_NAME", TypeName = "varchar")]
         [MaxLength(100)]
         public string p_Name { get; set; }
-        
+
         /// <summary>Тэг элемента</summary>
         [Column("F_TAG", TypeName = "varchar")]
         [MaxLength(60)]
@@ -102,7 +102,8 @@ namespace Sadco.FamilyDoctor.Core.Entities
         }
 
         /// <summary>Возвращает является ли текстовым элементом</summary>
-        public bool f_IsText() {
+        public bool f_IsText()
+        {
             return p_ElementType == E_ElementsTypes.Float || p_ElementType == E_ElementsTypes.Line || p_ElementType == E_ElementsTypes.Bigbox;
         }
 
@@ -127,57 +128,57 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Обязательность заполнения</summary>
         [Column("F_REQUIRED")]
         public bool p_Required { get { return m_Required; } set { m_Required = value; } }
-        
+
         /// <summary>Возможность редактирования</summary>
         [Column("F_EDITING")]
         public bool p_Editing { get { return m_Editing; } set { m_Editing = value; } }
-        
+
         // <summary>Множественный выбор</summary>
         [Column("F_ISMULTI")]
         public bool p_IsMultiSelect { get; set; }
-        
+
         // <summary>Является числовым</summary>
         [Column("F_ISNUMBER")]
         public bool p_IsNumber { get; set; }
-        
+
         // <summary>Точность числа</summary>
         [Column("F_NUMROUND")]
         public byte p_NumberRound { get; set; }
-        
+
         // <summary>Формула числа</summary>
         [Column("F_NUMFORMULA", TypeName = "varchar")]
         [MaxLength(300)]
         public string p_NumberFormula { get; set; }
-        
+
         /// <summary>Видимость безусловная</summary>
         [Column("F_VISIBLE")]
         public bool p_Visible { get { return m_Visible; } set { m_Visible = value; } }
-        
+
         /// <summary>Видимость для пациента</summary>
         [Column("F_VISIBLEPATIENT")]
         public bool p_VisiblePatient { get; set; }
-        
+
         /// <summary>Подсказка по заполнению (отображается всплывающей подсказкой или сообщение по F1)</summary>
         [Column("F_HELP", TypeName = "varchar")]
         [MaxLength(500)]
         public string p_Help { get; set; }
-        
+
         /// <summary>Признак симметричности.
         /// Симметричность подразумевает повторение содержимого блока 2 раза (это используется для описания одинаковых правых и левых органов)
         /// с автоматически добавляемыми заголовками, указанными в его свойствах (напр., «справа» и «слева» или “OD” и “OS”)</summary>
         [Column("F_SYMMETRICAL")]
         public bool p_Symmetrical { get { return m_Symmetrical; } set { m_Symmetrical = value; } }
-        
+
         /// <summary>Текст обозначения 1 стороны симметричности</summary>
         [Column("F_SYMMETRYPARAMLEFT", TypeName = "varchar")]
         [MaxLength(50)]
         public string p_SymmetryParamLeft { get; set; }
-        
+
         /// <summary>Текст обозначения 2 стороны симметричности</summary>
         [Column("F_SYMMETRYPARAMRIGHT", TypeName = "varchar")]
         [MaxLength(50)]
         public string p_SymmetryParamRight { get; set; }
-        
+
         /// <summary>Значение по умолчанию</summary>
         [Column("F_DEFAULT", TypeName = "varchar")]
         [MaxLength(100)]
@@ -215,18 +216,20 @@ namespace Sadco.FamilyDoctor.Core.Entities
         public bool p_IsPartNorm { get; set; }
 
         /// <summary>Часть. Значение нормы</summary>
-        [Column("F_PARTNORM", TypeName = "varchar")]
-        [MaxLength(100)]
-        public string p_PartNorm { get; set; }
+        [Column("F_PARTNORM")]
+        public decimal p_PartNorm { get; set; }
 
         /// <summary>Часть. Использование нормы диапозон</summary>
         [Column("F_ISPARTNORMRANGE")]
         public bool p_IsPartNormRange { get; set; }
 
-        /// <summary>Часть. Значение нормы диапозон</summary>
-        [Column("F_PARTNORMRANGE", TypeName = "varchar")]
-        [MaxLength(100)]
-        public string p_PartNormRange { get; set; }
+        private List<Cl_AgeNorm> m_PartAgeNorms = new List<Cl_AgeNorm>();
+        /// <summary>Часть. Список возрастных норм</summary>
+        [ForeignKey("p_ElementID")]
+        public List<Cl_AgeNorm> p_PartAgeNorms {
+            get { return m_PartAgeNorms; }
+            set { m_PartAgeNorms = value; }
+        }
         #endregion
 
         /// <summary>Возможность ввода не стандартных значений</summary>
@@ -284,7 +287,8 @@ namespace Sadco.FamilyDoctor.Core.Entities
             {
                 foreach (string val in a_Values)
                 {
-                    p_ParamsValues.Add(new Cl_ElementsParams() { p_ElementID = p_ID, p_TypeParam = a_TypeParam, p_Value = val });
+                    if (!string.IsNullOrWhiteSpace(val))
+                        p_ParamsValues.Add(new Cl_ElementsParams() { p_ElementID = p_ID, p_TypeParam = a_TypeParam, p_Value = val });
                 }
             }
         }

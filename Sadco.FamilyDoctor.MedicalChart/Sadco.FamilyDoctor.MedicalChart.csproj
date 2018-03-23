@@ -93,7 +93,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\Controls\Cl_CtrlTemplateNode.cs" />
     <Compile Include="Forms\SubForms\Elements\Editors\F_EditorСondition.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -111,12 +110,6 @@
     </Compile>
     <Compile Include="Forms\SubForms\Elements\Editors\UC_ElementsPropertyPanel.Designer.cs">
       <DependentUpon>UC_ElementsPropertyPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\F_LocationEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\F_LocationEditor.Designer.cs">
-      <DependentUpon>F_LocationEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\MegaTemplate\F_GroupTemplate.cs">
       <SubType>Form</SubType>
@@ -168,11 +161,7 @@
     <Compile Include="Forms\SubForms\Templates\UC_EditorTemplates.Designer.cs">
       <DependentUpon>UC_EditorTemplates.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI_Helper.cs" />
     <Compile Include="UI_PanelManager.cs" />
-    <EmbeddedResource Include="Forms\F_LocationEditor.resx">
-      <DependentUpon>F_LocationEditor.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MegaTemplate\F_GroupTemplate.resx">
       <DependentUpon>F_GroupTemplate.cs</DependentUpon>
     </EmbeddedResource>

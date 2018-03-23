@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Sadco.FamilyDoctor.Core.Entities
 {
-    /// <summary>Класс параметров элементов шаблона</summary>
+    /// <summary>Класс параметров текстовых элементов шаблона</summary>
     [Table("T_ELEMENTSPRMS")]
     public class Cl_ElementsParams 
     {

@@ -2,7 +2,6 @@
 using Sadco.FamilyDoctor.Core.Controls;
 using Sadco.FamilyDoctor.Core.Controls.DesignerPanel;
 using Sadco.FamilyDoctor.Core.Entities;
-using Sadco.FamilyDoctor.MedicalChart.Entities.Controls;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

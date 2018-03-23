@@ -61,6 +61,7 @@
             // 
             // ctrl_CB_ControlType
             // 
+            this.ctrl_CB_ControlType.BackColor = System.Drawing.SystemColors.Control;
             this.ctrl_CB_ControlType.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.ctrl_CB_ControlType.FormattingEnabled = true;
             this.ctrl_CB_ControlType.Location = new System.Drawing.Point(162, 74);
@@ -169,6 +170,7 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "Dlg_EditorElement";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Dlg_EditorElement";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

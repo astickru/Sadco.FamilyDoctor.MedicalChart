@@ -23,6 +23,7 @@ namespace Sadco.FamilyDoctor.Core.Data
 
         public DbSet<Cl_Element> p_Elements { get; set; }
         public DbSet<Cl_ElementsParams> p_ElementsParams { get; set; }
+        public DbSet<Cl_AgeNorm> p_AgeNorms { get; set; }
 
         private Dictionary<string, Type> m_GetAvailableControls { get; set; }
         public Dictionary<string, Type> f_GetAvailableControls()
@@ -53,6 +54,12 @@ namespace Sadco.FamilyDoctor.Core.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Cl_Element>().Property(e => e.p_PartNorm).HasPrecision(10, 6);
+
+            modelBuilder.Entity<Cl_AgeNorm>().Property(n => n.p_MaleMin).HasPrecision(10, 6);
+            modelBuilder.Entity<Cl_AgeNorm>().Property(n => n.p_MaleMax).HasPrecision(10, 6);
+            modelBuilder.Entity<Cl_AgeNorm>().Property(n => n.p_FemaleMin).HasPrecision(10, 6);
+            modelBuilder.Entity<Cl_AgeNorm>().Property(n => n.p_FemaleMax).HasPrecision(10, 6);
         }
     }
 }

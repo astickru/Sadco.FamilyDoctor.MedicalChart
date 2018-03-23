@@ -13,7 +13,7 @@ namespace Sadco.FamilyDoctor.Core.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201803210706012_appInit"; }
+            get { return "201803230833396_appInit"; }
         }
         
         string IMigrationMetadata.Source
