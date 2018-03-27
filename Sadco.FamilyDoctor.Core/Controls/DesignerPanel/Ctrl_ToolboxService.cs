@@ -5,13 +5,13 @@ using System.Windows.Forms;
 using System.Drawing.Design;
 
 namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel {
-	public class Ctrl_ToolboxService : TreeView, IToolboxService {
+	public class Ctrl_ToolboxService : Ctrl_TreeElements, IToolboxService {
 		internal Control m_DesignPanel = null;
-		private ImageList m_ImageList = null;
+		//private ImageList m_ImageList = null;
 
 		public Ctrl_ToolboxService() {
-			m_ImageList = new ImageList();
-			ImageList = m_ImageList;
+			//m_ImageList = new ImageList();
+			//ImageList = m_ImageList;
 		}
 
 		public void AddCreator(System.Drawing.Design.ToolboxItemCreatorCallback creator, string format, System.ComponentModel.Design.IDesignerHost host) {
@@ -35,10 +35,18 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel {
 		}
 
 		public void AddToolboxItem(System.Drawing.Design.ToolboxItem toolboxItem) {
-			TreeNode node = new TreeNode(toolboxItem.DisplayName);
-			node.Tag = toolboxItem;
-			Nodes.Add(node);
-		}
+            if (toolboxItem is Cl_ToolboxItemElement)
+            {
+                Ctrl_TreeNodeElement node = ((Cl_ToolboxItemElement)toolboxItem).p_TreeNodeElement;
+                Nodes.Add(node);
+            }
+            else
+            {
+                TreeNode node = new TreeNode(toolboxItem.DisplayName);
+                node.Tag = toolboxItem;
+                Nodes.Add(node);
+            }
+        }
 
 		public System.Drawing.Design.ToolboxItem DeserializeToolboxItem(object serializedObject, System.ComponentModel.Design.IDesignerHost host) {
 			return null;
@@ -53,10 +61,12 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel {
 		}
 
 		public System.Drawing.Design.ToolboxItem GetSelectedToolboxItem() {
-			if (base.SelectedNode == null)
-				return null;
-			else
-				return (ToolboxItem)base.SelectedNode.Tag;
+            if (SelectedNode == null)
+                return null;
+            else
+            {
+                return (ToolboxItem)SelectedNode.Tag;
+            }
 		}
 
 		public System.Drawing.Design.ToolboxItemCollection GetToolboxItems(string category, System.ComponentModel.Design.IDesignerHost host) {

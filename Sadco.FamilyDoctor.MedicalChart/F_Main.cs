@@ -15,18 +15,18 @@ namespace Sadco.FamilyDoctor.MedicalChart
             Cl_App.Initialize();
 			InitializeComponent();
 			p_PanelManager = new UI_PanelManager(ctrl_CustomControls);
-			setControl<UC_EditorTemplates>();
+			f_SetControl<UC_EditorTemplates>();
 		}
 
 		private void ctrl_MenuShowTemplates_Click(object sender, EventArgs e) {
-			setControl<UC_EditorTemplates>();
+			f_SetControl<UC_EditorTemplates>();
 		}
 
 		private void ctrl_MenuShowElements_Click(object sender, EventArgs e) {
-			setControl<UC_EditorElements>();
+			f_SetControl<UC_EditorElements>();
 		}
 
-		private void setControl<T>() where T : UserControl {
+		private void f_SetControl<T>() where T : UserControl {
 			this.Text = p_PanelManager.f_SetElement<T>().Tag.ToString();
 		}
 

@@ -93,6 +93,18 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SubForms\Templates\F_DesignerTemplate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SubForms\Templates\F_DesignerTemplate.Designer.cs">
+      <DependentUpon>F_DesignerTemplate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SubForms\Elements\Editors\F_EditorСondition.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -162,6 +174,12 @@
       <DependentUpon>UC_EditorTemplates.cs</DependentUpon>
     </Compile>
     <Compile Include="UI_PanelManager.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SubForms\Templates\F_DesignerTemplate.resx">
+      <DependentUpon>F_DesignerTemplate.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MegaTemplate\F_GroupTemplate.resx">
       <DependentUpon>F_GroupTemplate.cs</DependentUpon>
     </EmbeddedResource>

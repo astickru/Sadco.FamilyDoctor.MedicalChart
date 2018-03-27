@@ -4,6 +4,9 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel {
 	[ProvideProperty("Name", typeof(IComponent))]
@@ -13,77 +16,85 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel {
 		private Stack transactions = null;
 
 		// Services
-		private IServiceContainer parent = null;
+		private IServiceContainer p_ParentService = null;
 
 		// Container
 		private Hashtable components = null;
 		private Hashtable designers = null;
 		private ArrayList extenderProviders = null;
 		private IComponent rootComponent = null;
+        private UserControl rootUserControl {
+            get {
+                if (rootComponent is UserControl)
+                    return (UserControl)rootComponent;
+                else
+                    return null;
+            }
+        }
 
-		public Cl_DesignerHost(IServiceContainer parent)
+        public Cl_DesignerHost(IServiceContainer a_ParentService)
 		{
 			// Keep the parent reference around for re-use
-			this.parent = parent;
+			this.p_ParentService = a_ParentService;
 
-			// Initialise container helpers
-			components = new Hashtable(CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default);
+            // Initialise container helpers
+            components = new Hashtable(CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default);
 			designers = new Hashtable();
 
 			// Initialise transaction stack
 			transactions = new Stack();
 
 			// Add our own services
-			parent.AddService(typeof(IDesignerHost), this);
-			parent.AddService(typeof(IContainer), this);
-			parent.AddService(typeof(IComponentChangeService), this);
-			parent.AddService(typeof(ITypeDescriptorFilterService), this);
+			a_ParentService.AddService(typeof(IDesignerHost), this);
+			a_ParentService.AddService(typeof(IContainer), this);
+			a_ParentService.AddService(typeof(IComponentChangeService), this);
+			a_ParentService.AddService(typeof(ITypeDescriptorFilterService), this);
 
 			// Add extender services
 			extenderProviders = new ArrayList();
-			parent.AddService(typeof(IExtenderListService), this);
-			parent.AddService(typeof(IExtenderProviderService), this);
+			a_ParentService.AddService(typeof(IExtenderListService), this);
+			a_ParentService.AddService(typeof(IExtenderProviderService), this);
 			AddExtenderProvider(this);
 
 			// Add selection service
-			parent.AddService(typeof(ISelectionService), new Cl_SelectionService(this));
+			a_ParentService.AddService(typeof(ISelectionService), new Cl_SelectionService(this));
 		}
 
 		#region IServiceContainer Implementation
 
 		public object GetService(System.Type serviceType)
 		{
-			return parent.GetService(serviceType);
+			return p_ParentService.GetService(serviceType);
 		}
 
 		public void AddService(System.Type serviceType, System.ComponentModel.Design.ServiceCreatorCallback callback, bool promote)
 		{
-			parent.AddService(serviceType, callback, promote);
+			p_ParentService.AddService(serviceType, callback, promote);
 		}
 
 		public void AddService(System.Type serviceType, System.ComponentModel.Design.ServiceCreatorCallback callback)
 		{
-			parent.AddService(serviceType, callback);
+			p_ParentService.AddService(serviceType, callback);
 		}
 
 		public void AddService(System.Type serviceType, object serviceInstance, bool promote)
 		{
-			parent.AddService(serviceType, serviceInstance, promote);
+			p_ParentService.AddService(serviceType, serviceInstance, promote);
 		}
 
 		public void AddService(System.Type serviceType, object serviceInstance)
 		{
-			parent.AddService(serviceType, serviceInstance);
+			p_ParentService.AddService(serviceType, serviceInstance);
 		}
 
 		public void RemoveService(System.Type serviceType, bool promote)
 		{
-			parent.RemoveService(serviceType, promote);
+			p_ParentService.RemoveService(serviceType, promote);
 		}
 
 		public void RemoveService(System.Type serviceType)
 		{
-			parent.RemoveService(serviceType);
+			p_ParentService.RemoveService(serviceType);
 		}
 
 		#endregion
@@ -108,13 +119,35 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel {
 		public System.ComponentModel.IComponent CreateComponent(System.Type componentClass, string name)
 		{
 			IComponent component = null;
-
-			// Create instance
 			component = (IComponent)Activator.CreateInstance(componentClass);
 
-			// Add to design container
-			Add(component, name);
+            Ctrl_ToolboxService toolboxService = p_ParentService.GetService(typeof(IToolboxService)) as Ctrl_ToolboxService;
+            if (componentClass == typeof(Ctrl_Element) && toolboxService != null && toolboxService.p_SelectedElement != null)
+            {
+                Cl_NameCreationService nameService = GetService(typeof(INameCreationService)) as Cl_NameCreationService;
+                if (nameService != null)
+                {
+                    Ctrl_Element el = (Ctrl_Element)component;
+                    el.p_Element = toolboxService.p_SelectedElement.p_Element;
+                    name = nameService.f_CreateName(this, toolboxService.p_SelectedElement.p_Element.p_Name);
+                    Add(component, name);
 
+                    //if (rootUserControl != null)
+                    //{
+                    //    el.AutoSize = false;
+                    //    el.Height = el.PreferredHeight;
+                    //    if (el.f_IsLine)
+                    //    {
+                    //        el.Width = rootUserControl.Width;
+                    //        el.BackColor = System.Drawing.Color.Blue;
+                    //    }
+                    //}
+                }
+            }
+            else
+            {
+                Add(component, name);
+            }
 			return component;
 		}
 
@@ -294,7 +327,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel {
 			{
 				INameCreationService nameService = (INameCreationService)GetService(typeof(INameCreationService));
 				name = nameService.CreateName(this, component.GetType());
-			}
+            }
 
 			// Make sure there isn't already a component with this name in the container
 			if (ContainsName(name))
@@ -325,7 +358,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel {
 			if (designer != null)
 			{
 				designer.Initialize(component);
-				designers[component] = designer;
+                designers[component] = designer;
 			}
 			else
 			{

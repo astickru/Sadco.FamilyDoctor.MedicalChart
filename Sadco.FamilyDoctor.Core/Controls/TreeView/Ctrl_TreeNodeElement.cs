@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.Core.Controls
 {
-    public class Ctrl_TreeNodeElement : TreeNode
+    public class Ctrl_TreeNodeElement : TreeNode, I_TreeNode
     {
         public Ctrl_TreeNodeElement(Cl_Group a_Group, Cl_Element a_Element)
         {

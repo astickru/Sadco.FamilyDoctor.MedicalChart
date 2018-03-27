@@ -91,6 +91,27 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.ResumeLayout(false);
         }
 
+        private bool m_ReadOnly = false;
+        /// <summary>Флаг только чтения</summary>
+        public bool p_ReadOnly {
+            get {
+                return m_ReadOnly;
+            }
+            set {
+                m_ReadOnly = value;
+                if (m_ReadOnly)
+                {
+                    ContextMenuStrip = null;
+                    AllowDrop = false;
+                }
+                else
+                {
+                    ContextMenuStrip = ctrl_Tree;
+                    AllowDrop = true;
+                }
+            }
+        }
+
         /// <summary>Тип группы</summary>
         protected virtual Cl_Group.E_Type p_Type { get; }
 
@@ -241,7 +262,17 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
         private void Ctrl_TreeView_DragEnter(object sender, DragEventArgs e)
         {
-            e.Effect = e.AllowedEffect;
+            string[] formats = e.Data.GetFormats();
+            foreach (string format in formats)
+            {
+                var item = e.Data.GetData(format);
+                if (item is I_TreeNode)
+                {
+                    e.Effect = e.AllowedEffect;
+                    return;
+                }
+            }
+            e.Effect = DragDropEffects.None;
         }
 
         protected virtual void f_TreeView_DragDrop(object sender, DragEventArgs e, Ctrl_TreeNodeGroup a_TargetNodeGroup)

@@ -1,7 +1,7 @@
-﻿namespace Sadco.FamilyDoctor.MedicalChart.Forms
+﻿namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
-	partial class F_LocationEditor
-	{
+	partial class F_DesignerTemplate
+    {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -28,7 +28,6 @@
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.ctrl_TreeElements = new Sadco.FamilyDoctor.Core.Controls.DesignerPanel.Ctrl_ToolboxService();
-            this.ctrl_TVControls = new System.Windows.Forms.TreeView();
             this.ctrl_P_DesignConteiner = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -47,7 +46,6 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.ctrl_TreeElements);
-            this.splitContainer1.Panel1.Controls.Add(this.ctrl_TVControls);
             // 
             // splitContainer1.Panel2
             // 
@@ -58,24 +56,15 @@
             // 
             // ctrl_TreeElements
             // 
+            this.ctrl_TreeElements.AllowDrop = true;
             this.ctrl_TreeElements.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ctrl_TreeElements.ImageIndex = 0;
-            this.ctrl_TreeElements.Location = new System.Drawing.Point(0, 230);
+            this.ctrl_TreeElements.Location = new System.Drawing.Point(0, 0);
             this.ctrl_TreeElements.Name = "ctrl_TreeElements";
             this.ctrl_TreeElements.SelectedCategory = null;
             this.ctrl_TreeElements.SelectedImageIndex = 0;
-            this.ctrl_TreeElements.Size = new System.Drawing.Size(262, 450);
+            this.ctrl_TreeElements.Size = new System.Drawing.Size(262, 680);
             this.ctrl_TreeElements.TabIndex = 5;
-            // 
-            // ctrl_TVControls
-            // 
-            this.ctrl_TVControls.Dock = System.Windows.Forms.DockStyle.Top;
-            this.ctrl_TVControls.Location = new System.Drawing.Point(0, 0);
-            this.ctrl_TVControls.Margin = new System.Windows.Forms.Padding(3, 2, 3, 3);
-            this.ctrl_TVControls.Name = "ctrl_TVControls";
-            this.ctrl_TVControls.Size = new System.Drawing.Size(262, 230);
-            this.ctrl_TVControls.TabIndex = 4;
-            this.ctrl_TVControls.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.ctrl_TVControls_ItemDrag);
             // 
             // ctrl_P_DesignConteiner
             // 
@@ -97,19 +86,16 @@
             this.panel1.Size = new System.Drawing.Size(981, 686);
             this.panel1.TabIndex = 0;
             // 
-            // F_LocationEditor
+            // F_DesignerTemplate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(981, 686);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
-            this.Name = "F_LocationEditor";
-            this.ShowInTaskbar = false;
+            this.Name = "F_DesignerTemplate";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Редактор расположения элементов";
+            this.Text = "F_DesignerTemplate";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();
@@ -124,7 +110,6 @@
 		#endregion
 
 		private System.Windows.Forms.SplitContainer splitContainer1;
-		private System.Windows.Forms.TreeView ctrl_TVControls;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Panel ctrl_P_DesignConteiner;
 		private Core.Controls.DesignerPanel.Ctrl_ToolboxService ctrl_TreeElements;

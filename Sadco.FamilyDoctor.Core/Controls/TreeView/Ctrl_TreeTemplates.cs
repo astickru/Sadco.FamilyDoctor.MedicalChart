@@ -24,6 +24,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
         public Ctrl_TreeNodeTemplate p_SelectedTemplate {
             get { return SelectedNode as Ctrl_TreeNodeTemplate; }
         }
+        public event TreeViewEventHandler e_EditElement;
 
         private void InitializeComponent()
         {
@@ -143,7 +144,10 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
         private void ctrl_TemplateEdit_Click(object sender, EventArgs e)
         {
-
+            if (p_SelectedTemplate != null)
+            {
+                e_EditElement?.Invoke(sender, new TreeViewEventArgs(p_SelectedTemplate));
+            }
         }
 
         private void ctrl_TemplateDelete_Click(object sender, EventArgs e)

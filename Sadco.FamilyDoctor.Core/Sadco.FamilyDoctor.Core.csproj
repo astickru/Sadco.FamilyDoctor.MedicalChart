@@ -68,6 +68,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cl_App.cs" />
+    <Compile Include="Controls\Ctrl_ImageLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Ctrl_ImageLabel.Designer.cs">
+      <DependentUpon>Ctrl_ImageLabel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Ctrl_SeparatorCombobox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -77,6 +83,14 @@
     <Compile Include="Controls\Ctrl_MacrosEditor.designer.cs">
       <DependentUpon>Ctrl_MacrosEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DesignerPanel\Cl_ToolboxItemElement.cs" />
+    <Compile Include="Controls\DesignerPanel\Ctrl_Element.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\DesignerPanel\Ctrl_Element.Designer.cs">
+      <DependentUpon>Ctrl_Element.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DesignerPanel\I_Element.cs" />
     <Compile Include="Controls\TreeView\Ctrl_TreeNodeTemplate.cs" />
     <Compile Include="Controls\TreeView\Ctrl_TreeElements.cs">
       <SubType>Component</SubType>
@@ -130,6 +144,7 @@
     <Compile Include="Controls\TreeView\Dlg_EditorGroup.Designer.cs">
       <DependentUpon>Dlg_EditorGroup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TreeView\I_TreeNode.cs" />
     <Compile Include="Entities\Cl_AgeNorms.cs" />
     <Compile Include="Entities\Cl_ElementsParams.cs" />
     <Compile Include="Entities\Cl_Group.cs" />
@@ -139,10 +154,6 @@
     <Compile Include="Entities\Cl_Element.cs" />
     <Compile Include="Entities\I_Archive.cs" />
     <Compile Include="Entities\I_Version.cs" />
-    <Compile Include="Migrations\201803230833396_appInit.cs" />
-    <Compile Include="Migrations\201803230833396_appInit.Designer.cs">
-      <DependentUpon>201803230833396_appInit.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -181,6 +192,9 @@
     <EmbeddedResource Include="Controls\Ctrl_MacrosEditor.resx">
       <DependentUpon>Ctrl_MacrosEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DesignerPanel\Ctrl_Element.resx">
+      <DependentUpon>Ctrl_Element.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\TreeView\Ctrl_TreeView.resx">
       <DependentUpon>Ctrl_TreeView.cs</DependentUpon>
     </EmbeddedResource>
@@ -195,9 +209,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\TreeView\Dlg_EditorGroup.resx">
       <DependentUpon>Dlg_EditorGroup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803230833396_appInit.resx">
-      <DependentUpon>201803230833396_appInit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
