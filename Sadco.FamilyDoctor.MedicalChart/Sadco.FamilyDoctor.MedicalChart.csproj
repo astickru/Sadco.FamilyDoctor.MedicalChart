@@ -93,11 +93,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="Forms\SubForms\Dlg_HistoryViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Forms\SubForms\Dlg_HistoryViewer.Designer.cs">
+      <DependentUpon>Dlg_HistoryViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SubForms\Templates\F_DesignerTemplate.cs">
       <SubType>Form</SubType>
@@ -122,18 +122,6 @@
     </Compile>
     <Compile Include="Forms\SubForms\Elements\Editors\UC_ElementsPropertyPanel.Designer.cs">
       <DependentUpon>UC_ElementsPropertyPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\MegaTemplate\F_GroupTemplate.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MegaTemplate\F_GroupTemplate.Designer.cs">
-      <DependentUpon>F_GroupTemplate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\MegaTemplate\F_Template.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MegaTemplate\F_Template.Designer.cs">
-      <DependentUpon>F_Template.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SubForms\Elements\Editors\UC_EditorImage.cs">
       <SubType>UserControl</SubType>
@@ -174,17 +162,11 @@
       <DependentUpon>UC_EditorTemplates.cs</DependentUpon>
     </Compile>
     <Compile Include="UI_PanelManager.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\SubForms\Dlg_HistoryViewer.resx">
+      <DependentUpon>Dlg_HistoryViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SubForms\Templates\F_DesignerTemplate.resx">
       <DependentUpon>F_DesignerTemplate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MegaTemplate\F_GroupTemplate.resx">
-      <DependentUpon>F_GroupTemplate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MegaTemplate\F_Template.resx">
-      <DependentUpon>F_Template.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SubForms\Elements\Editors\F_EditorСondition.resx">
       <DependentUpon>F_EditorСondition.cs</DependentUpon>

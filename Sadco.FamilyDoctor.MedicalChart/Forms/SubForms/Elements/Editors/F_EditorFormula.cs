@@ -2,6 +2,7 @@
 using Sadco.FamilyDoctor.Core.Entities;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -21,7 +22,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 		bool m_VisibilityFormula = false;
 
 		public F_EditorFormula() {
-			InitializeComponent();
+            this.Font = new System.Drawing.Font(ConfigurationManager.AppSettings["FontFamily"],
+                float.Parse(ConfigurationManager.AppSettings["FontSize"]),
+                (System.Drawing.FontStyle)int.Parse(ConfigurationManager.AppSettings["FontStyle"]),
+                System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            InitializeComponent();
 			InitializeOptions();
 
 			ctrlCBAddElement.AutoCompleteMode = AutoCompleteMode.SuggestAppend;

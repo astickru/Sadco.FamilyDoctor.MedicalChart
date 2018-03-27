@@ -8,7 +8,6 @@ using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Controls;
 using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.EntityLogs;
-using Sadco.FamilyDoctor.MedicalChart.Forms.MegaTemplate;
 using static Sadco.FamilyDoctor.Core.Entities.Cl_Element;
 
 namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms

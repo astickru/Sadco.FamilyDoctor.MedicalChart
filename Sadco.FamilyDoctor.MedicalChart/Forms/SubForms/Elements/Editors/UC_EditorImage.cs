@@ -1,6 +1,7 @@
 ﻿using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Entities;
 using System;
+using System.Configuration;
 using System.Drawing;
 using System.Windows.Forms;
 using static Sadco.FamilyDoctor.Core.Entities.Cl_Element;
@@ -13,6 +14,10 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         public UC_EditorImage()
         {
+            this.Font = new System.Drawing.Font(ConfigurationManager.AppSettings["FontFamily"],
+                float.Parse(ConfigurationManager.AppSettings["FontSize"]),
+                (System.Drawing.FontStyle)int.Parse(ConfigurationManager.AppSettings["FontStyle"]),
+                System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             InitializeComponent();
         }
 
