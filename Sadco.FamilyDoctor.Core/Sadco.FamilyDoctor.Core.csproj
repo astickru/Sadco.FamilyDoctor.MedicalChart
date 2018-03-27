@@ -112,6 +112,12 @@
     <Compile Include="Controls\TreeView\Dlg_EditorImage.Designer.cs">
       <DependentUpon>Dlg_EditorImage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TreeView\Dlg_HistoryViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\TreeView\Dlg_HistoryViewer.Designer.cs">
+      <DependentUpon>Dlg_HistoryViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TreeView\Dlg_EditorTemplate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -138,10 +144,15 @@
     <Compile Include="Data\Cl_DataContextMegaTemplate.cs" />
     <Compile Include="Entities\Cl_Element.cs" />
     <Compile Include="Entities\I_Archive.cs" />
+    <Compile Include="EntityLogs\Cl_Log.cs" />
+    <Compile Include="EntityLogs\ELogClassAttribute.cs" />
+    <Compile Include="EntityLogs\I_ELog.cs" />
     <Compile Include="Entities\I_Version.cs" />
-    <Compile Include="Migrations\201803230833396_appInit.cs" />
-    <Compile Include="Migrations\201803230833396_appInit.Designer.cs">
-      <DependentUpon>201803230833396_appInit.cs</DependentUpon>
+    <Compile Include="EntityLogs\ELogPropertyAttribute.cs" />
+    <Compile Include="EntityLogs\EntityLog.cs" />
+    <Compile Include="Migrations\201803261148440_appInit.cs" />
+    <Compile Include="Migrations\201803261148440_appInit.Designer.cs">
+      <DependentUpon>201803261148440_appInit.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -157,7 +168,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
@@ -187,6 +200,9 @@
     <EmbeddedResource Include="Controls\TreeView\Dlg_EditorImage.resx">
       <DependentUpon>Dlg_EditorImage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TreeView\Dlg_HistoryViewer.resx">
+      <DependentUpon>Dlg_HistoryViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\TreeView\Dlg_EditorTemplate.resx">
       <DependentUpon>Dlg_EditorTemplate.cs</DependentUpon>
     </EmbeddedResource>
@@ -196,8 +212,8 @@
     <EmbeddedResource Include="Controls\TreeView\Dlg_EditorGroup.resx">
       <DependentUpon>Dlg_EditorGroup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803230833396_appInit.resx">
-      <DependentUpon>201803230833396_appInit.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201803261148440_appInit.resx">
+      <DependentUpon>201803261148440_appInit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
