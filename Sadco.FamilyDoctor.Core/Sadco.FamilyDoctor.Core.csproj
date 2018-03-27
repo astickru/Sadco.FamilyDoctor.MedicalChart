@@ -161,9 +161,10 @@
     <Compile Include="Entities\I_Archive.cs" />
     <Compile Include="EntityLogs\Cl_Log.cs" />
     <Compile Include="EntityLogs\ELogClassAttribute.cs" />
+    <Compile Include="EntityLogs\ELogPropertyAttribute.cs" />
+    <Compile Include="EntityLogs\EntityLog.cs" />
     <Compile Include="EntityLogs\I_ELog.cs" />
     <Compile Include="Entities\I_Version.cs" />
-
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -225,7 +226,6 @@
     <EmbeddedResource Include="Controls\TreeView\Dlg_EditorGroup.resx">
       <DependentUpon>Dlg_EditorGroup.cs</DependentUpon>
     </EmbeddedResource>
-
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
