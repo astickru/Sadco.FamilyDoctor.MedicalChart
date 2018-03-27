@@ -4,13 +4,14 @@ using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.Core.Controls
 {
-	public class Ctrl_TreeNodeElement : TreeNode
-	{
-		public Ctrl_TreeNodeElement(Cl_Group a_Group, Cl_Element a_Element) {
-			p_Group = a_Group;
-			p_Element = a_Element;
-			ForeColor = Color.Blue;
-		}
+    public class Ctrl_TreeNodeElement : TreeNode, I_TreeNode
+    {
+        public Ctrl_TreeNodeElement(Cl_Group a_Group, Cl_Element a_Element)
+        {
+            p_Group = a_Group;
+            p_Element = a_Element;
+            ForeColor = Color.Blue;
+        }
 
 		public Cl_Group p_Group { get; private set; }
 

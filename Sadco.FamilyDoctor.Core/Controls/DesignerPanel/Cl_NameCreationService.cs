@@ -7,21 +7,27 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel {
 	{
 		public string CreateName(System.ComponentModel.IContainer container, System.Type dataType)
 		{
-			int i = 0;
-			string name = dataType.Name;
+            return f_CreateName(container, dataType.Name);
 
-			// Increment counter until we find a name that's not in use
-			while(true)
-			{
-				i++;
-				if (container.Components[name + i.ToString()] == null)
-					break;
-			}
+        }
 
-			return name + i.ToString();
-		}
+        public string f_CreateName(System.ComponentModel.IContainer a_Container, string a_Name)
+        {
+            int i = 0;
+            string name = a_Name;
 
-		public void ValidateName(string name)
+            // Increment counter until we find a name that's not in use
+            while (true)
+            {
+                i++;
+                if (a_Container.Components[name + i.ToString()] == null)
+                    break;
+            }
+
+            return name + i.ToString();
+        }
+
+        public void ValidateName(string name)
 		{
 			// Use our existing method to check but then throw an exception if it's invalid
 			if (!IsValidName(name))

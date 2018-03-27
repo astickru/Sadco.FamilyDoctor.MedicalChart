@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.Core.Controls
 {
-    public class Ctrl_TreeNodeGroup : TreeNode
+    public class Ctrl_TreeNodeGroup : TreeNode, I_TreeNode
     {
         public Ctrl_TreeNodeGroup(Cl_Group a_Group)
         {

@@ -72,7 +72,17 @@ namespace Sadco.FamilyDoctor.Core.Entities
 		[ELogProperty("Тег элемента")]
 		public string p_Tag { get; set; }
 
-		/// <summary>Вид текстового элемента</summary>
+        /// <summary>ID обработчик</summary>
+        [Column("F_HANDLERID")]
+        [MaxLength(100)]
+        public string p_HandlerID { get; set; }
+
+        /// <summary>Аргументы обработчика</summary>
+        [Column("F_HANDLER_ARGS")]
+        [MaxLength(200)]
+        public string p_HandlerArguments { get; set; }
+
+        /// <summary>Вид текстового элемента</summary>
 		[Column("F_ELEMENT_TYPE")]
 		[ELogProperty("Вид текстового элемента")]
 		public E_ElementsTypes p_ElementType {

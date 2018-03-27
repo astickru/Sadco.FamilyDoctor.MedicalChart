@@ -91,14 +91,35 @@ namespace Sadco.FamilyDoctor.Core.Controls
 			this.ResumeLayout(false);
 		}
 
-		private void Ctrl_TreeView_e_ParentChanged(object sender, TreeViewEventArgs e) {
-			throw new NotImplementedException();
-		}
+        private bool m_ReadOnly = false;
+        /// <summary>Флаг только чтения</summary>
+        public bool p_ReadOnly {
+            get {
+                return m_ReadOnly;
+            }
+            set {
+                m_ReadOnly = value;
+                if (m_ReadOnly)
+                {
+                    ContextMenuStrip = null;
+                    AllowDrop = false;
+                }
+                else
+                {
+                    ContextMenuStrip = ctrl_Tree;
+                    AllowDrop = true;
+                }
+            }
+        }
 
-		/// <summary>Тип группы</summary>
-		protected virtual Cl_Group.E_Type p_Type { get; }
+        /// <summary>Тип группы</summary>
+        protected virtual Cl_Group.E_Type p_Type { get; }
 
-		private void Ctrl_CMTree_Opening(object sender, System.ComponentModel.CancelEventArgs e) {
+        private void Ctrl_TreeView_e_ParentChanged(object sender, TreeViewEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+        private void Ctrl_CMTree_Opening(object sender, System.ComponentModel.CancelEventArgs e) {
 			if (SelectedNode == null) {
 				ctrl_GroupNew.Visible = true;
 				ctrl_GroupDelete.Visible = false;
@@ -219,9 +240,20 @@ namespace Sadco.FamilyDoctor.Core.Controls
 			SelectedNode = GetNodeAt(targetPoint);
 		}
 
-		private void Ctrl_TreeView_DragEnter(object sender, DragEventArgs e) {
-			e.Effect = e.AllowedEffect;
-		}
+        private void Ctrl_TreeView_DragEnter(object sender, DragEventArgs e)
+        {
+            string[] formats = e.Data.GetFormats();
+            foreach (string format in formats)
+            {
+                var item = e.Data.GetData(format);
+                if (item is I_TreeNode)
+                {
+                    e.Effect = e.AllowedEffect;
+                    return;
+                }
+            }
+            e.Effect = DragDropEffects.None;
+        }
 
 		protected virtual void f_TreeView_DragDrop(object sender, DragEventArgs e, Ctrl_TreeNodeGroup a_TargetNodeGroup) {
 
