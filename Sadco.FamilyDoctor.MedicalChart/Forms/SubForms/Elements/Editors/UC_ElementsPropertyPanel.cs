@@ -97,5 +97,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Elements.Editors
                 p_IsReadOnly = true;
             }
         }
-    }
+
+		private void ctrl_BHistory_Click(object sender, EventArgs e) {
+			Dlg_HistoryViewer viewer = new Dlg_HistoryViewer();
+			viewer.LoadHistory(p_EditableElement.p_Element.p_ID);
+			viewer.ShowDialog(this);
+		}
+	}
 }
