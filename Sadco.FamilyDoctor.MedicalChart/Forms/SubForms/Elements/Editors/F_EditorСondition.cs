@@ -49,9 +49,12 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 		}
 
 		private void ctrlBAddTag_Click(object sender, EventArgs e) {
-			if (ctrlCBAddElement.SelectedItem == null && !(ctrlCBAddElement.SelectedItem is Cl_Element)) return;
+			if (ctrlCBAddElement.SelectedItem == null || !(ctrlCBAddElement.SelectedItem is Cl_Element)) return;
 			Cl_Element el = (Cl_Element)ctrlCBAddElement.SelectedItem;
-			if (string.IsNullOrWhiteSpace(el.p_Tag)) return;
+			if (string.IsNullOrWhiteSpace(el.p_Tag)) {
+				MessageBox.Show("Невозможно добавить элемент \"" + el.p_Name + "\" в редактор формул, т.к. у него не заполнено поле \"Тег элемента\"", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				return;
+			}
 			m_ItemsFormula.Add(f_AppendText(operatorTag + el.p_Tag, Color.DarkGoldenrod));
 			f_UpdateVisibilityHide(++m_VisibilityHide);
 		}
