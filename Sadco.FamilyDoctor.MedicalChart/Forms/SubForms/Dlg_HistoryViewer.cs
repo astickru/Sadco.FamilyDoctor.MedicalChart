@@ -42,7 +42,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 			{
 				var row = dtLogs.NewRow();
 				row["cl_date"] = log.p_ChangeTime;
-				row["cl_version"] = log.p_Version;
+				row["cl_version"] = log.p_Version == 0 ? "Черновик" : log.p_Version.ToString();
 				row["cl_event"] = log.p_Event;
 				row["cl_user"] = log.p_UserName;
 				dtLogs.Rows.Add(row);

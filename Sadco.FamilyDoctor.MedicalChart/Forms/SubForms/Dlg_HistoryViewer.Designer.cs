@@ -77,7 +77,7 @@
 			this.cl_version.HeaderText = "Версия";
 			this.cl_version.Name = "cl_version";
 			this.cl_version.ReadOnly = true;
-			this.cl_version.Width = 60;
+			this.cl_version.Width = 80;
 			// 
 			// cl_event
 			// 
