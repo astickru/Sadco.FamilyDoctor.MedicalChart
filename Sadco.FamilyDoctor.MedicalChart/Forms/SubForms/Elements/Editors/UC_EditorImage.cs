@@ -50,8 +50,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             el.p_ElementID = p_EditingImage.p_ElementID;
             el.p_Name = ctrl_Name.Text;
             el.p_Tag = ctrlTag.Text;
+            el.p_Image = ctrlImage.Image;
             el.p_Help = ctrl_Hint.Text;
-            el.p_Default = ctrl_Default.Text;
             el.p_Comment = ctrl_Note.Text;
 
             Cl_App.m_DataContext.SaveChanges();
@@ -69,9 +69,29 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 ctrl_Version.Text = p_EditingImage.p_Version.ToString();
             ctrl_Name.Text = p_EditingImage.p_Name;
             ctrlTag.Text = p_EditingImage.p_Tag;
+            ctrlImage.Image = p_EditingImage.p_Image;
             ctrl_Hint.Text = p_EditingImage.p_Help;
-            ctrl_Default.Text = p_EditingImage.p_Default;
             ctrl_Note.Text = p_EditingImage.p_Comment;
         }
-    }
+
+		private void ctrlBAdd_Click(object sender, EventArgs e) {
+			OpenFileDialog openFile = new OpenFileDialog();
+			openFile.Filter = "Image Files |*.bmp; *.gif; *.jpg; *.jpeg; *.png";
+			openFile.FilterIndex = 1;
+			if (openFile.ShowDialog() != DialogResult.OK)
+				return;
+			Image result = null;
+			try {
+				result = Image.FromFile(openFile.FileName);
+			} catch (Exception) {
+				MessageBox.Show("Выбранный файл не является изображением", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
+			ctrlImage.Image = result;
+		}
+
+		private void ctrlBDelete_Click(object sender, EventArgs e) {
+			ctrlImage.Image = null;
+		}
+	}
 }

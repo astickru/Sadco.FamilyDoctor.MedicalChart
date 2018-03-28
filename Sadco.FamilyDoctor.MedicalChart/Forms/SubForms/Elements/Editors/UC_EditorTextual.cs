@@ -297,16 +297,38 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
 			f_UpdateModeTextType((E_TextTypes)ctrl_ControlType.f_GetSelectedItem());
 		}
+
+		private void f_UpdateIsNumber() {
+			ctrl_NumberParams.Visible = ctrl_IsPartNorm.Enabled = ctrl_IsPartNormRange.Enabled = ctrl_IsNumber.Visible && ctrl_IsNumber.Enabled && ctrl_IsNumber.Checked;
+			if (!ctrl_IsNumber.Checked)	{
+				ctrl_IsPartNorm.Checked = ctrl_IsPartNormRange.Checked = false;
+			}
+			ctrl_PartNormValue.Enabled = ctrl_IsPartNorm.Enabled && ctrl_IsPartNorm.Checked;
+			ctrl_TPartNormRangeValues.Enabled = ctrl_IsPartNormRange.Enabled && ctrl_IsPartNormRange.Checked;
+		}
+
+		private void f_UpdateModeTextType(E_TextTypes a_TextType) {
+			bool enable = true;
+			if (a_TextType == E_TextTypes.Bigbox)
+				enable = false;
+			ctrl_LPatValues.Enabled = ctrl_PatValues.Enabled = enable;
+			ctrl_IsPartLocations.Enabled = enable;
+			ctrl_PartLocationsValue.Enabled = ctrl_IsPartLocationsMulti.Enabled = ctrl_IsPartLocations.Enabled && ctrl_IsPartLocations.Checked;
+			ctrl_IsMultiSelect.Enabled = enable;
+			ctrl_IsPartPost.Enabled = enable;
+			ctrl_PartPostValue.Enabled = ctrl_IsPartPost.Enabled && ctrl_IsPartPost.Checked;
+
+			ctrl_IsNumber.Visible = enable;
+			f_UpdateIsNumber();
+		}
+
 		#region CheckedChanged
 		private void ctrl_IsSymmentry_CheckedChanged(object sender, EventArgs e) {
 			ctrl_SymmetryVals.Visible = ctrl_IsSymmentry.Checked;
 		}
 
 		private void ctrl_CB_IsNumber_CheckedChanged(object sender, EventArgs e) {
-			ctrl_NumberParams.Visible = ctrl_IsNumber.Checked;
-			ctrl_IsPartNorm.Checked = ctrl_IsPartNormRange.Checked = false;
-			ctrl_IsPartNorm.Enabled = ctrl_IsPartNormRange.Enabled = ctrl_IsNumber.Checked;
-			ctrl_PartNormValue.Enabled = ctrl_TPartNormRangeValues.Enabled = false;
+			f_UpdateIsNumber();
 		}
 
 		private void ctrl_IsPartPre_CheckedChanged(object sender, EventArgs e) {
@@ -446,23 +468,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 			if (fEditor.ShowDialog(this) == DialogResult.OK) {
 				ctrl_VisibilityFormula.Text = fEditor.f_GetFormula();
 			}
-		}
-
-		private void f_UpdateModeTextType(E_TextTypes a_TextType) {
-			bool enable = true;
-			if (a_TextType == E_TextTypes.Bigbox)
-				enable = false;
-			ctrl_LPatValues.Enabled = ctrl_PatValues.Enabled = enable;
-			ctrl_IsPartLocations.Enabled = enable;
-			ctrl_PartLocationsValue.Enabled = ctrl_IsPartLocationsMulti.Enabled = ctrl_IsPartLocations.Enabled && ctrl_IsPartLocations.Checked;
-			ctrl_IsMultiSelect.Enabled = enable;
-			ctrl_IsPartPost.Enabled = enable;
-			ctrl_PartPostValue.Enabled = ctrl_IsPartPost.Enabled && ctrl_IsPartPost.Checked;
-			ctrl_IsNumber.Visible = ctrl_NumberParams.Visible = enable;
-			ctrl_IsPartNorm.Enabled = enable;
-			ctrl_PartNormValue.Enabled = ctrl_IsPartNorm.Enabled && ctrl_IsPartNorm.Checked;
-			ctrl_IsPartNormRange.Enabled = enable;
-			ctrl_IsChangeNotNormValues.Enabled = ctrl_IsPartNormRange.Enabled && ctrl_IsPartNormRange.Checked;
 		}
 
 		private void ctrl_ControlType_Click(object sender, EventArgs e) {

@@ -58,6 +58,12 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.ctrl_PartNormValue = new System.Windows.Forms.TextBox();
             this.ctrl_TPartNormRangeValues = new System.Windows.Forms.DataGridView();
+            this.p_AgeFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p_AgeTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p_MaleMin = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p_MaleMax = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p_FemaleMin = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p_FemaleMax = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ctrl_IsChangeNotNormValues = new System.Windows.Forms.CheckBox();
             this.ctrl_PatValues = new System.Windows.Forms.RichTextBox();
             this.ctrl_LPatValues = new System.Windows.Forms.Label();
@@ -83,12 +89,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.ctrl_Hint = new System.Windows.Forms.TextBox();
             this.ctrl_TypeDescription = new System.Windows.Forms.Label();
-            this.p_AgeFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.p_AgeTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.p_MaleMin = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.p_MaleMax = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.p_FemaleMin = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.p_FemaleMax = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ctrl_ControlsConteiner.SuspendLayout();
             this.SelectTypePanel.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -109,7 +109,7 @@
             this.ctrl_ControlsConteiner.Dock = System.Windows.Forms.DockStyle.Top;
             this.ctrl_ControlsConteiner.Location = new System.Drawing.Point(0, 0);
             this.ctrl_ControlsConteiner.Name = "ctrl_ControlsConteiner";
-            this.ctrl_ControlsConteiner.Size = new System.Drawing.Size(871, 924);
+            this.ctrl_ControlsConteiner.Size = new System.Drawing.Size(871, 1030);
             this.ctrl_ControlsConteiner.TabIndex = 22;
             // 
             // SelectTypePanel
@@ -122,7 +122,7 @@
             this.SelectTypePanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.SelectTypePanel.Location = new System.Drawing.Point(0, 0);
             this.SelectTypePanel.Name = "SelectTypePanel";
-            this.SelectTypePanel.Size = new System.Drawing.Size(871, 924);
+            this.SelectTypePanel.Size = new System.Drawing.Size(871, 1030);
             this.SelectTypePanel.TabIndex = 24;
             // 
             // panel2
@@ -135,7 +135,7 @@
             this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.label9);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(0, 824);
+            this.panel2.Location = new System.Drawing.Point(0, 930);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(871, 100);
             this.panel2.TabIndex = 81;
@@ -208,7 +208,7 @@
             this.ctrl_Number.Controls.Add(this.ctrl_NumberParams);
             this.ctrl_Number.Controls.Add(this.ctrl_IsNumber);
             this.ctrl_Number.Dock = System.Windows.Forms.DockStyle.Top;
-            this.ctrl_Number.Location = new System.Drawing.Point(0, 750);
+            this.ctrl_Number.Location = new System.Drawing.Point(0, 856);
             this.ctrl_Number.Name = "ctrl_Number";
             this.ctrl_Number.Size = new System.Drawing.Size(871, 74);
             this.ctrl_Number.TabIndex = 80;
@@ -298,7 +298,7 @@
             this.ctrl_Symmetry.Controls.Add(this.ctrl_SymmetryVals);
             this.ctrl_Symmetry.Controls.Add(this.ctrl_IsSymmentry);
             this.ctrl_Symmetry.Dock = System.Windows.Forms.DockStyle.Top;
-            this.ctrl_Symmetry.Location = new System.Drawing.Point(0, 680);
+            this.ctrl_Symmetry.Location = new System.Drawing.Point(0, 786);
             this.ctrl_Symmetry.Name = "ctrl_Symmetry";
             this.ctrl_Symmetry.Size = new System.Drawing.Size(871, 70);
             this.ctrl_Symmetry.TabIndex = 64;
@@ -389,12 +389,12 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(871, 680);
+            this.panel3.Size = new System.Drawing.Size(871, 786);
             this.panel3.TabIndex = 63;
             // 
             // ctrlBEditHideFormula
             // 
-            this.ctrlBEditHideFormula.Location = new System.Drawing.Point(732, 627);
+            this.ctrlBEditHideFormula.Location = new System.Drawing.Point(732, 731);
             this.ctrlBEditHideFormula.Name = "ctrlBEditHideFormula";
             this.ctrlBEditHideFormula.Size = new System.Drawing.Size(122, 25);
             this.ctrlBEditHideFormula.TabIndex = 84;
@@ -404,7 +404,7 @@
             // 
             // ctrl_VisibilityFormula
             // 
-            this.ctrl_VisibilityFormula.Location = new System.Drawing.Point(200, 627);
+            this.ctrl_VisibilityFormula.Location = new System.Drawing.Point(200, 731);
             this.ctrl_VisibilityFormula.Name = "ctrl_VisibilityFormula";
             this.ctrl_VisibilityFormula.ReadOnly = true;
             this.ctrl_VisibilityFormula.Size = new System.Drawing.Size(526, 45);
@@ -414,7 +414,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(14, 628);
+            this.label11.Location = new System.Drawing.Point(14, 732);
             this.label11.Margin = new System.Windows.Forms.Padding(0);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(144, 13);
@@ -466,14 +466,14 @@
             this.groupBox1.Controls.Add(this.ctrl_IsPartPre);
             this.groupBox1.Location = new System.Drawing.Point(3, 116);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(864, 414);
+            this.groupBox1.Size = new System.Drawing.Size(864, 517);
             this.groupBox1.TabIndex = 61;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Часть";
             // 
             // ctrl_PartNormValue
             // 
-            this.ctrl_PartNormValue.Location = new System.Drawing.Point(193, 225);
+            this.ctrl_PartNormValue.Location = new System.Drawing.Point(193, 334);
             this.ctrl_PartNormValue.Name = "ctrl_PartNormValue";
             this.ctrl_PartNormValue.Size = new System.Drawing.Size(158, 21);
             this.ctrl_PartNormValue.TabIndex = 88;
@@ -489,10 +489,42 @@
             this.p_MaleMax,
             this.p_FemaleMin,
             this.p_FemaleMax});
-            this.ctrl_TPartNormRangeValues.Location = new System.Drawing.Point(193, 248);
+            this.ctrl_TPartNormRangeValues.Location = new System.Drawing.Point(193, 357);
             this.ctrl_TPartNormRangeValues.Name = "ctrl_TPartNormRangeValues";
             this.ctrl_TPartNormRangeValues.Size = new System.Drawing.Size(664, 156);
             this.ctrl_TPartNormRangeValues.TabIndex = 87;
+            // 
+            // p_AgeFrom
+            // 
+            this.p_AgeFrom.HeaderText = "Возраст с";
+            this.p_AgeFrom.Name = "p_AgeFrom";
+            this.p_AgeFrom.Width = 110;
+            // 
+            // p_AgeTo
+            // 
+            this.p_AgeTo.HeaderText = "Возраст до";
+            this.p_AgeTo.Name = "p_AgeTo";
+            this.p_AgeTo.Width = 110;
+            // 
+            // p_MaleMin
+            // 
+            this.p_MaleMin.HeaderText = "Муж мин";
+            this.p_MaleMin.Name = "p_MaleMin";
+            // 
+            // p_MaleMax
+            // 
+            this.p_MaleMax.HeaderText = "Муж макс";
+            this.p_MaleMax.Name = "p_MaleMax";
+            // 
+            // p_FemaleMin
+            // 
+            this.p_FemaleMin.HeaderText = "Жен мин";
+            this.p_FemaleMin.Name = "p_FemaleMin";
+            // 
+            // p_FemaleMax
+            // 
+            this.p_FemaleMax.HeaderText = "Жен макс";
+            this.p_FemaleMax.Name = "p_FemaleMax";
             // 
             // ctrl_IsChangeNotNormValues
             // 
@@ -510,7 +542,7 @@
             // 
             this.ctrl_PatValues.Location = new System.Drawing.Point(193, 106);
             this.ctrl_PatValues.Name = "ctrl_PatValues";
-            this.ctrl_PatValues.Size = new System.Drawing.Size(453, 45);
+            this.ctrl_PatValues.Size = new System.Drawing.Size(453, 154);
             this.ctrl_PatValues.TabIndex = 83;
             this.ctrl_PatValues.Text = "";
             this.ctrl_PatValues.TextChanged += new System.EventHandler(this.ctrl_PatValues_TextChanged);
@@ -548,7 +580,7 @@
             // 
             // ctrl_PartLocationsValue
             // 
-            this.ctrl_PartLocationsValue.Location = new System.Drawing.Point(193, 176);
+            this.ctrl_PartLocationsValue.Location = new System.Drawing.Point(193, 285);
             this.ctrl_PartLocationsValue.Name = "ctrl_PartLocationsValue";
             this.ctrl_PartLocationsValue.Size = new System.Drawing.Size(453, 47);
             this.ctrl_PartLocationsValue.TabIndex = 79;
@@ -557,7 +589,7 @@
             // ctrl_IsPartLocationsMulti
             // 
             this.ctrl_IsPartLocationsMulti.AutoSize = true;
-            this.ctrl_IsPartLocationsMulti.Location = new System.Drawing.Point(651, 178);
+            this.ctrl_IsPartLocationsMulti.Location = new System.Drawing.Point(651, 291);
             this.ctrl_IsPartLocationsMulti.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsPartLocationsMulti.Name = "ctrl_IsPartLocationsMulti";
             this.ctrl_IsPartLocationsMulti.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -569,20 +601,20 @@
             // ctrl_IsPartNormRange
             // 
             this.ctrl_IsPartNormRange.AutoSize = true;
-            this.ctrl_IsPartNormRange.Location = new System.Drawing.Point(6, 245);
+            this.ctrl_IsPartNormRange.Location = new System.Drawing.Point(651, 337);
             this.ctrl_IsPartNormRange.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsPartNormRange.Name = "ctrl_IsPartNormRange";
             this.ctrl_IsPartNormRange.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.ctrl_IsPartNormRange.Size = new System.Drawing.Size(138, 17);
             this.ctrl_IsPartNormRange.TabIndex = 76;
-            this.ctrl_IsPartNormRange.Text = "Норма диапозон";
+            this.ctrl_IsPartNormRange.Text = "Норма диапазон";
             this.ctrl_IsPartNormRange.UseVisualStyleBackColor = true;
             this.ctrl_IsPartNormRange.CheckedChanged += new System.EventHandler(this.ctrl_IsPartNormRange_CheckedChanged);
             // 
             // ctrl_IsPartNorm
             // 
             this.ctrl_IsPartNorm.AutoSize = true;
-            this.ctrl_IsPartNorm.Location = new System.Drawing.Point(6, 226);
+            this.ctrl_IsPartNorm.Location = new System.Drawing.Point(6, 335);
             this.ctrl_IsPartNorm.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsPartNorm.Name = "ctrl_IsPartNorm";
             this.ctrl_IsPartNorm.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -595,7 +627,7 @@
             // ctrl_IsPartLocations
             // 
             this.ctrl_IsPartLocations.AutoSize = true;
-            this.ctrl_IsPartLocations.Location = new System.Drawing.Point(3, 178);
+            this.ctrl_IsPartLocations.Location = new System.Drawing.Point(3, 287);
             this.ctrl_IsPartLocations.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsPartLocations.Name = "ctrl_IsPartLocations";
             this.ctrl_IsPartLocations.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -607,7 +639,7 @@
             // 
             // ctrl_PartPostValue
             // 
-            this.ctrl_PartPostValue.Location = new System.Drawing.Point(193, 153);
+            this.ctrl_PartPostValue.Location = new System.Drawing.Point(193, 262);
             this.ctrl_PartPostValue.Name = "ctrl_PartPostValue";
             this.ctrl_PartPostValue.Size = new System.Drawing.Size(158, 21);
             this.ctrl_PartPostValue.TabIndex = 59;
@@ -615,7 +647,7 @@
             // ctrl_IsPartPost
             // 
             this.ctrl_IsPartPost.AutoSize = true;
-            this.ctrl_IsPartPost.Location = new System.Drawing.Point(3, 153);
+            this.ctrl_IsPartPost.Location = new System.Drawing.Point(3, 262);
             this.ctrl_IsPartPost.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsPartPost.Name = "ctrl_IsPartPost";
             this.ctrl_IsPartPost.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -629,7 +661,7 @@
             // 
             this.ctrl_PartPreValue.Location = new System.Drawing.Point(193, 16);
             this.ctrl_PartPreValue.Name = "ctrl_PartPreValue";
-            this.ctrl_PartPreValue.Size = new System.Drawing.Size(158, 21);
+            this.ctrl_PartPreValue.Size = new System.Drawing.Size(452, 21);
             this.ctrl_PartPreValue.TabIndex = 57;
             // 
             // ctrl_IsPartPre
@@ -659,7 +691,7 @@
             // ctrl_IsMultiSelect
             // 
             this.ctrl_IsMultiSelect.AutoSize = true;
-            this.ctrl_IsMultiSelect.Location = new System.Drawing.Point(8, 605);
+            this.ctrl_IsMultiSelect.Location = new System.Drawing.Point(8, 709);
             this.ctrl_IsMultiSelect.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsMultiSelect.Name = "ctrl_IsMultiSelect";
             this.ctrl_IsMultiSelect.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -671,7 +703,7 @@
             // ctrl_IsVisiblePatient
             // 
             this.ctrl_IsVisiblePatient.AutoSize = true;
-            this.ctrl_IsVisiblePatient.Location = new System.Drawing.Point(8, 554);
+            this.ctrl_IsVisiblePatient.Location = new System.Drawing.Point(8, 658);
             this.ctrl_IsVisiblePatient.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsVisiblePatient.Name = "ctrl_IsVisiblePatient";
             this.ctrl_IsVisiblePatient.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -683,7 +715,7 @@
             // ctrl_IsRequiredFIeld
             // 
             this.ctrl_IsRequiredFIeld.AutoSize = true;
-            this.ctrl_IsRequiredFIeld.Location = new System.Drawing.Point(8, 571);
+            this.ctrl_IsRequiredFIeld.Location = new System.Drawing.Point(8, 675);
             this.ctrl_IsRequiredFIeld.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsRequiredFIeld.Name = "ctrl_IsRequiredFIeld";
             this.ctrl_IsRequiredFIeld.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -695,7 +727,7 @@
             // ctrl_IsEditing
             // 
             this.ctrl_IsEditing.AutoSize = true;
-            this.ctrl_IsEditing.Location = new System.Drawing.Point(8, 588);
+            this.ctrl_IsEditing.Location = new System.Drawing.Point(8, 692);
             this.ctrl_IsEditing.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsEditing.Name = "ctrl_IsEditing";
             this.ctrl_IsEditing.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -707,7 +739,7 @@
             // ctrl_IsVisible
             // 
             this.ctrl_IsVisible.AutoSize = true;
-            this.ctrl_IsVisible.Location = new System.Drawing.Point(8, 537);
+            this.ctrl_IsVisible.Location = new System.Drawing.Point(8, 641);
             this.ctrl_IsVisible.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_IsVisible.Name = "ctrl_IsVisible";
             this.ctrl_IsVisible.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -731,7 +763,7 @@
             this.ctrl_Name.Location = new System.Drawing.Point(198, 4);
             this.ctrl_Name.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_Name.Name = "ctrl_Name";
-            this.ctrl_Name.Size = new System.Drawing.Size(215, 21);
+            this.ctrl_Name.Size = new System.Drawing.Size(450, 21);
             this.ctrl_Name.TabIndex = 50;
             // 
             // label4
@@ -749,7 +781,7 @@
             this.ctrl_Hint.Location = new System.Drawing.Point(198, 91);
             this.ctrl_Hint.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_Hint.Name = "ctrl_Hint";
-            this.ctrl_Hint.Size = new System.Drawing.Size(669, 21);
+            this.ctrl_Hint.Size = new System.Drawing.Size(662, 21);
             this.ctrl_Hint.TabIndex = 52;
             // 
             // ctrl_TypeDescription
@@ -762,38 +794,6 @@
             this.ctrl_TypeDescription.TabIndex = 47;
             this.ctrl_TypeDescription.Text = "Вид текстового элемента";
             // 
-            // p_AgeFrom
-            // 
-            this.p_AgeFrom.HeaderText = "Возраст с";
-            this.p_AgeFrom.Name = "p_AgeFrom";
-            this.p_AgeFrom.Width = 110;
-            // 
-            // p_AgeTo
-            // 
-            this.p_AgeTo.HeaderText = "Возраст до";
-            this.p_AgeTo.Name = "p_AgeTo";
-            this.p_AgeTo.Width = 110;
-            // 
-            // p_MaleMin
-            // 
-            this.p_MaleMin.HeaderText = "Муж мин";
-            this.p_MaleMin.Name = "p_MaleMin";
-            // 
-            // p_MaleMax
-            // 
-            this.p_MaleMax.HeaderText = "Муж макс";
-            this.p_MaleMax.Name = "p_MaleMax";
-            // 
-            // p_FemaleMin
-            // 
-            this.p_FemaleMin.HeaderText = "Жен мин";
-            this.p_FemaleMin.Name = "p_FemaleMin";
-            // 
-            // p_FemaleMax
-            // 
-            this.p_FemaleMax.HeaderText = "Жен макс";
-            this.p_FemaleMax.Name = "p_FemaleMax";
-            // 
             // UC_EditorTextual
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 13F);
@@ -802,7 +802,7 @@
             this.Controls.Add(this.ctrl_ControlsConteiner);
             this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Name = "UC_EditorTextual";
-            this.Size = new System.Drawing.Size(871, 937);
+            this.Size = new System.Drawing.Size(871, 1047);
             this.ctrl_ControlsConteiner.ResumeLayout(false);
             this.ctrl_ControlsConteiner.PerformLayout();
             this.SelectTypePanel.ResumeLayout(false);

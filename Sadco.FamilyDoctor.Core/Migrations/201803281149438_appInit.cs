@@ -63,6 +63,7 @@ namespace Sadco.FamilyDoctor.Core.Migrations
                         F_COMMENT = c.String(maxLength: 100, unicode: false),
                         F_GROUP_ID = c.Int(nullable: false),
                         F_ISARHIVE = c.Boolean(nullable: false),
+                        F_IMAGE = c.Binary(),
                     })
                 .PrimaryKey(t => t.F_ID)
                 .ForeignKey("dbo.T_GROUPS", t => t.F_GROUP_ID, cascadeDelete: true)
