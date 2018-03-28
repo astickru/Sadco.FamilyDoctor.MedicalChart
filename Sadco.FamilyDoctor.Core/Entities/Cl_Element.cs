@@ -12,7 +12,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
 	/// </summary>
 	[ELogClass(EntityTypes.Elements)]
 	[Table("T_ELEMENTS")]
-	public class Cl_Element : I_Version, I_Archive, I_ELog
+	public class Cl_Element : I_ELog, I_Archive
 	{
 		/// <summary>Типы элементов шаблона</summary>
 		public enum E_ElementsTypes : byte

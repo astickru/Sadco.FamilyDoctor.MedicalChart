@@ -15,16 +15,16 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 		public int p_ID { get; set; }
 
 		/// <summary>
+		/// Предыдущий ID лога
+		/// </summary>
+		[Column("F_PREV_ID")]
+		public int p_PrevID { get; set; }
+
+		/// <summary>
 		/// ID элемента
 		/// </summary>
 		[Column("F_ELEMENT_ID")]
 		public int p_ElementID { get; set; }
-
-		/// <summary>
-		/// Предыдущий ID элемента
-		/// </summary>
-		[Column("F_ELEMENT_PREV_ID")]
-		public int p_PrevElementID { get; set; }
 
 		/// <summary>
 		/// Тип элемента
@@ -37,6 +37,12 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 		/// </summary>
 		[Column("F_TIME")]
 		public DateTime p_ChangeTime { get; set; }
+
+		/// <summary>
+		/// Версия измененного элемента
+		/// </summary>
+		[Column("F_VERSION")]
+		public int p_Version { get; set; }
 
 		/// <summary>
 		/// Совершенное действие

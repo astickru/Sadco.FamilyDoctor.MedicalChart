@@ -219,7 +219,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
 			}
 			Cl_App.m_DataContext.SaveChanges();
-			eLog.UpdateEntity(el);
+			eLog.SaveEntity(el);
 			f_SetElement(el);
 
 			return el;
