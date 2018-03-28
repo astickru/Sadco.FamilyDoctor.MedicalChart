@@ -171,7 +171,10 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
 		private void Ctrl_ImageNew_Click(object sender, EventArgs e)
 		{
+			EntityLog eLog = new EntityLog();
+
 			Cl_Element newElement = (Cl_Element)Activator.CreateInstance(typeof(Cl_Element));
+			eLog.SetEntity(newElement);
 			Cl_Group group = null;
 			if (p_SelectedGroup != null && p_SelectedGroup.p_Group != null)
 			{
@@ -192,6 +195,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
 			Cl_App.m_DataContext.SaveChanges();
 			newElement.p_ElementID = newElement.p_ID;
 			Cl_App.m_DataContext.SaveChanges();
+			eLog.SaveEntity(newElement);
 			Ctrl_TreeNodeElement newNode = new Ctrl_TreeNodeElement(group, newElement);
 			SelectedNode.Nodes.Add(newNode);
 			SelectedNode = newNode;
