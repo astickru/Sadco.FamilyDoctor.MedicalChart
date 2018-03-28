@@ -1,25 +1,55 @@
-﻿using System;
+﻿using Sadco.FamilyDoctor.Core.Entities;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Sadco.FamilyDoctor.Core.EntityLogs;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Sadco.FamilyDoctor.Core.Entities;
 
 namespace Sadco.FamilyDoctor.Core.EntityLogs
 {
 	public class EntityLog : IDisposable
 	{
 		private EntityTypes entityLogType = EntityTypes.Elements;
-		private Dictionary<PropertyInfo, object> lastValues = null;
-
+		private Dictionary<PropertyInfo, string> lastValues = null;
 		private I_ELog logObject { get; set; }
+		private int lastLogID { get; set; }
 
+		/// <summary>
+		/// Определяет был ли изменен объект
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public bool IsChanged(I_ELog obj)
+		{
+			bool isChanged = false;
 
-		public void SetEntity(I_ELog obj) {
+			ELogClassAttribute classAtr = GetClassAttribute<ELogClassAttribute>(obj);
+
+			if (classAtr == null) return isChanged;
+			if (this.entityLogType != classAtr.EntityType) return isChanged;
+
+			Dictionary<PropertyInfo, string> currentValues = GetValues(obj);
+
+			foreach (KeyValuePair<PropertyInfo, string> item in currentValues)
+			{
+				if (!lastValues.ContainsKey(item.Key)) continue;
+				if (!lastValues[item.Key].Equals(item.Value))
+				{
+					isChanged = true;
+					break;
+				}
+			}
+
+			return isChanged;
+		}
+
+		/// <summary>
+		/// Установка первоначального объекта
+		/// </summary>
+		/// <param name="obj"></param>
+		public void SetEntity(I_ELog obj)
+		{
 			if (logObject != null || obj == null) return;
 
 			ELogClassAttribute classAtr = GetClassAttribute<ELogClassAttribute>(obj);
@@ -29,72 +59,89 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 			this.entityLogType = classAtr.EntityType;
 
 			lastValues = GetValues(logObject);
+
+			Cl_Log prevEvent = Cl_App.m_DataContext.p_Logs.Where(l => l.p_ElementID == obj.p_ID).OrderByDescending(d => d.p_ChangeTime).FirstOrDefault();
+			if (prevEvent == null)
+				lastLogID = 0;
+			else
+				lastLogID = prevEvent.p_ID;
 		}
 
-		public void UpdateEntity(I_ELog obj) {
+		/// <summary>
+		/// Вызывается после сохранения элемента, что бы определить какие изменения были сделаны
+		/// </summary>
+		/// <param name="obj"></param>
+		public void SaveEntity(I_ELog obj)
+		{
 			if (obj == null) return;
 
-			bool IsChanged = false;
-			Dictionary<PropertyInfo, object> currentValues = null;
-			ELogClassAttribute classAtr = GetClassAttribute<ELogClassAttribute>(obj);
+			Cl_Log newEvent = null;
+			Dictionary<PropertyInfo, string> currentValues = GetValues(obj);
 
-			if (classAtr == null) return;
-			if (this.entityLogType != classAtr.EntityType) return;
+			if (this.IsChanged(obj))
+			{
+				StringBuilder sbAction = new StringBuilder();
 
-			currentValues = GetValues(obj);
-			StringBuilder sbAction = new StringBuilder();
-			if (logObject.p_ID == obj.p_ID) {
-				sbAction.Append("Создание");
-				IsChanged = true;
-			} else {
-				foreach (KeyValuePair<PropertyInfo, object> item in currentValues) {
+				if (lastLogID == 0)
+					sbAction.AppendLine("Создан новый элемент");
+
+				foreach (KeyValuePair<PropertyInfo, string> item in currentValues)
+				{
 					if (!lastValues.ContainsKey(item.Key)) continue;
 
-					if (!lastValues[item.Key].Equals(item.Value)) {
+					if (!lastValues[item.Key].Equals(item.Value))
+					{
 						ELogPropertyAttribute propAttr = item.Key.GetCustomAttributes(typeof(ELogPropertyAttribute), true).FirstOrDefault() as ELogPropertyAttribute;
 
 						string action = "";
 
 						if (propAttr.IsCustomDescription)
 							action = propAttr.Description + ".";
-						else {
+						else
+						{
 							action = "Изменилось поле: \"";
 
 							if (string.IsNullOrEmpty(propAttr.Description))
-								action += item.Key.Name + "\"";
+								action += item.Key.Name + "\".";
 							else
-								action += propAttr.Description + "\"";
+								action += propAttr.Description + "\".";
 						}
 
 						if (!propAttr.IgnoreValue)
-							action += " Старое значение: \"" + lastValues[item.Key].ToString() + "\"";
+						{
+							action += " Старое значение: \"" + lastValues[item.Key].ToString() + "\".";
+							action += " Новое значение: \"" + item.Value.ToString() + "\".";
+						}
 
 						sbAction.AppendLine(action);
-						IsChanged = true;
 					}
 				}
+
+				newEvent = CreateEvent(obj, lastLogID, sbAction.ToString().Trim());
+			}
+			else
+			{
+				newEvent = CreateEvent(obj, lastLogID, "Без изменений");
 			}
 
-			if (IsChanged) {
-				Cl_App.m_DataContext.p_Logs.Add(CreateEvent(obj.p_ID, logObject.p_ID, sbAction.ToString().Trim()));
-				Cl_App.m_DataContext.SaveChanges();
-			}
+			
+			Cl_App.m_DataContext.p_Logs.Add(newEvent);
+			Cl_App.m_DataContext.SaveChanges();
 
 			lastValues.Clear();
 			lastValues = currentValues;
 
 			logObject = obj;
+			lastLogID = newEvent.p_ID;
 		}
 
-		private Cl_Log CreateEvent(int curID, int lastID, string action) {
+		private Cl_Log CreateEvent(I_ELog obj, int lastID, string action)
+		{
 			Cl_Log outEvent = new Cl_Log();
 
-			outEvent.p_ElementID = curID;
-			if (curID == lastID)
-				outEvent.p_PrevElementID = 0;
-			else
-				outEvent.p_PrevElementID = lastID;
-
+			outEvent.p_ElementID = obj.p_ID;
+			outEvent.p_PrevID = lastID;
+			outEvent.p_Version = obj.p_Version;
 			outEvent.p_EntityType = this.entityLogType;
 			outEvent.p_ChangeTime = DateTime.Now;
 			outEvent.p_Event = action;
@@ -103,13 +150,17 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 			return outEvent;
 		}
 
-		private Dictionary<PropertyInfo, object> GetValues(I_ELog obj) {
-			Dictionary<PropertyInfo, object> values = new Dictionary<PropertyInfo, object>();
+		private Dictionary<PropertyInfo, string> GetValues(I_ELog obj)
+		{
+			Dictionary<PropertyInfo, string> values = new Dictionary<PropertyInfo, string>();
 			Type type = obj.GetType();
 
-			foreach (PropertyInfo mInfo in type.GetProperties()) {
-				foreach (Attribute attr in Attribute.GetCustomAttributes(mInfo)) {
-					if (attr.GetType() == typeof(ELogPropertyAttribute)) {
+			foreach (PropertyInfo mInfo in type.GetProperties())
+			{
+				foreach (Attribute attr in Attribute.GetCustomAttributes(mInfo))
+				{
+					if (attr.GetType() == typeof(ELogPropertyAttribute))
+					{
 						values.Add(mInfo, NormalizeValue(mInfo.GetValue(obj, null)));
 					}
 				}
@@ -118,25 +169,37 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 			return values;
 		}
 
-		private T GetClassAttribute<T>(I_ELog obj) {
+		private T GetClassAttribute<T>(I_ELog obj)
+		{
 			Type type = obj.GetType();
 			return (T)type.GetCustomAttributes(typeof(T), true).FirstOrDefault();
 		}
 
 		#region NormalizeValue
-		private string NormalizeValue(object value) {
+		private string NormalizeValue(object value)
+		{
 			string outValue = "";
 
-			if (value != null) {
-				if (value is Cl_Group) {
+			if (value != null)
+			{
+				if (value is Cl_Group)
+				{
 					outValue = GetGroupValue(value);
-				} else if (value is Enum) {
+				}
+				else if (value is Enum)
+				{
 					outValue = GetEnumValue(value);
-				} else if (value is Boolean) {
+				}
+				else if (value is Boolean)
+				{
 					outValue = GetBoolValue(value);
-				}else if(value is Decimal) {
+				}
+				else if (value is Decimal)
+				{
 					outValue = GetDecimalValue(value);
-				} else {
+				}
+				else
+				{
 					outValue = GetDefaultValue(value);
 				}
 			}
@@ -144,27 +207,32 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 			return outValue;
 		}
 
-		private string GetGroupValue(object value) {
+		private string GetGroupValue(object value)
+		{
 			Cl_Group group = value as Cl_Group;
 			return group.f_GetFullName();
 		}
 
-		private string GetEnumValue(object value) {
+		private string GetEnumValue(object value)
+		{
 			MemberInfo info = value.GetType().GetMember(value.ToString()).FirstOrDefault();
 
-			if (info != null) {
+			if (info != null)
+			{
 				DescriptionAttribute attribute = (DescriptionAttribute)info.GetCustomAttributes(typeof(DescriptionAttribute), false).FirstOrDefault();
 				return attribute.Description;
 			}
 			return value.ToString();
 		}
 
-		private string GetBoolValue(object value) {
+		private string GetBoolValue(object value)
+		{
 			bool tmp = (bool)value;
 			return tmp ? "Да" : "Нет";
 		}
 
-		private string GetDecimalValue(object value) {
+		private string GetDecimalValue(object value)
+		{
 			decimal dec = (decimal)value;
 			if (dec == 0)
 				return "0";
@@ -172,13 +240,15 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 				return dec.ToString();
 		}
 
-		private string GetDefaultValue(object value) {
+		private string GetDefaultValue(object value)
+		{
 			return value.ToString();
 		}
 		#endregion
 
 		#region Disposable
-		public void Dispose() {
+		public void Dispose()
+		{
 			lastValues.Clear();
 			lastValues = null;
 			logObject = null;

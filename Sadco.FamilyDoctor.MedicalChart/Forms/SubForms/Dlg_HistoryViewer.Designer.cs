@@ -29,6 +29,7 @@
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.ctrl_DGLogs = new System.Windows.Forms.DataGridView();
 			this.cl_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cl_version = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.cl_event = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.cl_user = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.panel2.SuspendLayout();
@@ -53,6 +54,7 @@
 			this.ctrl_DGLogs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.ctrl_DGLogs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cl_date,
+            this.cl_version,
             this.cl_event,
             this.cl_user});
 			this.ctrl_DGLogs.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -69,6 +71,13 @@
 			this.cl_date.ReadOnly = true;
 			this.cl_date.Resizable = System.Windows.Forms.DataGridViewTriState.False;
 			this.cl_date.Width = 150;
+			// 
+			// cl_version
+			// 
+			this.cl_version.HeaderText = "Версия";
+			this.cl_version.Name = "cl_version";
+			this.cl_version.ReadOnly = true;
+			this.cl_version.Width = 80;
 			// 
 			// cl_event
 			// 
@@ -96,7 +105,6 @@
 			this.ClientSize = new System.Drawing.Size(912, 211);
 			this.Controls.Add(this.panel2);
 			this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.MaximumSize = new System.Drawing.Size(1600, 1000);
 			this.MinimumSize = new System.Drawing.Size(794, 250);
 			this.Name = "Dlg_HistoryViewer";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -110,8 +118,9 @@
 		#endregion
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.DataGridView ctrl_DGLogs;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cl_date;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cl_event;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cl_user;
-    }
+		private System.Windows.Forms.DataGridViewTextBoxColumn cl_date;
+		private System.Windows.Forms.DataGridViewTextBoxColumn cl_version;
+		private System.Windows.Forms.DataGridViewTextBoxColumn cl_event;
+		private System.Windows.Forms.DataGridViewTextBoxColumn cl_user;
+	}
 }

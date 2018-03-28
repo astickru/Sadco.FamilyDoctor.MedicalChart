@@ -289,11 +289,5 @@ namespace Sadco.FamilyDoctor.Core.Controls
 			}
 		}
 		#endregion
-
-		protected void f_ParentChanged(Ctrl_TreeNodeElement el) {
-			/*EntityLog eLog = new EntityLog();
-			eLog.SetEntity(el.p_Element);
-			eLog.UpdateEntity(el.p_Element);*/
-		}
 	}
 }
