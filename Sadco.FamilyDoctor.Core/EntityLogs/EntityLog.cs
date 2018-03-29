@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Sadco.FamilyDoctor.Core.EntityLogs
@@ -124,7 +125,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 				newEvent = CreateEvent(obj, lastLogID, "Без изменений");
 			}
 
-			
+
 			Cl_App.m_DataContext.p_Logs.Add(newEvent);
 			Cl_App.m_DataContext.SaveChanges();
 
@@ -198,6 +199,10 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 				{
 					outValue = GetDecimalValue(value);
 				}
+				else if (value is Array)
+				{
+					outValue = GetArraysValue(value);
+				}
 				else
 				{
 					outValue = GetDefaultValue(value);
@@ -238,6 +243,55 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 				return "0";
 			else
 				return dec.ToString();
+		}
+
+		private string GetArraysValue(object value)
+		{
+			Type type = value.GetType();
+			Type elementType = type.GetElementType();
+			string salt = "1qaz2wsx3edc4rfv5tgb";
+			string result = salt;
+
+			using (MD5 md5Hash = MD5.Create())
+			{
+				if (elementType == typeof(Cl_ElementsParams))
+				{
+					Cl_ElementsParams[] elements = value as Cl_ElementsParams[];
+					foreach (Cl_ElementsParams item in elements)
+					{
+						result = CalcStringHash(md5Hash, item.p_Value);
+					}
+				}
+				else if (elementType == typeof(byte))
+				{
+					byte[] bytes = value as byte[];
+					result = CalcByteHash(md5Hash, bytes);
+				}
+				else
+				{
+					//result = CalcByteHash(md5Hash, bytes);
+				}
+			}
+
+			return result;
+		}
+
+		private string CalcStringHash(MD5 md5Hash, string input)
+		{
+			return CalcByteHash(md5Hash, Encoding.UTF8.GetBytes(input));
+		}
+
+		private string CalcByteHash(MD5 md5Hash, byte[] source)
+		{
+			StringBuilder sBuilder = new StringBuilder();
+			byte[] data = md5Hash.ComputeHash(source);
+
+			for (int i = 0; i < data.Length; i++)
+			{
+				sBuilder.Append(data[i].ToString("x2"));
+			}
+
+			return sBuilder.ToString();
 		}
 
 		private string GetDefaultValue(object value)
