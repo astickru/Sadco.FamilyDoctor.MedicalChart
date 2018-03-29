@@ -284,16 +284,19 @@ namespace Sadco.FamilyDoctor.Core.Entities
 		}
 
 		/// <summary>Часть. Возможные локации</summary>
+		[ELogProperty("Изменился набор значений для поля \"Локация\"", IsCustomDescription = true, IgnoreValue = true)]
 		public Cl_ElementsParams[] p_PartLocations {
 			get { return m_ParamsValues.Where(p => p.p_TypeParam == Cl_ElementsParams.E_TypeParam.Location).ToArray(); }
 		}
 
 		/// <summary>Список стандартных нормальных значений</summary>
+		[ELogProperty("Изменился набор значений для поля \"Нормальные значения\"", IsCustomDescription = true, IgnoreValue = true)]
 		public Cl_ElementsParams[] p_NormValues {
 			get { return m_ParamsValues.Where(p => p.p_TypeParam == Cl_ElementsParams.E_TypeParam.NormValues).ToArray(); }
 		}
 
 		/// <summary>Список стандартных патологических значений</summary>
+		[ELogProperty("Изменился набор значений для поля \"Паталогические значения\"", IsCustomDescription = true, IgnoreValue = true)]
 		public Cl_ElementsParams[] p_PatValues {
 			get { return m_ParamsValues.Where(p => p.p_TypeParam == Cl_ElementsParams.E_TypeParam.PatValues).ToArray(); }
 		}
