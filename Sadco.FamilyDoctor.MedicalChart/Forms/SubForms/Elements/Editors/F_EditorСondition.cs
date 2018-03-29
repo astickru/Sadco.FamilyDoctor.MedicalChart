@@ -10,261 +10,489 @@ using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
-	public partial class F_EditorСondition : Form
-	{
-		private const string operatorTag = "тег_";
-		private const string operatorMore = ">";
-		private const string operatorLess = "<";
-		private const string operatorEquals = "=";
-		private const string operatorNotEquals = "!=";
-		private const string operatorAnd = "И";
-		private const string operatorOr = "ИЛИ";
+    public partial class F_EditorСondition : Form
+    {
+        private enum E_Opers
+        {
+            more,
+            less,
+            equals,
+            notEquals,
+            and,
+            or
+        }
 
-		List<int> m_ItemsFormula = new List<int>();
-		int m_VisibilityHide = 1;
+        private class Cl_Block
+        {
+            public Cl_Block(object a_Object)
+            {
+                p_Object = a_Object;
+            }
 
-		public F_EditorСondition() {
+            public object p_Object { get; set; }
+            public const string m_OperatorTag = "tag_";
+
+            public string f_GetTextFromBlock()
+            {
+                if (p_Object is Cl_Element)
+                    return m_OperatorTag + ((Cl_Element)p_Object).p_Tag;
+                else if (p_Object is E_Opers)
+                {
+                    E_Opers oper = ((E_Opers)p_Object);
+                    switch (oper)
+                    {
+                        case E_Opers.more:
+                            return " > ";
+                        case E_Opers.less:
+                            return " < ";
+                        case E_Opers.equals:
+                            return " = ";
+                        case E_Opers.notEquals:
+                            return " != ";
+                        case E_Opers.and:
+                            return " И ";
+                        case E_Opers.or:
+                            return " ИЛИ ";
+                    }
+                }
+                else if (p_Object is int)
+                {
+                    return p_Object.ToString();
+                }
+                else if (p_Object is Cl_ElementsParams)
+                {
+                    return p_Object.ToString();
+                }
+                return "";
+            }
+
+            /// <summary>Получение цвета блока</summary>
+            /// <param name="a_Block">Блок</param>
+            public Color f_GetColorBlock()
+            {
+                if (p_Object is Cl_Element)
+                    return Color.DarkGoldenrod;
+                else if (p_Object is E_Opers)
+                {
+                    E_Opers oper = ((E_Opers)p_Object);
+                    switch (oper)
+                    {
+                        case E_Opers.more:
+                            return Color.Red;
+                        case E_Opers.less:
+                            return Color.Red;
+                        case E_Opers.equals:
+                            return Color.Red;
+                        case E_Opers.notEquals:
+                            return Color.Red;
+                        case E_Opers.and:
+                            return Color.Red;
+                        case E_Opers.or:
+                            return Color.Red;
+                    }
+                }
+                else if (p_Object is int)
+                {
+                    return Color.Blue;
+                }
+                else if (p_Object is Cl_ElementsParams)
+                {
+                    return Color.BlueViolet;
+                }
+                return Color.Green;
+            }
+
+            public override string ToString()
+            {
+                if (p_Object != null)
+                    return p_Object.ToString();
+                else
+                    return null;
+            }
+        }
+
+        public F_EditorСondition()
+        {
             this.Font = new System.Drawing.Font(ConfigurationManager.AppSettings["FontFamily"],
                 float.Parse(ConfigurationManager.AppSettings["FontSize"]),
                 (System.Drawing.FontStyle)int.Parse(ConfigurationManager.AppSettings["FontStyle"]),
                 System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             InitializeComponent();
-			InitializeOptions();
+            InitializeOptions();
 
-			ctrlCBAddElement.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-			ctrlCBAddElement.AutoCompleteSource = AutoCompleteSource.CustomSource;
-			var els = Cl_App.m_DataContext.p_Elements.Where(e => !e.p_IsArhive).GroupBy(e => e.p_ElementID)
-					  .Select(grp => grp
-							.OrderByDescending(v => v.p_Version).FirstOrDefault()).ToArray();
-			ctrlCBAddElement.AutoCompleteCustomSource.AddRange(els.Select(e => e.p_Name).ToArray());
-			ctrlCBAddElement.DataSource = new BindingSource(els, null);
-			ctrlCBAddElement.DisplayMember = "p_Name";
-			ctrlCBAddElement.ValueMember = "p_Tag";
+            ctrlStandartValues.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+            ctrlCBAddElement.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            ctrlCBAddElement.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            m_Elements = Cl_App.m_DataContext.p_Elements.Where(e => !e.p_IsArhive && e.p_ElementType != Cl_Element.E_ElementsTypes.Image).GroupBy(e => e.p_ElementID)
+                      .Select(grp => grp
+                            .OrderByDescending(v => v.p_Version).FirstOrDefault()).ToArray();
+            ctrlCBAddElement.AutoCompleteCustomSource.AddRange(m_Elements.Select(e => e.p_Name).ToArray());
+            ctrlCBAddElement.DataSource = new BindingSource(m_Elements, null);
+            ctrlCBAddElement.DisplayMember = "p_Name";
+            ctrlCBAddElement.ValueMember = "p_Tag";
 
-			f_UpdateVisibilityHide(m_VisibilityHide);
-		}
+            f_UpdateControls(m_NumberBlockOper);
+        }
 
-		private void InitializeOptions() {
-			ctrlBOperMore.Tag = operatorMore;
-			ctrlBOperLess.Tag = operatorLess;
-			ctrlBOperEquals.Tag = operatorEquals;
-			ctrlBOperNotEquals.Tag = operatorNotEquals;
-			ctrlBOperAnd.Tag = operatorAnd;
-			ctrlBOperOr.Tag = operatorOr;
-		}
+        private List<Cl_Block> m_Blocks = new List<Cl_Block>();
+        private int m_NumberBlockOper = 1;
+        private Cl_Element[] m_Elements = null;
 
-		private void ctrlBAddTag_Click(object sender, EventArgs e) {
-			if (ctrlCBAddElement.SelectedItem == null || !(ctrlCBAddElement.SelectedItem is Cl_Element)) return;
-			Cl_Element el = (Cl_Element)ctrlCBAddElement.SelectedItem;
-			if (string.IsNullOrWhiteSpace(el.p_Tag)) {
-				MessageBox.Show("Невозможно добавить элемент \"" + el.p_Name + "\" в редактор формул, т.к. у него не заполнено поле \"Тег элемента\"", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Information);
-				return;
-			}
-			m_ItemsFormula.Add(f_AppendText(operatorTag + el.p_Tag, Color.DarkGoldenrod));
-			f_UpdateVisibilityHide(++m_VisibilityHide);
-		}
+        private void InitializeOptions()
+        {
+            ctrlBOperMore.Tag = E_Opers.more;
+            ctrlBOperLess.Tag = E_Opers.less;
+            ctrlBOperEquals.Tag = E_Opers.equals;
+            ctrlBOperNotEquals.Tag = E_Opers.notEquals;
+            ctrlBOperAnd.Tag = E_Opers.and;
+            ctrlBOperOr.Tag = E_Opers.or;
+        }
 
-		private void ctrlBDelLastAction_Click(object sender, EventArgs e) {
-			if (m_ItemsFormula.Count == 0) return;
-			int lastLenght = m_ItemsFormula[m_ItemsFormula.Count - 1];
-			f_RemoveText(lastLenght);
-			m_ItemsFormula.RemoveAt(m_ItemsFormula.Count - 1);
-			f_UpdateVisibilityHide(--m_VisibilityHide);
-		}
+        private bool f_GetIsNumberBlockNumber()
+        {
+            Cl_Element el = null;
+            int index = m_Blocks.Count - m_NumberBlockOper + 1;
+            if (index >= 0 && m_Blocks.Count > index)
+                el = m_Blocks[index].p_Object as Cl_Element;
+            if (el != null)
+                return el.p_IsNumber;
+            return false;
+        }
 
-		private void addAction_Click(object sender, EventArgs e) {
-			Button btn = (Button)sender;
-			Color color = Color.Red;
-			m_ItemsFormula.Add(f_AppendText(" " + btn.Tag.ToString() + " ", color));
-			f_UpdateVisibilityHide(++m_VisibilityHide);
-		}
+        private void f_UpdateStandartValues(Cl_Element a_Element)
+        {
+            ctrlStandartValues.f_Clear();
+            if (!a_Element.p_IsNumber)
+            {
+                foreach (Cl_ElementsParams val in a_Element.p_NormValues)
+                {
+                    ctrlStandartValues.f_AddObject(val);
+                }
+                ctrlStandartValues.f_SetSeparator(a_Element.p_NormValues.Length);
+                foreach (Cl_ElementsParams val in a_Element.p_PatValues)
+                {
+                    ctrlStandartValues.f_AddObject(val);
+                }
+            }
+        }
 
-		private void ctrlBAddValue_Click(object sender, EventArgs e) {
-			int result = 0;
-			if (!int.TryParse(ctrlTBValue.Text, out result)) return;
-			m_ItemsFormula.Add(f_AppendText(result.ToString(), Color.Blue));
-			f_UpdateVisibilityHide(++m_VisibilityHide);
-		}
+        private void ctrlBAddTag_Click(object sender, EventArgs e)
+        {
+            if (ctrlCBAddElement.SelectedItem == null || !(ctrlCBAddElement.SelectedItem is Cl_Element)) return;
+            Cl_Element el = (Cl_Element)ctrlCBAddElement.SelectedItem;
+            if (string.IsNullOrWhiteSpace(el.p_Tag))
+            {
+                MessageBox.Show("Невозможно добавить элемент \"" + el.p_Name + "\" в редактор формул, т.к. у него не заполнено поле \"Тег элемента\"", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            f_AppendBlock(new Cl_Block(el));
+            f_UpdateStandartValues(el);
+            f_UpdateControls(++m_NumberBlockOper);
+        }
 
-		private void ctrlBClear_Click(object sender, EventArgs e) {
-			if (MessageBox.Show("Очистить формулу?", "Очистка", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+        private void ctrlBDelLastAction_Click(object sender, EventArgs e)
+        {
+            if (m_Blocks.Count == 0) return;
+            Cl_Block lastBlock = m_Blocks.LastOrDefault();
+            f_RemoveBlock(lastBlock);
+            m_NumberBlockOper--;
+            if (m_NumberBlockOper == 3)
+            {
+                if (m_Blocks[m_Blocks.Count - 2].p_Object is Cl_Element)
+                {
+                    f_UpdateStandartValues((Cl_Element)m_Blocks[m_Blocks.Count - 2].p_Object);
+                }
+            }
+            f_UpdateControls(m_NumberBlockOper);
+        }
 
-			m_ItemsFormula.Clear();
-			m_VisibilityHide = 1;
-			f_UpdateVisibilityHide(m_VisibilityHide);
-			f_ClearText();
-		}
+        private void addAction_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            f_AppendBlock(new Cl_Block(btn.Tag));
+            f_UpdateControls(++m_NumberBlockOper);
+        }
+
+        private void ctrlBAddValue_Click(object sender, EventArgs e)
+        {
+            int result = 0;
+            if (!int.TryParse(ctrlTBValue.Text, out result)) return;
+            f_AppendBlock(new Cl_Block(result));
+            f_UpdateControls(++m_NumberBlockOper);
+        }
+
+        private void ctrlBClear_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Очистить формулу?", "Очистка", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+            m_NumberBlockOper = 1;
+            f_UpdateControls(m_NumberBlockOper);
+            f_ClearBlocks();
+        }
 
 
-		private void f_UpdateVisibilityHide(int state) {
-			bool visGroup1 = false;
-			bool visGroup2 = false;
-			bool visGroup3 = false;
+        private void ctrlStandartValues_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            f_AppendBlock(new Cl_Block(ctrlStandartValues.SelectedItem));
+            f_UpdateControls(++m_NumberBlockOper);
+            ctrlStandartValues.f_Clear();
+        }
 
-			if (state > 4) {
-				m_VisibilityHide = 1;
-				f_UpdateVisibilityHide(m_VisibilityHide);
-				return;
-			} else if (state == 0) {
-				m_VisibilityHide = 4;
-				f_UpdateVisibilityHide(m_VisibilityHide);
-				return;
-			} else {
-				if ((state % 2) == 1) {
-					visGroup1 = true;
-					visGroup2 = visGroup3 = !visGroup1;
-				} else if (state == 2) {
-					visGroup2 = true;
-					visGroup1 = visGroup3 = !visGroup2;
-				} else {
-					visGroup3 = true;
-					visGroup1 = visGroup2 = !visGroup3;
-				}
-			}
+        private void f_UpdateControls(int state)
+        {
+            bool visGroup1 = false;
+            bool visGroup2 = false;
+            bool visGroup3 = false;
 
-			ctrlCBAddElement.Enabled = visGroup1;
-			ctrlBAddTag.Enabled = visGroup1;
-			ctrlTBValue.Enabled = visGroup1;
-			ctrlBAddValue.Enabled = visGroup1;
+            if (state > 4)
+            {
+                m_NumberBlockOper = 1;
+                f_UpdateControls(m_NumberBlockOper);
+                return;
+            }
+            else if (state == 0)
+            {
+                m_NumberBlockOper = 4;
+                f_UpdateControls(m_NumberBlockOper);
+                return;
+            }
+            else
+            {
+                if ((state % 2) == 1)
+                {
+                    visGroup1 = true;
+                    visGroup2 = visGroup3 = !visGroup1;
+                }
+                else if (state == 2)
+                {
+                    visGroup2 = true;
+                    visGroup1 = visGroup3 = !visGroup2;
+                }
+                else
+                {
+                    visGroup3 = true;
+                    visGroup1 = visGroup2 = !visGroup3;
+                }
+            }
 
-			ctrlBOperNotEquals.Enabled = visGroup2;
-			ctrlBOperEquals.Enabled = visGroup2;
-			ctrlBOperLess.Enabled = visGroup2;
-			ctrlBOperMore.Enabled = visGroup2;
-			ctrlBOperAnd.Enabled = visGroup3;
-			ctrlBOperOr.Enabled = visGroup3;
-		}
+            ctrlCBAddElement.Enabled = visGroup1;
+            ctrlBAddTag.Enabled = visGroup1;
 
-		/// <summary>Добавление блока в формулу</summary>
-		/// <param name="a_Text">Текст блока</param>
-		/// <param name="a_Color">Цвет блока</param>
-		/// <returns></returns>
-		private int f_AppendText(string a_Text, Color a_Color) {
-			ctrlRTBFormula.SelectionStart = ctrlRTBFormula.TextLength;
-			ctrlRTBFormula.SelectionLength = 0;
-			ctrlRTBFormula.SelectionColor = a_Color;
-			ctrlRTBFormula.AppendText(a_Text);
-			ctrlRTBFormula.SelectionColor = ctrlRTBFormula.ForeColor;
-			return a_Text.Length;
-		}
+            ctrlBOperNotEquals.Enabled = visGroup2;
+            ctrlBOperEquals.Enabled = visGroup2;
 
-		/// <summary>Удаление блока из формулы</summary>
-		/// <param name="a_Index">Индекс в формуле</param>
-		private void f_RemoveText(int a_Index) {
-			int start = 0;
-			if (ctrlRTBFormula.TextLength == 0) return;
-			if (a_Index > ctrlRTBFormula.TextLength) {
-				start = 0;
-			} else {
-				start = ctrlRTBFormula.TextLength - a_Index;
-			}
-			ctrlRTBFormula.ReadOnly = false;
-			ctrlRTBFormula.SelectionStart = start;
-			ctrlRTBFormula.SelectionLength = a_Index;
-			ctrlRTBFormula.SelectedText = "";
-			ctrlRTBFormula.ReadOnly = true;
-		}
+            if (!f_GetIsNumberBlockNumber())
+            {
+                ctrlBOperLess.Enabled = false;
+                ctrlBOperMore.Enabled = false;
+                ctrlCBAddElement.DataSource = new BindingSource(m_Elements, null);
+                ctrlStandartValues.Enabled = m_NumberBlockOper == 3;
+                ctrlTBValue.Enabled = false;
+                ctrlBAddValue.Enabled = false;
+            }
+            else
+            {
+                ctrlBOperLess.Enabled = visGroup2;
+                ctrlBOperMore.Enabled = visGroup2;
+                ctrlCBAddElement.DataSource = new BindingSource(m_Elements.Where(el => el.p_IsNumber), null);
+                ctrlStandartValues.Enabled = false;
+                if (m_NumberBlockOper > 1)
+                {
+                    ctrlTBValue.Enabled = visGroup1;
+                    ctrlBAddValue.Enabled = visGroup1;
+                }
+            }
 
-		/// <summary>Очистка блоков из формулы</summary>
-		private void f_ClearText() {
-			ctrlRTBFormula.ReadOnly = false;
-			ctrlRTBFormula.SelectionStart = 0;
-			ctrlRTBFormula.SelectionLength = 0;
-			ctrlRTBFormula.SelectedText = "";
-			ctrlRTBFormula.Text = "";
-			ctrlRTBFormula.ReadOnly = true;
-		}
+            ctrlBOperAnd.Enabled = visGroup3;
+            ctrlBOperOr.Enabled = visGroup3;
+        }
 
-		/// <summary>Получение формулы</summary>
-		/// <returns>Формула</returns>
-		public string f_GetFormula() {
-			return ctrlRTBFormula.Text;
-		}
+        /// <summary>Добавление блока в формулу</summary>
+        /// <param name="a_Block">Блок</param>
+        /// <returns></returns>
+        private bool f_AppendBlock(Cl_Block a_Block)
+        {
+            if (a_Block == null) return false;
 
-		/// <summary>Указание формулы</summary>
-		/// <param name="a_Formula">Формула</param>
-		public void f_SetFormula(string a_Formula) {
-			int lastPos = 0;
-			string[] blocks = f_getSelectOperator(a_Formula);
+            if (a_Block.p_Object is string)
+            {
+                string txt = a_Block.p_Object.ToString();
+                if (m_Blocks.Count < 2) return false;
+                Cl_Element el = m_Blocks[m_Blocks.Count - 2].p_Object as Cl_Element;
+                if (el == null || el.p_IsNumber) return false;
+                Cl_ElementsParams prm = el.p_NormValues.FirstOrDefault(val => val.p_Value == txt);
+                if (prm != null)
+                {
+                    a_Block.p_Object = prm;
+                }
+                else
+                {
+                    prm = el.p_PatValues.FirstOrDefault(val => val.p_Value == txt);
+                    if (prm != null)
+                    {
+                        a_Block.p_Object = prm;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
 
-			for (int i = 0; i < blocks.Count(); i++) {
-				string opParts = blocks[i].Trim();
-				string[] compareValues = f_getCompareOperators(opParts);
-				string compareOperator = "";
-				string firstTag = "";
-				string secondTag = "";
+            string text = a_Block.f_GetTextFromBlock();
+            if (string.IsNullOrWhiteSpace(text)) return false;
+            ctrlRTBFormula.SelectionStart = ctrlRTBFormula.TextLength;
+            ctrlRTBFormula.SelectionLength = 0;
+            ctrlRTBFormula.SelectionColor = a_Block.f_GetColorBlock();
+            ctrlRTBFormula.AppendText(text);
+            ctrlRTBFormula.SelectionColor = ctrlRTBFormula.ForeColor;
+            m_Blocks.Add(a_Block);
+            return true;
+        }
 
-				firstTag = compareValues[0].Trim();
-				if (compareValues.Count() > 1) {
-					secondTag = compareValues[1].Trim();
-					compareOperator = opParts.Substring(firstTag.Length, opParts.Length - secondTag.Length - firstTag.Length).Trim();
-				} else {
-					if (opParts.Length > firstTag.Length) {
-						compareOperator = opParts.Substring(firstTag.Length, opParts.Length - firstTag.Length).Trim();
-					}
-				}
+        /// <summary>Удаление блока из формулы</summary>
+        /// <param name="a_Block">Блок</param>
+        private bool f_RemoveBlock(Cl_Block a_Block)
+        {
+            if (a_Block == null) return false;
+            if (ctrlRTBFormula.TextLength == 0) return false;
+            string text = a_Block.f_GetTextFromBlock();
+            if (string.IsNullOrWhiteSpace(text)) return false;
+            int start = 0;
+            if (text.Length > ctrlRTBFormula.TextLength)
+            {
+                start = 0;
+            }
+            else
+            {
+                start = ctrlRTBFormula.TextLength - text.Length;
+            }
+            ctrlRTBFormula.ReadOnly = false;
+            ctrlRTBFormula.SelectionStart = start;
+            ctrlRTBFormula.SelectionLength = text.Length;
+            ctrlRTBFormula.SelectedText = "";
+            ctrlRTBFormula.ReadOnly = true;
+            m_Blocks.RemoveAt(m_Blocks.LastIndexOf(a_Block));
+            return true;
+        }
 
-				if (i > 0) {
-					int pos = a_Formula.IndexOf(opParts, lastPos);
-					string selectOp = a_Formula.Substring(lastPos, pos - lastPos).Trim();
-					m_ItemsFormula.Add(f_AppendText(" " + selectOp + " ", Color.Red));
-					f_UpdateVisibilityHide(++m_VisibilityHide);
+        /// <summary>Очистка блоков из формулы</summary>
+        private void f_ClearBlocks()
+        {
+            ctrlRTBFormula.ReadOnly = false;
+            ctrlRTBFormula.SelectionStart = 0;
+            ctrlRTBFormula.SelectionLength = 0;
+            ctrlRTBFormula.SelectedText = "";
+            ctrlRTBFormula.Text = "";
+            ctrlRTBFormula.ReadOnly = true;
+            m_Blocks.Clear();
+        }
 
-					lastPos = pos;
-				}
+        /// <summary>Получение формулы</summary>
+        /// <returns>Формула</returns>
+        public string f_GetFormula()
+        {
+            return ctrlRTBFormula.Text;
+        }
 
-				if (firstTag.Length > operatorTag.Length && firstTag.Substring(0, operatorTag.Length) == operatorTag) {
-					m_ItemsFormula.Add(f_AppendText(firstTag, Color.DarkGoldenrod));
-				} else {
-					m_ItemsFormula.Add(f_AppendText(firstTag, Color.Blue));
-				}
-				f_UpdateVisibilityHide(++m_VisibilityHide);
+        /// <summary>Получение первого блока из текста</summary>
+        /// <param name="a_Text">Текст</param>
+        /// <returns></returns>
+        private Cl_Block f_GetFirstBlockFromText(string a_Text)
+        {
+            if (!string.IsNullOrWhiteSpace(a_Text))
+            {
+                string txt = "";
+                if (a_Text.Length >= 3)
+                {
+                    txt = a_Text.Substring(0, 3);
+                    if (txt == " > ")
+                        return new Cl_Block(E_Opers.more);
+                    else if (txt == " < ")
+                        return new Cl_Block(E_Opers.less);
+                    else if (txt == " = ")
+                        return new Cl_Block(E_Opers.equals);
+                    else if (txt == " И ")
+                        return new Cl_Block(E_Opers.and);
+                }
+                if (a_Text.Length >= 4)
+                {
+                    txt = a_Text.Substring(0, 4);
+                    if (txt == " != ")
+                        return new Cl_Block(E_Opers.notEquals);
+                }
+                if (a_Text.Length >= 5)
+                {
+                    txt = a_Text.Substring(0, 5);
+                    if (txt == " ИЛИ ")
+                        return new Cl_Block(E_Opers.or);
+                }
+                if (a_Text.Length > Cl_Block.m_OperatorTag.Length)
+                {
+                    txt = a_Text.Substring(0, Cl_Block.m_OperatorTag.Length);
+                    if (txt == Cl_Block.m_OperatorTag)
+                    {
+                        int indexEnd = a_Text.IndexOf(" ");
+                        if (indexEnd > -1)
+                            txt = a_Text.Substring(Cl_Block.m_OperatorTag.Length, indexEnd - Cl_Block.m_OperatorTag.Length);
+                        else
+                            txt = a_Text.Replace(Cl_Block.m_OperatorTag, "");
+                        Cl_Element element = m_Elements.FirstOrDefault(el => el.p_Tag == txt);
+                        if (element != null)
+                            return new Cl_Block(element);
+                    }
+                }
+                if (a_Text.Length > 0)
+                {
+                    int indexEnd = a_Text.IndexOf(" ");
+                    if (indexEnd > -1)
+                        txt = a_Text.Substring(0, indexEnd);
+                    else
+                        txt = a_Text;
+                    int iVal = 0;
+                    if (int.TryParse(txt, out iVal))
+                    {
+                        return new Cl_Block(iVal);
+                    }
+                    if (!string.IsNullOrWhiteSpace(txt))
+                    {
+                        return new Cl_Block(txt);
+                    }
+                }
+            }
+            return null;
+        }
 
-				if (!string.IsNullOrEmpty(compareOperator)) {
-					m_ItemsFormula.Add(f_AppendText(" " + compareOperator + " ", Color.Red));
-					f_UpdateVisibilityHide(++m_VisibilityHide);
-				}
-
-				if (!string.IsNullOrEmpty(secondTag)) {
-					if (secondTag.Length > operatorTag.Length && secondTag.Substring(0, operatorTag.Length) == operatorTag) {
-						m_ItemsFormula.Add(f_AppendText(secondTag.Trim(), Color.DarkGoldenrod));
-					} else {
-						m_ItemsFormula.Add(f_AppendText(secondTag.Trim(), Color.Blue));
-					}
-					f_UpdateVisibilityHide(++m_VisibilityHide);
-				}
-
-				lastPos += opParts.Length;
-			}
-
-			if (a_Formula.Length > lastPos) {
-				string lastOp = a_Formula.Substring(lastPos, a_Formula.Length - lastPos).Trim();
-
-				if (!string.IsNullOrEmpty(lastOp)) {
-					m_ItemsFormula.Add(f_AppendText(" " + lastOp + " ", Color.Red));
-					f_UpdateVisibilityHide(++m_VisibilityHide);
-				}
-			}
-		}
-
-		private string[] f_getSelectOperator(string formula) {
-			if (string.IsNullOrEmpty(formula))
-				return new string[0];
-
-			return formula.Trim().Split(new string[] {
-				" " + operatorOr,
-				" " + operatorAnd}, StringSplitOptions.RemoveEmptyEntries);
-		}
-
-		private string[] f_getCompareOperators(string comparePart) {
-			if (string.IsNullOrEmpty(comparePart))
-				return new string[0];
-
-			return comparePart.Trim().Split(new string[] {
-				" " + operatorEquals,
-				" " + operatorLess,
-				" " + operatorMore,
-				" " + operatorNotEquals}, StringSplitOptions.RemoveEmptyEntries);
-		}
-	}
+        /// <summary>Указание формулы</summary>
+        /// <param name="a_Formula">Формула</param>
+        public void f_SetFormula(string a_Formula)
+        {
+            f_ClearBlocks();
+            string formula = a_Formula;
+            while (!string.IsNullOrWhiteSpace(formula))
+            {
+                Cl_Block block = f_GetFirstBlockFromText(formula);
+                if (block != null)
+                {
+                    if (f_AppendBlock(block))
+                    {
+                        string txtBlock = block.f_GetTextFromBlock();
+                        formula = formula.Substring(txtBlock.Length);
+                    }
+                    else
+                    {
+                        formula = null;
+                    }
+                }
+                else
+                {
+                    formula = null;
+                }
+            }
+            if (m_Blocks.Count > 0)
+                m_NumberBlockOper = 4;
+            else
+                m_NumberBlockOper = 1;
+            f_UpdateControls(m_NumberBlockOper);
+        }
+    }
 }

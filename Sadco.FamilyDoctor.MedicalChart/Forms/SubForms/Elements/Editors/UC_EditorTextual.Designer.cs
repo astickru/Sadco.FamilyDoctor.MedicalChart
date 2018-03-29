@@ -161,7 +161,7 @@
             // 
             // ctrl_Default
             // 
-            this.ctrl_Default.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.ctrl_Default.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.ctrl_Default.FormattingEnabled = true;
             this.ctrl_Default.Location = new System.Drawing.Point(186, 1);
             this.ctrl_Default.Name = "ctrl_Default";

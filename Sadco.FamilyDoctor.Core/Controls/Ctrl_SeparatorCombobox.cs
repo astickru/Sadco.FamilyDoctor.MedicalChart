@@ -34,6 +34,17 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
         #region Medthods
 
+        public void f_AddObject(object s)
+        {
+            Items.Add(s);
+        }
+
+        public void f_AddObjectWithSeparator(object s)
+        {
+            Items.Add(s);
+            m_Separators.Add(s);
+        }
+
         public void f_AddString(string s)
         {
             Items.Add(s);
@@ -53,6 +64,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
         public void f_Clear()
         {
             Items.Clear();
+            Text = "";
             m_Separators.Clear();
         }
         #endregion
@@ -139,7 +151,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             }
 
             Brush br = DrawItemState.Selected == (DrawItemState.Selected & e.State) ? SystemBrushes.HighlightText : new SolidBrush(e.ForeColor);
-            g.DrawString((string)Items[e.Index], e.Font, br, e.Bounds.Left, y + 1);
+            g.DrawString(Items[e.Index].ToString(), e.Font, br, e.Bounds.Left, y + 1);
 
             base.OnDrawItem(e);
         }
