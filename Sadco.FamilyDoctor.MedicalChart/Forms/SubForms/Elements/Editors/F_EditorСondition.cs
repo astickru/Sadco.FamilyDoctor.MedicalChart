@@ -196,7 +196,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             Cl_Block lastBlock = m_Blocks.LastOrDefault();
             f_RemoveBlock(lastBlock);
             m_NumberBlockOper--;
-            if (m_NumberBlockOper == 3)
+            if (m_Blocks.Count > 1 && m_NumberBlockOper == 3)
             {
                 if (m_Blocks[m_Blocks.Count - 2].p_Object is Cl_Element)
                 {
@@ -493,6 +493,21 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             else
                 m_NumberBlockOper = 1;
             f_UpdateControls(m_NumberBlockOper);
+        }
+
+        /// <summary>Проверка корректности формулы</summary>
+        public bool f_Valid()
+        {
+            return m_Blocks.Count % 3 == 0;
+        }
+
+        private void F_EditorСondition_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!f_Valid())
+            {
+                MessageBox.Show("Формула не корректная!");
+                e.Cancel = true;
+            }
         }
     }
 }

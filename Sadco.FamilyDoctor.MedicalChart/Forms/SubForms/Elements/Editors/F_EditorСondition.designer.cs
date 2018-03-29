@@ -32,6 +32,7 @@
             this.panel_Editor = new System.Windows.Forms.Panel();
             this.ctrlRTBFormula = new System.Windows.Forms.RichTextBox();
             this.panel_Actions = new System.Windows.Forms.Panel();
+            this.ctrlStandartValues = new Sadco.FamilyDoctor.Core.Controls.Ctrl_SeparatorCombobox();
             this.ctrlBDelLastAction = new System.Windows.Forms.Button();
             this.ctrlCBAddElement = new System.Windows.Forms.ComboBox();
             this.ctrlBAddTag = new System.Windows.Forms.Button();
@@ -48,7 +49,6 @@
             this.panel_Result = new System.Windows.Forms.Panel();
             this.ctrlBEdit = new System.Windows.Forms.Button();
             this.ctrlBCancel = new System.Windows.Forms.Button();
-            this.ctrlStandartValues = new Sadco.FamilyDoctor.Core.Controls.Ctrl_SeparatorCombobox();
             this.panel_Main.SuspendLayout();
             this.panel_Editor.SuspendLayout();
             this.panel_Actions.SuspendLayout();
@@ -101,6 +101,21 @@
             this.panel_Actions.Name = "panel_Actions";
             this.panel_Actions.Size = new System.Drawing.Size(750, 29);
             this.panel_Actions.TabIndex = 2;
+            // 
+            // ctrlStandartValues
+            // 
+            this.ctrlStandartValues.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.ctrlStandartValues.FormattingEnabled = true;
+            this.ctrlStandartValues.Location = new System.Drawing.Point(340, 3);
+            this.ctrlStandartValues.Name = "ctrlStandartValues";
+            this.ctrlStandartValues.p_AutoAdjustItemHeight = false;
+            this.ctrlStandartValues.p_SeparatorColor = System.Drawing.Color.Black;
+            this.ctrlStandartValues.p_SeparatorMargin = 1;
+            this.ctrlStandartValues.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            this.ctrlStandartValues.p_SeparatorWidth = 1;
+            this.ctrlStandartValues.Size = new System.Drawing.Size(192, 22);
+            this.ctrlStandartValues.TabIndex = 80;
+            this.ctrlStandartValues.SelectedIndexChanged += new System.EventHandler(this.ctrlStandartValues_SelectedIndexChanged);
             // 
             // ctrlBDelLastAction
             // 
@@ -273,21 +288,6 @@
             this.ctrlBCancel.Text = "отмена";
             this.ctrlBCancel.UseVisualStyleBackColor = true;
             // 
-            // ctrlStandartValues
-            // 
-            this.ctrlStandartValues.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.ctrlStandartValues.FormattingEnabled = true;
-            this.ctrlStandartValues.Location = new System.Drawing.Point(340, 3);
-            this.ctrlStandartValues.Name = "ctrlStandartValues";
-            this.ctrlStandartValues.p_AutoAdjustItemHeight = false;
-            this.ctrlStandartValues.p_SeparatorColor = System.Drawing.Color.Black;
-            this.ctrlStandartValues.p_SeparatorMargin = 1;
-            this.ctrlStandartValues.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            this.ctrlStandartValues.p_SeparatorWidth = 1;
-            this.ctrlStandartValues.Size = new System.Drawing.Size(192, 22);
-            this.ctrlStandartValues.TabIndex = 80;
-            this.ctrlStandartValues.SelectedIndexChanged += new System.EventHandler(this.ctrlStandartValues_SelectedIndexChanged);
-            // 
             // F_EditorСondition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 13F);
@@ -302,6 +302,7 @@
             this.Padding = new System.Windows.Forms.Padding(7, 5, 7, 5);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "F_EditorСondition";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.F_EditorСondition_FormClosing);
             this.panel_Main.ResumeLayout(false);
             this.panel_Main.PerformLayout();
             this.panel_Editor.ResumeLayout(false);

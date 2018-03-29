@@ -326,5 +326,20 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
             f_UpdateControls(m_Blocks.Count > 0);
         }
+
+        /// <summary>Проверка корректности формулы</summary>
+        public bool f_Valid()
+        {
+            return m_Blocks.Count % 3 == 0;
+        }
+
+        private void F_EditorFormula_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!f_Valid())
+            {
+                MessageBox.Show("Формула не корректная!");
+                e.Cancel = true;
+            }
+        }
     }
 }
