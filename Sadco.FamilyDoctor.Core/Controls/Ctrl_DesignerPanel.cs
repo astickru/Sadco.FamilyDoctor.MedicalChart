@@ -1,5 +1,7 @@
 ﻿using Sadco.FamilyDoctor.Core.Controls.DesignerPanel;
+using Sadco.FamilyDoctor.Core.Entities;
 using System;
+using System.Linq;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
@@ -404,10 +406,41 @@ namespace Sadco.FamilyDoctor.Core.Controls
             return !dragZone.Contains(location);
         }
 
+        protected bool f_HasElements(Cl_Element[] a_Elemnts)
+        {
+            foreach (Ctrl_Element el in Items)
+            {
+                if (a_Elemnts.Contains(el.p_Element))
+                    return true;
+            }
+            return false;
+        }
 
         protected override void OnDragEnter(DragEventArgs e)
         {
             base.OnDragEnter(e);
+            string[] formats = e.Data.GetFormats();
+            foreach (string format in formats)
+            {
+                var item = e.Data.GetData(format);
+                if (item is Ctrl_TreeNodeElement || item is Ctrl_TreeNodeTemplate)
+                {
+                    if (item is Ctrl_TreeNodeElement)
+                    {
+                        Ctrl_TreeNodeElement nodeEl = (Ctrl_TreeNodeElement)item;
+                        if (f_HasElements(new Cl_Element[] { nodeEl.p_Element }))
+                        {
+                            e.Effect = DragDropEffects.None;
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    e.Effect = DragDropEffects.None;
+                    return;
+                }
+            }
             e.Effect = e.AllowedEffect;
         }
 
