@@ -240,16 +240,21 @@ namespace Sadco.FamilyDoctor.Core.Controls
 			SelectedNode = GetNodeAt(targetPoint);
 		}
 
+
         private void Ctrl_TreeView_DragEnter(object sender, DragEventArgs e)
         {
             string[] formats = e.Data.GetFormats();
             foreach (string format in formats)
             {
                 var item = e.Data.GetData(format);
-                if (item is I_TreeNode)
+                if (item is TreeNode)
                 {
-                    e.Effect = e.AllowedEffect;
-                    return;
+                    TreeNode node = (TreeNode)item;
+                    if (Equals(node.TreeView))
+                    {
+                        e.Effect = e.AllowedEffect;
+                        return;
+                    }
                 }
             }
             e.Effect = DragDropEffects.None;
