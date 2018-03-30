@@ -104,5 +104,10 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 		{
 			ctrlImage.Image = null;
 		}
+
+		private void ctrlTag_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			e.Handled = e.KeyChar != Keys.Back.GetHashCode() && e.KeyChar != Keys.Delete.GetHashCode() && (e.KeyChar < 65 || (e.KeyChar > 90 && e.KeyChar < 97) || e.KeyChar > 122);
+		}
 	}
 }

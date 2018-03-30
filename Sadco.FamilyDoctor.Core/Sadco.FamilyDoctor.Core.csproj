@@ -77,12 +77,6 @@
     <Compile Include="Controls\Ctrl_SeparatorCombobox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\Ctrl_MacrosEditor.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\Ctrl_MacrosEditor.designer.cs">
-      <DependentUpon>Ctrl_MacrosEditor.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\DesignerPanel\Cl_ToolboxItemElement.cs" />
     <Compile Include="Controls\DesignerPanel\Ctrl_Element.cs">
       <SubType>Component</SubType>
@@ -199,9 +193,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Ctrl_SeparatorCombobox.resx">
       <DependentUpon>Ctrl_SeparatorCombobox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Ctrl_MacrosEditor.resx">
-      <DependentUpon>Ctrl_MacrosEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\DesignerPanel\Ctrl_Element.resx">
       <DependentUpon>Ctrl_Element.cs</DependentUpon>
