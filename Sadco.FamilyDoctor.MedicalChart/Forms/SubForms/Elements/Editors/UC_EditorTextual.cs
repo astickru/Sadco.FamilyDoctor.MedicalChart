@@ -347,8 +347,12 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 			ctrl_NumberFormula.Text = p_EditingElement.p_NumberFormula;
 			ctrl_VisibilityFormula.Text = p_EditingElement.p_VisibilityFormula;
 
-			int pos = ctrl_Default.Items.IndexOf(p_EditingElement.p_Default);
-			ctrl_Default.SelectedIndex = pos;
+			if (p_EditingElement.p_Default != null)
+			{
+				int pos = ctrl_Default.Items.IndexOf(p_EditingElement.p_Default);
+				ctrl_Default.SelectedIndex = pos;
+			}
+
 			ctrl_Note.Text = p_EditingElement.p_Comment;
 
 			ctrl_PartLocationsValue.Text = string.Join("\n", p_EditingElement.p_PartLocations.ToList());
