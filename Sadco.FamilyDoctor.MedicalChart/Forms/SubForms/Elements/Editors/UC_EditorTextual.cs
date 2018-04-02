@@ -500,11 +500,23 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
 		private void ctrl_NormValues_KeyPress(object sender, KeyPressEventArgs e)
 		{
+			if (e.KeyChar == '"')
+			{
+				e.Handled = true;
+				return;
+			}
+
 			ctrl_ValidNumber_KeyPress(sender, e);
 		}
 
 		private void ctrl_PatValues_KeyPress(object sender, KeyPressEventArgs e)
 		{
+			if (e.KeyChar == '"')
+			{
+				e.Handled = true;
+				return;
+			}
+
 			ctrl_ValidNumber_KeyPress(sender, e);
 		}
 

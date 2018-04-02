@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
@@ -67,7 +68,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 				}
 				else if (p_Object is Cl_ElementsParams)
 				{
-					return p_Object.ToString();
+					string preValue = p_Object.ToString();
+					if (preValue.IndexOf(' ') != -1)
+						preValue = "\"" + preValue.Trim() + "\"";
+
+					return preValue;
 				}
 				return "";
 			}
@@ -449,11 +454,24 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 				}
 				if (a_Text.Length > 0)
 				{
-					int indexEnd = a_Text.IndexOf(" ");
-					if (indexEnd > -1)
-						txt = a_Text.Substring(0, indexEnd);
+					int indexStart = 0;
+					int lenght = 0;
+					if (a_Text != "" && a_Text[0] == '"')
+					{
+						indexStart = 1;
+						lenght = a_Text.IndexOf('"', 1) - indexStart;
+					}
+					else
+					{
+						byte[] asdsad = Encoding.ASCII.GetBytes(a_Text);
+						lenght = a_Text.IndexOf(" ");
+					}
+
+					if (lenght > -1)
+						txt = a_Text.Substring(indexStart, lenght);
 					else
 						txt = a_Text;
+
 					int iVal = 0;
 					if (int.TryParse(txt, out iVal))
 					{

@@ -152,7 +152,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
 				newElement.p_PartPre = dlg.ctrl_TBName.Text[0].ToString().ToUpper();
 				if (dlg.ctrl_TBName.Text.Length > 1)
 				{
-					newElement.p_PartPre += dlg.ctrl_TBName.Text.Substring(1, dlg.ctrl_TBName.Text.Length - 2);
+					newElement.p_PartPre += dlg.ctrl_TBName.Text.Substring(1, dlg.ctrl_TBName.Text.Length - 1);
 				}
 			}
 			newElement.p_SymmetryParamLeft = "Слева";
