@@ -69,10 +69,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 				else if (p_Object is Cl_ElementsParams)
 				{
 					string preValue = p_Object.ToString();
-					if (preValue.IndexOf(' ') != -1)
-						preValue = "\"" + preValue.Trim() + "\"";
-
-					return preValue;
+					return preValue = "\"" + preValue.Trim() + "\"";
 				}
 				return "";
 			}
