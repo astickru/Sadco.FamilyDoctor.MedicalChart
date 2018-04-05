@@ -83,7 +83,12 @@
     <Compile Include="Controls\Ctrl_MacrosEditor.designer.cs">
       <DependentUpon>Ctrl_MacrosEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DesignerPanel\Cl_ToolboxItemElement.cs" />
+    <Compile Include="Controls\DesignerPanel\Ctrl_Template.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\DesignerPanel\Ctrl_Template.Designer.cs">
+      <DependentUpon>Ctrl_Template.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DesignerPanel\Ctrl_Element.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -110,14 +115,6 @@
       <DependentUpon>Ctrl_DesignerPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\Ctrl_RadioButtonList.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\DesignerPanel\Cl_DesignerHost.cs" />
-    <Compile Include="Controls\DesignerPanel\Cl_DesignSite.cs" />
-    <Compile Include="Controls\DesignerPanel\Cl_MegaDesignerTransaction.cs" />
-    <Compile Include="Controls\DesignerPanel\Cl_SelectionService.cs" />
-    <Compile Include="Controls\DesignerPanel\Cl_NameCreationService.cs" />
-    <Compile Include="Controls\DesignerPanel\Ctrl_ToolboxService.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\TreeView\Dlg_EditorImage.cs">
@@ -159,9 +156,9 @@
     <Compile Include="EntityLogs\EntityLog.cs" />
     <Compile Include="Entities\I_ELog.cs" />
     <Compile Include="Entities\I_Version.cs" />
-    <Compile Include="Migrations\201803281226227_appInit.cs" />
-    <Compile Include="Migrations\201803281226227_appInit.Designer.cs">
-      <DependentUpon>201803281226227_appInit.cs</DependentUpon>
+    <Compile Include="Migrations\201804041305543_appInit.cs" />
+    <Compile Include="Migrations\201804041305543_appInit.Designer.cs">
+      <DependentUpon>201804041305543_appInit.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -203,6 +200,9 @@
     <EmbeddedResource Include="Controls\Ctrl_MacrosEditor.resx">
       <DependentUpon>Ctrl_MacrosEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DesignerPanel\Ctrl_Template.resx">
+      <DependentUpon>Ctrl_Template.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\DesignerPanel\Ctrl_Element.resx">
       <DependentUpon>Ctrl_Element.cs</DependentUpon>
     </EmbeddedResource>
@@ -221,8 +221,8 @@
     <EmbeddedResource Include="Controls\TreeView\Dlg_EditorGroup.resx">
       <DependentUpon>Dlg_EditorGroup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803281226227_appInit.resx">
-      <DependentUpon>201803281226227_appInit.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201804041305543_appInit.resx">
+      <DependentUpon>201804041305543_appInit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

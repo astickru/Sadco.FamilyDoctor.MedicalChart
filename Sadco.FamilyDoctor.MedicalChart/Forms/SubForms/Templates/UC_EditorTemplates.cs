@@ -50,45 +50,50 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         private void Ctrl_TreeTemplates_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            f_LoadTemplates();
+            //f_LoadTemplates();
         }
 
         private void Ctrl_TreeTemplates_e_EditElement(object sender, TreeViewEventArgs e)
         {
             Ctrl_TreeNodeTemplate treeNode = (Ctrl_TreeNodeTemplate)e.Node;
-            F_DesignerTemplate editor = new F_DesignerTemplate();
-            editor.p_ActiveTemplate = treeNode.p_Template;
-            editor.Show(ParentForm);
-        }
-
-        /// <summary>
-        /// Обновление списка темплейтов в области свойств группы
-        /// </summary>
-        private void f_LoadTemplates()
-        {
-            ctrl_LVTemplates.Items.Clear();
-            if (ctrl_TreeTemplates.p_SelectedTemplate != null && ctrl_TreeTemplates.p_SelectedTemplate.p_Template != null)
+            var tpl = Cl_App.m_DataContext.p_Templates
+                .Where(t => t.p_TemplateID == treeNode.p_Template.p_TemplateID && !t.p_IsArhive).OrderByDescending(v => v.p_Version).FirstOrDefault();
+            if (tpl != null)
             {
-                Cl_TemplatesElements[] controls = Cl_App.m_DataContext.p_TemplatesElements.Where(t => t.p_TemplateID == ctrl_TreeTemplates.p_SelectedTemplate.p_Template.p_ID).ToArray();
-                foreach (Cl_TemplatesElements control in controls)
-                {
-                    if (control.p_Element == null) continue;
-
-                    ListViewItem listitem = new ListViewItem(new string[] { control.p_Element.p_Name, control.p_ControlType });
-                    ctrl_LVTemplates.Items.Add(listitem);
-                }
-            }
-            else if (ctrl_TreeTemplates.p_SelectedGroup != null)
-            {
-                Cl_Template[] templates = Cl_App.m_DataContext.p_Templates.
-                    Where(t => t.p_ParentGroupID == ctrl_TreeTemplates.p_SelectedGroup.p_Group.p_ID && !t.p_IsArhive).ToArray();
-                foreach (Cl_Template template in templates)
-                {
-                    ListViewItem listitem = new ListViewItem(new string[] { template.p_Name, template.p_Description });
-                    listitem.Tag = template.p_ID;
-                    ctrl_LVTemplates.Items.Add(listitem);
-                }
+                treeNode.p_Template = tpl;
+                F_DesignerTemplate editor = new F_DesignerTemplate();
+                editor.p_ActiveTemplate = treeNode.p_Template;
+                editor.Show(ParentForm);
             }
         }
+
+        ///// <summary>
+        ///// Обновление списка темплейтов в области свойств группы
+        ///// </summary>
+        //private void f_LoadTemplates()
+        //{
+        //    ctrl_LVTemplates.Items.Clear();
+        //    if (ctrl_TreeTemplates.p_SelectedTemplate != null && ctrl_TreeTemplates.p_SelectedTemplate.p_Template != null)
+        //    {
+        //        var elemnts = Cl_App.m_DataContext.p_TemplatesElements.Where(t => t.p_TemplateID == ctrl_TreeTemplates.p_SelectedTemplate.p_Template.p_ID).ToArray();
+        //        foreach (Cl_TemplatesElements control in elemnts)
+        //        {
+        //            if (control.p_ChildElement == null) continue;
+        //            ListViewItem listitem = new ListViewItem(new string[] { control.p_ChildElement.p_Name });
+        //            ctrl_LVTemplates.Items.Add(listitem);
+        //        }
+        //    }
+        //    else if (ctrl_TreeTemplates.p_SelectedGroup != null)
+        //    {
+        //        Cl_Template[] templates = Cl_App.m_DataContext.p_Templates.
+        //            Where(t => t.p_ParentGroupID == ctrl_TreeTemplates.p_SelectedGroup.p_Group.p_ID && !t.p_IsArhive).ToArray();
+        //        foreach (Cl_Template template in templates)
+        //        {
+        //            ListViewItem listitem = new ListViewItem(new string[] { template.p_Name, template.p_Description });
+        //            listitem.Tag = template.p_ID;
+        //            ctrl_LVTemplates.Items.Add(listitem);
+        //        }
+        //    }
+        //}
     }
 }

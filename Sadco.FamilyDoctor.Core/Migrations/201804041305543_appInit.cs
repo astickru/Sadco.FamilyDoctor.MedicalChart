@@ -132,33 +132,33 @@ namespace Sadco.FamilyDoctor.Core.Migrations
                 c => new
                     {
                         F_ID = c.Int(nullable: false, identity: true),
-                        F_CONTROL_ID = c.Int(nullable: false),
                         F_TEMPLATE_ID = c.Int(nullable: false),
-                        F_CONTROL_TYPE = c.String(maxLength: 8000, unicode: false),
-                        F_POSX = c.Int(nullable: false),
-                        F_POSY = c.Int(nullable: false),
-                        F_WIDTH = c.Int(nullable: false),
-                        F_HEIGHT = c.Int(nullable: false),
-                        p_Element_p_ID = c.Int(),
+                        F_CHILDELEMENT_ID = c.Int(),
+                        F_CHILDTEMPLATE_ID = c.Int(),
+                        F_INDEX = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.F_ID)
-                .ForeignKey("dbo.T_ELEMENTS", t => t.p_Element_p_ID)
+                .ForeignKey("dbo.T_ELEMENTS", t => t.F_CHILDELEMENT_ID)
+                .ForeignKey("dbo.T_TEMPLATES", t => t.F_CHILDTEMPLATE_ID)
                 .ForeignKey("dbo.T_TEMPLATES", t => t.F_TEMPLATE_ID, cascadeDelete: true)
                 .Index(t => t.F_TEMPLATE_ID)
-                .Index(t => t.p_Element_p_ID);
+                .Index(t => t.F_CHILDELEMENT_ID)
+                .Index(t => t.F_CHILDTEMPLATE_ID);
             
         }
         
         public override void Down()
         {
             DropForeignKey("dbo.T_TEMPLATESELEMENTS", "F_TEMPLATE_ID", "dbo.T_TEMPLATES");
-            DropForeignKey("dbo.T_TEMPLATESELEMENTS", "p_Element_p_ID", "dbo.T_ELEMENTS");
+            DropForeignKey("dbo.T_TEMPLATESELEMENTS", "F_CHILDTEMPLATE_ID", "dbo.T_TEMPLATES");
+            DropForeignKey("dbo.T_TEMPLATESELEMENTS", "F_CHILDELEMENT_ID", "dbo.T_ELEMENTS");
             DropForeignKey("dbo.T_TEMPLATES", "F_GROUP_ID", "dbo.T_GROUPS");
             DropForeignKey("dbo.T_AGENORMS", "F_ELEMENT_ID", "dbo.T_ELEMENTS");
             DropForeignKey("dbo.T_ELEMENTS", "F_GROUP_ID", "dbo.T_GROUPS");
             DropForeignKey("dbo.T_GROUPS", "F_PARENT_ID", "dbo.T_GROUPS");
             DropForeignKey("dbo.T_ELEMENTSPRMS", "F_ELEMENT_ID", "dbo.T_ELEMENTS");
-            DropIndex("dbo.T_TEMPLATESELEMENTS", new[] { "p_Element_p_ID" });
+            DropIndex("dbo.T_TEMPLATESELEMENTS", new[] { "F_CHILDTEMPLATE_ID" });
+            DropIndex("dbo.T_TEMPLATESELEMENTS", new[] { "F_CHILDELEMENT_ID" });
             DropIndex("dbo.T_TEMPLATESELEMENTS", new[] { "F_TEMPLATE_ID" });
             DropIndex("dbo.T_TEMPLATES", new[] { "F_GROUP_ID" });
             DropIndex("dbo.T_GROUPS", new[] { "F_PARENT_ID" });

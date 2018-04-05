@@ -37,9 +37,9 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [MaxLength(1000)]
         public string p_Description { get; set; }
 
-        /// <summary>Возвращает список элемента шаблона</summary>
+        /// <summary>Возвращает список элементов шаблона</summary>
         [ForeignKey("p_TemplateID")]
-        public ICollection<Cl_TemplatesElements> p_TemplateControls { get; set; }
+        public ICollection<Cl_TemplatesElements> p_TemplateElements { get; set; }
 
         /// <summary>Версия шаблона</summary>
         [Column("F_VERSION")]

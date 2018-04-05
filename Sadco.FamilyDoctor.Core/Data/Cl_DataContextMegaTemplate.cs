@@ -26,28 +26,32 @@ namespace Sadco.FamilyDoctor.Core.Data
 		public DbSet<Cl_ElementsParams> p_ElementsParams { get; set; }
 		public DbSet<Cl_AgeNorm> p_AgeNorms { get; set; }
 
-		private Dictionary<string, Type> m_GetAvailableControls { get; set; }
-		public Dictionary<string, Type> f_GetAvailableControls() {
-			return new Dictionary<string, Type>(m_GetAvailableControls);
-		}
-
 		public void f_Init() {
 			p_Groups.Load();
 			if (!p_Groups.Any(g => g.p_Type == Cl_Group.E_Type.Templates)) p_Groups.Add(new Cl_Group() { p_Type = Cl_Group.E_Type.Templates, p_Name = "Root" });
 			if (!p_Groups.Any(g => g.p_Type == Cl_Group.E_Type.Elements)) p_Groups.Add(new Cl_Group() { p_Type = Cl_Group.E_Type.Elements, p_Name = "Root" });
-
-			m_GetAvailableControls = new Dictionary<string, Type>();
-			Type type = typeof(Cl_Element);
-			IEnumerable<Type> types = AppDomain.CurrentDomain.GetAssemblies()
-				  .SelectMany(s => s.GetTypes())
-				  .Where(p => type.IsAssignableFrom(p) && !p.IsInterface && !p.IsAbstract && p.GetCustomAttributes(false).Length > 0);
-
-			foreach (Type item in types) {
-				m_GetAvailableControls.Add(item.Name, item);
-			}
-
 			base.SaveChanges();
 		}
+
+        /// <summary>Сохранение изменений БД с логированием изменений</summary>
+		/// <param name="obj"></param>
+		public void f_SaveChanges(EntityLog a_Log, I_ELog a_Obj) {
+            using (var transaction = Database.BeginTransaction())
+            {
+                try
+                {
+                    a_Log.SaveEntity(a_Obj);
+                    SaveChanges();
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    throw ex;
+                }
+            }
+            
+        }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder) {
 			base.OnModelCreating(modelBuilder);

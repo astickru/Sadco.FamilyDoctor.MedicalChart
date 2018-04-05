@@ -12,9 +12,12 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
 {
     public partial class Ctrl_Element : Panel, I_Element
     {
+        public const int m_ElementHeight = 24;
+
         public Ctrl_Element()
         {
             InitializeComponent();
+            Height = m_ElementHeight;
             BackColor = Color.Gray;
         }
 
@@ -25,37 +28,15 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
             set {
                 m_Element = value;
-                //Controls.Clear();
-                //Controls.Add(new Ctrl_ImageLabel() {
-                //    Image = (Image)Properties.Resources.ResourceManager.GetObject(m_Element.p_IconName),
-                //    Text = p_Element.p_Name,
-                //});
-                
-                //ComboBox cb = null;
-                //if (p_Element.p_IsPartPre)
-                //    Controls.Add(new Label() { Text = p_Element.p_PartPre });
-                //if (p_Element.p_IsPartLocations)
-                //{
-                //    cb = new ComboBox();
-                //    cb.Items.Add("локации");
-                //    cb.SelectedIndex = 0;
-                //    Controls.Add(cb);
-                //}
-                //cb = new ComboBox();
-                //cb.Items.Add("значение");
-                //cb.SelectedIndex = 0;
-                //Controls.Add(cb);
-                //if (p_Element.p_IsPartPost)
-                //    Controls.Add(new Label() { Text = p_Element.p_PartPost });
-                //if (p_Element.p_IsPartNorm)
-                //    Controls.Add(new Label() { Text = p_Element.p_PartNorm.ToString() });
-                //else if (p_Element.p_IsPartNormRange)
-                //{
-                //    cb = new ComboBox();
-                //    cb.Items.Add("возр. нормы");
-                //    cb.SelectedIndex = 0;
-                //    Controls.Add(cb);
-                //}
+            }
+        }
+
+        /// <summary>ID элемента</summary>
+        public int p_ID {
+            get {
+                if (p_Element != null)
+                    return p_Element.p_ID;
+                return -1;
             }
         }
 
@@ -97,17 +78,15 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
         }
 
+        /// <summary>Прорисовка контрола</summary>
         public void f_Draw(Graphics a_Graphics, Rectangle a_Bounds)
         {
             if (m_Element != null)
             {
                 Rectangle imageBounds = new Rectangle(a_Bounds.Left + 4, a_Bounds.Top + a_Bounds.Height / 2 - p_ImageIcon.Height / 2, p_ImageIcon.Width, p_ImageIcon.Height);
                 Rectangle textBounds = new Rectangle(imageBounds.Right + 5, imageBounds.Top, a_Bounds.Width - (imageBounds.Right + 10), imageBounds.Height);
-
                 a_Graphics.DrawImage(p_ImageIcon, imageBounds);
-
                 TextRenderer.DrawText(a_Graphics, p_Name, Font, textBounds, ForeColor, TextFormatFlags.ExpandTabs | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter);
-
             }
         }
 

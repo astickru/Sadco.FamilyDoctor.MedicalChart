@@ -30,6 +30,9 @@ namespace Sadco.FamilyDoctor.Core.Controls {
             this.ctrlMenuDel = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlMenu.SuspendLayout();
 
+            this.ItemHeight = 24;
+            this.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+
             // 
             // ctrlMenu
             // 

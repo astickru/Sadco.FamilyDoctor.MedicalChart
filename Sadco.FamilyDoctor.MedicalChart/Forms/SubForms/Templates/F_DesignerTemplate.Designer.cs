@@ -27,7 +27,7 @@
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-			this.ctrl_TreeElements = new Sadco.FamilyDoctor.Core.Controls.DesignerPanel.Ctrl_ToolboxService();
+			this.ctrl_TreeElements = new Sadco.FamilyDoctor.Core.Controls.Ctrl_TreeElements();
 			this.ctrl_P_DesignConteiner = new System.Windows.Forms.Panel();
 			this.panel1 = new System.Windows.Forms.Panel();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -62,7 +62,6 @@
 			this.ctrl_TreeElements.Location = new System.Drawing.Point(0, 0);
 			this.ctrl_TreeElements.Name = "ctrl_TreeElements";
 			this.ctrl_TreeElements.p_ReadOnly = false;
-			this.ctrl_TreeElements.SelectedCategory = null;
 			this.ctrl_TreeElements.SelectedImageIndex = 0;
 			this.ctrl_TreeElements.Size = new System.Drawing.Size(262, 680);
 			this.ctrl_TreeElements.TabIndex = 5;
@@ -114,6 +113,6 @@
 		private System.Windows.Forms.SplitContainer splitContainer1;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Panel ctrl_P_DesignConteiner;
-		private Core.Controls.DesignerPanel.Ctrl_ToolboxService ctrl_TreeElements;
+		private Core.Controls.Ctrl_TreeElements ctrl_TreeElements;
 	}
 }

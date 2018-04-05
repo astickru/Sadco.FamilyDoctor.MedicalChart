@@ -23,7 +23,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 m_Template = value;
                 if (m_Template != null)
                 {
-                    Text = string.Format("{0} v.{1}", m_Template.p_Name, m_Template.p_Version);
+                    Text = m_Template.p_Name;
                     Name = p_Template.p_ID.ToString();
                     ImageKey = p_Template.p_IconName;
                     SelectedImageKey = p_Template.p_IconName;

@@ -120,26 +120,40 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
         private void ctrl_TemplateNew_Click(object sender, EventArgs e)
         {
-            Cl_Template newTemplate = (Cl_Template)Activator.CreateInstance(typeof(Cl_Template));
-            Cl_Group group = null;
-            if (p_SelectedGroup != null && p_SelectedGroup.p_Group != null)
+            using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
             {
-                group = p_SelectedGroup.p_Group;
+                try
+                {
+                    Cl_Template newTemplate = (Cl_Template)Activator.CreateInstance(typeof(Cl_Template));
+                    Cl_Group group = null;
+                    if (p_SelectedGroup != null && p_SelectedGroup.p_Group != null)
+                    {
+                        group = p_SelectedGroup.p_Group;
+                    }
+                    Dlg_EditorTemplate dlg = new Dlg_EditorTemplate();
+                    dlg.Text = "Новый шаблон";
+                    if (group != null)
+                    {
+                        newTemplate.p_ParentGroup = p_SelectedGroup.p_Group;
+                        dlg.ctrl_LGroupValue.Text = p_SelectedGroup.p_Group.f_GetFullName();
+                    }
+                    if (dlg.ShowDialog() != DialogResult.OK) return;
+                    newTemplate.p_Name = dlg.ctrl_TBName.Text;
+                    Cl_App.m_DataContext.p_Templates.Add(newTemplate);
+                    Cl_App.m_DataContext.SaveChanges();
+                    newTemplate.p_TemplateID = newTemplate.p_ID;
+                    Cl_App.m_DataContext.SaveChanges();
+                    transaction.Commit();
+
+                    SelectedNode.Nodes.Add(new Ctrl_TreeNodeTemplate(group, newTemplate));
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    MessageBox.Show("При создании нового шаблона произошла ошибка");
+                    return;
+                }
             }
-            Dlg_EditorTemplate dlg = new Dlg_EditorTemplate();
-            dlg.Text = "Новый шаблон";
-            if (group != null)
-            {
-                newTemplate.p_ParentGroup = p_SelectedGroup.p_Group;
-                dlg.ctrl_LGroupValue.Text = p_SelectedGroup.p_Group.f_GetFullName();
-            }
-            if (dlg.ShowDialog() != DialogResult.OK) return;
-            newTemplate.p_Name = dlg.ctrl_TBName.Text;
-            Cl_App.m_DataContext.p_Templates.Add(newTemplate);
-            Cl_App.m_DataContext.SaveChanges();
-            newTemplate.p_TemplateID = newTemplate.p_TemplateID;
-            Cl_App.m_DataContext.SaveChanges();
-            SelectedNode.Nodes.Add(new Ctrl_TreeNodeTemplate(group, newTemplate));
         }
 
         private void ctrl_TemplateEdit_Click(object sender, EventArgs e)
@@ -154,24 +168,36 @@ namespace Sadco.FamilyDoctor.Core.Controls
         {
             if (p_SelectedTemplate == null && p_SelectedTemplate.p_Template == null) return;
 
-            var els = Cl_App.m_DataContext.p_Templates.Where(el => el.p_TemplateID == p_SelectedTemplate.p_Template.p_TemplateID);
-            if (els != null)
+            using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
             {
-                bool isChange = false;
-                foreach (Cl_Template el in els)
+                try
                 {
-                    el.p_IsArhive = true;
-                    isChange = true;
+                    var els = Cl_App.m_DataContext.p_Templates.Where(el => el.p_TemplateID == p_SelectedTemplate.p_Template.p_TemplateID);
+                    if (els != null)
+                    {
+                        bool isChange = false;
+                        foreach (Cl_Template el in els)
+                        {
+                            el.p_IsArhive = true;
+                            isChange = true;
+                        }
+                        if (isChange)
+                        {
+                            Cl_App.m_DataContext.SaveChanges();
+                            SelectedNode.Remove();
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Не найдена элемент для шаблонов");
+                    }
                 }
-                if (isChange)
+                catch (Exception ex)
                 {
-                    Cl_App.m_DataContext.SaveChanges();
-                    SelectedNode.Remove();
+                    transaction.Rollback();
+                    MessageBox.Show("При удалении шаблона произошла ошибка");
+                    return;
                 }
-            }
-            else
-            {
-                throw new Exception("Не найдена элемент для шаблонов");
             }
         }
     }

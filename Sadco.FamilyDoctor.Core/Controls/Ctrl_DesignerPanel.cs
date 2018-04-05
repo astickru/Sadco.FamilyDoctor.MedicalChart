@@ -35,11 +35,8 @@ namespace Sadco.FamilyDoctor.Core.Controls
     {
         public Ctrl_DesignerPanel()
         {
-            ItemHeight = 24;
             InitializeComponent();
-            //Initialize();
             this.DoubleBuffered = true;
-            DrawMode = DrawMode.OwnerDrawFixed;
             m_InsertionLineColor = Color.Red;
             InsertionIndex = InvalidIndex;
         }
@@ -132,12 +129,6 @@ namespace Sadco.FamilyDoctor.Core.Controls
             get { return m_ToolboxService; }
             set {
                 m_ToolboxService = value;
-                //if (m_ToolboxService != null)
-                //{
-                //    serviceContainer.AddService(typeof(IToolboxService), m_ToolboxService);
-                //    m_ToolboxService.m_DesignPanel = this;
-                //    //PopulateToolbox(p_ToolboxService);
-                //}
             }
         }
 
@@ -162,14 +153,6 @@ namespace Sadco.FamilyDoctor.Core.Controls
         }
         #endregion
 
-        //protected override void OnResize(EventArgs eventargs)
-        //{
-        //    base.OnResize(eventargs);
-
-        //}
-
-
-
         protected override void OnPaintBackground(PaintEventArgs e)
         {
             base.OnPaintBackground(e);
@@ -179,7 +162,6 @@ namespace Sadco.FamilyDoctor.Core.Controls
         protected override void WndProc(ref Message m)
         {
             base.WndProc(ref m);
-
             switch (m.Msg)
             {
                 case WM_PAINT:
@@ -197,10 +179,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
         {
             if (this.InsertionIndex != InvalidIndex)
             {
-                int index;
-
-                index = this.InsertionIndex;
-
+                int index = this.InsertionIndex;
                 if (index >= 0 && index < this.Items.Count)
                 {
                     Rectangle bounds;
@@ -229,12 +208,10 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
                 x2 = x1 + width;
                 arrowHeadSize = 7;
-                leftArrowHead = new[]
-                                {
+                leftArrowHead = new[] {
                           new Point(x1, y - (arrowHeadSize / 2)), new Point(x1 + arrowHeadSize, y), new Point(x1, y + (arrowHeadSize / 2))
                         };
-                rightArrowHead = new[]
-                                 {
+                rightArrowHead = new[] {
                            new Point(x2, y - (arrowHeadSize / 2)), new Point(x2 - arrowHeadSize, y), new Point(x2, y + (arrowHeadSize / 2))
                          };
 
@@ -258,12 +235,26 @@ namespace Sadco.FamilyDoctor.Core.Controls
             e.DrawBackground();
             e.DrawFocusRectangle();
 
-            if (e.Index != -1)
+            if (e.Index != -1 && Items.Count > e.Index)
             {
-                if (Items[e.Index] is Ctrl_Element)
+                if (Items[e.Index] is I_Element)
                 {
-                    Ctrl_Element el = (Ctrl_Element)Items[e.Index];
+                    var el = (I_Element)Items[e.Index];
                     el.f_Draw(e.Graphics, e.Bounds);
+                }
+            }
+        }
+
+        protected override void OnMeasureItem(MeasureItemEventArgs e)
+        {
+            base.OnMeasureItem(e);
+
+            if (e.Index != -1 && Items.Count > e.Index)
+            {
+                if (Items[e.Index] is Control)
+                {
+                    var el = (Control)Items[e.Index];
+                    e.ItemHeight = el.Height;
                 }
             }
         }
@@ -469,20 +460,13 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
                         if (dropIndex != dragIndex)
                         {
-                            //ListBoxItemDragEventArgs args;
-                            Point clientPoint;
-
-                            clientPoint = this.PointToClient(new Point(drgevent.X, drgevent.Y));
+                            Point clientPoint = this.PointToClient(new Point(drgevent.X, drgevent.Y));
                             //args = new ListBoxItemDragEventArgs(dragIndex, dropIndex, this.InsertionMode, clientPoint.X, clientPoint.Y);
-
                             //this.OnItemDrag(args);
-
                             //if (!args.Cancel)
                             {
                                 object dragItem;
-
                                 dragItem = this.Items[dragIndex];
-
                                 this.Items.Remove(dragItem);
                                 this.Items.Insert(dropIndex, dragItem);
                                 this.SelectedItem = dragItem;
@@ -500,37 +484,41 @@ namespace Sadco.FamilyDoctor.Core.Controls
             }
             else
             {
-                if (drgevent.Data.GetData(drgevent.Data.GetFormats()[0]) is Control)
+                if (drgevent.Data.GetData(drgevent.Data.GetFormats()[0]) is Ctrl_TreeNodeElement)
                 {
-                    f_DragControl(drgevent.Data.GetData(drgevent.Data.GetFormats()[0]) as Control, drgevent.X, drgevent.Y);
+                    f_DragNewElement(drgevent.Data.GetData(drgevent.Data.GetFormats()[0]) as Ctrl_TreeNodeElement, drgevent.X, drgevent.Y);
                 }
-                else if (drgevent.Data.GetData(drgevent.Data.GetFormats()[0]) is Ctrl_TreeNodeElement)
+                else if (drgevent.Data.GetData(drgevent.Data.GetFormats()[0]) is Ctrl_TreeNodeTemplate)
                 {
-                    f_DragNewControl(drgevent.Data.GetData(drgevent.Data.GetFormats()[0]) as Ctrl_TreeNodeElement, drgevent.X, drgevent.Y);
+                    f_DragNewTemplate(drgevent.Data.GetData(drgevent.Data.GetFormats()[0]) as Ctrl_TreeNodeTemplate, drgevent.X, drgevent.Y);
                 }
             }
 
             base.OnDragDrop(drgevent);
         }
 
-        private void f_DragControl(Control control, int x, int y)
+        private void f_DragNewElement(Ctrl_TreeNodeElement a_NodeElement, int a_PosX, int a_PosY)
         {
-            if (control == null)
+            if (a_NodeElement == null)
                 return;
-            //control.Location = PointToClient(new Point(x - deltaX, y - deltaY));
-        }
-
-
-
-        private void f_DragNewControl(Ctrl_TreeNodeElement controlNode, int posX, int posY)
-        {
-            if (controlNode == null)
-                return;
-            if (controlNode.p_Element == null)
+            if (a_NodeElement.p_Element == null)
                 return;
 
             Ctrl_Element ctrlEl = new Ctrl_Element();
-            ctrlEl.p_Element = controlNode.p_Element;
+            ctrlEl.p_Element = a_NodeElement.p_Element;
+            ctrlEl.Name = f_CreateName(ctrlEl.p_Name);
+            Items.Add(ctrlEl);
+        }
+
+        private void f_DragNewTemplate(Ctrl_TreeNodeTemplate a_NodeTemplate, int a_PosX, int a_PosY)
+        {
+            if (a_NodeTemplate == null)
+                return;
+            if (a_NodeTemplate.p_Template == null)
+                return;
+
+            Ctrl_Template ctrlEl = new Ctrl_Template();
+            ctrlEl.p_Template = a_NodeTemplate.p_Template;
             ctrlEl.Name = f_CreateName(ctrlEl.p_Name);
             Items.Add(ctrlEl);
         }
