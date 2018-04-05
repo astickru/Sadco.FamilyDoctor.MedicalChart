@@ -273,6 +273,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
 		/// <summary>Возможность ввода не стандартных значений</summary>
 		[Column("F_ISCHANGENOTNORM")]
+		[ELogProperty("Ввод не стандартных значений")]
 		public bool p_IsChangeNotNormValues { get; set; }
 
 		private List<Cl_ElementsParams> m_ParamsValues = new List<Cl_ElementsParams>();

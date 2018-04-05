@@ -1,13 +1,11 @@
-﻿using System;
+﻿using Sadco.FamilyDoctor.Core;
+using Sadco.FamilyDoctor.Core.Entities;
+using Sadco.FamilyDoctor.Core.EntityLogs;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using Sadco.FamilyDoctor.Core;
-using Sadco.FamilyDoctor.Core.Controls;
-using Sadco.FamilyDoctor.Core.Entities;
-using Sadco.FamilyDoctor.Core.EntityLogs;
 using static Sadco.FamilyDoctor.Core.Entities.Cl_Element;
 
 namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
@@ -484,35 +482,47 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             return valid;
         }
 
-        private void ctrl_ValidNumber_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            RichTextBox el = ((RichTextBox)sender);
-            if (ctrl_IsNumber.Checked)
-            {
-                int pos = el.SelectionStart - el.GetFirstCharIndexOfCurrentLine();
-                string txt = el.Text;
-                if (el.Lines.Length > 0)
-                {
-                    txt = el.Lines.ElementAt(el.GetLineFromCharIndex(el.SelectionStart));
-                }
-                txt = string.Format("{0}{1}{2}", txt.Substring(0, pos), e.KeyChar, txt.Substring(pos, txt.Length - pos));
-                e.Handled = !f_ValidNumber(new string[] { txt });
-            }
-            else
-            {
-                e.Handled = false;
-            }
-        }
+		private void ctrl_ValidNumber_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			RichTextBox el = ((RichTextBox)sender);
+			if (ctrl_IsNumber.Checked)
+			{
+				int pos = el.SelectionStart - el.GetFirstCharIndexOfCurrentLine();
+				string txt = el.Text;
+				if (el.Lines.Length > 0)
+				{
+					txt = el.Lines.ElementAt(el.GetLineFromCharIndex(el.SelectionStart));
+				}
+				txt = string.Format("{0}{1}{2}", txt.Substring(0, pos), e.KeyChar, txt.Substring(pos, txt.Length - pos));
+				e.Handled = !f_ValidNumber(new string[] { txt });
+			}
+			else
+			{
+				e.Handled = false;
+			}
+		}
 
-        private void ctrl_NormValues_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            ctrl_ValidNumber_KeyPress(sender, e);
-        }
+		private void ctrl_NormValues_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (e.KeyChar == '"')
+			{
+				e.Handled = true;
+				return;
+			}
 
-        private void ctrl_PatValues_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            ctrl_ValidNumber_KeyPress(sender, e);
-        }
+			ctrl_ValidNumber_KeyPress(sender, e);
+		}
+
+		private void ctrl_PatValues_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (e.KeyChar == '"')
+			{
+				e.Handled = true;
+				return;
+			}
+
+			ctrl_ValidNumber_KeyPress(sender, e);
+		}
 
         private void ctrl_PartNormValue_KeyPress(object sender, KeyPressEventArgs e)
         {
