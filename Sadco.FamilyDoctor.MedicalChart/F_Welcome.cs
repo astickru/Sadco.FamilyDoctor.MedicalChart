@@ -51,7 +51,8 @@ namespace Sadco.FamilyDoctor.MedicalChart
 								})
 								.OrderBy(item => item.value)
 								.ToList();
-			}
+                comboBox1.SelectedIndex = 1;
+            }
 		}
 
 		public T f_GetSelectedItem<T>()
