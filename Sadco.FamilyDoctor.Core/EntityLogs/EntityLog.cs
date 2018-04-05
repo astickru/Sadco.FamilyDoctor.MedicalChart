@@ -1,4 +1,5 @@
 ﻿using Sadco.FamilyDoctor.Core.Entities;
+using Sadco.FamilyDoctor.Core.Permision;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -146,7 +147,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 			outEvent.p_EntityType = this.entityLogType;
 			outEvent.p_ChangeTime = DateTime.Now;
 			outEvent.p_Event = action;
-			outEvent.p_UserName = "TestUserName";
+			outEvent.p_UserName = UserSession.Name;
 
 			return outEvent;
 		}

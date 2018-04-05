@@ -30,8 +30,8 @@
 			this.ctrlMISave = new System.Windows.Forms.ToolStripMenuItem();
 			this.ctrlMIExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.редакторToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.шаблоныToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.элементыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuTemplate = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuMegaTemplate = new System.Windows.Forms.ToolStripMenuItem();
 			this.ctrlMIInfo = new System.Windows.Forms.ToolStripMenuItem();
 			this.MainPanel = new System.Windows.Forms.Panel();
 			this.ctrl_CustomControls = new System.Windows.Forms.Panel();
@@ -77,27 +77,27 @@
 			// редакторToolStripMenuItem
 			// 
 			this.редакторToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.шаблоныToolStripMenuItem,
-            this.элементыToolStripMenuItem});
+            this.menuTemplate,
+            this.menuMegaTemplate});
 			this.редакторToolStripMenuItem.Name = "редакторToolStripMenuItem";
 			this.редакторToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
 			this.редакторToolStripMenuItem.Text = "Редактор";
 			// 
-			// шаблоныToolStripMenuItem
+			// menuTemplate
 			// 
-			this.шаблоныToolStripMenuItem.Image = global::Sadco.FamilyDoctor.MedicalChart.Properties.Resources.data_sort;
-			this.шаблоныToolStripMenuItem.Name = "шаблоныToolStripMenuItem";
-			this.шаблоныToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
-			this.шаблоныToolStripMenuItem.Text = "Шаблоны";
-			this.шаблоныToolStripMenuItem.Click += new System.EventHandler(this.ctrl_MenuShowTemplates_Click);
+			this.menuTemplate.Image = global::Sadco.FamilyDoctor.MedicalChart.Properties.Resources.data_sort;
+			this.menuTemplate.Name = "menuTemplate";
+			this.menuTemplate.Size = new System.Drawing.Size(180, 22);
+			this.menuTemplate.Text = "Шаблоны";
+			this.menuTemplate.Click += new System.EventHandler(this.ctrl_MenuShowTemplates_Click);
 			// 
-			// элементыToolStripMenuItem
+			// menuMegaTemplate
 			// 
-			this.элементыToolStripMenuItem.Image = global::Sadco.FamilyDoctor.MedicalChart.Properties.Resources.data_table;
-			this.элементыToolStripMenuItem.Name = "элементыToolStripMenuItem";
-			this.элементыToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
-			this.элементыToolStripMenuItem.Text = "Элементы";
-			this.элементыToolStripMenuItem.Click += new System.EventHandler(this.ctrl_MenuShowElements_Click);
+			this.menuMegaTemplate.Image = global::Sadco.FamilyDoctor.MedicalChart.Properties.Resources.data_table;
+			this.menuMegaTemplate.Name = "menuMegaTemplate";
+			this.menuMegaTemplate.Size = new System.Drawing.Size(180, 22);
+			this.menuMegaTemplate.Text = "Элементы";
+			this.menuMegaTemplate.Click += new System.EventHandler(this.ctrl_MenuShowElements_Click);
 			// 
 			// ctrlMIInfo
 			// 
@@ -158,8 +158,8 @@
 		private System.Windows.Forms.ToolStripMenuItem ctrlMISave;
 		private System.Windows.Forms.ToolStripMenuItem ctrlMIExit;
 		private System.Windows.Forms.ToolStripMenuItem редакторToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem шаблоныToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem элементыToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem menuTemplate;
+		private System.Windows.Forms.ToolStripMenuItem menuMegaTemplate;
 		private System.Windows.Forms.ToolStripMenuItem ctrlMIInfo;
 		private System.Windows.Forms.Panel MainPanel;
 		private System.Windows.Forms.Panel ctrl_CustomControls;
