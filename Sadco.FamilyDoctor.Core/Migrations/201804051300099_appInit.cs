@@ -101,7 +101,6 @@ namespace Sadco.FamilyDoctor.Core.Migrations
                 c => new
                     {
                         F_ID = c.Int(nullable: false, identity: true),
-                        F_PREV_ID = c.Int(nullable: false),
                         F_ELEMENT_ID = c.Int(nullable: false),
                         F_TYPE = c.Int(nullable: false),
                         F_TIME = c.DateTime(nullable: false),

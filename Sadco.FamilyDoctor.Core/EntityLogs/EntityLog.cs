@@ -15,7 +15,6 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 		private EntityTypes entityLogType = EntityTypes.Elements;
 		private Dictionary<PropertyInfo, string> lastValues = null;
 		private I_ELog logObject { get; set; }
-		private int lastLogID { get; set; }
 
 		/// <summary>
 		/// Определяет был ли изменен объект
@@ -61,13 +60,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 			this.entityLogType = classAtr.EntityType;
 
 			lastValues = GetValues(logObject);
-
-			Cl_Log prevEvent = Cl_App.m_DataContext.p_Logs.Where(l => l.p_ElementID == obj.p_ID).OrderByDescending(d => d.p_ChangeTime).FirstOrDefault();
-			if (prevEvent == null)
-				lastLogID = 0;
-			else
-				lastLogID = prevEvent.p_ID;
-		}
+        }
 
 		/// <summary>
 		/// Вызывается после сохранения элемента, что бы определить какие изменения были сделаны
@@ -77,14 +70,26 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 		{
 			if (obj == null) return;
 
-			Cl_Log newEvent = null;
+            ELogClassAttribute classAtr = GetClassAttribute<ELogClassAttribute>(obj);
+            if (classAtr == null) return;
+
+            Cl_Log newEvent = null;
 			Dictionary<PropertyInfo, string> currentValues = GetValues(obj);
 
 			if (this.IsChanged(obj))
 			{
 				StringBuilder sbAction = new StringBuilder();
 
-				if (lastLogID == 0)
+                Cl_Log prevEvent = null;
+                if (obj.p_GetLogEntityID != 0)
+                {
+                    if (classAtr.EntityType == EntityTypes.Elements)
+                        prevEvent = Cl_App.m_DataContext.p_Logs.Where(l => l.p_ElementID == obj.p_GetLogEntityID).OrderByDescending(d => d.p_ChangeTime).FirstOrDefault();
+                    else
+                        prevEvent = Cl_App.m_DataContext.p_Logs.Where(l => l.p_ElementID == obj.p_GetLogEntityID).OrderByDescending(d => d.p_ChangeTime).FirstOrDefault();
+                }
+
+                if (prevEvent == null)
 					sbAction.AppendLine("Создан новый элемент");
 
 				foreach (KeyValuePair<PropertyInfo, string> item in currentValues)
@@ -119,30 +124,31 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 					}
 				}
 
-				newEvent = CreateEvent(obj, lastLogID, sbAction.ToString().Trim());
+				newEvent = CreateEvent(obj, sbAction.ToString().Trim());
 			}
 			else
 			{
-				newEvent = CreateEvent(obj, lastLogID, "Без изменений");
+				newEvent = CreateEvent(obj, "Без изменений");
 			}
 
 
 			Cl_App.m_DataContext.p_Logs.Add(newEvent);
 			Cl_App.m_DataContext.SaveChanges();
 
-			lastValues.Clear();
-			lastValues = currentValues;
+            if (lastValues != null)
+            {
+                lastValues.Clear();
+                lastValues = currentValues;
+            }
 
 			logObject = obj;
-			lastLogID = newEvent.p_ID;
 		}
 
-		private Cl_Log CreateEvent(I_ELog obj, int lastID, string action)
+		private Cl_Log CreateEvent(I_ELog obj, string action)
 		{
 			Cl_Log outEvent = new Cl_Log();
 
-			outEvent.p_ElementID = obj.p_ID;
-			outEvent.p_PrevID = lastID;
+			outEvent.p_ElementID = obj.p_GetLogEntityID;
 			outEvent.p_Version = obj.p_Version;
 			outEvent.p_EntityType = this.entityLogType;
 			outEvent.p_ChangeTime = DateTime.Now;

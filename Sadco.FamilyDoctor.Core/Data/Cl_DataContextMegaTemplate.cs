@@ -40,8 +40,8 @@ namespace Sadco.FamilyDoctor.Core.Data
             {
                 try
                 {
-                    a_Log.SaveEntity(a_Obj);
                     SaveChanges();
+                    a_Log.SaveEntity(a_Obj);
                     transaction.Commit();
                 }
                 catch (Exception ex)

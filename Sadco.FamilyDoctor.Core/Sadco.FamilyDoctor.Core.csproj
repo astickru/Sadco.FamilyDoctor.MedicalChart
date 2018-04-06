@@ -36,6 +36,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -150,9 +151,9 @@
     <Compile Include="EntityLogs\EntityLog.cs" />
     <Compile Include="Entities\I_ELog.cs" />
     <Compile Include="Entities\I_Version.cs" />
-    <Compile Include="Migrations\201804041305543_appInit.cs" />
-    <Compile Include="Migrations\201804041305543_appInit.Designer.cs">
-      <DependentUpon>201804041305543_appInit.cs</DependentUpon>
+    <Compile Include="Migrations\201804051300099_appInit.cs" />
+    <Compile Include="Migrations\201804051300099_appInit.Designer.cs">
+      <DependentUpon>201804051300099_appInit.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\AccessLevelAttribute.cs" />
@@ -217,8 +218,8 @@
     <EmbeddedResource Include="Controls\TreeView\Dlg_EditorGroup.resx">
       <DependentUpon>Dlg_EditorGroup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804041305543_appInit.resx">
-      <DependentUpon>201804041305543_appInit.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201804051300099_appInit.resx">
+      <DependentUpon>201804051300099_appInit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -15,12 +15,6 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 		public int p_ID { get; set; }
 
 		/// <summary>
-		/// Предыдущий ID лога
-		/// </summary>
-		[Column("F_PREV_ID")]
-		public int p_PrevID { get; set; }
-
-		/// <summary>
 		/// ID элемента
 		/// </summary>
 		[Column("F_ELEMENT_ID")]

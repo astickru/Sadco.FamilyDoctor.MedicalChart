@@ -238,9 +238,12 @@ namespace Sadco.FamilyDoctor.Core.Controls
             {
                 try
                 {
-                    var els = Cl_App.m_DataContext.p_Elements.Where(el => el.p_ElementID == p_SelectedElement.p_Element.p_ElementID);
+                    EntityLog eLog = new EntityLog();
+                    var els = Cl_App.m_DataContext.p_Elements.Where(el => el.p_ElementID == p_SelectedElement.p_Element.p_ElementID).OrderByDescending(v => v.p_Version);
                     if (els != null)
                     {
+                        Cl_Element lastVersion = els.FirstOrDefault();
+                        eLog.SetEntity(lastVersion);
                         bool isChange = false;
                         foreach (Cl_Element el in els)
                         {
@@ -250,8 +253,10 @@ namespace Sadco.FamilyDoctor.Core.Controls
                         if (isChange)
                         {
                             Cl_App.m_DataContext.SaveChanges();
-                            SelectedNode.Remove();
+                            eLog.SaveEntity(lastVersion);
                             transaction.Commit();
+
+                            SelectedNode.Remove();
                         }
                     }
                     else

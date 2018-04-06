@@ -6,8 +6,8 @@
 	public interface I_ELog : I_Version
     {
         /// <summary>
-        /// ИД объекта
+        /// Возвращает уникальный ID элемента
         /// </summary>
-        int p_ID { get; set; }
+        int p_GetLogEntityID { get; }
     }
 }
