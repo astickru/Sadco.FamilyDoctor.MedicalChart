@@ -39,6 +39,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.DoubleBuffered = true;
             m_InsertionLineColor = Color.Red;
             InsertionIndex = InvalidIndex;
+            ctrlMenuDel.Click += ctrlMenuDel_Click;
         }
 
         private bool m_AllowItemDrag;

@@ -55,7 +55,6 @@ namespace Sadco.FamilyDoctor.Core.Controls {
             this.ResumeLayout(false);
 
         }
-
         #endregion
 
         private System.Windows.Forms.ContextMenuStrip ctrlMenu;

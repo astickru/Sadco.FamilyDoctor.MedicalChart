@@ -40,6 +40,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             var templatesElements = Cl_App.m_DataContext.p_TemplatesElements.Include(te => te.p_Template).Where(te => te.p_ChildElementID == a_Element.p_ID).ToArray();
             foreach (var te in templatesElements)
             {
+                templates.Add(te.p_Template);
                 templates.AddRange(f_GetConflictTemplates(te.p_ChildTemplate));
             }
             return templates.ToArray();
@@ -52,6 +53,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             var templatesElements = Cl_App.m_DataContext.p_TemplatesElements.Include(te => te.p_Template).Where(te => te.p_ChildTemplateID == a_Template.p_ID).ToArray();
             foreach (var te in templatesElements)
             {
+                templates.Add(te.p_Template);
                 templates.AddRange(f_GetConflictTemplates(te.p_ChildTemplate));
             }
             return templates.ToArray();

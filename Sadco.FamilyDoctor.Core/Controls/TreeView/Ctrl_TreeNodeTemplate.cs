@@ -10,7 +10,6 @@ namespace Sadco.FamilyDoctor.Core.Controls
         {
             p_Group = a_Group;
             p_Template = a_Template;
-            ForeColor = Color.Blue;
         }
 
         public Cl_Group p_Group { get; private set; }
@@ -27,6 +26,10 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     Name = p_Template.p_ID.ToString();
                     ImageKey = p_Template.p_IconName;
                     SelectedImageKey = p_Template.p_IconName;
+                    if (p_Template.p_IsConflict)
+                        ForeColor = Color.Red;
+                    else
+                        ForeColor = Color.Blue;
                 }
             }
         }

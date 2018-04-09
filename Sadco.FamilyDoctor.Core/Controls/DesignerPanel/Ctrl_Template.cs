@@ -189,7 +189,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             Rectangle imageBounds = new Rectangle(a_Bounds.Left + 7, top, imgIcon.Width, imgIcon.Height);
                             Rectangle textBounds = new Rectangle(imageBounds.Right + 5, imageBounds.Top, a_Bounds.Width - (imageBounds.Right + 10), imageBounds.Height);
                             a_Graphics.DrawImage(imgIcon, imageBounds);
-                            TextRenderer.DrawText(a_Graphics, te.p_ChildElement.p_Name, a_Font, textBounds, a_ForeColor, TextFormatFlags.ExpandTabs | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter);
+                            TextRenderer.DrawText(a_Graphics, string.Format("{0} ({1})", te.p_ChildElement.p_Name, te.p_ChildElement.p_Version == 0 ? "Черновик" : "v" + te.p_ChildElement.p_Version), a_Font, textBounds, a_ForeColor, TextFormatFlags.ExpandTabs | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter);
                             if (p_Template.p_Type == Cl_Template.E_TemplateType.Table && i < a_Template.p_TemplateElements.Count - 1)
                             {
                                 a_Graphics.DrawLine(new Pen(this.p_BorderColor, 1) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash }, a_Bounds.Left + 3, top - 5 + Ctrl_Element.m_ElementHeight, a_Bounds.Width - 5, top - 5 + Ctrl_Element.m_ElementHeight);

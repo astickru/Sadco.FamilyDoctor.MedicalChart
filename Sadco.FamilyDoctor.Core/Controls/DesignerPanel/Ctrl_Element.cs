@@ -92,7 +92,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 Rectangle imageBounds = new Rectangle(a_Bounds.Left + 4, a_Bounds.Top + a_Bounds.Height / 2 - p_ImageIcon.Height / 2, p_ImageIcon.Width, p_ImageIcon.Height);
                 Rectangle textBounds = new Rectangle(imageBounds.Right + 5, imageBounds.Top, a_Bounds.Width - (imageBounds.Right + 10), imageBounds.Height);
                 a_Graphics.DrawImage(p_ImageIcon, imageBounds);
-                TextRenderer.DrawText(a_Graphics, p_Name, a_Font, textBounds, a_ForeColor, TextFormatFlags.ExpandTabs | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter);
+                TextRenderer.DrawText(a_Graphics, string.Format("{0} ({1})", p_Name, p_Element.p_Version == 0 ? "Черновик" : "v" + p_Element.p_Version), a_Font, textBounds, a_ForeColor, TextFormatFlags.ExpandTabs | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter);
             }
         }
 
