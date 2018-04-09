@@ -30,12 +30,12 @@
             this.ctrlMISave = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlMIExit = new System.Windows.Forms.ToolStripMenuItem();
             this.редакторToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuTemplate = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuMegaTemplate = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlMIInfo = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel = new System.Windows.Forms.Panel();
             this.ctrl_CustomControls = new System.Windows.Forms.Panel();
-            this.ctrlMIRecord = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuMegaTemplateDeleted = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuTemplate = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuMegaTemplate = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlMIMenu.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.SuspendLayout();

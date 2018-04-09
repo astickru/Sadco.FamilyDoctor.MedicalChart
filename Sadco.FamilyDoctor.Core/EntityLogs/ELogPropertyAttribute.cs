@@ -32,5 +32,10 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 		/// Игнорирование значения
 		/// </summary>
 		public bool IgnoreValue { get; set; }
-	}
+
+        /// <summary>
+        /// Сохранять в истории только новое значение, старое игнорируется
+        /// </summary>
+        public bool IsNewValueOnly { get; set; }
+    }
 }

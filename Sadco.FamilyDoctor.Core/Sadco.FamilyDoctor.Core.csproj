@@ -36,6 +36,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -193,6 +194,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Controls\Ctrl_DesignerPanel.resx">
       <DependentUpon>Ctrl_DesignerPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Ctrl_SeparatorCombobox.resx">
       <DependentUpon>Ctrl_SeparatorCombobox.cs</DependentUpon>
@@ -232,16 +234,17 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Resources\combo_box.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\label.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\document_comments.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Data\manual.txt" />
+    <None Include="Resources\ListBullets_16x16-deleted.png" />
+    <None Include="Resources\Image_16x16-deleted.png" />
+    <None Include="Resources\folder-deleted.png" />
+    <None Include="Resources\Edit_16x16-deleted.png" />
+    <None Include="Resources\AlignJustify_16x16-deleted.png" />
     <None Include="Resources\AlignJustify_16x16.png" />
     <None Include="Resources\AlignJustify_32x32.png" />
     <None Include="Resources\ListBullets_16x16.png" />
@@ -251,9 +254,6 @@
     <None Include="Resources\Edit_16x16.png" />
     <None Include="Resources\Edit_32x32.png" />
     <None Include="Resources\folder.png" />
-    <None Include="Resources\check_box.png" />
-    <None Include="Resources\image.png" />
-    <None Include="Resources\list_box.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

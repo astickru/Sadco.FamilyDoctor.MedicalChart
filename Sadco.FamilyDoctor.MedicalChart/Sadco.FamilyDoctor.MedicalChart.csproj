@@ -221,6 +221,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="F_Main.resx">
       <DependentUpon>F_Main.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="F_Welcome.resx">
       <DependentUpon>F_Welcome.cs</DependentUpon>
@@ -268,6 +269,8 @@
       <Name>Sadco.FamilyDoctor.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\data_table_deleted.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

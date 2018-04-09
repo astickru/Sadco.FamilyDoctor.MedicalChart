@@ -1,4 +1,5 @@
 ﻿using Sadco.FamilyDoctor.Core.Entities;
+using Sadco.FamilyDoctor.Core.EntityLogs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -149,6 +150,8 @@ namespace Sadco.FamilyDoctor.Core.Controls
                                 if (isChange)
                                 {
                                     Cl_App.m_DataContext.SaveChanges();
+                                    EntityLog eLog = new EntityLog();
+                                    eLog.SetEntity(draggedNodeTemplate.p_Template);
                                     transaction.Commit();
                                     draggedNodeTemplate.Remove();
                                     a_TargetNodeGroup.Nodes.Insert(f_GetFirstGroupInNode(a_TargetNodeGroup.Nodes), draggedNodeTemplate);
@@ -176,7 +179,10 @@ namespace Sadco.FamilyDoctor.Core.Controls
             {
                 try
                 {
+                    EntityLog eLog = new EntityLog();
+
                     Cl_Template newTemplate = (Cl_Template)Activator.CreateInstance(typeof(Cl_Template));
+                    eLog.SetEntity(newTemplate);
                     Cl_Group group = null;
                     if (p_SelectedGroup != null && p_SelectedGroup.p_Group != null)
                     {
@@ -201,6 +207,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     Cl_App.m_DataContext.SaveChanges();
                     newTemplate.p_TemplateID = newTemplate.p_ID;
                     Cl_App.m_DataContext.SaveChanges();
+                    eLog.SaveEntity(newTemplate);
                     transaction.Commit();
 
                     SelectedNode.Nodes.Add(new Ctrl_TreeNodeTemplate(group, newTemplate));
@@ -245,9 +252,12 @@ namespace Sadco.FamilyDoctor.Core.Controls
             {
                 try
                 {
-                    var els = Cl_App.m_DataContext.p_Templates.Where(el => el.p_TemplateID == p_SelectedTemplate.p_Template.p_TemplateID);
+                    EntityLog eLog = new EntityLog();
+                    var els = Cl_App.m_DataContext.p_Templates.Where(el => el.p_TemplateID == p_SelectedTemplate.p_Template.p_TemplateID).OrderByDescending(v => v.p_Version);
                     if (els != null)
                     {
+                        Cl_Template lastVersion = els.FirstOrDefault();
+                        eLog.SetEntity(lastVersion);
                         bool isChange = false;
                         foreach (Cl_Template el in els)
                         {
@@ -257,6 +267,9 @@ namespace Sadco.FamilyDoctor.Core.Controls
                         if (isChange)
                         {
                             Cl_App.m_DataContext.SaveChanges();
+                            eLog.SaveEntity(lastVersion);
+                            transaction.Commit();
+
                             SelectedNode.Remove();
                             transaction.Commit();
                         }

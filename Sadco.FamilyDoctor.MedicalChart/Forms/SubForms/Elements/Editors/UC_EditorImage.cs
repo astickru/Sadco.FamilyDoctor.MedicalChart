@@ -13,7 +13,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
     {
         private EntityLog eLog = new EntityLog();
 
-        public Cl_Element p_EditingImage { get; private set; }
+        public Cl_Element p_EditingElement { get; private set; }
 
         public UC_EditorImage()
         {
@@ -40,21 +40,21 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 try
                 {
                     Cl_Element el = null;
-                    if (p_EditingImage.p_Version == 0)
+                    if (p_EditingElement.p_Version == 0)
                     {
-                        el = p_EditingImage;
+                        el = p_EditingElement;
                         el.p_Version = 1;
                     }
                     else
                     {
                         el = new Cl_Element();
-                        el.p_Version = p_EditingImage.p_Version + 1;
-                        el.p_ParentGroupID = p_EditingImage.p_ParentGroupID;
-                        el.p_ParentGroup = p_EditingImage.p_ParentGroup;
+                        el.p_Version = p_EditingElement.p_Version + 1;
+                        el.p_ParentGroupID = p_EditingElement.p_ParentGroupID;
+                        el.p_ParentGroup = p_EditingElement.p_ParentGroup;
                         Cl_App.m_DataContext.p_Elements.Add(el);
                     }
                     el.p_ElementType = E_ElementsTypes.Image;
-                    el.p_ElementID = p_EditingImage.p_ElementID;
+                    el.p_ElementID = p_EditingElement.p_ElementID;
                     el.p_Name = ctrl_Name.Text;
                     el.p_Tag = ctrlTag.Text;
                     el.p_Image = ctrlImage.Image;
@@ -82,16 +82,16 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             eLog.SetEntity(a_Element);
 
             if (a_Element == null || !a_Element.f_IsImage()) return;
-            p_EditingImage = a_Element;
-            if (p_EditingImage.p_Version == 0)
+            p_EditingElement = a_Element;
+            if (p_EditingElement.p_Version == 0)
                 ctrl_Version.Text = "Черновик";
             else
-                ctrl_Version.Text = p_EditingImage.p_Version.ToString();
-            ctrl_Name.Text = p_EditingImage.p_Name;
-            ctrlTag.Text = p_EditingImage.p_Tag;
-            ctrlImage.Image = p_EditingImage.p_Image;
-            ctrl_Hint.Text = p_EditingImage.p_Help;
-            ctrl_Note.Text = p_EditingImage.p_Comment;
+                ctrl_Version.Text = p_EditingElement.p_Version.ToString();
+            ctrl_Name.Text = p_EditingElement.p_Name;
+            ctrlTag.Text = p_EditingElement.p_Tag;
+            ctrlImage.Image = p_EditingElement.p_Image;
+            ctrl_Hint.Text = p_EditingElement.p_Help;
+            ctrl_Note.Text = p_EditingElement.p_Comment;
         }
 
         private void ctrlBAdd_Click(object sender, EventArgs e)

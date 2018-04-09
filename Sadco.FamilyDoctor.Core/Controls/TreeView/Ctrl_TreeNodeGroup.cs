@@ -17,7 +17,20 @@ namespace Sadco.FamilyDoctor.Core.Controls
             Text = a_Group.p_Name;
         }
 
-        public Cl_Group p_Group { get; private set; }
+        private Cl_Group m_Group = null;
+        public Cl_Group p_Group {
+            get {
+                return m_Group;
+            }
+            set {
+                m_Group = value;
+                if (m_Group != null)
+                {
+                    this.ImageKey = "FOLDER_16" + (m_Group.p_IsArhive ? "_DEL" : "");
+                    this.SelectedImageKey = "FOLDER_16" + (m_Group.p_IsArhive ? "_DEL" : "");
+                }
+            }
+        }
 
         public void f_SetGroupName(string a_Name)
         {

@@ -27,29 +27,20 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
 		public void LoadHistory(int LoadForID)
 		{
-			Cl_Log log = Cl_App.m_DataContext.p_Logs.Where(l => l.p_ElementID == LoadForID).OrderByDescending(d => d.p_ChangeTime).FirstOrDefault();
-			if (log == null) return;
+			IOrderedQueryable<Cl_Log> logs = Cl_App.m_DataContext.p_Logs.Where(l => l.p_ElementID == LoadForID).OrderByDescending(d => d.p_ChangeTime);
+			if (logs.Count() == 0) return;
 
-			LoadRow(log.p_ID);
+            foreach(Cl_Log log in logs)
+            {
+                var row = dtLogs.NewRow();
+                row["cl_date"] = log.p_ChangeTime;
+                row["cl_version"] = log.p_Version == 0 ? "Черновик" : log.p_Version.ToString();
+                row["cl_event"] = log.p_Event;
+                row["cl_user"] = log.p_UserName;
+                dtLogs.Rows.Add(row);
+            }
 
 			ctrl_DGLogs.DataSource = dtLogs;
-		}
-
-		private void LoadRow(int lastID)
-		{
-			Cl_Log log = Cl_App.m_DataContext.p_Logs.Where(l => l.p_ID == lastID).FirstOrDefault();
-			if (log != null)
-			{
-				var row = dtLogs.NewRow();
-				row["cl_date"] = log.p_ChangeTime;
-				row["cl_version"] = log.p_Version == 0 ? "Черновик" : log.p_Version.ToString();
-				row["cl_event"] = log.p_Event;
-				row["cl_user"] = log.p_UserName;
-				dtLogs.Rows.Add(row);
-
-				if (log.p_PrevID != 0)
-					LoadRow(log.p_PrevID);
-			}
 		}
 	}
 }
