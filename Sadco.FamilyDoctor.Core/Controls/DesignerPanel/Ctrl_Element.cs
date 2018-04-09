@@ -10,7 +10,7 @@ using Sadco.FamilyDoctor.Core.Entities;
 
 namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
 {
-    public partial class Ctrl_Element : Panel, I_Element
+    public partial class Ctrl_Element : UserControl, I_Element
     {
         public const int m_ElementHeight = 24;
 
@@ -81,12 +81,18 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         /// <summary>Прорисовка контрола</summary>
         public void f_Draw(Graphics a_Graphics, Rectangle a_Bounds)
         {
+            f_Draw(a_Graphics, a_Bounds, Font, ForeColor);
+        }
+
+        /// <summary>Прорисовка контрола</summary>
+        public void f_Draw(Graphics a_Graphics, Rectangle a_Bounds, Font a_Font, Color a_ForeColor)
+        {
             if (m_Element != null)
             {
                 Rectangle imageBounds = new Rectangle(a_Bounds.Left + 4, a_Bounds.Top + a_Bounds.Height / 2 - p_ImageIcon.Height / 2, p_ImageIcon.Width, p_ImageIcon.Height);
                 Rectangle textBounds = new Rectangle(imageBounds.Right + 5, imageBounds.Top, a_Bounds.Width - (imageBounds.Right + 10), imageBounds.Height);
                 a_Graphics.DrawImage(p_ImageIcon, imageBounds);
-                TextRenderer.DrawText(a_Graphics, p_Name, Font, textBounds, ForeColor, TextFormatFlags.ExpandTabs | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter);
+                TextRenderer.DrawText(a_Graphics, p_Name, a_Font, textBounds, a_ForeColor, TextFormatFlags.ExpandTabs | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter);
             }
         }
 

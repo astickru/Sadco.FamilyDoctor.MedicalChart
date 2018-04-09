@@ -99,6 +99,24 @@
     <Compile Include="Forms\SubForms\Dlg_HistoryViewer.Designer.cs">
       <DependentUpon>Dlg_HistoryViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SubForms\Records\Dlg_Record.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SubForms\Records\Dlg_Record.Designer.cs">
+      <DependentUpon>Dlg_Record.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SubForms\Records\Dlg_SelectTemplate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SubForms\Records\Dlg_SelectTemplate.Designer.cs">
+      <DependentUpon>Dlg_SelectTemplate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SubForms\Records\UC_Records.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\SubForms\Records\UC_Records.Designer.cs">
+      <DependentUpon>UC_Records.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SubForms\Templates\F_DesignerTemplate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -170,6 +188,15 @@
     <Compile Include="UI_PanelManager.cs" />
     <EmbeddedResource Include="Forms\SubForms\Dlg_HistoryViewer.resx">
       <DependentUpon>Dlg_HistoryViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SubForms\Records\Dlg_Record.resx">
+      <DependentUpon>Dlg_Record.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SubForms\Records\Dlg_SelectTemplate.resx">
+      <DependentUpon>Dlg_SelectTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SubForms\Records\UC_Records.resx">
+      <DependentUpon>UC_Records.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SubForms\Templates\F_DesignerTemplate.resx">
       <DependentUpon>F_DesignerTemplate.cs</DependentUpon>

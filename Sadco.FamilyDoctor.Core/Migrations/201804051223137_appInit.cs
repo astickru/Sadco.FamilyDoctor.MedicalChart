@@ -118,6 +118,7 @@ namespace Sadco.FamilyDoctor.Core.Migrations
                         F_ID = c.Int(nullable: false, identity: true),
                         F_TEMPLATE_ID = c.Int(nullable: false),
                         F_GROUP_ID = c.Int(nullable: false),
+                        F_TYPE = c.Byte(nullable: false),
                         F_NAME = c.String(maxLength: 100, unicode: false),
                         F_DESC = c.String(maxLength: 1000, unicode: false),
                         F_VERSION = c.Int(nullable: false),

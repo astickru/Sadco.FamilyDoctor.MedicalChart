@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using System.Data.Entity;
 using static Sadco.FamilyDoctor.Core.Entities.Cl_Element;
 
 namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
@@ -32,6 +33,30 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
         }
 
+        public Cl_Template[] f_GetConflictTemplates(Cl_Element a_Element)
+        {
+            var templates = new List<Cl_Template>();
+            if (a_Element == null) return templates.ToArray();
+            var templatesElements = Cl_App.m_DataContext.p_TemplatesElements.Include(te => te.p_Template).Where(te => te.p_ChildElementID == a_Element.p_ID).ToArray();
+            foreach (var te in templatesElements)
+            {
+                templates.AddRange(f_GetConflictTemplates(te.p_ChildTemplate));
+            }
+            return templates.ToArray();
+        }
+
+        public Cl_Template[] f_GetConflictTemplates(Cl_Template a_Template)
+        {
+            var templates = new List<Cl_Template>();
+            if (a_Template == null) return templates.ToArray();
+            var templatesElements = Cl_App.m_DataContext.p_TemplatesElements.Include(te => te.p_Template).Where(te => te.p_ChildTemplateID == a_Template.p_ID).ToArray();
+            foreach (var te in templatesElements)
+            {
+                templates.AddRange(f_GetConflictTemplates(te.p_ChildTemplate));
+            }
+            return templates.ToArray();
+        }
+
         public object f_ConfirmChanges()
         {
             if (!f_ValidNumber(ctrl_NormValues.Lines))
@@ -48,6 +73,14 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 MessageBox.Show("Значение по-умолчанию не является числовым или не соответствует точности числа");
                 return null;
+            }
+            var templates = f_GetConflictTemplates(p_EditingElement);
+            if (templates.Length > 0)
+            {
+                if (MessageBox.Show("Этот элемент уже используется в шаблонах. Сохранить новую версию элмента?", "", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
+                {
+                    return null;
+                }
             }
             using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
             {
@@ -276,6 +309,13 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         }
                     }
                     Cl_App.m_DataContext.SaveChanges();
+                    if (templates.Length > 0)
+                    {
+                        foreach (var t in templates)
+                        {
+                            t.p_IsConflict = true;
+                        }
+                    }
                     m_Log.SaveEntity(el);
                     transaction.Commit();
                     f_SetElement(el);
@@ -482,47 +522,47 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             return valid;
         }
 
-		private void ctrl_ValidNumber_KeyPress(object sender, KeyPressEventArgs e)
-		{
-			RichTextBox el = ((RichTextBox)sender);
-			if (ctrl_IsNumber.Checked)
-			{
-				int pos = el.SelectionStart - el.GetFirstCharIndexOfCurrentLine();
-				string txt = el.Text;
-				if (el.Lines.Length > 0)
-				{
-					txt = el.Lines.ElementAt(el.GetLineFromCharIndex(el.SelectionStart));
-				}
-				txt = string.Format("{0}{1}{2}", txt.Substring(0, pos), e.KeyChar, txt.Substring(pos, txt.Length - pos));
-				e.Handled = !f_ValidNumber(new string[] { txt });
-			}
-			else
-			{
-				e.Handled = false;
-			}
-		}
+        private void ctrl_ValidNumber_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            RichTextBox el = ((RichTextBox)sender);
+            if (ctrl_IsNumber.Checked)
+            {
+                int pos = el.SelectionStart - el.GetFirstCharIndexOfCurrentLine();
+                string txt = el.Text;
+                if (el.Lines.Length > 0)
+                {
+                    txt = el.Lines.ElementAt(el.GetLineFromCharIndex(el.SelectionStart));
+                }
+                txt = string.Format("{0}{1}{2}", txt.Substring(0, pos), e.KeyChar, txt.Substring(pos, txt.Length - pos));
+                e.Handled = !f_ValidNumber(new string[] { txt });
+            }
+            else
+            {
+                e.Handled = false;
+            }
+        }
 
-		private void ctrl_NormValues_KeyPress(object sender, KeyPressEventArgs e)
-		{
-			if (e.KeyChar == '"')
-			{
-				e.Handled = true;
-				return;
-			}
+        private void ctrl_NormValues_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '"')
+            {
+                e.Handled = true;
+                return;
+            }
 
-			ctrl_ValidNumber_KeyPress(sender, e);
-		}
+            ctrl_ValidNumber_KeyPress(sender, e);
+        }
 
-		private void ctrl_PatValues_KeyPress(object sender, KeyPressEventArgs e)
-		{
-			if (e.KeyChar == '"')
-			{
-				e.Handled = true;
-				return;
-			}
+        private void ctrl_PatValues_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '"')
+            {
+                e.Handled = true;
+                return;
+            }
 
-			ctrl_ValidNumber_KeyPress(sender, e);
-		}
+            ctrl_ValidNumber_KeyPress(sender, e);
+        }
 
         private void ctrl_PartNormValue_KeyPress(object sender, KeyPressEventArgs e)
         {

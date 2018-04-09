@@ -33,24 +33,9 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 ctrl_Version.Text = "Черновик";
             else
                 ctrl_Version.Text = p_EditingTemplate.p_Version.ToString();
-            ctrl_EditorPanel.Items.Clear();
-            var elemnts = Cl_App.m_DataContext.p_TemplatesElements.Include(te => te.p_ChildElement).Include(te => te.p_ChildTemplate).Include(te => te.p_ChildTemplate.p_TemplateElements)
+            var elements = Cl_App.m_DataContext.p_TemplatesElements.Include(te => te.p_ChildElement).Include(te => te.p_ChildTemplate).Include(te => te.p_ChildTemplate.p_TemplateElements)
                 .Where(t => t.p_TemplateID == p_EditingTemplate.p_ID).OrderBy(t => t.p_Index).ToArray();
-            foreach (Cl_TemplatesElements control in elemnts)
-            {
-                if (control.p_ChildElement != null)
-                {
-                    var ctrl = new Ctrl_Element();
-                    ctrl.p_Element = control.p_ChildElement;
-                    ctrl_EditorPanel.Items.Add(ctrl);
-                }
-                else if (control.p_ChildTemplate == null)
-                {
-                    var ctrl = new Ctrl_Template();
-                    ctrl.p_Template = control.p_ChildTemplate;
-                    ctrl_EditorPanel.Items.Add(ctrl);
-                }
-            }
+            ctrl_EditorPanel.f_SetTemplatesElements(elements);
         }
 
         private void ctrl_B_Save_Click(object sender, EventArgs e)
@@ -69,6 +54,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     else
                     {
                         tpl = new Cl_Template();
+                        tpl.p_TemplateID = p_EditingTemplate.p_TemplateID;
+                        tpl.p_Type = p_EditingTemplate.p_Type;
                         tpl.p_Name = p_EditingTemplate.p_Name;
                         tpl.p_Version = p_EditingTemplate.p_Version + 1;
                         tpl.p_ParentGroupID = p_EditingTemplate.p_ParentGroupID;
@@ -80,7 +67,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     int index = 0;
                     foreach (I_Element item in ctrl_EditorPanel.Items)
                     {
-                        var tplEl = new Cl_TemplatesElements();
+                        var tplEl = new Cl_TemplateElement();
                         tplEl.p_TemplateID = tpl.p_ID;
                         tplEl.p_Template = tpl;
                         if (item is Ctrl_Element)

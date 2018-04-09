@@ -28,16 +28,18 @@ namespace Sadco.FamilyDoctor.MedicalChart
 
 			if (UserSession.Permission.IsEditMegaTemplates)
 			{
-				f_SetControl<UC_EditorElements>();
+				//f_SetControl<UC_EditorElements>();
 				menuMegaTemplate.Visible = UserSession.Permission.IsEditMegaTemplates;
 			}
 
 			if (UserSession.Permission.IsEditTemplates)
 			{
-				f_SetControl<UC_EditorTemplates>();
+				//f_SetControl<UC_EditorTemplates>();
 				menuTemplate.Visible = UserSession.Permission.IsEditTemplates;
 			}
-		}
+
+            f_SetControl<UC_Records>();
+        }
 
 		private void InitSession(string[] args)
 		{
@@ -55,7 +57,12 @@ namespace Sadco.FamilyDoctor.MedicalChart
 			}
 		}
 
-		private void ctrl_MenuShowTemplates_Click(object sender, EventArgs e)
+        private void ctrlMIRecord_Click(object sender, EventArgs e)
+        {
+            f_SetControl<UC_Records>();
+        }
+
+        private void ctrl_MenuShowTemplates_Click(object sender, EventArgs e)
 		{
 			f_SetControl<UC_EditorTemplates>();
 		}
@@ -74,5 +81,5 @@ namespace Sadco.FamilyDoctor.MedicalChart
 		{
 			this.Close();
 		}
-	}
+    }
 }

@@ -19,6 +19,8 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
         private System.ComponentModel.IContainer components;
         private System.Windows.Forms.ToolStripMenuItem ctrl_TemplateNew;
+        private System.Windows.Forms.ToolStripMenuItem ctrl_BlockNew;
+        private System.Windows.Forms.ToolStripMenuItem ctrl_TableNew;
         private System.Windows.Forms.ToolStripMenuItem ctrl_TemplateEdit;
         private System.Windows.Forms.ToolStripMenuItem ctrl_TemplateDelete;
         public Ctrl_TreeNodeTemplate p_SelectedTemplate {
@@ -30,6 +32,8 @@ namespace Sadco.FamilyDoctor.Core.Controls
         {
             this.components = new System.ComponentModel.Container();
             this.ctrl_TemplateNew = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctrl_BlockNew = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctrl_TableNew = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_TemplateEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_TemplateDelete = new System.Windows.Forms.ToolStripMenuItem();
             // 
@@ -40,6 +44,22 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.ctrl_TemplateNew.Tag = "TemplateNew";
             this.ctrl_TemplateNew.Text = "Добавить шаблон";
             this.ctrl_TemplateNew.Click += new System.EventHandler(this.ctrl_TemplateNew_Click);
+            // 
+            // ctrl_BlockNew
+            // 
+            this.ctrl_BlockNew.Name = "ctrl_BlockNew";
+            this.ctrl_BlockNew.Size = new System.Drawing.Size(176, 22);
+            this.ctrl_BlockNew.Tag = "ctrl_BlockNew";
+            this.ctrl_BlockNew.Text = "Добавить блок";
+            this.ctrl_BlockNew.Click += new System.EventHandler(this.ctrl_BlockNew_Click);
+            // 
+            // ctrl_TableNew
+            // 
+            this.ctrl_TableNew.Name = "ctrl_TableNew";
+            this.ctrl_TableNew.Size = new System.Drawing.Size(176, 22);
+            this.ctrl_TableNew.Tag = "ctrl_TableNew";
+            this.ctrl_TableNew.Text = "Добавить таблицу";
+            this.ctrl_TableNew.Click += new System.EventHandler(this.ctrl_TableNew_Click);
             // 
             // ctrl_TemplateEdit
             // 
@@ -60,8 +80,12 @@ namespace Sadco.FamilyDoctor.Core.Controls
             // ctrl_Tree
             // 
             this.ImageList.Images.Add("TEMPLATE_16", Properties.Resources.TEMPLATE_16);
+            this.ImageList.Images.Add("BLOCK_16", Properties.Resources.BLOCK_16);
+            this.ImageList.Images.Add("TABLE_16", Properties.Resources.TABLE_16);
             this.ctrl_Tree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ctrl_TemplateNew,
+            this.ctrl_BlockNew,
+            this.ctrl_TableNew,
             this.ctrl_TemplateEdit,
             this.ctrl_TemplateDelete });
 
@@ -75,15 +99,30 @@ namespace Sadco.FamilyDoctor.Core.Controls
             base.f_Tree_Opening(sender, e);
             if (p_SelectedGroup != null)
             {
-                ctrl_TemplateNew.Visible = true;
+                ctrl_TemplateNew.Visible = ctrl_BlockNew.Visible = ctrl_TableNew.Visible = true;
                 ctrl_TemplateEdit.Visible = false;
                 ctrl_TemplateDelete.Visible = false;
             }
             else if (p_SelectedTemplate != null)
             {
-                ctrl_TemplateNew.Visible = false;
+                ctrl_TemplateNew.Visible = ctrl_BlockNew.Visible = ctrl_TableNew.Visible = false;
                 ctrl_TemplateEdit.Visible = true;
                 ctrl_TemplateDelete.Visible = true;
+                if (p_SelectedTemplate.p_Template.p_Type == Cl_Template.E_TemplateType.Template)
+                {
+                    ctrl_TemplateEdit.Text = "Изменить шаблон";
+                    ctrl_TemplateDelete.Text = "Удалить шаблон";
+                }
+                else if (p_SelectedTemplate.p_Template.p_Type == Cl_Template.E_TemplateType.Block)
+                {
+                    ctrl_TemplateEdit.Text = "Изменить блок";
+                    ctrl_TemplateDelete.Text = "Удалить блок";
+                }
+                else if (p_SelectedTemplate.p_Template.p_Type == Cl_Template.E_TemplateType.Table)
+                {
+                    ctrl_TemplateEdit.Text = "Изменить таблицу";
+                    ctrl_TemplateDelete.Text = "Удалить таблицу";
+                }
             }
         }
 
@@ -91,34 +130,47 @@ namespace Sadco.FamilyDoctor.Core.Controls
         {
             if (a_TargetNodeGroup != null)
             {
-                Ctrl_TreeNodeTemplate draggedNodeTemplate = (Ctrl_TreeNodeTemplate)e.Data.GetData(typeof(Ctrl_TreeNodeTemplate));
-                if (e.Effect == DragDropEffects.Move)
+                using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
                 {
-                    var elsDraggeds = Cl_App.m_DataContext.p_Templates.Where(el => el.p_TemplateID == draggedNodeTemplate.p_Template.p_TemplateID);
-                    if (elsDraggeds != null)
+                    try
                     {
-                        bool isChange = false;
-                        foreach (Cl_Template el in elsDraggeds)
+                        Ctrl_TreeNodeTemplate draggedNodeTemplate = (Ctrl_TreeNodeTemplate)e.Data.GetData(typeof(Ctrl_TreeNodeTemplate));
+                        if (e.Effect == DragDropEffects.Move)
                         {
-                            el.p_ParentGroupID = a_TargetNodeGroup.p_Group.p_ID;
-                            isChange = true;
-                        }
-                        if (isChange)
-                        {
-                            Cl_App.m_DataContext.SaveChanges();
-                            draggedNodeTemplate.Remove();
-                            a_TargetNodeGroup.Nodes.Insert(f_GetFirstGroupInNode(a_TargetNodeGroup.Nodes), draggedNodeTemplate);
+                            var elsDraggeds = Cl_App.m_DataContext.p_Templates.Where(el => el.p_TemplateID == draggedNodeTemplate.p_Template.p_TemplateID);
+                            if (elsDraggeds != null)
+                            {
+                                bool isChange = false;
+                                foreach (Cl_Template el in elsDraggeds)
+                                {
+                                    el.p_ParentGroupID = a_TargetNodeGroup.p_Group.p_ID;
+                                    isChange = true;
+                                }
+                                if (isChange)
+                                {
+                                    Cl_App.m_DataContext.SaveChanges();
+                                    transaction.Commit();
+                                    draggedNodeTemplate.Remove();
+                                    a_TargetNodeGroup.Nodes.Insert(f_GetFirstGroupInNode(a_TargetNodeGroup.Nodes), draggedNodeTemplate);
+                                }
+                            }
+                            else
+                            {
+                                throw new Exception("Не найдена элемент для шаблонов");
+                            }
                         }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        throw new Exception("Не найдена элемент для шаблонов");
+                        transaction.Rollback();
+                        MessageBox.Show("При перемещении шаблона произошла ошибка");
+                        return;
                     }
                 }
             }
         }
 
-        private void ctrl_TemplateNew_Click(object sender, EventArgs e)
+        private void f_TemplateNew(Cl_Template.E_TemplateType a_TemplateType)
         {
             using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
             {
@@ -131,7 +183,12 @@ namespace Sadco.FamilyDoctor.Core.Controls
                         group = p_SelectedGroup.p_Group;
                     }
                     Dlg_EditorTemplate dlg = new Dlg_EditorTemplate();
-                    dlg.Text = "Новый шаблон";
+                    if (a_TemplateType == Cl_Template.E_TemplateType.Template)
+                        dlg.Text = "Новый шаблон";
+                    else if (a_TemplateType == Cl_Template.E_TemplateType.Block)
+                        dlg.Text = "Новый блок";
+                    else if (a_TemplateType == Cl_Template.E_TemplateType.Table)
+                        dlg.Text = "Новая таблица";
                     if (group != null)
                     {
                         newTemplate.p_ParentGroup = p_SelectedGroup.p_Group;
@@ -139,6 +196,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     }
                     if (dlg.ShowDialog() != DialogResult.OK) return;
                     newTemplate.p_Name = dlg.ctrl_TBName.Text;
+                    newTemplate.p_Type = a_TemplateType;
                     Cl_App.m_DataContext.p_Templates.Add(newTemplate);
                     Cl_App.m_DataContext.SaveChanges();
                     newTemplate.p_TemplateID = newTemplate.p_ID;
@@ -154,6 +212,21 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     return;
                 }
             }
+        }
+
+        private void ctrl_TemplateNew_Click(object sender, EventArgs e)
+        {
+            f_TemplateNew(Cl_Template.E_TemplateType.Template);
+        }
+
+        private void ctrl_BlockNew_Click(object sender, EventArgs e)
+        {
+            f_TemplateNew(Cl_Template.E_TemplateType.Block);
+        }
+
+        private void ctrl_TableNew_Click(object sender, EventArgs e)
+        {
+            f_TemplateNew(Cl_Template.E_TemplateType.Table);
         }
 
         private void ctrl_TemplateEdit_Click(object sender, EventArgs e)
@@ -185,6 +258,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                         {
                             Cl_App.m_DataContext.SaveChanges();
                             SelectedNode.Remove();
+                            transaction.Commit();
                         }
                     }
                     else

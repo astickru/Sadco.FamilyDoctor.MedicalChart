@@ -153,6 +153,28 @@ namespace Sadco.FamilyDoctor.Core.Controls
         }
         #endregion
 
+        /// <summary>Установка элементов шаблона</summary>
+        public void f_SetTemplatesElements(Cl_TemplateElement[] a_TemplatesElements)
+        {
+            if (a_TemplatesElements == null) return;
+            Items.Clear();
+            foreach (var te in a_TemplatesElements)
+            {
+                if (te.p_ChildElement != null)
+                {
+                    var ctrl = new Ctrl_Element();
+                    ctrl.p_Element = te.p_ChildElement;
+                    Items.Add(ctrl);
+                }
+                else if (te.p_ChildTemplate != null)
+                {
+                    var ctrl = new Ctrl_Template();
+                    ctrl.p_Template = te.p_ChildTemplate;
+                    Items.Add(ctrl);
+                }
+            }
+        }
+
         protected override void OnPaintBackground(PaintEventArgs e)
         {
             base.OnPaintBackground(e);
@@ -240,7 +262,12 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 if (Items[e.Index] is I_Element)
                 {
                     var el = (I_Element)Items[e.Index];
-                    el.f_Draw(e.Graphics, e.Bounds);
+                    Color foreColor = ForeColor;
+                    if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+                    {
+                        foreColor = Color.White;
+                    }
+                    el.f_Draw(e.Graphics, e.Bounds, Font, foreColor);
                 }
             }
         }
@@ -397,12 +424,42 @@ namespace Sadco.FamilyDoctor.Core.Controls
             return !dragZone.Contains(location);
         }
 
-        protected bool f_HasElements(Cl_Element[] a_Elemnts)
+        protected bool f_HasElement(Cl_Element a_Elemnt)
         {
-            foreach (Ctrl_Element el in Items)
+            foreach (I_Element item in Items)
             {
-                if (a_Elemnts.Contains(el.p_Element))
-                    return true;
+                if (item is Ctrl_Element)
+                {
+                    var el = (Ctrl_Element)item;
+                    if (el.p_Element.Equals(a_Elemnt))
+                        return true;
+                }
+                else if (item is Ctrl_Template)
+                {
+                    var tpl = (Ctrl_Template)item;
+                    if (tpl.p_Template.f_HasElement(a_Elemnt))
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        protected bool f_HasElement(Cl_Template a_Template)
+        {
+            foreach (I_Element item in Items)
+            {
+                if (item is Ctrl_Element)
+                {
+                    var el = (Ctrl_Element)item;
+                    if (a_Template.f_HasElement(el.p_Element))
+                        return true;
+                }
+                else if (item is Ctrl_Template)
+                {
+                    var tpl = (Ctrl_Template)item;
+                    if (a_Template.f_HasElement(tpl.p_Template))
+                        return true;
+                }
             }
             return false;
         }
@@ -419,7 +476,16 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     if (item is Ctrl_TreeNodeElement)
                     {
                         Ctrl_TreeNodeElement nodeEl = (Ctrl_TreeNodeElement)item;
-                        if (f_HasElements(new Cl_Element[] { nodeEl.p_Element }))
+                        if (f_HasElement(nodeEl.p_Element))
+                        {
+                            e.Effect = DragDropEffects.None;
+                            return;
+                        }
+                    }
+                    else if(item is Ctrl_TreeNodeTemplate)
+                    {
+                        Ctrl_TreeNodeTemplate nodeTemp = (Ctrl_TreeNodeTemplate)item;
+                        if (f_HasElement(nodeTemp.p_Template))
                         {
                             e.Effect = DragDropEffects.None;
                             return;
@@ -528,10 +594,9 @@ namespace Sadco.FamilyDoctor.Core.Controls
         {
             if (SelectedItem != null)
             {
-                if (SelectedItem is Ctrl_Element)
+                if (SelectedItem is I_Element)
                 {
-                    Ctrl_Element el = (Ctrl_Element)SelectedItem;
-
+                    I_Element el = (I_Element)SelectedItem;
                     Items.Remove(el);
                 }
             }

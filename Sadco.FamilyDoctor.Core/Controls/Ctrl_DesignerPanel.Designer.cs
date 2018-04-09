@@ -29,10 +29,7 @@ namespace Sadco.FamilyDoctor.Core.Controls {
             this.ctrlMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctrlMenuDel = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlMenu.SuspendLayout();
-
-            this.ItemHeight = 24;
-            this.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-
+            this.SuspendLayout();
             // 
             // ctrlMenu
             // 
@@ -46,13 +43,17 @@ namespace Sadco.FamilyDoctor.Core.Controls {
             this.ctrlMenuDel.Name = "ctrlMenuDel";
             this.ctrlMenuDel.Size = new System.Drawing.Size(118, 22);
             this.ctrlMenuDel.Text = "Удалить";
-            this.ctrlMenuDel.Click += ctrlMenuDel_Click;
-
-            ContextMenuStrip = ctrlMenu;
-            this.ctrlMenu.ResumeLayout(false);
-            this.SuspendLayout();
-			this.ResumeLayout(false);
+            // 
+            // Ctrl_DesignerPanel
+            // 
             this.AllowDrop = true;
+            this.ContextMenuStrip = this.ctrlMenu;
+            this.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.ItemHeight = 24;
+            this.ctrlMenu.ResumeLayout(false);
+            this.ResumeLayout(false);
+
         }
 
         #endregion

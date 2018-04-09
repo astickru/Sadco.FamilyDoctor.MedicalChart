@@ -84,7 +84,7 @@
       <DependentUpon>Ctrl_Template.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\DesignerPanel\Ctrl_Element.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\DesignerPanel\Ctrl_Element.Designer.cs">
       <DependentUpon>Ctrl_Element.cs</DependentUpon>
@@ -136,6 +136,7 @@
       <DependentUpon>Dlg_EditorGroup.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\TreeView\I_TreeNode.cs" />
+    <Compile Include="Entities\Cl_Report.cs" />
     <Compile Include="Entities\Cl_AgeNorms.cs" />
     <Compile Include="Entities\Cl_ElementsParams.cs" />
     <Compile Include="Entities\Cl_Group.cs" />
@@ -150,9 +151,9 @@
     <Compile Include="EntityLogs\EntityLog.cs" />
     <Compile Include="Entities\I_ELog.cs" />
     <Compile Include="Entities\I_Version.cs" />
-    <Compile Include="Migrations\201804041305543_appInit.cs" />
-    <Compile Include="Migrations\201804041305543_appInit.Designer.cs">
-      <DependentUpon>201804041305543_appInit.cs</DependentUpon>
+    <Compile Include="Migrations\201804051223137_appInit.cs" />
+    <Compile Include="Migrations\201804051223137_appInit.Designer.cs">
+      <DependentUpon>201804051223137_appInit.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\AccessLevelAttribute.cs" />
@@ -217,8 +218,8 @@
     <EmbeddedResource Include="Controls\TreeView\Dlg_EditorGroup.resx">
       <DependentUpon>Dlg_EditorGroup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804041305543_appInit.resx">
-      <DependentUpon>201804041305543_appInit.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201804051223137_appInit.resx">
+      <DependentUpon>201804051223137_appInit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

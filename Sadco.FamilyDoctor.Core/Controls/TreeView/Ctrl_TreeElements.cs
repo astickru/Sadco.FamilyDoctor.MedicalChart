@@ -58,6 +58,8 @@ namespace Sadco.FamilyDoctor.Core.Controls
             // ctrl_Tree
             // 
             this.ImageList.Images.Add("TEMPLATE_16", Properties.Resources.TEMPLATE_16);
+            this.ImageList.Images.Add("BLOCK_16", Properties.Resources.BLOCK_16);
+            this.ImageList.Images.Add("TABLE_16", Properties.Resources.TABLE_16);
             this.ImageList.Images.Add("FLOAT_16", Properties.Resources.FLOAT_16);
             this.ImageList.Images.Add("LINE_16", Properties.Resources.LINE_16);
             this.ImageList.Images.Add("BIGBOX_16", Properties.Resources.BIGBOX_16);
@@ -93,32 +95,45 @@ namespace Sadco.FamilyDoctor.Core.Controls
         {
             if (a_TargetNodeGroup != null)
             {
-                Ctrl_TreeNodeElement draggedNodeElement = (Ctrl_TreeNodeElement)e.Data.GetData(typeof(Ctrl_TreeNodeElement));
-                if (e.Effect == DragDropEffects.Move)
+                using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
                 {
-                    EntityLog eLog = new EntityLog();
-                    eLog.SetEntity(draggedNodeElement.p_Element);
-
-                    var elsDraggeds = Cl_App.m_DataContext.p_Elements.Where(el => el.p_ElementID == draggedNodeElement.p_Element.p_ElementID);
-                    if (elsDraggeds != null)
+                    try
                     {
-                        bool isChange = false;
-                        foreach (Cl_Element el in elsDraggeds)
+                        Ctrl_TreeNodeElement draggedNodeElement = (Ctrl_TreeNodeElement)e.Data.GetData(typeof(Ctrl_TreeNodeElement));
+                        if (e.Effect == DragDropEffects.Move)
                         {
-                            //el.p_ParentGroupID = a_TargetNodeGroup.p_Group.p_ID;
-                            el.p_ParentGroup = a_TargetNodeGroup.p_Group;
-                            isChange = true;
-                        }
-                        if (isChange)
-                        {
-                            Cl_App.m_DataContext.f_SaveChanges(eLog, draggedNodeElement.p_Element);
-                            draggedNodeElement.Remove();
-                            a_TargetNodeGroup.Nodes.Insert(f_GetFirstGroupInNode(a_TargetNodeGroup.Nodes), draggedNodeElement);
+                            EntityLog eLog = new EntityLog();
+                            eLog.SetEntity(draggedNodeElement.p_Element);
+
+                            var elsDraggeds = Cl_App.m_DataContext.p_Elements.Where(el => el.p_ElementID == draggedNodeElement.p_Element.p_ElementID);
+                            if (elsDraggeds != null)
+                            {
+                                bool isChange = false;
+                                foreach (Cl_Element el in elsDraggeds)
+                                {
+                                    //el.p_ParentGroupID = a_TargetNodeGroup.p_Group.p_ID;
+                                    el.p_ParentGroup = a_TargetNodeGroup.p_Group;
+                                    isChange = true;
+                                }
+                                if (isChange)
+                                {
+                                    Cl_App.m_DataContext.f_SaveChanges(eLog, draggedNodeElement.p_Element);
+                                    transaction.Commit();
+                                    draggedNodeElement.Remove();
+                                    a_TargetNodeGroup.Nodes.Insert(f_GetFirstGroupInNode(a_TargetNodeGroup.Nodes), draggedNodeElement);
+                                }
+                            }
+                            else
+                            {
+                                throw new Exception("Не найдена элемент для шаблонов");
+                            }
                         }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        throw new Exception("Не найдена элемент для шаблонов");
+                        transaction.Rollback();
+                        MessageBox.Show("При перемещении элемента произошла ошибка");
+                        return;
                     }
                 }
             }

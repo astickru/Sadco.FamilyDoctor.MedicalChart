@@ -5,10 +5,10 @@ using System.Linq;
 namespace Sadco.FamilyDoctor.Core.Entities
 {
     /// <summary>
-	/// Класс элементов шаблона
+	/// Класс элемента шаблона
 	/// </summary>
     [Table("T_TEMPLATESELEMENTS")]
-    public class Cl_TemplatesElements
+    public class Cl_TemplateElement
     {
         [Column("F_ID")]
         [Key]

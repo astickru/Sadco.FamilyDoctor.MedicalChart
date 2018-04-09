@@ -145,7 +145,7 @@
   <data name="IMAGE_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Image_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="label" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="TABLE_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\label.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="LINE_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -154,7 +154,7 @@
   <data name="LINE_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ListBullets_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="list_box" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="BLOCK_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\list_box.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TEMPLATE_16" type="System.Resources.ResXFileRef, System.Windows.Forms">

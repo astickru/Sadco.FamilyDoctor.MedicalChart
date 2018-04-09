@@ -19,5 +19,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         bool p_ReadOnly { get; set; }
         /// <summary>Прорисовка контрола</summary>
         void f_Draw(Graphics a_Graphics, Rectangle a_Bounds);
+        /// <summary>Прорисовка контрола</summary>
+        void f_Draw(Graphics a_Graphics, Rectangle a_Bounds, Font a_Font, Color a_Color);
     }
 }
