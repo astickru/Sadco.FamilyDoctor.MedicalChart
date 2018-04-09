@@ -1,5 +1,6 @@
 ﻿using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.EntityLogs;
+using Sadco.FamilyDoctor.Core.Permision;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -62,6 +63,11 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.ImageList.Images.Add("LINE_16", Properties.Resources.LINE_16);
             this.ImageList.Images.Add("BIGBOX_16", Properties.Resources.BIGBOX_16);
             this.ImageList.Images.Add("IMAGE_16", Properties.Resources.IMAGE_16);
+            this.ImageList.Images.Add("FLOAT_16_DEL", Properties.Resources.FLOAT_16_DEL);
+            this.ImageList.Images.Add("LINE_16_DEL", Properties.Resources.LINE_16_DEL);
+            this.ImageList.Images.Add("BIGBOX_16_DEL", Properties.Resources.BIGBOX_16_DEL);
+            this.ImageList.Images.Add("IMAGE_16_DEL", Properties.Resources.IMAGE_16_DEL);
+
             this.ctrl_Tree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
                                 this.ctrl_ElementNew,
                                 this.ctrl_ImageNew,
@@ -80,12 +86,20 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 ctrl_ElementNew.Visible = false;
                 ctrl_ImageNew.Visible = false;
                 ctrl_ElementDelete.Visible = true;
+                ctrl_ElementDelete.Enabled = !p_SelectedElement.p_Element.p_IsArhive;
             }
             else
             {
                 ctrl_ElementNew.Visible = true;
                 ctrl_ImageNew.Visible = true;
                 ctrl_ElementDelete.Visible = false;
+            }
+
+            if (p_SelectedGroup != null)
+            {
+                ctrl_ElementNew.Enabled = !p_SelectedGroup.p_Group.p_IsArhive;
+                ctrl_ImageNew.Enabled = !p_SelectedGroup.p_Group.p_IsArhive;
+                ctrl_ElementDelete.Enabled = !p_SelectedGroup.p_Group.p_IsArhive;
             }
         }
 
@@ -256,7 +270,10 @@ namespace Sadco.FamilyDoctor.Core.Controls
                             eLog.SaveEntity(lastVersion);
                             transaction.Commit();
 
-                            SelectedNode.Remove();
+                            if (!UserSession.IsShowDeletedMegTemplates)
+                                SelectedNode.Remove();
+                            else
+                                p_SelectedElement.p_Element = p_SelectedElement.p_Element;
                         }
                     }
                     else

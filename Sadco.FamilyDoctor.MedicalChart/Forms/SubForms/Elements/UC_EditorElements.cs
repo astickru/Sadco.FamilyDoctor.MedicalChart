@@ -1,6 +1,7 @@
 ﻿using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Controls;
 using Sadco.FamilyDoctor.Core.Entities;
+using Sadco.FamilyDoctor.Core.Permision;
 using Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Elements.Editors;
 using System.Configuration;
 using System.Data;
@@ -26,7 +27,12 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             ctrl_TreeElements.AfterSelect += Ctrl_TreeElements_AfterSelect;
             ctrl_TreeElements.e_AfterCreateElement += Ctrl_TreeElements_e_AfterCreateElement;
-            Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Elements && g.p_ParentID == null && !g.p_IsArhive).ToArray();
+            f_PopulateGroup();
+        }
+
+        private void f_PopulateGroup()
+        {
+            Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Elements && g.p_ParentID == null && (UserSession.IsShowDeletedMegTemplates ? true : !g.p_IsArhive)).ToArray();
             foreach (Cl_Group group in groups)
             {
                 f_PopulateTreeGroup(group, ctrl_TreeElements.Nodes);
@@ -38,7 +44,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             TreeNode node = new Ctrl_TreeNodeGroup(a_Group);
             a_TreeNodes.Add(node);
             var els = Cl_App.m_DataContext.p_Elements
-                .Where(e => e.p_ParentGroupID == a_Group.p_ID && !e.p_IsArhive).GroupBy(e => e.p_ElementID)
+                .Where(e => e.p_ParentGroupID == a_Group.p_ID && (UserSession.IsShowDeletedMegTemplates ? true : !e.p_IsArhive)).GroupBy(e => e.p_ElementID)
                     .Select(grp => grp
                         .OrderByDescending(v => v.p_Version).FirstOrDefault())
                         .Include(e => e.p_ParamsValues);
@@ -50,7 +56,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             if (!dcGroups.IsLoaded) dcGroups.Load();
             foreach (Cl_Group group in a_Group.p_SubGroups)
             {
-                if (!group.p_IsArhive)
+                if (!group.p_IsArhive || UserSession.IsShowDeletedMegTemplates)
                     f_PopulateTreeGroup(group, node.Nodes);
             }
         }
@@ -76,6 +82,12 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 m_PanelManager.f_DeleteElement();
             }
+        }
+
+        public void f_ShowDeletedElements(bool isShow)
+        {
+            ctrl_TreeElements.Nodes.Clear();
+            f_PopulateGroup();
         }
     }
 }

@@ -45,5 +45,10 @@ namespace Sadco.FamilyDoctor.Core.Permision
 		/// Конец выбранного диапазона даты
 		/// </summary>
 		public static DateTime TimeIntervalEnd { get; set; }
+
+        /// <summary>
+        /// Возвращает статус показываются ли удаленные элементы в мегашаблоне
+        /// </summary>
+        public static bool IsShowDeletedMegTemplates { get; set; }
 	}
 }

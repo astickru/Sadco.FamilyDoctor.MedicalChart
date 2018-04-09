@@ -48,6 +48,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         }
 
         private E_ElementsTypes m_Types = E_ElementsTypes.Float;
+        private string m_IconImage = "";
         private bool m_Required = false;
         private bool m_Editing = true;
         private bool m_Visible = true;
@@ -136,7 +137,14 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
         /// <summary>Системное наименование иконки</summary>
         [NotMapped]
-        public string p_IconName { get; set; }
+        public string p_IconName {
+            get {
+                return m_IconImage + (p_IsArhive ? "_DEL" : "");
+            }
+            set {
+                m_IconImage = value;
+            }
+        }
 
         [NotMapped]
         /// <summary>Флаг многострочности текстового элемента</summary>
@@ -285,19 +293,19 @@ namespace Sadco.FamilyDoctor.Core.Entities
         }
 
         /// <summary>Часть. Возможные локации</summary>
-        [ELogProperty("Изменился набор значений для поля \"Локация\"", IsCustomDescription = true, IgnoreValue = true)]
+        [ELogProperty("Изменился набор значений для поля \"Локация\"", IsCustomDescription = true, IsNewValueOnly = true)]
         public Cl_ElementsParams[] p_PartLocations {
             get { return m_ParamsValues.Where(p => p.p_TypeParam == Cl_ElementsParams.E_TypeParam.Location).ToArray(); }
         }
 
         /// <summary>Список стандартных нормальных значений</summary>
-        [ELogProperty("Изменился набор значений для поля \"Нормальные значения\"", IsCustomDescription = true, IgnoreValue = true)]
+        [ELogProperty("Изменился набор значений для поля \"Нормальные значения\"", IsCustomDescription = true, IsNewValueOnly = true)]
         public Cl_ElementsParams[] p_NormValues {
             get { return m_ParamsValues.Where(p => p.p_TypeParam == Cl_ElementsParams.E_TypeParam.NormValues).ToArray(); }
         }
 
         /// <summary>Список стандартных патологических значений</summary>
-        [ELogProperty("Изменился набор значений для поля \"Паталогические значения\"", IsCustomDescription = true, IgnoreValue = true)]
+        [ELogProperty("Изменился набор значений для поля \"Паталогические значения\"", IsCustomDescription = true, IsNewValueOnly = true)]
         public Cl_ElementsParams[] p_PatValues {
             get { return m_ParamsValues.Where(p => p.p_TypeParam == Cl_ElementsParams.E_TypeParam.PatValues).ToArray(); }
         }

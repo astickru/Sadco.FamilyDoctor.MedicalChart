@@ -73,6 +73,16 @@ namespace Sadco.FamilyDoctor.Core.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap BIGBOX_16_DEL {
+            get {
+                object obj = ResourceManager.GetObject("BIGBOX_16_DEL", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap BIGBOX_32 {
             get {
                 object obj = ResourceManager.GetObject("BIGBOX_32", resourceCulture);
@@ -83,29 +93,19 @@ namespace Sadco.FamilyDoctor.Core.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap check_box {
-            get {
-                object obj = ResourceManager.GetObject("check_box", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap combo_box {
-            get {
-                object obj = ResourceManager.GetObject("combo_box", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap FLOAT_16 {
             get {
                 object obj = ResourceManager.GetObject("FLOAT_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FLOAT_16_DEL {
+            get {
+                object obj = ResourceManager.GetObject("FLOAT_16_DEL", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,9 +133,29 @@ namespace Sadco.FamilyDoctor.Core.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap FOLDER_DEL {
+            get {
+                object obj = ResourceManager.GetObject("FOLDER_DEL", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap IMAGE_16 {
             get {
                 object obj = ResourceManager.GetObject("IMAGE_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IMAGE_16_DEL {
+            get {
+                object obj = ResourceManager.GetObject("IMAGE_16_DEL", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -153,16 +173,6 @@ namespace Sadco.FamilyDoctor.Core.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap label {
-            get {
-                object obj = ResourceManager.GetObject("label", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap LINE_16 {
             get {
                 object obj = ResourceManager.GetObject("LINE_16", resourceCulture);
@@ -173,9 +183,9 @@ namespace Sadco.FamilyDoctor.Core.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap LINE_32 {
+        internal static System.Drawing.Bitmap LINE_16_DEL {
             get {
-                object obj = ResourceManager.GetObject("LINE_32", resourceCulture);
+                object obj = ResourceManager.GetObject("LINE_16_DEL", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -183,9 +193,9 @@ namespace Sadco.FamilyDoctor.Core.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap list_box {
+        internal static System.Drawing.Bitmap LINE_32 {
             get {
-                object obj = ResourceManager.GetObject("list_box", resourceCulture);
+                object obj = ResourceManager.GetObject("LINE_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
