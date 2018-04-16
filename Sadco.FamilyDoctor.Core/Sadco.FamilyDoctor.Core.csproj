@@ -157,6 +157,14 @@
     <Compile Include="Migrations\201804131122447_appInit.Designer.cs">
       <DependentUpon>201804131122447_appInit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804160723357_appRecord.cs" />
+    <Compile Include="Migrations\201804160723357_appRecord.Designer.cs">
+      <DependentUpon>201804160723357_appRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804160741168_appRecordEl.cs" />
+    <Compile Include="Migrations\201804160741168_appRecordEl.Designer.cs">
+      <DependentUpon>201804160741168_appRecordEl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\AccessLevelAttribute.cs" />
     <Compile Include="Permision\Enums\AccessLevels.cs" />
@@ -223,6 +231,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804131122447_appInit.resx">
       <DependentUpon>201804131122447_appInit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804160723357_appRecord.resx">
+      <DependentUpon>201804160723357_appRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804160741168_appRecordEl.resx">
+      <DependentUpon>201804160741168_appRecordEl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

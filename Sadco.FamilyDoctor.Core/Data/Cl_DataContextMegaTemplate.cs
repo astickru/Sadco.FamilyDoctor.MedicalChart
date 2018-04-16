@@ -64,6 +64,8 @@ namespace Sadco.FamilyDoctor.Core.Data
 			modelBuilder.Entity<Cl_AgeNorm>().Property(n => n.p_MaleMax).HasPrecision(10, 6);
 			modelBuilder.Entity<Cl_AgeNorm>().Property(n => n.p_FemaleMin).HasPrecision(10, 6);
 			modelBuilder.Entity<Cl_AgeNorm>().Property(n => n.p_FemaleMax).HasPrecision(10, 6);
-		}
+
+            modelBuilder.Entity<Cl_RecordValue>().HasRequired(rv => rv.p_Record).WithMany(r => r.p_Values).WillCascadeOnDelete(false);
+        }
 	}
 }
