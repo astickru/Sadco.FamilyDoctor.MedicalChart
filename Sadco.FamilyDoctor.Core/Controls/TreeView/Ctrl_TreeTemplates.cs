@@ -20,6 +20,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
         }
 
         private System.ComponentModel.IContainer components;
+        private ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem ctrl_TemplateNew;
         private System.Windows.Forms.ToolStripMenuItem ctrl_BlockNew;
         private System.Windows.Forms.ToolStripMenuItem ctrl_TableNew;
@@ -33,6 +34,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ctrl_TemplateNew = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_BlockNew = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_TableNew = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,17 +81,23 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.ctrl_TemplateDelete.Text = "Удалить шаблон";
             this.ctrl_TemplateDelete.Click += new System.EventHandler(this.ctrl_TemplateDelete_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(166, 6);
+            // 
             // ctrl_Tree
             // 
             this.ImageList.Images.Add("TEMPLATE_16", Properties.Resources.TEMPLATE_16);
             this.ImageList.Images.Add("BLOCK_16", Properties.Resources.BLOCK_16);
             this.ImageList.Images.Add("TABLE_16", Properties.Resources.TABLE_16);
-            this.ctrl_Tree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ctrl_TemplateNew,
-            this.ctrl_BlockNew,
-            this.ctrl_TableNew,
-            this.ctrl_TemplateEdit,
-            this.ctrl_TemplateDelete });
+
+            this.ctrl_Tree.Items.Insert(0, this.ctrl_TemplateNew);
+            this.ctrl_Tree.Items.Insert(1, this.ctrl_BlockNew);
+            this.ctrl_Tree.Items.Insert(2, this.ctrl_TableNew);
+            this.ctrl_Tree.Items.Insert(3, this.ctrl_TemplateEdit);
+            this.ctrl_Tree.Items.Insert(4, this.ctrl_TemplateDelete);
+            this.ctrl_Tree.Items.Insert(5, this.toolStripSeparator1);
 
             this.ResumeLayout(false);
         }

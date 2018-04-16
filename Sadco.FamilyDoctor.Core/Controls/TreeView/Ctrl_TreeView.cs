@@ -19,7 +19,6 @@ namespace Sadco.FamilyDoctor.Core.Controls
         private System.ComponentModel.IContainer components;
         private ToolStripMenuItem ctrl_GroupNew;
         private ToolStripMenuItem ctrl_GroupEdit;
-        private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem ctrl_GroupDelete;
         public Ctrl_TreeNodeGroup p_SelectedGroup {
             get { return SelectedNode as Ctrl_TreeNodeGroup; }
@@ -39,7 +38,6 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.ctrl_GroupNew = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_GroupEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_GroupDelete = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ctrl_Tree.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,8 +46,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.ctrl_Tree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
                 this.ctrl_GroupNew,
                 this.ctrl_GroupEdit,
-                this.ctrl_GroupDelete,
-                this.toolStripSeparator1});
+                this.ctrl_GroupDelete});
             this.ctrl_Tree.Name = "ctrl_Tree";
             this.ctrl_Tree.Size = new System.Drawing.Size(170, 76);
             // 
@@ -76,11 +73,6 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.ctrl_GroupDelete.Tag = "GroupDelete";
             this.ctrl_GroupDelete.Text = "Удалить группу";
             this.ctrl_GroupDelete.Click += Ctrl_GroupDelete_Click;
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(166, 6);
             // 
             // Ctrl_TreeView
             // 

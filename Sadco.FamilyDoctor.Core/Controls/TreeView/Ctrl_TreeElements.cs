@@ -17,6 +17,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
         }
 
         private System.ComponentModel.IContainer components;
+        private ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem ctrl_ElementNew;
         private System.Windows.Forms.ToolStripMenuItem ctrl_ImageNew;
         private System.Windows.Forms.ToolStripMenuItem ctrl_ElementDelete;
@@ -29,6 +30,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ctrl_ElementNew = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_ImageNew = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_ElementDelete = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,6 +59,11 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.ctrl_ElementDelete.Text = "Удалить элемент";
             this.ctrl_ElementDelete.Click += Ctrl_ElementDelete_Click;
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(166, 6);
+            // 
             // ctrl_Tree
             // 
             this.ImageList.Images.Add("TEMPLATE_16", Properties.Resources.TEMPLATE_16);
@@ -71,10 +78,12 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.ImageList.Images.Add("BIGBOX_16_DEL", Properties.Resources.BIGBOX_16_DEL);
             this.ImageList.Images.Add("IMAGE_16_DEL", Properties.Resources.IMAGE_16_DEL);
 
-            this.ctrl_Tree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                                this.ctrl_ElementNew,
-                                this.ctrl_ImageNew,
-                                this.ctrl_ElementDelete });
+
+            this.ctrl_Tree.Items.Insert(0, this.ctrl_ElementNew);
+            this.ctrl_Tree.Items.Insert(1, this.ctrl_ImageNew);
+            this.ctrl_Tree.Items.Insert(2, this.ctrl_ElementDelete);
+            this.ctrl_Tree.Items.Insert(3, this.toolStripSeparator1);
+
 
             this.ResumeLayout(false);
         }
