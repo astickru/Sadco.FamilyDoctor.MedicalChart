@@ -1,4 +1,5 @@
-﻿using Sadco.FamilyDoctor.Core;
+﻿using FD.dat.mon.stb.lib;
+using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.EntityLogs;
 using System;
@@ -71,7 +72,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    MessageBox.Show("При сохранении изменений произошла ошибка");
+                    MonitoringStub.Error("Error_Editor", "При сохранении изменений произошла ошибка", ex, null, null);
                     return null;
                 }
             }
@@ -106,9 +107,9 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 result = Image.FromFile(openFile.FileName);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Выбранный файл не является изображением", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MonitoringStub.Problem("Problem_Editor", "Выбранный файл не является изображением", ex, null, null);
                 return;
             }
             ctrlImage.Image = result;

@@ -1,4 +1,5 @@
-﻿using Sadco.FamilyDoctor.Core;
+﻿using FD.dat.mon.stb.lib;
+using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -139,8 +140,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 			Cl_Element el = (Cl_Element)ctrlCBAddElement.SelectedItem;
 			if (string.IsNullOrWhiteSpace(el.p_Tag))
 			{
-				MessageBox.Show("Невозможно добавить элемент \"" + el.p_Name + "\" в редактор формул, т.к. у него не заполнено поле \"Тег элемента\"", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Information);
-				return;
+                MonitoringStub.Problem("Problem_Formula", "Невозможно добавить элемент \"" + el.p_Name + "\" в редактор формул, т.к. у него не заполнено поле \"Тег элемента\"", new Exception("EX PROBLEM"), "el.p_Tag = null", null);
+                return;
 			}
 			f_AppendBlock(new Cl_Block(el));
 			f_UpdateControls(true);
@@ -350,8 +351,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
 			if (!f_Valid())
 			{
-				MessageBox.Show("Формула не корректная!");
-				e.Cancel = true;
+				MonitoringStub.Message("Формула не корректная!");
+                e.Cancel = true;
 			}
 		}
 

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Data.Entity;
 using static Sadco.FamilyDoctor.Core.Entities.Cl_Element;
+using FD.dat.mon.stb.lib;
 
 namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
@@ -63,17 +64,17 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             if (!f_ValidNumber(ctrl_NormValues.Lines))
             {
-                MessageBox.Show("Нормальные значения не являются числовыми или не соответствуют точности числа");
+                MonitoringStub.Message("Нормальные значения не являются числовыми или не соответствуют точности числа");
                 return null;
             }
             if (!f_ValidNumber(ctrl_PatValues.Lines))
             {
-                MessageBox.Show("Патологические значения не являются числовыми или не соответствуют точности числа");
+                MonitoringStub.Message("Патологические значения не являются числовыми или не соответствуют точности числа");
                 return null;
             }
             if (!f_ValidNumber(new string[] { ctrl_Default.Text }))
             {
-                MessageBox.Show("Значение по-умолчанию не является числовым или не соответствует точности числа");
+                MonitoringStub.Message("Значение по-умолчанию не является числовым или не соответствует точности числа");
                 return null;
             }
             var templates = f_GetConflictTemplates(p_EditingElement);
@@ -130,13 +131,13 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                 el.p_PartNorm = dVal;
                             else
                             {
-                                MessageBox.Show("Значение поля \"Норма\" не соответствует точности!");
+                                MonitoringStub.Message("Значение поля \"Норма\" не соответствует точности!");
                                 return null;
                             }
                         }
                         else
                         {
-                            MessageBox.Show("Значение поля \"Норма\" не корректное!");
+                            MonitoringStub.Message("Значение поля \"Норма\" не корректное!");
                             return null;
                         }
                     }
@@ -180,7 +181,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                 byte bVal = 0;
                                 if (row["p_AgeFrom"] == null)
                                 {
-                                    MessageBox.Show("Поле \"Возраст от\" пустое!");
+                                    MonitoringStub.Message("Поле \"Возраст от\" пустое!");
                                     return null;
                                 }
                                 else
@@ -189,13 +190,13 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                         norm.p_AgeFrom = bVal;
                                     else
                                     {
-                                        MessageBox.Show("Значение поля \"Возраст от\" не корректное!");
+                                        MonitoringStub.Message("Значение поля \"Возраст от\" не корректное!");
                                         return null;
                                     }
                                 }
                                 if (row["p_AgeTo"] == null)
                                 {
-                                    MessageBox.Show("Поле \"Возраст до\" пустое!");
+                                    MonitoringStub.Message("Поле \"Возраст до\" пустое!");
                                     return null;
                                 }
                                 else
@@ -204,18 +205,18 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                         norm.p_AgeTo = bVal;
                                     else
                                     {
-                                        MessageBox.Show("Значение поля \"Возраст до\" не корректное!");
+                                        MonitoringStub.Message("Значение поля \"Возраст до\" не корректное!");
                                         return null;
                                     }
                                 }
                                 if (norm.p_AgeFrom > norm.p_AgeTo)
                                 {
-                                    MessageBox.Show("Значение поля \"Возраст от\" больше значения поля \"Возраст до\"!");
+                                    MonitoringStub.Message("Значение поля \"Возраст от\" больше значения поля \"Возраст до\"!");
                                     return null;
                                 }
                                 if (row["p_MaleMin"] == null)
                                 {
-                                    MessageBox.Show("Поле \"Муж мин\" пустое!");
+                                    MonitoringStub.Message("Поле \"Муж мин\" пустое!");
                                     return null;
                                 }
                                 else
@@ -226,19 +227,19 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                             norm.p_MaleMin = dVal;
                                         else
                                         {
-                                            MessageBox.Show("Значение поля \"Муж мин\" не соответствует точности!");
+                                            MonitoringStub.Message("Значение поля \"Муж мин\" не соответствует точности!");
                                             return null;
                                         }
                                     }
                                     else
                                     {
-                                        MessageBox.Show("Значение поля \"Муж мин\" не корректное!");
+                                        MonitoringStub.Message("Значение поля \"Муж мин\" не корректное!");
                                         return null;
                                     }
                                 }
                                 if (row["p_MaleMax"] == null)
                                 {
-                                    MessageBox.Show("Поле \"Муж макс\" пустое!");
+                                    MonitoringStub.Message("Поле \"Муж макс\" пустое!");
                                     return null;
                                 }
                                 else
@@ -249,19 +250,19 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                             norm.p_MaleMax = dVal;
                                         else
                                         {
-                                            MessageBox.Show("Значение поля \"Муж макс\" не соответствует точности!");
+                                            MonitoringStub.Message("Значение поля \"Муж макс\" не соответствует точности!");
                                             return null;
                                         }
                                     }
                                     else
                                     {
-                                        MessageBox.Show("Значение поля \"Муж макс\" не корректное!");
+                                        MonitoringStub.Message("Значение поля \"Муж макс\" не корректное!");
                                         return null;
                                     }
                                 }
                                 if (row["p_FemaleMin"] == null)
                                 {
-                                    MessageBox.Show("Поле \"Жен мин\" пустое!");
+                                    MonitoringStub.Message("Поле \"Жен мин\" пустое!");
                                     return null;
                                 }
                                 else
@@ -272,19 +273,19 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                             norm.p_FemaleMin = dVal;
                                         else
                                         {
-                                            MessageBox.Show("Значение поля \"Жен мин\" не соответствует точности!");
+                                            MonitoringStub.Message("Значение поля \"Жен мин\" не соответствует точности!");
                                             return null;
                                         }
                                     }
                                     else
                                     {
-                                        MessageBox.Show("Значение поля \"Жен мин\" не корректное!");
+                                        MonitoringStub.Message("Значение поля \"Жен мин\" не корректное!");
                                         return null;
                                     }
                                 }
                                 if (row["p_FemaleMax"] == null)
                                 {
-                                    MessageBox.Show("Поле \"Жен макс\" пустое!");
+                                    MonitoringStub.Message("Поле \"Жен макс\" пустое!");
                                     return null;
                                 }
                                 else
@@ -295,13 +296,13 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                             norm.p_FemaleMax = dVal;
                                         else
                                         {
-                                            MessageBox.Show("Значение поля \"Жен макс\" не соответствует точности!");
+                                            MonitoringStub.Message("Значение поля \"Жен макс\" не соответствует точности!");
                                             return null;
                                         }
                                     }
                                     else
                                     {
-                                        MessageBox.Show("Значение поля \"Жен макс\" не корректное!");
+                                        MonitoringStub.Message("Значение поля \"Жен макс\" не корректное!");
                                         return null;
                                     }
                                 }
@@ -326,7 +327,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    MessageBox.Show("При сохранении изменений произошла ошибка");
+                    MonitoringStub.Error("Error_Editor", "При сохранении изменений произошла ошибка", ex, null, null);
                     return null;
                 }
             }

@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Data.Entity;
 using System.Windows.Forms;
+using FD.dat.mon.stb.lib;
 
 namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
@@ -92,7 +93,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    MessageBox.Show("При сохранении изменений произошла ошибка");
+                    MonitoringStub.Error("Error_Editor", "При сохранении изменений произошла ошибка", ex, null, null);
                 }
             }
         }
