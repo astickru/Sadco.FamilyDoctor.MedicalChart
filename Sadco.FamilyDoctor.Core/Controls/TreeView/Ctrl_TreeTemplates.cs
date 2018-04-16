@@ -1,4 +1,5 @@
-﻿using Sadco.FamilyDoctor.Core.Entities;
+﻿using FD.dat.mon.stb.lib;
+using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.EntityLogs;
 using System;
 using System.Collections.Generic;
@@ -159,14 +160,14 @@ namespace Sadco.FamilyDoctor.Core.Controls
                             }
                             else
                             {
-                                throw new Exception("Не найдена элемент для шаблонов");
+                                MonitoringStub.Error("Error_Tree", "Не найден шаблон", new Exception("EX ERROR"), "draggedNodeTemplate.p_Template.p_TemplateID = " + draggedNodeTemplate.p_Template.p_TemplateID, null);
                             }
                         }
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        MessageBox.Show("При перемещении шаблона произошла ошибка");
+                        MonitoringStub.Error("Error_Tree", "При перемещении шаблона произошла ошибка", ex, null, null);
                         return;
                     }
                 }
@@ -215,7 +216,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    MessageBox.Show("При создании нового шаблона произошла ошибка");
+                    MonitoringStub.Error("Error_Tree", "При создании нового шаблона произошла ошибка", ex, null, null);
                     return;
                 }
             }
@@ -276,13 +277,13 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     }
                     else
                     {
-                        throw new Exception("Не найдена элемент для шаблонов");
+                        MonitoringStub.Error("Error_Tree", "Не найдена шаблон", new Exception("EX ERROR"), "p_SelectedTemplate.p_Template.p_TemplateID = " + p_SelectedTemplate.p_Template.p_TemplateID, null);
                     }
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    MessageBox.Show("При удалении шаблона произошла ошибка");
+                    MonitoringStub.Error("Error_Tree", "При удалении шаблона произошла ошибка", ex, null, null);
                     return;
                 }
             }

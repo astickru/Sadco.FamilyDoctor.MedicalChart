@@ -1,4 +1,5 @@
-﻿using Sadco.FamilyDoctor.Core.Entities;
+﻿using FD.dat.mon.stb.lib;
+using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.EntityLogs;
 using Sadco.FamilyDoctor.Core.Permision;
 using System;
@@ -139,14 +140,14 @@ namespace Sadco.FamilyDoctor.Core.Controls
                             }
                             else
                             {
-                                throw new Exception("Не найдена элемент для шаблонов");
+                                MonitoringStub.Error("Error_Tree", "Не найдена элемент для шаблонов", new Exception("EX ERROR"), "elsDraggeds = null", null);
                             }
                         }
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        MessageBox.Show("При перемещении элемента произошла ошибка");
+                        MonitoringStub.Error("Error_Tree", "При перемещении элемента произошла ошибка", ex, null, null);
                         return;
                     }
                 }
@@ -206,7 +207,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    MessageBox.Show("При создании нового элемента произошла ошибка");
+                    MonitoringStub.Error("Error_Tree", "При создании нового элемента произошла ошибка", ex, null, null);
                     return;
                 }
             }
@@ -253,7 +254,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    MessageBox.Show("При создании нового элемента произошла ошибка");
+                    MonitoringStub.Error("Error_Tree", "При создании нового элемента произошла ошибка", ex, null, null);
                     return;
                 }
             }
@@ -293,13 +294,13 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     }
                     else
                     {
-                        throw new Exception("Не найдена элемент");
+                        MonitoringStub.Error("Error_Tree", "Не найдена элемент", new Exception("EX ERROR"), "p_SelectedElement.p_Element.p_ElementID = " + p_SelectedElement.p_Element.p_ElementID, null);
                     }
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    MessageBox.Show("При удалении элемента произошла ошибка");
+                    MonitoringStub.Error("Error_Tree", "При удалении элемента произошла ошибка", ex, null, null);
                     return;
                 }
             }
