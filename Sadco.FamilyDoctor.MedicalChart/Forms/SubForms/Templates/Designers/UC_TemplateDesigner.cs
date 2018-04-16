@@ -96,5 +96,12 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 }
             }
         }
+
+        private void ctrl_B_History_Click(object sender, EventArgs e)
+        {
+            Dlg_HistoryViewer viewer = new Dlg_HistoryViewer();
+            viewer.LoadHistory(p_EditingTemplate.p_TemplateID);
+            viewer.ShowDialog(this);
+        }
     }
 }

@@ -32,6 +32,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.ctrl_Version = new System.Windows.Forms.Label();
+            this.ctrl_B_History = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -39,6 +40,7 @@
             // panel2
             // 
             this.panel2.Controls.Add(this.ctrl_B_Save);
+            this.panel2.Controls.Add(this.ctrl_B_History);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel2.Location = new System.Drawing.Point(0, 501);
             this.panel2.Margin = new System.Windows.Forms.Padding(0);
@@ -109,6 +111,18 @@
             this.ctrl_Version.Text = "0";
             this.ctrl_Version.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // ctrl_B_History
+            // 
+            this.ctrl_B_History.Dock = System.Windows.Forms.DockStyle.Left;
+            this.ctrl_B_History.Location = new System.Drawing.Point(2, 2);
+            this.ctrl_B_History.Margin = new System.Windows.Forms.Padding(0);
+            this.ctrl_B_History.Name = "ctrl_B_History";
+            this.ctrl_B_History.Size = new System.Drawing.Size(99, 26);
+            this.ctrl_B_History.TabIndex = 1;
+            this.ctrl_B_History.Text = "история";
+            this.ctrl_B_History.UseVisualStyleBackColor = true;
+            this.ctrl_B_History.Click += new System.EventHandler(this.ctrl_B_History_Click);
+            // 
             // UC_TemplateDesigner
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 13F);
@@ -133,5 +147,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label ctrl_Version;
+        private System.Windows.Forms.Button ctrl_B_History;
     }
 }
