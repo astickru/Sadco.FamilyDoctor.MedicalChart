@@ -1,10 +1,10 @@
 ﻿using Sadco.FamilyDoctor.Core.Entities;
-using Sadco.FamilyDoctor.Core.EntityLogs;
 using Sadco.FamilyDoctor.Core.Permision;
 using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using FD.dat.mon.stb.lib;
 
 namespace Sadco.FamilyDoctor.Core.Controls
 {
@@ -119,10 +119,6 @@ namespace Sadco.FamilyDoctor.Core.Controls
         /// <summary>Тип группы</summary>
         protected virtual Cl_Group.E_Type p_Type { get; }
 
-        private void Ctrl_TreeView_e_ParentChanged(object sender, TreeViewEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
         private void Ctrl_CMTree_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (SelectedNode == null)
@@ -333,7 +329,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                         }
                         else
                         {
-                            throw new Exception("Не найдена группа шаблонов");
+                            MonitoringStub.Error("Error_Tree", "Не найдена группа шаблонов", new Exception("EX ERROR"), "groupDragged = null", null);
                         }
                     }
                 }

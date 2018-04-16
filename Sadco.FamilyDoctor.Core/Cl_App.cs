@@ -1,4 +1,5 @@
 ﻿
+using FD.dat.mon.stb.lib;
 using Sadco.FamilyDoctor.Core.Data;
 using System;
 using System.Configuration;
@@ -37,8 +38,8 @@ namespace Sadco.FamilyDoctor.Core
 				try {
 					config.Save(ConfigurationSaveMode.Full);
 				} catch (Exception ex) {
-					throw ex;
-				}
+                    MonitoringStub.Error("Error_Tree", "Не удалось подключиться к базе данных", ex, null, null);
+                }
 			}
 
 			return config;

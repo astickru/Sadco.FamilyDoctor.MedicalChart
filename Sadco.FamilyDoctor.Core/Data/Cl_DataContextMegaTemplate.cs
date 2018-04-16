@@ -1,4 +1,5 @@
-﻿using Sadco.FamilyDoctor.Core.Entities;
+﻿using FD.dat.mon.stb.lib;
+using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.EntityLogs;
 using System;
 using System.Collections.Generic;
@@ -50,7 +51,7 @@ namespace Sadco.FamilyDoctor.Core.Data
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    throw ex;
+                    MonitoringStub.Error("Error_Tree", "Не удалось сохранить изменения в базе данных", ex, null, null);
                 }
             }
             
