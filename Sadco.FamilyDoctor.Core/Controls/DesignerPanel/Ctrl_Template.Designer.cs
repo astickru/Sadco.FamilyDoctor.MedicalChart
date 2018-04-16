@@ -28,13 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.SuspendLayout();
             // 
-            // Ctrl_Element
+            // Ctrl_Template
             // 
             this.AutoSize = true;
+            this.Name = "Ctrl_Template";
+            this.Size = new System.Drawing.Size(354, 260);
             this.ResumeLayout(false);
+
         }
 
         #endregion

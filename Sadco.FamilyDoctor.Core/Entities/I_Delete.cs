@@ -8,9 +8,9 @@ namespace Sadco.FamilyDoctor.Core.Entities
     /// <summary>
     /// Интерфейс сущности архивирования
     /// </summary>
-    public interface I_Archive
+    public interface I_Delete
     {
-        /// <summary>Флаг нахождения сущности в архиве</summary>
-        bool p_IsArhive { get; set; }
+        /// <summary>Флаг нахождения сущности в удалении</summary>
+        bool p_IsDelete { get; set; }
     }
 }

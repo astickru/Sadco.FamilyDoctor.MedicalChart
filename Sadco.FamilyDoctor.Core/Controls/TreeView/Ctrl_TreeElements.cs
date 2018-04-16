@@ -88,7 +88,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 ctrl_ElementNew.Visible = false;
                 ctrl_ImageNew.Visible = false;
                 ctrl_ElementDelete.Visible = true;
-                ctrl_ElementDelete.Enabled = !p_SelectedElement.p_Element.p_IsArhive;
+                ctrl_ElementDelete.Enabled = !p_SelectedElement.p_Element.p_IsDelete;
             }
             else
             {
@@ -99,9 +99,9 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
             if (p_SelectedGroup != null)
             {
-                ctrl_ElementNew.Enabled = !p_SelectedGroup.p_Group.p_IsArhive;
-                ctrl_ImageNew.Enabled = !p_SelectedGroup.p_Group.p_IsArhive;
-                ctrl_ElementDelete.Enabled = !p_SelectedGroup.p_Group.p_IsArhive;
+                ctrl_ElementNew.Enabled = !p_SelectedGroup.p_Group.p_IsDelete;
+                ctrl_ImageNew.Enabled = !p_SelectedGroup.p_Group.p_IsDelete;
+                ctrl_ElementDelete.Enabled = !p_SelectedGroup.p_Group.p_IsDelete;
             }
         }
 
@@ -276,7 +276,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                         bool isChange = false;
                         foreach (Cl_Element el in els)
                         {
-                            el.p_IsArhive = true;
+                            el.p_IsDelete = true;
                             isChange = true;
                         }
                         if (isChange)

@@ -62,7 +62,7 @@ namespace Sadco.FamilyDoctor.Core.Migrations
                         F_VISIBILITYFORMULA = c.String(maxLength: 1000, unicode: false),
                         F_COMMENT = c.String(maxLength: 100, unicode: false),
                         F_GROUP_ID = c.Int(nullable: false),
-                        F_ISARHIVE = c.Boolean(nullable: false),
+                        F_ISDEL = c.Boolean(nullable: false),
                         F_IMAGE = c.Binary(),
                     })
                 .PrimaryKey(t => t.F_ID)
@@ -90,7 +90,7 @@ namespace Sadco.FamilyDoctor.Core.Migrations
                         F_TYPE = c.Byte(nullable: false),
                         F_NAME = c.String(maxLength: 100, unicode: false),
                         F_PARENT_ID = c.Int(),
-                        F_ISARHIVE = c.Boolean(nullable: false),
+                        F_ISDEL = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.F_ID)
                 .ForeignKey("dbo.T_GROUPS", t => t.F_PARENT_ID)
@@ -122,7 +122,7 @@ namespace Sadco.FamilyDoctor.Core.Migrations
                         F_DESC = c.String(maxLength: 1000, unicode: false),
                         F_VERSION = c.Int(nullable: false),
                         F_ISCONFLICT = c.Boolean(nullable: false),
-                        F_ISARHIVE = c.Boolean(nullable: false),
+                        F_ISDEL = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.F_ID)
                 .ForeignKey("dbo.T_GROUPS", t => t.F_GROUP_ID, cascadeDelete: true)

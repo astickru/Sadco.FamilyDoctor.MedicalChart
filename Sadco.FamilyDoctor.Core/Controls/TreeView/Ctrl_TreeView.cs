@@ -147,9 +147,9 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
             if (p_SelectedGroup != null)
             {
-                ctrl_GroupNew.Enabled = !p_SelectedGroup.p_Group.p_IsArhive;
-                ctrl_GroupEdit.Enabled = !p_SelectedGroup.p_Group.p_IsArhive;
-                ctrl_GroupDelete.Enabled = !p_SelectedGroup.p_Group.p_IsArhive;
+                ctrl_GroupNew.Enabled = !p_SelectedGroup.p_Group.p_IsDelete;
+                ctrl_GroupEdit.Enabled = !p_SelectedGroup.p_Group.p_IsDelete;
+                ctrl_GroupDelete.Enabled = !p_SelectedGroup.p_Group.p_IsDelete;
             }
 
             f_Tree_Opening(sender, e);
@@ -223,7 +223,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             if (p_SelectedGroup == null && p_SelectedGroup.p_Group == null) return;
             Cl_Group parentGroup = p_SelectedGroup.p_Group.p_Parent;
             if (parentGroup == null) return;
-            p_SelectedGroup.p_Group.p_IsArhive = true;
+            p_SelectedGroup.p_Group.p_IsDelete = true;
             Cl_App.m_DataContext.SaveChanges();
 
             if (!UserSession.IsShowDeletedMegTemplates)

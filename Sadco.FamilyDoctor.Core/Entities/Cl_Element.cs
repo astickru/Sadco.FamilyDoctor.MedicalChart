@@ -14,7 +14,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
     /// </summary>
     [ELogClass(EntityTypes.Elements)]
     [Table("T_ELEMENTS")]
-    public class Cl_Element : I_Version, I_Archive, I_ELog
+    public class Cl_Element : I_Version, I_Delete, I_ELog
     {
         /// <summary>Типы элементов шаблона</summary>
         public enum E_ElementsTypes : byte
@@ -139,7 +139,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [NotMapped]
         public string p_IconName {
             get {
-                return m_IconImage + (p_IsArhive ? "_DEL" : "");
+                return m_IconImage + (p_IsDelete ? "_DEL" : "");
             }
             set {
                 m_IconImage = value;
@@ -330,10 +330,10 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [ELogProperty("Изменилась группа", IsCustomDescription = true)]
         public Cl_Group p_ParentGroup { get; set; }
 
-        /// <summary>Флаг нахождения элемента в архиве</summary>
-        [Column("F_ISARHIVE")]
-        [ELogProperty("Элемент перенесён в архив", IsCustomDescription = true, IgnoreValue = true)]
-        public bool p_IsArhive { get; set; }
+        /// <summary>Флаг нахождения элемента в удалении</summary>
+        [Column("F_ISDEL")]
+        [ELogProperty("Элемент удален", IsCustomDescription = true, IgnoreValue = true)]
+        public bool p_IsDelete { get; set; }
 
         /// <summary>Данные рисунка</summary>
         [Column("F_IMAGE")]
@@ -379,9 +379,21 @@ namespace Sadco.FamilyDoctor.Core.Entities
             }
         }
 
-        /// <summary>
-        /// Возвращает уникальный ID элемента
-        /// </summary>
+        /// <summary>Возвращает уникальный ID элемента</summary>
         int I_ELog.p_GetLogEntityID => this.p_ElementID;
+
+        /// <summary>Является ли значение элемента текстом</summary>
+        public bool p_IsText {
+            get {
+                return p_IsChangeNotNormValues || ((p_NormValues == null || p_NormValues.Length == 0) && (p_NormValues == null || p_NormValues.Length == 0));
+            }
+        }
+
+        /// <summary>Является ли значение элемента из справочника</summary>
+        public bool p_IsListBox {
+            get {
+                return !p_IsText;
+            }
+        }
     }
 }

@@ -55,7 +55,7 @@
             this.ctrl_B_Save.Name = "ctrl_B_Save";
             this.ctrl_B_Save.Size = new System.Drawing.Size(99, 26);
             this.ctrl_B_Save.TabIndex = 0;
-            this.ctrl_B_Save.Text = "Сохранить";
+            this.ctrl_B_Save.Text = "cохранить";
             this.ctrl_B_Save.UseVisualStyleBackColor = true;
             this.ctrl_B_Save.Click += new System.EventHandler(this.ctrl_B_Save_Click);
             // 
@@ -64,6 +64,9 @@
             this.ctrl_EditorPanel.AllowDrop = true;
             this.ctrl_EditorPanel.Cursor = System.Windows.Forms.Cursors.Default;
             this.ctrl_EditorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ctrl_EditorPanel.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.ctrl_EditorPanel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.ctrl_EditorPanel.ItemHeight = 24;
             this.ctrl_EditorPanel.Location = new System.Drawing.Point(0, 23);
             this.ctrl_EditorPanel.Name = "ctrl_EditorPanel";
             this.ctrl_EditorPanel.p_ReadOnly = false;

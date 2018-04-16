@@ -35,8 +35,8 @@
             this.ctrl_MITemplateDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_TreeTemplates = new Sadco.FamilyDoctor.Core.Controls.Ctrl_TreeTemplates();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.ctrl_CMTemplate.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -102,7 +102,7 @@
             this.ctrl_TreeTemplates.ImageKey = "FOLDER_16";
             this.ctrl_TreeTemplates.Location = new System.Drawing.Point(0, 0);
             this.ctrl_TreeTemplates.Name = "ctrl_TreeTemplates";
-            this.ctrl_TreeTemplates.p_ReadOnly = false;
+            this.ctrl_TreeTemplates.p_ReadOnly = true;
             this.ctrl_TreeTemplates.SelectedImageKey = "FOLDER_16";
             this.ctrl_TreeTemplates.Size = new System.Drawing.Size(550, 507);
             this.ctrl_TreeTemplates.TabIndex = 1;
@@ -118,17 +118,6 @@
             this.panel1.Size = new System.Drawing.Size(550, 25);
             this.panel1.TabIndex = 2;
             // 
-            // button2
-            // 
-            this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.button2.Location = new System.Drawing.Point(475, 0);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 25);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "отменить";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -140,6 +129,17 @@
             this.button1.Text = "выбрать";
             this.button1.UseVisualStyleBackColor = true;
             // 
+            // button2
+            // 
+            this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.button2.Location = new System.Drawing.Point(475, 0);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 25);
+            this.button2.TabIndex = 1;
+            this.button2.Text = "отменить";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
             // Dlg_SelectTemplate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -148,6 +148,7 @@
             this.ClientSize = new System.Drawing.Size(550, 507);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.ctrl_TreeTemplates);
+            this.MaximumSize = new System.Drawing.Size(1600, 1000);
             this.Name = "Dlg_SelectTemplate";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.ctrl_CMTemplate.ResumeLayout(false);

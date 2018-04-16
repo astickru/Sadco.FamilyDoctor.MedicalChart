@@ -114,7 +114,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
 			ctrlCBAddElement.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
 			ctrlCBAddElement.AutoCompleteSource = AutoCompleteSource.CustomSource;
-			m_Elements = Cl_App.m_DataContext.p_Elements.Where(e => !e.p_IsArhive && e.p_ElementType != Cl_Element.E_ElementsTypes.Image).GroupBy(e => e.p_ElementID)
+			m_Elements = Cl_App.m_DataContext.p_Elements.Where(e => !e.p_IsDelete && e.p_ElementType != Cl_Element.E_ElementsTypes.Image).GroupBy(e => e.p_ElementID)
 								.Select(grp => grp
 											.OrderByDescending(v => v.p_Version).FirstOrDefault()).Where(e => e.p_IsNumber).ToArray();
 			ctrlCBAddElement.AutoCompleteCustomSource.AddRange(m_Elements.Select(e => e.p_Name).ToArray());

@@ -5,9 +5,7 @@
 	/// </summary>
 	public interface I_ELog : I_Version
     {
-        /// <summary>
-        /// Возвращает уникальный ID элемента
-        /// </summary>
+        /// <summary>Возвращает уникальный ID сущности</summary>
         int p_GetLogEntityID { get; }
     }
 }

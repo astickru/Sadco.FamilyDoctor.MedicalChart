@@ -8,15 +8,15 @@ using System.Text;
 using System.Windows.Forms;
 using Sadco.FamilyDoctor.Core.Entities;
 using System.Windows.Forms.VisualStyles;
+using System.Data.Entity;
 
 namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
 {
-    public partial class Ctrl_Template : GroupBox, I_Element
+    public partial class Ctrl_Template : UserControl, I_Element
     {
         public Ctrl_Template()
         {
             InitializeComponent();
-            BackColor = Color.Gray;
         }
 
         private Color m_BorderColor = Color.Black;
@@ -25,7 +25,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             get { return m_BorderColor; }
             set { m_BorderColor = value; this.Invalidate(); }
         }
-        
+
         public Cl_Template m_Template = null;
         public Cl_Template p_Template {
             get {
@@ -79,30 +79,51 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
         }
 
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            f_Draw(e.Graphics, e.ClipRectangle);
-            base.OnPaint(e);
+        private int m_PaddingX = 5;
+        [Category("p_Padding")]
+        [DefaultValue(false)]
+        public int p_PaddingX {
+            get { return m_PaddingX; }
+            set {
+                if (this.m_PaddingX != value)
+                {
+                    m_PaddingX = value;
+                }
+            }
         }
 
+        private int m_PaddingY = 5;
+        [Category("p_Padding")]
+        [DefaultValue(false)]
+        public int p_PaddingY {
+            get { return m_PaddingY; }
+            set {
+                if (this.m_PaddingY != value)
+                {
+                    m_PaddingY = value;
+                }
+            }
+        }
+
+        /// <summary>Получение высоты шаблона</summary>
         public int f_GetHeight()
         {
             return f_GetHeight(p_Template);
         }
 
-        /// <summary>Прорисовка контрола</summary>
+        /// <summary>Прорисовка контрола для дизайнера</summary>
         public void f_Draw(Graphics a_Graphics, Rectangle a_Bounds)
         {
             f_Draw(a_Graphics, a_Bounds, Font, ForeColor);
         }
 
-        /// <summary>Прорисовка контрола</summary>
+        /// <summary>Прорисовка контрола для дизайнера</summary>
         public void f_Draw(Graphics a_Graphics, Rectangle a_Bounds, Font a_Font, Color a_ForeColor)
         {
             GroupBoxState state = base.Enabled ? GroupBoxState.Normal : GroupBoxState.Disabled;
             TextFormatFlags flags = TextFormatFlags.PreserveGraphicsTranslateTransform |
-                TextFormatFlags.PreserveGraphicsClipping | TextFormatFlags.TextBoxControl |
-                TextFormatFlags.WordBreak;
+                    TextFormatFlags.PreserveGraphicsClipping | TextFormatFlags.TextBoxControl |
+                    TextFormatFlags.WordBreak;
             Color titleColor = a_ForeColor;
             if (!this.ShowKeyboardCues)
                 flags |= TextFormatFlags.HidePrefix;
@@ -113,6 +134,105 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             f_DrawUnthemedGroupBoxWithText(a_Graphics, a_Bounds, this.Text, a_Font, titleColor, flags, state);
 
             f_DrawTemplate(a_Graphics, a_Bounds, p_Template, a_Font, a_ForeColor);
+        }
+
+        private TableLayoutPanel f_GetControlTable()
+        {
+            var ctrlTable = new TableLayoutPanel();
+            ctrlTable.ColumnCount = 7;
+            ctrlTable.ColumnStyles.Add(new ColumnStyle());
+            ctrlTable.ColumnStyles.Add(new ColumnStyle());
+            ctrlTable.ColumnStyles.Add(new ColumnStyle());
+            ctrlTable.ColumnStyles.Add(new ColumnStyle());
+            ctrlTable.ColumnStyles.Add(new ColumnStyle());
+            ctrlTable.ColumnStyles.Add(new ColumnStyle());
+            ctrlTable.ColumnStyles.Add(new ColumnStyle());
+            ctrlTable.RowCount = 0;
+            return ctrlTable;
+        }
+
+        /// <summary>Инициализация пользовательских контролов</summary>
+        private void f_AddControlsTemplate(Cl_Template a_Template, ControlCollection a_Controls = null)
+        {
+            if (a_Template != null)
+            {
+                if (a_Template.p_TemplateElements == null)
+                {
+                    var cTe = Cl_App.m_DataContext.Entry(a_Template).Collection(g => g.p_TemplateElements).Query().Include(te => te.p_ChildElement).Include(te => te.p_ChildTemplate);
+                    cTe.Load();
+                }
+                if (a_Template.p_TemplateElements != null && a_Template.p_TemplateElements.Count > 0)
+                {
+                    int top = 0;
+                    ControlCollection controls = null;
+                    if (a_Controls != null)
+                    {
+                        controls = a_Controls;
+                        top = 20;
+                    }
+                    else
+                        controls = Controls;
+                    foreach (var te in a_Template.p_TemplateElements)
+                    {
+                        if (te.p_ChildElement != null)
+                        {
+                            var ctrlEl = new Ctrl_Element();
+                            ctrlEl.p_Element = te.p_ChildElement;
+                            ctrlEl.p_Element = te.p_ChildElement;
+                            if (controls is TableLayoutControlCollection && controls.Owner is TableLayoutPanel)
+                            {
+                                var table = (TableLayoutPanel)controls.Owner;
+                                table.RowCount++;
+                                table.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+                                ctrlEl.f_InitUIControls(table, table.RowCount - 1);
+                            }
+                            else
+                                ctrlEl.f_InitUIControls();
+
+                            ctrlEl.Top = top;
+                            ctrlEl.Left = m_PaddingX;
+                            top += ctrlEl.Height + m_PaddingY;
+                            controls.Add(ctrlEl);
+                        }
+                        else if (te.p_ChildTemplate != null)
+                        {
+                            if (te.p_ChildTemplate.p_Type == Cl_Template.E_TemplateType.Block)
+                            {
+                                var ctrlGroup = new GroupBox();
+                                ctrlGroup.Text = te.p_ChildTemplate.p_Name;
+                                ctrlGroup.AutoSize = true;
+                                ctrlGroup.Top = top;
+                                controls.Add(ctrlGroup);
+                                f_AddControlsTemplate(te.p_ChildTemplate, ctrlGroup.Controls);
+                                top += ctrlGroup.Height + m_PaddingY;
+                            }
+                            else if (te.p_ChildTemplate.p_Type == Cl_Template.E_TemplateType.Table)
+                            {
+                                var ctrlTable = f_GetControlTable();
+                                ctrlTable.AutoSize = true;
+                                top += 10;
+                                ctrlTable.Top = top;
+                                ctrlTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.InsetDouble;
+                                ctrlTable.RowCount++;
+                                ctrlTable.Controls.Add(new Label() { Text = "Показатель", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 0, 0);
+                                ctrlTable.Controls.Add(new Label() { Text = "Локация", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 1, 0);
+                                ctrlTable.Controls.Add(new Label() { Text = "Значение", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 2, 0);
+                                ctrlTable.Controls.Add(new Label() { Text = "Ед. изм.", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 3, 0);
+                                ctrlTable.Controls.Add(new Label() { Text = "Норм значения", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 4, 0);
+                                controls.Add(ctrlTable);
+                                f_AddControlsTemplate(te.p_ChildTemplate, ctrlTable.Controls);
+                                top += ctrlTable.Height + m_PaddingY;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>Инициализация пользовательских контролов</summary>
+        public void f_InitUIControls()
+        {
+            f_AddControlsTemplate(m_Template);
         }
 
         private int f_GetHeight(Cl_Template a_Template)
@@ -175,7 +295,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             {
                 if (a_Template.p_TemplateElements != null && a_Template.p_TemplateElements.Count > 0)
                 {
-                    int top = a_Bounds.Top + 25;
+                    int top = a_Bounds.Top + 20;
                     for (int i = 0; i < a_Template.p_TemplateElements.Count; i++)
                     {
                         var te = a_Template.p_TemplateElements.ElementAt(i);
@@ -185,14 +305,11 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         }
                         else if (te.p_ChildElement != null)
                         {
-                            Image imgIcon = (Image)Properties.Resources.ResourceManager.GetObject(te.p_ChildElement.p_IconName);
-                            Rectangle imageBounds = new Rectangle(a_Bounds.Left + 7, top, imgIcon.Width, imgIcon.Height);
-                            Rectangle textBounds = new Rectangle(imageBounds.Right + 5, imageBounds.Top, a_Bounds.Width - (imageBounds.Right + 10), imageBounds.Height);
-                            a_Graphics.DrawImage(imgIcon, imageBounds);
-                            TextRenderer.DrawText(a_Graphics, string.Format("{0} ({1})", te.p_ChildElement.p_Name, te.p_ChildElement.p_Version == 0 ? "Черновик" : "v" + te.p_ChildElement.p_Version), a_Font, textBounds, a_ForeColor, TextFormatFlags.ExpandTabs | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter);
+                            var ctrlEl = new Ctrl_Element() { p_Element = te.p_ChildElement };
+                            ctrlEl.f_Draw(a_Graphics, new Rectangle(a_Bounds.Left + 4, top, a_Bounds.Width, Ctrl_Element.m_ElementHeight), a_Font, a_ForeColor);
                             if (p_Template.p_Type == Cl_Template.E_TemplateType.Table && i < a_Template.p_TemplateElements.Count - 1)
                             {
-                                a_Graphics.DrawLine(new Pen(this.p_BorderColor, 1) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash }, a_Bounds.Left + 3, top - 5 + Ctrl_Element.m_ElementHeight, a_Bounds.Width - 5, top - 5 + Ctrl_Element.m_ElementHeight);
+                                a_Graphics.DrawLine(new Pen(this.p_BorderColor, 1) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash }, a_Bounds.Left + 3, top + Ctrl_Element.m_ElementHeight, a_Bounds.Width - 5, top + Ctrl_Element.m_ElementHeight);
                             }
                             top += Ctrl_Element.m_ElementHeight;
                         }

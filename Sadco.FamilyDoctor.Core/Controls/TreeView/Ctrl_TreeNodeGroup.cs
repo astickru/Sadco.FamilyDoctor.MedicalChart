@@ -26,8 +26,8 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 m_Group = value;
                 if (m_Group != null)
                 {
-                    this.ImageKey = "FOLDER_16" + (m_Group.p_IsArhive ? "_DEL" : "");
-                    this.SelectedImageKey = "FOLDER_16" + (m_Group.p_IsArhive ? "_DEL" : "");
+                    this.ImageKey = "FOLDER_16" + (m_Group.p_IsDelete ? "_DEL" : "");
+                    this.SelectedImageKey = "FOLDER_16" + (m_Group.p_IsDelete ? "_DEL" : "");
                 }
             }
         }

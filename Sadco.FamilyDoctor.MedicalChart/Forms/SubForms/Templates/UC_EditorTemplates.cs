@@ -20,7 +20,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 		private void f_InitTreeView() {
             ctrl_TreeTemplates.AfterSelect += Ctrl_TreeTemplates_AfterSelect;
             ctrl_TreeTemplates.e_EditElement += Ctrl_TreeTemplates_e_EditElement;
-            Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Templates && g.p_ParentID == null && !g.p_IsArhive).ToArray();
+            Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Templates && g.p_ParentID == null && !g.p_IsDelete).ToArray();
             foreach (Cl_Group group in groups)
             {
                 f_PopulateTreeGroup(group, ctrl_TreeTemplates.Nodes);
@@ -31,7 +31,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             TreeNode node = new Ctrl_TreeNodeGroup(a_Group);
             a_TreeNodes.Add(node);
             var tpls = Cl_App.m_DataContext.p_Templates
-                .Where(t => t.p_ParentGroupID == a_Group.p_ID && !t.p_IsArhive).GroupBy(t => t.p_TemplateID)
+                .Where(t => t.p_ParentGroupID == a_Group.p_ID && !t.p_IsDelete).GroupBy(t => t.p_TemplateID)
                     .Select(grp => grp
                         .OrderByDescending(v => v.p_Version)
                         .FirstOrDefault());
@@ -43,7 +43,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             if (!dcGroups.IsLoaded) dcGroups.Load();
             foreach (Cl_Group group in a_Group.p_SubGroups)
             {
-                if (!group.p_IsArhive)
+                if (!group.p_IsDelete)
                     f_PopulateTreeGroup(group, node.Nodes);
             }
 		}
@@ -57,7 +57,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             Ctrl_TreeNodeTemplate treeNode = (Ctrl_TreeNodeTemplate)e.Node;
             var tpl = Cl_App.m_DataContext.p_Templates
-                .Where(t => t.p_TemplateID == treeNode.p_Template.p_TemplateID && !t.p_IsArhive).OrderByDescending(v => v.p_Version).FirstOrDefault();
+                .Where(t => t.p_TemplateID == treeNode.p_Template.p_TemplateID && !t.p_IsDelete).OrderByDescending(v => v.p_Version).FirstOrDefault();
             if (tpl != null)
             {
                 treeNode.p_Template = tpl;

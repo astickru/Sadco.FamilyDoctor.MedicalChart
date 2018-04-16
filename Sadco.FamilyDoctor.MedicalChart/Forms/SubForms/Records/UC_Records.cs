@@ -33,6 +33,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 {
                     Cl_Record record = new Cl_Record();
                     record.p_Template = dlg.p_SelectedTemplate;
+                    record.p_UserName = UserSession.Name;
+                    record.p_PatientName = UserSession.PatientName;
                     var dlgRecord = new Dlg_Record();
                     dlgRecord.p_Record = record;
                     dlgRecord.ShowDialog(this);

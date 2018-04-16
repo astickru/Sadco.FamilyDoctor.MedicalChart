@@ -79,7 +79,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\DesignerPanel\Ctrl_Template.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\DesignerPanel\Ctrl_Template.Designer.cs">
       <DependentUpon>Ctrl_Template.cs</DependentUpon>
@@ -137,7 +137,8 @@
       <DependentUpon>Dlg_EditorGroup.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\TreeView\I_TreeNode.cs" />
-    <Compile Include="Entities\Cl_Report.cs" />
+    <Compile Include="Entities\Cl_RecordValue.cs" />
+    <Compile Include="Entities\Cl_Record.cs" />
     <Compile Include="Entities\Cl_AgeNorms.cs" />
     <Compile Include="Entities\Cl_ElementsParams.cs" />
     <Compile Include="Entities\Cl_Group.cs" />
@@ -145,16 +146,16 @@
     <Compile Include="Entities\Cl_Template.cs" />
     <Compile Include="Data\Cl_DataContextMegaTemplate.cs" />
     <Compile Include="Entities\Cl_Element.cs" />
-    <Compile Include="Entities\I_Archive.cs" />
+    <Compile Include="Entities\I_Delete.cs" />
     <Compile Include="EntityLogs\Cl_Log.cs" />
     <Compile Include="EntityLogs\ELogClassAttribute.cs" />
     <Compile Include="EntityLogs\ELogPropertyAttribute.cs" />
     <Compile Include="EntityLogs\EntityLog.cs" />
     <Compile Include="Entities\I_ELog.cs" />
     <Compile Include="Entities\I_Version.cs" />
-    <Compile Include="Migrations\201804091235450_appInit.cs" />
-    <Compile Include="Migrations\201804091235450_appInit.Designer.cs">
-      <DependentUpon>201804091235450_appInit.cs</DependentUpon>
+    <Compile Include="Migrations\201804131122447_appInit.cs" />
+    <Compile Include="Migrations\201804131122447_appInit.Designer.cs">
+      <DependentUpon>201804131122447_appInit.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\AccessLevelAttribute.cs" />
@@ -220,8 +221,8 @@
     <EmbeddedResource Include="Controls\TreeView\Dlg_EditorGroup.resx">
       <DependentUpon>Dlg_EditorGroup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804091235450_appInit.resx">
-      <DependentUpon>201804091235450_appInit.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201804131122447_appInit.resx">
+      <DependentUpon>201804131122447_appInit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

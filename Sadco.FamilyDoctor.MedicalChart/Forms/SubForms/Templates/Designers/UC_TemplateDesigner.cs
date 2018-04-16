@@ -33,9 +33,9 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 ctrl_Version.Text = "Черновик";
             else
                 ctrl_Version.Text = p_EditingTemplate.p_Version.ToString();
-            var elements = Cl_App.m_DataContext.p_TemplatesElements.Include(te => te.p_ChildElement).Include(te => te.p_ChildTemplate).Include(te => te.p_ChildTemplate.p_TemplateElements)
-                .Where(t => t.p_TemplateID == p_EditingTemplate.p_ID).OrderBy(t => t.p_Index).ToArray();
-            ctrl_EditorPanel.f_SetTemplatesElements(elements);
+            a_Template.f_LoadTemplatesElements();
+            if (a_Template.p_TemplateElements != null)
+                ctrl_EditorPanel.f_SetTemplatesElements(a_Template.p_TemplateElements.ToArray());
         }
 
         private void ctrl_B_Save_Click(object sender, EventArgs e)

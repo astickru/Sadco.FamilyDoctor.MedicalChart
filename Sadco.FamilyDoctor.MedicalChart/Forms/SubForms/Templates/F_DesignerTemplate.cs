@@ -49,7 +49,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 TreeNode node = new Ctrl_TreeNodeGroup(new Cl_Group() { p_Name = "Элементы" });
                 ctrl_TreeElements.Nodes.Add(node);
-                Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Elements && g.p_ParentID == null && !g.p_IsArhive).ToArray();
+                Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Elements && g.p_ParentID == null && !g.p_IsDelete).ToArray();
                 foreach (Cl_Group group in groups)
                 {
                     f_PopulateTreeGroup(Cl_Group.E_Type.Elements, group, node.Nodes);
@@ -58,7 +58,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 {
                     node = new Ctrl_TreeNodeGroup(new Cl_Group() { p_Name = "Блоки и таблицы" });
                     ctrl_TreeElements.Nodes.Add(node);
-                    groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Templates && g.p_ParentID == null && !g.p_IsArhive).ToArray();
+                    groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Templates && g.p_ParentID == null && !g.p_IsDelete).ToArray();
                     foreach (Cl_Group group in groups)
                     {
                         f_PopulateTreeGroup(Cl_Group.E_Type.Templates, group, node.Nodes);
@@ -76,7 +76,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 if (a_Type == Cl_Group.E_Type.Elements)
                 {
                     var els = Cl_App.m_DataContext.p_Elements
-                        .Where(e => e.p_ParentGroupID == a_Group.p_ID && !e.p_IsArhive).GroupBy(e => e.p_ElementID)
+                        .Where(e => e.p_ParentGroupID == a_Group.p_ID && !e.p_IsDelete).GroupBy(e => e.p_ElementID)
                             .Select(grp => grp
                                 .OrderByDescending(v => v.p_Version).FirstOrDefault())
                                 .Include(e => e.p_ParamsValues);
@@ -88,7 +88,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 else if (p_ActiveTemplate.p_Type == Cl_Template.E_TemplateType.Template)
                 {
                     var tpls = Cl_App.m_DataContext.p_Templates.Include(t => t.p_TemplateElements)
-                        .Where(e => e.p_ParentGroupID == a_Group.p_ID && !e.p_IsArhive && (e.p_Type == Cl_Template.E_TemplateType.Block || e.p_Type == Cl_Template.E_TemplateType.Table)).GroupBy(e => e.p_TemplateID)
+                        .Where(e => e.p_ParentGroupID == a_Group.p_ID && !e.p_IsDelete && (e.p_Type == Cl_Template.E_TemplateType.Block || e.p_Type == Cl_Template.E_TemplateType.Table)).GroupBy(e => e.p_TemplateID)
                             .Select(grp => grp
                                 .OrderByDescending(v => v.p_Version).FirstOrDefault());
                     foreach (Cl_Template tpl in tpls)
@@ -100,7 +100,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 if (!dcGroups.IsLoaded) dcGroups.Load();
                 foreach (Cl_Group group in a_Group.p_SubGroups)
                 {
-                    if (!group.p_IsArhive)
+                    if (!group.p_IsDelete)
                         f_PopulateTreeGroup(a_Type, group, node.Nodes);
                 }
             }

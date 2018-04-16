@@ -9,7 +9,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
     /// Класс сущности групп
     /// </summary>
     [Table("T_GROUPS")]
-    public class Cl_Group : I_Archive
+    public class Cl_Group : I_Delete
     {
         /// <summary>
         /// Тип групп
@@ -50,9 +50,9 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [ForeignKey("p_ParentID")]
         public virtual ICollection<Cl_Group> p_SubGroups { get; set; }
 
-        /// <summary>Флаг нахождения группы элементов в архиве</summary>
-        [Column("F_ISARHIVE")]
-        public bool p_IsArhive { get; set; }
+        /// <summary>Флаг нахождения группы элементов в удалении</summary>
+        [Column("F_ISDEL")]
+        public bool p_IsDelete { get; set; }
 
         /// <summary>Возвращает имя родительской группы</summary>
         public string f_GetParentName(Cl_Group parent)

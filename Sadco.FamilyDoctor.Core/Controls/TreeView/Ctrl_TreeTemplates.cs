@@ -261,7 +261,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                         bool isChange = false;
                         foreach (Cl_Template el in els)
                         {
-                            el.p_IsArhive = true;
+                            el.p_IsDelete = true;
                             isChange = true;
                         }
                         if (isChange)

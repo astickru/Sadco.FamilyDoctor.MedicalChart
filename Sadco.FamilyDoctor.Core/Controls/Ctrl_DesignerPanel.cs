@@ -36,6 +36,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
         public Ctrl_DesignerPanel()
         {
             InitializeComponent();
+            ctrlMenuDel.Visible = false;
             this.DoubleBuffered = true;
             m_InsertionLineColor = Color.Red;
             InsertionIndex = InvalidIndex;
@@ -174,6 +175,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     Items.Add(ctrl);
                 }
             }
+            ctrlMenuDel.Visible = Items.Count > 0;
         }
 
         protected override void OnPaintBackground(PaintEventArgs e)
@@ -381,7 +383,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 if (e.Button == MouseButtons.Right)
                 {
                     var index = IndexFromPoint(e.Location);
-                    if (index != ListBox.NoMatches)
+                    if (index != ListBox.NoMatches && Items.Count > index)
                     {
                         Control ctrl = Items[index] as Control;
                         if (ctrl != null)
@@ -575,6 +577,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             ctrlEl.p_Element = a_NodeElement.p_Element;
             ctrlEl.Name = f_CreateName(ctrlEl.p_Name);
             Items.Add(ctrlEl);
+            ctrlMenuDel.Visible = Items.Count > 0;
         }
 
         private void f_DragNewTemplate(Ctrl_TreeNodeTemplate a_NodeTemplate, int a_PosX, int a_PosY)
@@ -588,6 +591,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             ctrlEl.p_Template = a_NodeTemplate.p_Template;
             ctrlEl.Name = f_CreateName(ctrlEl.p_Name);
             Items.Add(ctrlEl);
+            ctrlMenuDel.Visible = Items.Count > 0;
         }
 
         #region Menu
@@ -599,6 +603,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 {
                     I_Element el = (I_Element)SelectedItem;
                     Items.Remove(el);
+                    ctrlMenuDel.Visible = Items.Count > 0;
                 }
             }
         }

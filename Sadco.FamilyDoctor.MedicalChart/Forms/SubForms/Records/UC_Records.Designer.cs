@@ -33,12 +33,12 @@
             this.ctrl_MIControlNew = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_MIControlDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_TPartNormRangeValues = new System.Windows.Forms.DataGridView();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.ctrlLPatientName = new System.Windows.Forms.Label();
             this.p_AgeFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.p_AgeTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.p_MaleMin = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.ctrlLPatientName = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.ctrlBReportAdd = new System.Windows.Forms.Button();
             this.ctrl_CMTreeElements.SuspendLayout();
@@ -106,6 +106,24 @@
             this.ctrl_TPartNormRangeValues.Size = new System.Drawing.Size(705, 305);
             this.ctrl_TPartNormRangeValues.TabIndex = 88;
             // 
+            // p_AgeFrom
+            // 
+            this.p_AgeFrom.HeaderText = "Время";
+            this.p_AgeFrom.Name = "p_AgeFrom";
+            this.p_AgeFrom.Width = 110;
+            // 
+            // p_AgeTo
+            // 
+            this.p_AgeTo.HeaderText = "Специалист";
+            this.p_AgeTo.Name = "p_AgeTo";
+            this.p_AgeTo.Width = 150;
+            // 
+            // p_MaleMin
+            // 
+            this.p_MaleMin.HeaderText = "Описание";
+            this.p_MaleMin.Name = "p_MaleMin";
+            this.p_MaleMin.Width = 400;
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.label1);
@@ -135,24 +153,6 @@
             this.ctrlLPatientName.TabIndex = 0;
             this.ctrlLPatientName.Text = "Пациент ФИО";
             // 
-            // p_AgeFrom
-            // 
-            this.p_AgeFrom.HeaderText = "Время";
-            this.p_AgeFrom.Name = "p_AgeFrom";
-            this.p_AgeFrom.Width = 110;
-            // 
-            // p_AgeTo
-            // 
-            this.p_AgeTo.HeaderText = "Специалист";
-            this.p_AgeTo.Name = "p_AgeTo";
-            this.p_AgeTo.Width = 150;
-            // 
-            // p_MaleMin
-            // 
-            this.p_MaleMin.HeaderText = "Описание";
-            this.p_MaleMin.Name = "p_MaleMin";
-            this.p_MaleMin.Width = 400;
-            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.ctrlBReportAdd);
@@ -181,6 +181,7 @@
             this.Controls.Add(this.ctrl_TPartNormRangeValues);
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.MaximumSize = new System.Drawing.Size(1600, 1000);
             this.Name = "UC_Records";
             this.Size = new System.Drawing.Size(705, 344);
             this.ctrl_CMTreeElements.ResumeLayout(false);

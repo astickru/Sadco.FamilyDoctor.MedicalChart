@@ -26,7 +26,10 @@ namespace Sadco.FamilyDoctor.Core.Data
 		public DbSet<Cl_ElementsParams> p_ElementsParams { get; set; }
 		public DbSet<Cl_AgeNorm> p_AgeNorms { get; set; }
 
-		public void f_Init() {
+        public DbSet<Cl_Record> p_Records { get; set; }
+        public DbSet<Cl_RecordValue> p_RecordsValues { get; set; }
+
+        public void f_Init() {
 			p_Groups.Load();
 			if (!p_Groups.Any(g => g.p_Type == Cl_Group.E_Type.Templates)) p_Groups.Add(new Cl_Group() { p_Type = Cl_Group.E_Type.Templates, p_Name = "Root" });
 			if (!p_Groups.Any(g => g.p_Type == Cl_Group.E_Type.Elements)) p_Groups.Add(new Cl_Group() { p_Type = Cl_Group.E_Type.Elements, p_Name = "Root" });
