@@ -92,11 +92,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Elements.Editors
 
 		private void ctrl_BSave_Click(object sender, EventArgs e)
 		{
-            EntityLog.CustomMessageLog(p_EditableElement.p_Element, "Нажата кнопка \"Сохранить\"");
             Cl_Element el = p_EditPanel.f_ConfirmChanges() as Cl_Element;
 			if (el != null)
 			{
-				m_EditableElement.p_Element = el;
+                EntityLog.CustomMessageLog(p_EditableElement.p_Element, "Нажата кнопка \"Сохранить\"");
+                m_EditableElement.p_Element = el;
 				p_IsReadOnly = true;
 			}
 		}

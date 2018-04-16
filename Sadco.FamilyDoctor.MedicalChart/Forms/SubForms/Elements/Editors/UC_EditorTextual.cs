@@ -105,6 +105,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         el.p_ParentGroup = p_EditingElement.p_ParentGroup;
                         Cl_App.m_DataContext.p_Elements.Add(el);
                     }
+
                     el.p_ElementType = (E_ElementsTypes)ctrl_ControlType.f_GetSelectedItem();
                     el.p_ElementID = p_EditingElement.p_ElementID;
                     el.p_Name = ctrl_Name.Text;
@@ -311,6 +312,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             }
                         }
                     }
+
                     Cl_App.m_DataContext.SaveChanges();
                     if (templates.Length > 0)
                     {
@@ -319,6 +321,19 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             t.p_IsConflict = true;
                         }
                     }
+
+                    if (m_Log.IsChanged(el) == false)
+                    {
+                        if (el.Equals(p_EditingElement) && el.p_Version == 1)
+                        {
+                            el.p_Version = 0;
+                        }
+
+                        MessageBox.Show("Элемент не изменялся!");
+                        transaction.Rollback();
+                        return null;
+                    }
+
                     m_Log.SaveEntity(el);
                     transaction.Commit();
                     f_SetElement(el);
