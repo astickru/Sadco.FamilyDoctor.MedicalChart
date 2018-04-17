@@ -28,11 +28,11 @@
             this.components = new System.ComponentModel.Container();
             this.panel2 = new System.Windows.Forms.Panel();
             this.ctrl_B_Save = new System.Windows.Forms.Button();
+            this.ctrl_B_History = new System.Windows.Forms.Button();
             this.ctrl_EditorPanel = new Sadco.FamilyDoctor.Core.Controls.Ctrl_DesignerPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.ctrl_Version = new System.Windows.Forms.Label();
-            this.ctrl_B_History = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -60,6 +60,18 @@
             this.ctrl_B_Save.Text = "cохранить";
             this.ctrl_B_Save.UseVisualStyleBackColor = true;
             this.ctrl_B_Save.Click += new System.EventHandler(this.ctrl_B_Save_Click);
+            // 
+            // ctrl_B_History
+            // 
+            this.ctrl_B_History.Dock = System.Windows.Forms.DockStyle.Left;
+            this.ctrl_B_History.Location = new System.Drawing.Point(2, 2);
+            this.ctrl_B_History.Margin = new System.Windows.Forms.Padding(0);
+            this.ctrl_B_History.Name = "ctrl_B_History";
+            this.ctrl_B_History.Size = new System.Drawing.Size(99, 26);
+            this.ctrl_B_History.TabIndex = 1;
+            this.ctrl_B_History.Text = "история";
+            this.ctrl_B_History.UseVisualStyleBackColor = true;
+            this.ctrl_B_History.Click += new System.EventHandler(this.ctrl_B_History_Click);
             // 
             // ctrl_EditorPanel
             // 
@@ -110,18 +122,6 @@
             this.ctrl_Version.TabIndex = 66;
             this.ctrl_Version.Text = "0";
             this.ctrl_Version.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // ctrl_B_History
-            // 
-            this.ctrl_B_History.Dock = System.Windows.Forms.DockStyle.Left;
-            this.ctrl_B_History.Location = new System.Drawing.Point(2, 2);
-            this.ctrl_B_History.Margin = new System.Windows.Forms.Padding(0);
-            this.ctrl_B_History.Name = "ctrl_B_History";
-            this.ctrl_B_History.Size = new System.Drawing.Size(99, 26);
-            this.ctrl_B_History.TabIndex = 1;
-            this.ctrl_B_History.Text = "история";
-            this.ctrl_B_History.UseVisualStyleBackColor = true;
-            this.ctrl_B_History.Click += new System.EventHandler(this.ctrl_B_History_Click);
             // 
             // UC_TemplateDesigner
             // 

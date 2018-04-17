@@ -25,9 +25,9 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 			}
 		}
 
-		public void LoadHistory(int LoadForID)
+		public void LoadHistory(int LoadForID, EntityTypes eType)
 		{
-			IOrderedQueryable<Cl_Log> logs = Cl_App.m_DataContext.p_Logs.Where(l => l.p_ElementID == LoadForID).OrderByDescending(d => d.p_ChangeTime);
+			IOrderedQueryable<Cl_Log> logs = Cl_App.m_DataContext.p_Logs.Where(l => l.p_ElementID == LoadForID && l.p_EntityType == eType).OrderByDescending(d => d.p_ChangeTime);
 			if (logs.Count() == 0) return;
 
             foreach(Cl_Log log in logs)

@@ -7,11 +7,14 @@ using System.Linq;
 using System.Data.Entity;
 using System.Windows.Forms;
 using FD.dat.mon.stb.lib;
+using Sadco.FamilyDoctor.Core.EntityLogs;
 
 namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
     public partial class UC_TemplateDesigner : UserControl
     {
+        private EntityLog m_Log = new EntityLog();
+
         public UC_TemplateDesigner()
         {
             InitializeComponent();
@@ -29,12 +32,14 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         public void f_SetTemplate(Cl_Template a_Template)
         {
             if (a_Template == null) return;
+
             p_EditingTemplate = a_Template;
             if (p_EditingTemplate.p_Version == 0)
                 ctrl_Version.Text = "Черновик";
             else
                 ctrl_Version.Text = p_EditingTemplate.p_Version.ToString();
             a_Template.f_LoadTemplatesElements();
+            m_Log.SetEntity(a_Template);
             if (a_Template.p_TemplateElements != null)
                 ctrl_EditorPanel.f_SetTemplatesElements(a_Template.p_TemplateElements.ToArray());
         }
@@ -87,6 +92,20 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         Cl_App.m_DataContext.p_TemplatesElements.Add(tplEl);
                     }
                     Cl_App.m_DataContext.SaveChanges();
+
+                    if (m_Log.IsChanged(tpl) == false)
+                    {
+                        if (tpl.Equals(p_EditingTemplate) && tpl.p_Version == 1)
+                        {
+                            tpl.p_Version = 0;
+                        }
+
+                        MonitoringStub.Message("Шаблон не изменялся!");
+                        transaction.Rollback();
+                        return;
+                    }
+
+                    m_Log.SaveEntity(tpl);
                     transaction.Commit();
                     f_SetTemplate(tpl);
                 }
@@ -101,7 +120,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         private void ctrl_B_History_Click(object sender, EventArgs e)
         {
             Dlg_HistoryViewer viewer = new Dlg_HistoryViewer();
-            viewer.LoadHistory(p_EditingTemplate.p_TemplateID);
+            viewer.LoadHistory(p_EditingTemplate.p_TemplateID, EntityTypes.Templates);
             viewer.ShowDialog(this);
         }
     }

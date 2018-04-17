@@ -133,12 +133,14 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             else
                             {
                                 MonitoringStub.Message("Значение поля \"Норма\" не соответствует точности!");
+                                transaction.Rollback();
                                 return null;
                             }
                         }
                         else
                         {
                             MonitoringStub.Message("Значение поля \"Норма\" не корректное!");
+                            transaction.Rollback();
                             return null;
                         }
                     }
@@ -183,6 +185,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                 if (row["p_AgeFrom"] == null)
                                 {
                                     MonitoringStub.Message("Поле \"Возраст от\" пустое!");
+                                    transaction.Rollback();
                                     return null;
                                 }
                                 else
@@ -192,12 +195,14 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                     else
                                     {
                                         MonitoringStub.Message("Значение поля \"Возраст от\" не корректное!");
+                                        transaction.Rollback();
                                         return null;
                                     }
                                 }
                                 if (row["p_AgeTo"] == null)
                                 {
                                     MonitoringStub.Message("Поле \"Возраст до\" пустое!");
+                                    transaction.Rollback();
                                     return null;
                                 }
                                 else
@@ -207,17 +212,20 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                     else
                                     {
                                         MonitoringStub.Message("Значение поля \"Возраст до\" не корректное!");
+                                        transaction.Rollback();
                                         return null;
                                     }
                                 }
                                 if (norm.p_AgeFrom > norm.p_AgeTo)
                                 {
                                     MonitoringStub.Message("Значение поля \"Возраст от\" больше значения поля \"Возраст до\"!");
+                                    transaction.Rollback();
                                     return null;
                                 }
                                 if (row["p_MaleMin"] == null)
                                 {
                                     MonitoringStub.Message("Поле \"Муж мин\" пустое!");
+                                    transaction.Rollback();
                                     return null;
                                 }
                                 else
@@ -229,18 +237,21 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                         else
                                         {
                                             MonitoringStub.Message("Значение поля \"Муж мин\" не соответствует точности!");
+                                            transaction.Rollback();
                                             return null;
                                         }
                                     }
                                     else
                                     {
                                         MonitoringStub.Message("Значение поля \"Муж мин\" не корректное!");
+                                        transaction.Rollback();
                                         return null;
                                     }
                                 }
                                 if (row["p_MaleMax"] == null)
                                 {
                                     MonitoringStub.Message("Поле \"Муж макс\" пустое!");
+                                    transaction.Rollback();
                                     return null;
                                 }
                                 else
@@ -252,18 +263,21 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                         else
                                         {
                                             MonitoringStub.Message("Значение поля \"Муж макс\" не соответствует точности!");
+                                            transaction.Rollback();
                                             return null;
                                         }
                                     }
                                     else
                                     {
                                         MonitoringStub.Message("Значение поля \"Муж макс\" не корректное!");
+                                        transaction.Rollback();
                                         return null;
                                     }
                                 }
                                 if (row["p_FemaleMin"] == null)
                                 {
                                     MonitoringStub.Message("Поле \"Жен мин\" пустое!");
+                                    transaction.Rollback();
                                     return null;
                                 }
                                 else
@@ -275,18 +289,21 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                         else
                                         {
                                             MonitoringStub.Message("Значение поля \"Жен мин\" не соответствует точности!");
+                                            transaction.Rollback();
                                             return null;
                                         }
                                     }
                                     else
                                     {
                                         MonitoringStub.Message("Значение поля \"Жен мин\" не корректное!");
+                                        transaction.Rollback();
                                         return null;
                                     }
                                 }
                                 if (row["p_FemaleMax"] == null)
                                 {
                                     MonitoringStub.Message("Поле \"Жен макс\" пустое!");
+                                    transaction.Rollback();
                                     return null;
                                 }
                                 else
@@ -298,12 +315,14 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                         else
                                         {
                                             MonitoringStub.Message("Значение поля \"Жен макс\" не соответствует точности!");
+                                            transaction.Rollback();
                                             return null;
                                         }
                                     }
                                     else
                                     {
                                         MonitoringStub.Message("Значение поля \"Жен макс\" не корректное!");
+                                        transaction.Rollback();
                                         return null;
                                     }
                                 }
@@ -329,7 +348,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             el.p_Version = 0;
                         }
 
-                        MessageBox.Show("Элемент не изменялся!");
+                        MonitoringStub.Message("Элемент не изменялся!");
                         transaction.Rollback();
                         return null;
                     }
@@ -350,9 +369,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         public void f_SetElement(Cl_Element a_Element)
         {
-            m_Log.SetEntity(a_Element);
-
             if (a_Element == null || !a_Element.f_IsText()) return;
+            m_Log.SetEntity(a_Element);
             p_EditingElement = a_Element;
             if (p_EditingElement.p_Version == 0)
                 ctrl_Version.Text = "Черновик";

@@ -1,5 +1,7 @@
 ﻿using Sadco.FamilyDoctor.Core.EntityLogs;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
@@ -18,11 +20,23 @@ namespace Sadco.FamilyDoctor.Core.Entities
         public enum E_TemplateType : byte
         {
             /// <summary>Шаблон</summary>
+            [Description("Шаблон")]
             Template,
             /// <summary>Блок</summary>
+            [Description("Блок")]
             Block,
             /// <summary>Таблица</summary>
+            [Description("Таблица")]
             Table
+        }
+
+        /// <summary>
+        /// Возвращает название элемента шаблона
+        /// </summary>
+        public string p_GetElementName {
+            get {
+                return (Attribute.GetCustomAttribute(p_Type.GetType().GetField(p_Type.ToString()), typeof(DescriptionAttribute)) as DescriptionAttribute).Description;
+            }
         }
 
         /// <summary>ID шаблона</summary>
@@ -60,6 +74,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
         /// <summary>Возвращает список элементов шаблона</summary>
         [ForeignKey("p_TemplateID")]
+        [ELogProperty("Изменился набор элементов шаблона", IsCustomDescription = true, IsNewValueOnly = true)]
         public ICollection<Cl_TemplateElement> p_TemplateElements { get; set; }
 
         /// <summary>Версия шаблона</summary>

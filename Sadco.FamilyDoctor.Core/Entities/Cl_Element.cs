@@ -1,4 +1,5 @@
 ﻿using Sadco.FamilyDoctor.Core.EntityLogs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -31,6 +32,15 @@ namespace Sadco.FamilyDoctor.Core.Entities
             /// <summary>Рисунок</summary>
             [Description("Рисунок")]
             Image
+        }
+
+        /// <summary>
+        /// Возвращает название элемента шаблона
+        /// </summary>
+        public string p_GetElementName {
+            get {
+                return (Attribute.GetCustomAttribute(p_ElementType.GetType().GetField(p_ElementType.ToString()), typeof(DescriptionAttribute)) as DescriptionAttribute).Description;
+            }
         }
 
         /// <summary>Типы элементов шаблона</summary>
