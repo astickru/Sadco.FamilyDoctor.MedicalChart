@@ -352,15 +352,24 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             Cl_TemplateElement elm1 = (Cl_TemplateElement)val1;
             Cl_TemplateElement elm2 = (Cl_TemplateElement)val2;
 
+            bool isElement1 = false;
+            bool isElement2 = false;
+
             if (elm1 == null || elm2 == null)
             {
                 if ((elm1 == null && elm2 != null) || (elm1 != null && elm2 == null))
                     return false;
             }
-            if (elm1.p_ChildElementID != elm2.p_ChildElementID)
-                return false;
 
-            return true;
+            isElement1 = elm1.p_ChildElement != null;
+            isElement2 = elm2.p_ChildElement != null;
+
+            if (isElement1 && isElement2)
+                return elm1.p_ChildElementID == elm2.p_ChildElementID;
+            else if (isElement1 == false && isElement2 == false)
+                return elm1.p_ChildTemplateID == elm2.p_ChildTemplateID;
+            else
+                return false;
         }
 
         private bool Compare_Array(object val1, object val2)
