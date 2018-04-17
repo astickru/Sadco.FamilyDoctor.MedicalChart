@@ -1,62 +1,65 @@
 ﻿using System.ComponentModel;
 
-namespace Sadco.FamilyDoctor.Core.Permision.Enums
+namespace Sadco.FamilyDoctor.Core.Permision
 {
-	public enum Roles
+    /// <summary>
+    /// Роли доступа
+    /// </summary>
+    public enum E_Roles
 	{
 		/// <summary>
 		/// Главный врач
 		/// </summary>
 		[Description("Главный врач")]
-		[AccessLevel(AccessLevels.EditAllRecords | AccessLevels.EditAllRatings)]
+		[Cl_AccessLevel(E_AccessLevels.EditAllRecords | E_AccessLevels.EditAllRatings)]
 		ChiefDoctor,
 		/// <summary>
 		/// Врач - заведующий отделением
 		/// </summary>
 		[Description("Врач - заведующий отделением")]
-		[AccessLevel(AccessLevels.EditMegaTemplates | AccessLevels.EditTemplates)]
+		[Cl_AccessLevel(E_AccessLevels.EditMegaTemplates | E_AccessLevels.EditTemplates | E_AccessLevels.IsShowDeleted)]
 		ChiefUnitDoctor,
 		/// <summary>
 		/// Врач
 		/// </summary>
 		[Description("Врач")]
-		[AccessLevel(AccessLevels.EditAllRecords)]
+		[Cl_AccessLevel(E_AccessLevels.EditAllRecords)]
 		Doctor,
 		/// <summary>
 		/// Ассистент врача
 		/// </summary>
 		[Description("Ассистент врача")]
-		[AccessLevel(AccessLevels.EditAssistantRecords)]
+		[Cl_AccessLevel(E_AccessLevels.EditAssistantRecords)]
 		Assistant,
 		/// <summary>
 		/// Эксперт
 		/// </summary>
 		[Description("Эксперт")]
-		[AccessLevel(AccessLevels.ReadAllRecords | AccessLevels.EditAllRatings | AccessLevels.EditMegaTemplates | AccessLevels.EditTemplates | AccessLevels.EditAllRatings)]
+		[Cl_AccessLevel(E_AccessLevels.ReadAllRecords | E_AccessLevels.EditAllRatings | E_AccessLevels.EditMegaTemplates | E_AccessLevels.EditTemplates | E_AccessLevels.EditAllRatings | E_AccessLevels.IsShowDeleted)]
 		Expert,
 		/// <summary>
 		/// Архивариус
 		/// </summary>
 		[Description("Архивариус")]
-		[AccessLevel(AccessLevels.EditAllRecords)]
+		[Cl_AccessLevel(E_AccessLevels.EditAllRecords)]
 		Archivarius,
 		/// <summary>
 		/// Проверяющий С/К
 		/// </summary>
 		[Description("Проверяющий С/К")]
-		[AccessLevel(AccessLevels.ReadSelectedRecords)]
+		[Cl_AccessLevel(E_AccessLevels.ReadSelectedRecords)]
 		Inspector,
 		/// <summary>
 		/// Регистратор
 		/// </summary>
 		[Description("Регистратор")]
-		[AccessLevel(AccessLevels.ReadAllRecords)]
+		[Cl_AccessLevel(E_AccessLevels.ReadAllRecords)]
 		Registrator,
 		/// <summary>
 		/// Гость
 		/// </summary>
 		[Description("Гость")]
-		[AccessLevel(AccessLevels.EditSelfRecords)]
+		[Cl_AccessLevel(E_AccessLevels.EditSelfRecords)]
 		Guest
 	}
 }

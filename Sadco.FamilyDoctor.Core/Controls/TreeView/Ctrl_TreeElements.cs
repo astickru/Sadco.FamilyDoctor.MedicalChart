@@ -295,7 +295,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                             eLog.SaveEntity(lastVersion);
                             transaction.Commit();
 
-                            if (!UserSession.IsShowDeletedMegTemplates)
+                            if (!p_IsShowDeleted)
                                 SelectedNode.Remove();
                             else
                                 p_SelectedElement.p_Element = p_SelectedElement.p_Element;

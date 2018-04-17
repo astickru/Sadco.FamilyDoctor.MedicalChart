@@ -103,6 +103,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             if (a_Table == null)
             {
                 panel = new FlowLayoutPanel();
+                panel.WrapContents = false;
                 panel.Height = 20;
                 panel.AutoSize = true;
                 Controls.Add(panel);
@@ -159,19 +160,32 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
             else
             {
-                tb = new TextBox();
-                tb.Width = 200;
-                if (a_Table != null)
-                    a_Table.Controls.Add(tb, 3, a_RowIndex);
+                if (p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Float || p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Line)
+                {
+                    tb = new TextBox();
+                    tb.Width = 200;
+                    if (a_Table != null)
+                        a_Table.Controls.Add(tb, 2, a_RowIndex);
+                    else
+                        panel.Controls.Add(tb);
+                }
                 else
-                    panel.Controls.Add(tb);
+                {
+                    Ctrl_TextBoxAutoHeight tbh = new Ctrl_TextBoxAutoHeight() { p_MinLines = 3 };
+                    tbh.Width = 200;
+                    if (a_Table != null)
+                        a_Table.Controls.Add(tbh, 2, a_RowIndex);
+                    else
+                        panel.Controls.Add(tbh);
+                }
+                
             }
             if (p_Element.p_IsPartPost)
             {
                 l = new Label() { Text = p_Element.p_PartPost };
                 l.TextAlign = ContentAlignment.MiddleLeft;
                 if (a_Table != null)
-                    a_Table.Controls.Add(l, 4, a_RowIndex);
+                    a_Table.Controls.Add(l, 3, a_RowIndex);
                 else
                     panel.Controls.Add(l);
             }
@@ -180,7 +194,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 l = new Label() { Text = p_Element.p_PartNorm.ToString() };
                 l.TextAlign = ContentAlignment.MiddleLeft;
                 if (a_Table != null)
-                    a_Table.Controls.Add(l, 5, a_RowIndex);
+                    a_Table.Controls.Add(l, 4, a_RowIndex);
                 else
                     panel.Controls.Add(l);
             }
@@ -206,7 +220,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 }
                 cb.SelectedIndex = 0;
                 if (a_Table != null)
-                    a_Table.Controls.Add(cb, 6, a_RowIndex);
+                    a_Table.Controls.Add(cb, 4, a_RowIndex);
                 else
                     panel.Controls.Add(cb);
             }

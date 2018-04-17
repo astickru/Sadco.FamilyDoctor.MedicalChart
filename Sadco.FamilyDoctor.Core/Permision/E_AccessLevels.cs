@@ -1,9 +1,12 @@
 ﻿using System;
 
-namespace Sadco.FamilyDoctor.Core.Permision.Enums
+namespace Sadco.FamilyDoctor.Core.Permision
 {
-	[Flags]
-	public enum AccessLevels
+    /// <summary>
+    /// Уровни доступа
+    /// </summary>
+    [Flags]
+	public enum E_AccessLevels
 	{
 		/// <summary>
 		/// Не имеет доступа
@@ -44,5 +47,10 @@ namespace Sadco.FamilyDoctor.Core.Permision.Enums
 		/// Доступ к мегашаблону (Окно элементов)
 		/// </summary>
 		EditMegaTemplates = 0x80,
-	}
+
+        /// <summary>
+		/// Доступ к удаленным элементам
+		/// </summary>
+		IsShowDeleted = 0x100,
+    }
 }

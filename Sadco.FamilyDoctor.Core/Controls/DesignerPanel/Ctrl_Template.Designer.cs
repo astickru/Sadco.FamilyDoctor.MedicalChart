@@ -1,4 +1,6 @@
-﻿namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
+﻿using System.Windows.Forms;
+
+namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
 {
     partial class Ctrl_Template
     {
@@ -28,11 +30,24 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.ctrlContent = new System.Windows.Forms.FlowLayoutPanel();
             this.SuspendLayout();
+            // 
+            // ctrlContent
+            // 
+            this.ctrlContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ctrlContent.Location = new System.Drawing.Point(0, 0);
+            this.ctrlContent.Name = "ctrlContent";
+            this.ctrlContent.Size = new System.Drawing.Size(354, 260);
+            this.ctrlContent.TabIndex = 0;
+            this.ctrlContent.FlowDirection = FlowDirection.TopDown;
+            this.ctrlContent.WrapContents = false;
+            this.ctrlContent.AutoScroll = true;
             // 
             // Ctrl_Template
             // 
             this.AutoSize = true;
+            this.Controls.Add(this.ctrlContent);
             this.Name = "Ctrl_Template";
             this.Size = new System.Drawing.Size(354, 260);
             this.ResumeLayout(false);
@@ -40,5 +55,7 @@
         }
 
         #endregion
+
+        private System.Windows.Forms.FlowLayoutPanel ctrlContent;
     }
 }

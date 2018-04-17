@@ -139,9 +139,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         private TableLayoutPanel f_GetControlTable()
         {
             var ctrlTable = new TableLayoutPanel();
-            ctrlTable.ColumnCount = 7;
-            ctrlTable.ColumnStyles.Add(new ColumnStyle());
-            ctrlTable.ColumnStyles.Add(new ColumnStyle());
+            ctrlTable.ColumnCount = 5;
             ctrlTable.ColumnStyles.Add(new ColumnStyle());
             ctrlTable.ColumnStyles.Add(new ColumnStyle());
             ctrlTable.ColumnStyles.Add(new ColumnStyle());
@@ -168,16 +166,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     if (a_Controls != null)
                     {
                         controls = a_Controls;
-                        top = 20;
                     }
                     else
-                        controls = Controls;
+                        controls = ctrlContent.Controls;
                     foreach (var te in a_Template.p_TemplateElements)
                     {
                         if (te.p_ChildElement != null)
                         {
                             var ctrlEl = new Ctrl_Element();
-                            ctrlEl.p_Element = te.p_ChildElement;
                             ctrlEl.p_Element = te.p_ChildElement;
                             if (controls is TableLayoutControlCollection && controls.Owner is TableLayoutPanel)
                             {
@@ -202,8 +198,15 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 ctrlGroup.Text = te.p_ChildTemplate.p_Name;
                                 ctrlGroup.AutoSize = true;
                                 ctrlGroup.Top = top;
+                                FlowLayoutPanel panel = new FlowLayoutPanel();
+                                panel.Top = 20;
+                                panel.Left = 3;
+                                panel.WrapContents = false;
+                                panel.AutoSize = true;
+                                panel.FlowDirection = FlowDirection.TopDown;
+                                ctrlGroup.Controls.Add(panel);
                                 controls.Add(ctrlGroup);
-                                f_AddControlsTemplate(te.p_ChildTemplate, ctrlGroup.Controls);
+                                f_AddControlsTemplate(te.p_ChildTemplate, panel.Controls);
                                 top += ctrlGroup.Height + m_PaddingY;
                             }
                             else if (te.p_ChildTemplate.p_Type == Cl_Template.E_TemplateType.Table)
@@ -218,7 +221,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 ctrlTable.Controls.Add(new Label() { Text = "Локация", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 1, 0);
                                 ctrlTable.Controls.Add(new Label() { Text = "Значение", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 2, 0);
                                 ctrlTable.Controls.Add(new Label() { Text = "Ед. изм.", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 3, 0);
-                                ctrlTable.Controls.Add(new Label() { Text = "Норм значения", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 4, 0);
+                                ctrlTable.Controls.Add(new Label() { Text = "Нормa", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 4, 0);
+                                
                                 controls.Add(ctrlTable);
                                 f_AddControlsTemplate(te.p_ChildTemplate, ctrlTable.Controls);
                                 top += ctrlTable.Height + m_PaddingY;
@@ -232,6 +236,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         /// <summary>Инициализация пользовательских контролов</summary>
         public void f_InitUIControls()
         {
+            ctrlContent.Controls.Clear();
             f_AddControlsTemplate(m_Template);
         }
 

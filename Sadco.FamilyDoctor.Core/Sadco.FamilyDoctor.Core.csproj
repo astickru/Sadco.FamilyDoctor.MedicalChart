@@ -79,6 +79,9 @@
     <Compile Include="Controls\Ctrl_ImageLabel.Designer.cs">
       <DependentUpon>Ctrl_ImageLabel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Ctrl_TextBoxAutoHeight.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\Ctrl_SeparatorCombobox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -157,6 +160,7 @@
     <Compile Include="EntityLogs\EntityLog.cs" />
     <Compile Include="Entities\I_ELog.cs" />
     <Compile Include="Entities\I_Version.cs" />
+    <Compile Include="Facades\Cl_SessionFacade.cs" />
     <Compile Include="Migrations\201804131122447_appInit.cs" />
     <Compile Include="Migrations\201804131122447_appInit.Designer.cs">
       <DependentUpon>201804131122447_appInit.cs</DependentUpon>
@@ -170,11 +174,11 @@
       <DependentUpon>201804160741168_appRecordEl.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Permision\AccessLevelAttribute.cs" />
-    <Compile Include="Permision\Enums\AccessLevels.cs" />
-    <Compile Include="Permision\Enums\Roles.cs" />
-    <Compile Include="Permision\UserPermission.cs" />
-    <Compile Include="Permision\UserSession.cs" />
+    <Compile Include="Permision\Cl_AccessLevelAttribute.cs" />
+    <Compile Include="Permision\Cl_User.cs" />
+    <Compile Include="Permision\E_AccessLevels.cs" />
+    <Compile Include="Permision\E_Roles.cs" />
+    <Compile Include="Permision\Cl_UserPermission.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
