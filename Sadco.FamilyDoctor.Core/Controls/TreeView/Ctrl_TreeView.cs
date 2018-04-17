@@ -108,6 +108,9 @@ namespace Sadco.FamilyDoctor.Core.Controls
             }
         }
 
+        /// <summary>Флаг отображения удаленных элементов</summary>
+        public bool p_IsShowDeleted { get; set; }
+
         /// <summary>Тип группы</summary>
         protected virtual Cl_Group.E_Type p_Type { get; }
 
@@ -214,7 +217,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             p_SelectedGroup.p_Group.p_IsDelete = true;
             Cl_App.m_DataContext.SaveChanges();
 
-            if (!UserSession.IsShowDeletedMegTemplates)
+            if (!p_IsShowDeleted)
                 SelectedNode.Remove();
             else
                 p_SelectedGroup.p_Group = p_SelectedGroup.p_Group;

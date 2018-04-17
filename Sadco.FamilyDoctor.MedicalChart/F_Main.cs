@@ -1,4 +1,5 @@
 ﻿using Sadco.FamilyDoctor.Core;
+using Sadco.FamilyDoctor.Core.Facades;
 using Sadco.FamilyDoctor.Core.Permision;
 using Sadco.FamilyDoctor.MedicalChart.Forms.SubForms;
 using System;
@@ -13,7 +14,7 @@ namespace Sadco.FamilyDoctor.MedicalChart
 
         public F_Main(string[] args)
         {
-            InitSession(args);
+            f_InitSession(args);
             Tag = string.Format("Мегашаблон v{0}", ConfigurationManager.AppSettings["Version"]);
             Cl_App.Initialize();
             this.Font = new System.Drawing.Font(ConfigurationManager.AppSettings["FontFamily"],
@@ -23,39 +24,47 @@ namespace Sadco.FamilyDoctor.MedicalChart
             InitializeComponent();
             p_PanelManager = new UI_PanelManager(ctrl_CustomControls);
 
-			menuMegaTemplate.Visible = false;
-			menuTemplate.Visible = false;
+            menuMegaTemplate.Visible = false;
+            menuTemplate.Visible = false;
 
-			if (UserSession.Permission.IsEditMegaTemplates)
-			{
-				//f_SetControl<UC_EditorElements>();
-				menuMegaTemplate.Visible = UserSession.Permission.IsEditMegaTemplates;
-			}
+            if (Cl_SessionFacade.f_GetInstance().p_User.p_Permission.p_IsEditMegaTemplates)
+            {
+                menuMegaTemplate.Visible = Cl_SessionFacade.f_GetInstance().p_User.p_Permission.p_IsEditMegaTemplates;
+            }
 
-			if (UserSession.Permission.IsEditTemplates)
-			{
-				//f_SetControl<UC_EditorTemplates>();
-				menuTemplate.Visible = UserSession.Permission.IsEditTemplates;
-			}
+            if (Cl_SessionFacade.f_GetInstance().p_User.p_Permission.p_IsEditTemplates)
+            {
+                menuTemplate.Visible = Cl_SessionFacade.f_GetInstance().p_User.p_Permission.p_IsEditTemplates;
+            }
+
+            if (Cl_SessionFacade.f_GetInstance().p_User.p_Permission.p_IsShowDeleted)
+            {
+                menuMegaTemplateDeleted.Visible = Cl_SessionFacade.f_GetInstance().p_User.p_Permission.p_IsShowDeleted;
+            }
 
             f_SetControl<UC_Records>();
         }
 
-        private void InitSession(string[] args)
+        private void f_InitSession(string[] args)
         {
-            UserSession.ID = int.Parse(args[0]);
-            UserSession.Name = args[1];
-            UserSession.Permission = new UserPermission(args[2]);
-            UserSession.PatientID = int.Parse(args[3]);
-            UserSession.PatientName = args[4];
-            UserSession.PatientBirthday = DateTime.Parse(args[5]);
-
-			if (args.Length == 8)
-			{
-				UserSession.TimeIntervalStart = DateTime.Parse(args[6]);
-				UserSession.TimeIntervalEnd = DateTime.Parse(args[7]);
-			}
-		}
+            Cl_User user = new Cl_User();
+            user.p_UserID = int.Parse(args[0]);
+            user.p_UserSurName = args[1];
+            user.p_UserName = args[2];
+            user.p_UserLastName = args[3];
+            user.p_Permission = new Cl_UserPermission(args[4]);
+            Cl_User patient = new Cl_User();
+            patient.p_UserID = int.Parse(args[5]);
+            patient.p_UserSurName = args[6];
+            patient.p_UserName = args[7];
+            patient.p_UserLastName = args[8];
+            patient.p_Sex = (Cl_User.E_Sex)Enum.Parse(typeof(Cl_User.E_Sex), args[9]);
+            patient.p_DateBirth = DateTime.Parse(args[10]);
+            if (args.Length == 13)
+                Cl_SessionFacade.f_GetInstance().f_Init(user, patient, DateTime.Parse(args[11]), DateTime.Parse(args[12]));
+            else
+                Cl_SessionFacade.f_GetInstance().f_Init(user, patient);
+        }
 
         private void ctrlMIRecord_Click(object sender, EventArgs e)
         {
@@ -63,9 +72,9 @@ namespace Sadco.FamilyDoctor.MedicalChart
         }
 
         private void ctrl_MenuShowTemplates_Click(object sender, EventArgs e)
-		{
-			f_SetControl<UC_EditorTemplates>();
-		}
+        {
+            f_SetControl<UC_EditorTemplates>();
+        }
 
         private void ctrl_MenuShowElements_Click(object sender, EventArgs e)
         {
@@ -94,7 +103,7 @@ namespace Sadco.FamilyDoctor.MedicalChart
             UC_EditorElements elements_UI = p_PanelManager.p_ActiveControl as UC_EditorElements;
             ToolStripMenuItem menuItem = sender as ToolStripMenuItem;
             menuItem.Checked = !menuItem.Checked;
-            UserSession.IsShowDeletedMegTemplates = menuItem.Checked;
+            elements_UI.p_IsShowDeleted = menuItem.Checked;
             elements_UI.f_ShowDeletedElements(menuItem.Checked);
         }
     }

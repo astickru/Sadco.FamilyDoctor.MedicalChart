@@ -1,4 +1,5 @@
 ﻿using Sadco.FamilyDoctor.Core.EntityLogs;
+using Sadco.FamilyDoctor.Core.Permision;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,14 +13,6 @@ namespace Sadco.FamilyDoctor.Core.Entities
     [Table("T_RECORDS")]
     public class Cl_Record : I_Version, I_Delete, I_ELog
     {
-        public enum E_Sex : byte
-        {
-            /// <summary>Мужчина</summary>
-            Man,
-            /// <summary>Женьщина</summary>
-            Female
-        }
-
         /// <summary>Ключ записи</summary>
         [Key]
         [Column("F_ID")]
@@ -43,7 +36,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
         /// <summary>Пол</summary>
         [Column("F_SEX")]
-        public E_Sex p_Sex { get; set; }
+        public Permision.Cl_User.E_Sex p_Sex { get; set; }
 
         /// <summary>Дата рождения</summary>
         [Column("F_DATEBIRTH", TypeName = "Date")]
@@ -136,6 +129,24 @@ namespace Sadco.FamilyDoctor.Core.Entities
         public string f_GetPatientInitials()
         {
             return string.Format("{0} {1} {2}", p_PatientSurName, string.IsNullOrWhiteSpace(p_PatientName) ? "" : p_PatientName[0].ToString() + ".", string.IsNullOrWhiteSpace(p_PatientLastName) ? "" : p_PatientLastName[0].ToString() + ".");
+        }
+
+        /// <summary>Установка пользователя</summary>
+        public void f_SetUser(Cl_User a_User)
+        {
+            p_UserSurName = a_User.p_UserSurName;
+            p_UserName = a_User.p_UserName;
+            p_UserLastName = a_User.p_UserLastName;
+        }
+
+        /// <summary>Установка пациента</summary>
+        public void f_SetPatient(Cl_User a_User)
+        {
+            p_PatientSurName = a_User.p_UserSurName;
+            p_PatientName = a_User.p_UserName;
+            p_PatientLastName = a_User.p_UserLastName;
+            p_Sex = a_User.p_Sex;
+            p_DateBirth = a_User.p_DateBirth;
         }
     }
 }

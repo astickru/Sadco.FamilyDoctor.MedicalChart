@@ -1,4 +1,5 @@
 ﻿using Sadco.FamilyDoctor.Core.Entities;
+using Sadco.FamilyDoctor.Core.Facades;
 using Sadco.FamilyDoctor.Core.Permision;
 using System;
 using System.Collections.Generic;
@@ -155,7 +156,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             outEvent.p_EntityType = this.entityLogType;
             outEvent.p_ChangeTime = DateTime.Now;
             outEvent.p_Event = action;
-            outEvent.p_UserName = UserSession.Name;
+            outEvent.p_UserName = Cl_SessionFacade.f_GetInstance().p_User.p_FIO;
 
             return outEvent;
         }
@@ -172,7 +173,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             outEvent.p_EntityType = classAtr.EntityType;
             outEvent.p_ChangeTime = DateTime.Now;
             outEvent.p_Event = action;
-            outEvent.p_UserName = UserSession.Name;
+            outEvent.p_UserName = Cl_SessionFacade.f_GetInstance().p_User.p_FIO;
 
             Cl_App.m_DataContext.p_Logs.Add(outEvent);
             Cl_App.m_DataContext.SaveChanges();

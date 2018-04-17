@@ -1,6 +1,7 @@
 ﻿using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Controls;
 using Sadco.FamilyDoctor.Core.Entities;
+using Sadco.FamilyDoctor.Core.Facades;
 using Sadco.FamilyDoctor.Core.Permision;
 using Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Elements.Editors;
 using System.Configuration;
@@ -19,7 +20,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             Tag = string.Format("Записи клиента v{0}", ConfigurationManager.AppSettings["Version"]);
             InitializeComponent();
-            ctrlLPatientName.Text = UserSession.PatientName;
+            ctrlLPatientName.Text = Cl_SessionFacade.f_GetInstance().p_Patient.p_FIO;
             //f_InitTreeView();
             //m_PanelManager = new UI_PanelManager(ctrl_P_ElementProperty);
         }
@@ -33,8 +34,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 {
                     Cl_Record record = new Cl_Record();
                     record.p_Template = dlg.p_SelectedTemplate;
-                    record.p_UserName = UserSession.Name;
-                    record.p_PatientName = UserSession.PatientName;
+                    record.f_SetUser(Cl_SessionFacade.f_GetInstance().p_User);
+                    record.f_SetPatient(Cl_SessionFacade.f_GetInstance().p_Patient);
                     var dlgRecord = new Dlg_Record();
                     dlgRecord.p_Record = record;
                     dlgRecord.ShowDialog(this);

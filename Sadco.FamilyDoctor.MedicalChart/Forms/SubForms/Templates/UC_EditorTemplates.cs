@@ -1,6 +1,7 @@
 ﻿using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Controls;
 using Sadco.FamilyDoctor.Core.Entities;
+using Sadco.FamilyDoctor.Core.Facades;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity;
@@ -17,7 +18,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 			f_InitTreeView();
 		}
 
-		private void f_InitTreeView() {
+        /// <summary>Флаг отображения удаленных элементов</summary>
+        public bool p_IsShowDeleted { get; set; }
+
+        private void f_InitTreeView() {
+            ctrl_TreeTemplates.p_IsShowDeleted = p_IsShowDeleted;
             ctrl_TreeTemplates.AfterSelect += Ctrl_TreeTemplates_AfterSelect;
             ctrl_TreeTemplates.e_EditElement += Ctrl_TreeTemplates_e_EditElement;
             Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Templates && g.p_ParentID == null && !g.p_IsDelete).ToArray();

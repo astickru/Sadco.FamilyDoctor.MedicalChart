@@ -33,18 +33,21 @@
             this.ctrl_MIControlNew = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_MIControlDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_TPartNormRangeValues = new System.Windows.Forms.DataGridView();
-            this.p_AgeFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.p_AgeTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.p_MaleMin = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.ctrlLPatientName = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.ctrlBReportAdd = new System.Windows.Forms.Button();
+            this.p_AgeFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p_AgeTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.ctrl_CMTreeElements.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ctrl_TPartNormRangeValues)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ctrl_CMTreeElements
@@ -98,31 +101,12 @@
             this.ctrl_TPartNormRangeValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ctrl_TPartNormRangeValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.p_AgeFrom,
-            this.p_AgeTo,
-            this.p_MaleMin});
+            this.p_AgeTo});
             this.ctrl_TPartNormRangeValues.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ctrl_TPartNormRangeValues.Location = new System.Drawing.Point(0, 39);
+            this.ctrl_TPartNormRangeValues.Location = new System.Drawing.Point(0, 0);
             this.ctrl_TPartNormRangeValues.Name = "ctrl_TPartNormRangeValues";
-            this.ctrl_TPartNormRangeValues.Size = new System.Drawing.Size(705, 305);
+            this.ctrl_TPartNormRangeValues.Size = new System.Drawing.Size(310, 267);
             this.ctrl_TPartNormRangeValues.TabIndex = 88;
-            // 
-            // p_AgeFrom
-            // 
-            this.p_AgeFrom.HeaderText = "Время";
-            this.p_AgeFrom.Name = "p_AgeFrom";
-            this.p_AgeFrom.Width = 110;
-            // 
-            // p_AgeTo
-            // 
-            this.p_AgeTo.HeaderText = "Специалист";
-            this.p_AgeTo.Name = "p_AgeTo";
-            this.p_AgeTo.Width = 150;
-            // 
-            // p_MaleMin
-            // 
-            this.p_MaleMin.HeaderText = "Описание";
-            this.p_MaleMin.Name = "p_MaleMin";
-            this.p_MaleMin.Width = 400;
             // 
             // panel1
             // 
@@ -172,14 +156,39 @@
             this.ctrlBReportAdd.UseVisualStyleBackColor = true;
             this.ctrlBReportAdd.Click += new System.EventHandler(this.ctrlBReportAdd_Click);
             // 
+            // p_AgeFrom
+            // 
+            this.p_AgeFrom.HeaderText = "Время";
+            this.p_AgeFrom.Name = "p_AgeFrom";
+            this.p_AgeFrom.Width = 110;
+            // 
+            // p_AgeTo
+            // 
+            this.p_AgeTo.HeaderText = "Специалист";
+            this.p_AgeTo.Name = "p_AgeTo";
+            this.p_AgeTo.Width = 150;
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 39);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.ctrl_TPartNormRangeValues);
+            this.splitContainer1.Size = new System.Drawing.Size(705, 267);
+            this.splitContainer1.SplitterDistance = 310;
+            this.splitContainer1.TabIndex = 91;
+            // 
             // UC_Records
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.Controls.Add(this.panel2);
-            this.Controls.Add(this.ctrl_TPartNormRangeValues);
+            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panel2);
             this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.MaximumSize = new System.Drawing.Size(1600, 1000);
             this.Name = "UC_Records";
@@ -189,6 +198,9 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
 		}
@@ -204,10 +216,10 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label ctrlLPatientName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn p_AgeFrom;
-        private System.Windows.Forms.DataGridViewTextBoxColumn p_AgeTo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn p_MaleMin;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button ctrlBReportAdd;
+        private System.Windows.Forms.DataGridViewTextBoxColumn p_AgeFrom;
+        private System.Windows.Forms.DataGridViewTextBoxColumn p_AgeTo;
+        private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }

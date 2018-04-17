@@ -1,7 +1,7 @@
 ﻿using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Controls;
 using Sadco.FamilyDoctor.Core.Entities;
-using Sadco.FamilyDoctor.Core.Permision;
+using Sadco.FamilyDoctor.Core.Facades;
 using Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Elements.Editors;
 using System.Configuration;
 using System.Data;
@@ -23,8 +23,12 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             m_PanelManager = new UI_PanelManager(ctrl_P_ElementProperty);
         }
 
+        /// <summary>Флаг отображения удаленных элементов</summary>
+        public bool p_IsShowDeleted { get; set; }
+
         private void f_InitTreeView()
         {
+            ctrl_TreeElements.p_IsShowDeleted = p_IsShowDeleted;
             ctrl_TreeElements.AfterSelect += Ctrl_TreeElements_AfterSelect;
             ctrl_TreeElements.e_AfterCreateElement += Ctrl_TreeElements_e_AfterCreateElement;
             f_PopulateGroup();
@@ -32,7 +36,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         private void f_PopulateGroup()
         {
-            Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Elements && g.p_ParentID == null && (UserSession.IsShowDeletedMegTemplates ? true : !g.p_IsDelete)).ToArray();
+            Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Elements && g.p_ParentID == null && (p_IsShowDeleted ? true : !g.p_IsDelete)).ToArray();
             foreach (Cl_Group group in groups)
             {
                 f_PopulateTreeGroup(group, ctrl_TreeElements.Nodes);
@@ -44,7 +48,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             TreeNode node = new Ctrl_TreeNodeGroup(a_Group);
             a_TreeNodes.Add(node);
             var els = Cl_App.m_DataContext.p_Elements
-                .Where(e => e.p_ParentGroupID == a_Group.p_ID && (UserSession.IsShowDeletedMegTemplates ? true : !e.p_IsDelete)).GroupBy(e => e.p_ElementID)
+                .Where(e => e.p_ParentGroupID == a_Group.p_ID && (p_IsShowDeleted ? true : !e.p_IsDelete)).GroupBy(e => e.p_ElementID)
                     .Select(grp => grp
                         .OrderByDescending(v => v.p_Version).FirstOrDefault())
                         .Include(e => e.p_ParamsValues);
@@ -56,7 +60,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             if (!dcGroups.IsLoaded) dcGroups.Load();
             foreach (Cl_Group group in a_Group.p_SubGroups)
             {
-                if (!group.p_IsDelete || UserSession.IsShowDeletedMegTemplates)
+                if (!group.p_IsDelete || p_IsShowDeleted)
                     f_PopulateTreeGroup(group, node.Nodes);
             }
         }
