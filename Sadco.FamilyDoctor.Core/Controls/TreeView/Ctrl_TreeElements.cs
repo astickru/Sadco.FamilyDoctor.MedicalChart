@@ -141,7 +141,8 @@ namespace Sadco.FamilyDoctor.Core.Controls
                                 }
                                 if (isChange)
                                 {
-                                    Cl_App.m_DataContext.f_SaveChanges(eLog, draggedNodeElement.p_Element);
+                                    Cl_App.m_DataContext.SaveChanges();
+                                    eLog.SaveEntity(draggedNodeElement.p_Element);
                                     transaction.Commit();
                                     draggedNodeElement.Remove();
                                     a_TargetNodeGroup.Nodes.Insert(f_GetFirstGroupInNode(a_TargetNodeGroup.Nodes), draggedNodeElement);
@@ -170,7 +171,6 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 try
                 {
                     EntityLog eLog = new EntityLog();
-
                     Cl_Element newElement = (Cl_Element)Activator.CreateInstance(typeof(Cl_Element));
                     eLog.SetEntity(newElement);
                     Cl_Group group = null;
@@ -205,7 +205,6 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     Cl_App.m_DataContext.SaveChanges();
                     newElement.p_ElementID = newElement.p_ID;
                     Cl_App.m_DataContext.SaveChanges();
-                    eLog.SaveEntity(newElement);
                     transaction.Commit();
 
                     Ctrl_TreeNodeElement newNode = new Ctrl_TreeNodeElement(group, newElement);
