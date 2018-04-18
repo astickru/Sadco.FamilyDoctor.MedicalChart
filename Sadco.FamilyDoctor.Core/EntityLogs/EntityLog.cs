@@ -853,6 +853,8 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 
         private string GetDefaultValue(object value)
         {
+            if (value == null)
+                return "";
             return value.ToString();
         }
         #endregion
