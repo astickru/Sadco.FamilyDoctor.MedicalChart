@@ -12,7 +12,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
     public partial class UC_EditorImage : UserControl, I_EditPanel
     {
-        private EntityLog eLog = new EntityLog();
+        private EntityLog m_Log = new EntityLog();
 
         public Cl_Element p_EditingElement { get; private set; }
 
@@ -63,7 +63,19 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     el.p_Comment = ctrl_Note.Text;
 
                     Cl_App.m_DataContext.SaveChanges();
-                    eLog.SaveEntity(el);
+
+                    if (m_Log.IsChanged(el) == false)
+                    {
+                        if (el.Equals(p_EditingElement) && el.p_Version == 1)
+                        {
+                            el.p_Version = 0;
+                        }
+
+                        MonitoringStub.Message("Элемент не изменялся!");
+                        transaction.Rollback();
+                        return null;
+                    }
+                    m_Log.SaveEntity(el);
                     f_SetElement(el);
                     transaction.Commit();
 
@@ -80,7 +92,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         public void f_SetElement(Cl_Element a_Element)
         {
-            eLog.SetEntity(a_Element);
+            m_Log.SetEntity(a_Element);
 
             if (a_Element == null || !a_Element.f_IsImage()) return;
             p_EditingElement = a_Element;

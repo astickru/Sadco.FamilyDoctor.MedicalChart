@@ -97,35 +97,37 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 
                 if (IsNew(obj, classAtr.EntityType))
                     sbAction.AppendLine("Создан новый элемент");
-
-                Dictionary<PropertyInfo, object> changedValues = GetChangedValues(obj);
-                foreach (KeyValuePair<PropertyInfo, object> item in changedValues)
+                else
                 {
-                    ELogPropertyAttribute propAttr = item.Key.GetCustomAttributes(typeof(ELogPropertyAttribute), true).FirstOrDefault() as ELogPropertyAttribute;
-
-                    string action = "";
-
-                    if (propAttr.IsCustomDescription)
-                        action = propAttr.Description + ".";
-                    else
+                    Dictionary<PropertyInfo, object> changedValues = GetChangedValues(obj);
+                    foreach (KeyValuePair<PropertyInfo, object> item in changedValues)
                     {
-                        action = "Изменилось поле: \"";
+                        ELogPropertyAttribute propAttr = item.Key.GetCustomAttributes(typeof(ELogPropertyAttribute), true).FirstOrDefault() as ELogPropertyAttribute;
 
-                        if (string.IsNullOrEmpty(propAttr.Description))
-                            action += item.Key.Name + "\".";
+                        string action = "";
+
+                        if (propAttr.IsCustomDescription)
+                            action = propAttr.Description + ".";
                         else
-                            action += propAttr.Description + "\".";
+                        {
+                            action = "Изменилось поле: \"";
+
+                            if (string.IsNullOrEmpty(propAttr.Description))
+                                action += item.Key.Name + "\".";
+                            else
+                                action += propAttr.Description + "\".";
+                        }
+
+                        if (!propAttr.IgnoreValue)
+                        {
+                            if (!propAttr.IsNewValueOnly)
+                                action += " Старое значение: \"" + GetNormalizeValue(item.Key, lastValues[item.Key]) + "\".";
+
+                            action += " Новое значение: \"" + GetNormalizeValue(item.Key, item.Value) + "\".";
+                        }
+
+                        sbAction.AppendLine(action);
                     }
-
-                    if (!propAttr.IgnoreValue)
-                    {
-                        if (!propAttr.IsNewValueOnly)
-                            action += " Старое значение: \"" + GetNormalizeValue(item.Key, lastValues[item.Key]) + "\".";
-
-                        action += " Новое значение: \"" + GetNormalizeValue(item.Key, item.Value) + "\".";
-                    }
-
-                    sbAction.AppendLine(action);
                 }
 
                 newEvent = CreateEvent(obj, sbAction.ToString().Trim());
@@ -232,7 +234,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             else if (type == typeof(Cl_Group))
                 outResult = Compare_Cl_Group(val1, val2);
             else if (type == typeof(Byte))
-                outResult = Compare_Enum(val1, val2);
+                outResult = Compare_Byte(val1, val2);
             else if (type == typeof(Boolean))
                 outResult = Compare_Boolean(val1, val2);
             else if (type == typeof(Decimal))
@@ -288,6 +290,14 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 
         private bool Compare_Cl_Group(object val1, object val2)
         {
+            if (val1 == null || val2 == null)
+            {
+                if ((val1 == null && val2 != null) || (val1 != null && val2 == null))
+                    return false;
+                if (val1 == null && val2 == null)
+                    return true;
+            }
+
             if (val1.GetType().BaseType != val2.GetType().BaseType)
                 return false;
 
@@ -329,11 +339,16 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 
         private bool Compare_Collection_Cl_TemplateElement(object val1, object val2)
         {
+            if (val1 == null || val2 == null)
+            {
+                if ((val1 == null && val2 != null) || (val1 != null && val2 == null))
+                    return false;
+                if (val1 == null && val2 == null)
+                    return true;
+            }
+
             ICollection<Cl_TemplateElement> col1 = (ICollection<Cl_TemplateElement>)val1;
             ICollection<Cl_TemplateElement> col2 = (ICollection<Cl_TemplateElement>)val2;
-
-            if ((col1 == null && val2 != null) || (col1 != null && val2 == null))
-                return false;
 
             if (col1.Count() != col2.Count())
                 return false;
@@ -359,6 +374,8 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             {
                 if ((elm1 == null && elm2 != null) || (elm1 != null && elm2 == null))
                     return false;
+                if (elm1 == null && elm2 == null)
+                    return true;
             }
 
             isElement1 = elm1.p_ChildElement != null;
@@ -387,14 +404,39 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 
             if (elementType == typeof(Cl_ElementsParams))
                 return Compare_Array_Cl_ElementsParams(val1, val2);
+            else if (elementType == typeof(Byte))
+                return Compare_Array_Byte(val1, val2);
             else
                 return Array.Equals(val1, val2);
+        }
+
+        private bool Compare_Array_Byte(object val1, object val2)
+        {
+            byte[] a1 = (byte[])val1;
+            byte[] a2 = (byte[])val2;
+
+            if (a1.Count() != a2.Count())
+                return false;
+
+            for (int i = 0; i < a1.Count(); i++)
+                if (a1[i] != a2[i])
+                    return false;
+
+            return true;
         }
 
         private bool Compare_Array_Cl_ElementsParams(object val1, object val2)
         {
             Cl_ElementsParams[] elm1 = (Cl_ElementsParams[])val1;
             Cl_ElementsParams[] elm2 = (Cl_ElementsParams[])val2;
+
+            if (val1 == null || val2 == null)
+            {
+                if ((val1 == null && val2 != null) || (val1 != null && val2 == null))
+                    return false;
+                if (val1 == null && val2 == null)
+                    return true;
+            }
 
             if (elm1.Count() != elm2.Count())
                 return false;
@@ -414,7 +456,10 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             {
                 if ((elm1 == null && elm2 != null) || (elm1 != null && elm2 == null))
                     return false;
+                if (elm1 == null && elm2 == null)
+                    return true;
             }
+
             if (elm1.p_Value != elm2.p_Value)
                 return false;
 
@@ -472,31 +517,43 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
         #region NormalizeValue
         private string GetNormalizeValue(PropertyInfo pInfo, object value)
         {
+            Type type = pInfo.PropertyType;
             string outValue = "";
-            if (value == null)
-                return outValue;
+            //if (value == null)
+            //    return outValue;
 
-            if (value is String)
+            if (type == typeof(String))
                 outValue = GetDefaultValue(value);
-            else if (value is Byte)
+            else if (type == typeof(Byte))
                 outValue = GetDefaultValue(value);
-            else if (value is Cl_Group)
+            else if (type == typeof(Cl_Group))
                 outValue = GetGroupValue(value);
-            else if (value is Enum)
+            else if (type == typeof(Enum))
                 outValue = GetEnumValue(value);
-            else if (value is Boolean)
+            else if (type == typeof(Boolean))
                 outValue = GetBoolValue(value);
-            else if (value is Decimal)
+            else if (type == typeof(Decimal))
                 outValue = GetDecimalValue(value);
-            else if (value is Array)
-                outValue = GetArraysValue(value);
             else
             {
-                if (value.GetType().Name == "HashSet`1")
+                if (type.Name == "ICollection`1")
                     outValue = GetCollectionTemplate(pInfo, value);
                 else
-                    outValue = GetDefaultValue(value);
+                {
+                    if (type.BaseType != null)
+                    {
+                        if (type.BaseType == typeof(Enum))
+                            outValue = GetEnumValue(value);
+                        else if (type.BaseType == typeof(Array))
+                            outValue = GetArraysValue(value);
+                        else
+                            throw new NotImplementedException();
+                    }
+                    else
+                        throw new NotImplementedException();
+                }
             }
+
             return outValue;
         }
 

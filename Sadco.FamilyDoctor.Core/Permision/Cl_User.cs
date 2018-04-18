@@ -10,11 +10,11 @@ namespace Sadco.FamilyDoctor.Core.Permision
     {
         public enum E_Sex : byte
         {
-            /// <summary>Мужчина</summary>
-            [Description("Мужчина")]
+            /// <summary>Мужской</summary>
+            [Description("Мужской")]
             Man,
-            /// <summary>Женьщина</summary>
-            [Description("Женьщина")]
+            /// <summary>Женский</summary>
+            [Description("Женский")]
             Female
         }
 

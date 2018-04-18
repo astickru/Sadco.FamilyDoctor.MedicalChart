@@ -147,6 +147,9 @@ namespace Sadco.FamilyDoctor.Core.Controls
                         Ctrl_TreeNodeTemplate draggedNodeTemplate = (Ctrl_TreeNodeTemplate)e.Data.GetData(typeof(Ctrl_TreeNodeTemplate));
                         if (e.Effect == DragDropEffects.Move)
                         {
+                            EntityLog eLog = new EntityLog();
+                            eLog.SetEntity(draggedNodeTemplate.p_Template);
+
                             var elsDraggeds = Cl_App.m_DataContext.p_Templates.Where(el => el.p_TemplateID == draggedNodeTemplate.p_Template.p_TemplateID);
                             if (elsDraggeds != null)
                             {
@@ -159,8 +162,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                                 if (isChange)
                                 {
                                     Cl_App.m_DataContext.SaveChanges();
-                                    EntityLog eLog = new EntityLog();
-                                    eLog.SetEntity(draggedNodeTemplate.p_Template);
+                                    eLog.SaveEntity(draggedNodeTemplate.p_Template);
                                     transaction.Commit();
                                     draggedNodeTemplate.Remove();
                                     a_TargetNodeGroup.Nodes.Insert(f_GetFirstGroupInNode(a_TargetNodeGroup.Nodes), draggedNodeTemplate);
@@ -280,7 +282,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                             transaction.Commit();
 
                             SelectedNode.Remove();
-                            transaction.Commit();
+                            //transaction.Commit();
                         }
                     }
                     else

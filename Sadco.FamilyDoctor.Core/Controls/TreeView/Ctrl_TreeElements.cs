@@ -205,6 +205,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     Cl_App.m_DataContext.SaveChanges();
                     newElement.p_ElementID = newElement.p_ID;
                     Cl_App.m_DataContext.SaveChanges();
+                    eLog.SaveEntity(newElement);
                     transaction.Commit();
 
                     Ctrl_TreeNodeElement newNode = new Ctrl_TreeNodeElement(group, newElement);
