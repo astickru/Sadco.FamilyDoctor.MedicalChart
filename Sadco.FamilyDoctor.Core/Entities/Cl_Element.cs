@@ -399,6 +399,13 @@ namespace Sadco.FamilyDoctor.Core.Entities
             }
         }
 
+        /// <summary>Является ли значение элемента текстом</summary>
+        public bool p_IsImage {
+            get {
+                return !p_IsText;
+            }
+        }
+
         /// <summary>Является ли значение элемента из справочника</summary>
         public bool p_IsListBox {
             get {

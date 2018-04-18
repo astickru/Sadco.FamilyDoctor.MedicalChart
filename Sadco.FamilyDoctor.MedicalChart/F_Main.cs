@@ -83,6 +83,7 @@ namespace Sadco.FamilyDoctor.MedicalChart
 
         private void f_SetControl<T>() where T : UserControl
         {
+            menuMegaTemplateDeleted.Checked = false;
             if (typeof(T) == typeof(UC_EditorElements))
                 menuMegaTemplateDeleted.Enabled = true;
             else
