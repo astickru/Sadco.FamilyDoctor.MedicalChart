@@ -99,13 +99,19 @@ namespace Sadco.FamilyDoctor.MedicalChart
 
         private void menuMegaTemplateDeleted_Click(object sender, EventArgs e)
         {
-            if (!(p_PanelManager.p_ActiveControl is UC_EditorElements)) return;
-
-            UC_EditorElements elements_UI = p_PanelManager.p_ActiveControl as UC_EditorElements;
             ToolStripMenuItem menuItem = sender as ToolStripMenuItem;
             menuItem.Checked = !menuItem.Checked;
-            elements_UI.p_IsShowDeleted = menuItem.Checked;
-            elements_UI.f_ShowDeletedElements(menuItem.Checked);
+            if (p_PanelManager.p_ActiveControl is UC_EditorElements)
+            {
+                var winApp = p_PanelManager.p_ActiveControl as UC_EditorElements;
+                winApp.p_IsShowDeleted = menuItem.Checked;
+                winApp.f_ShowDeletedElements(menuItem.Checked);
+            }
+            else if (p_PanelManager.p_ActiveControl is UC_Records)
+            {
+                var winApp = p_PanelManager.p_ActiveControl as UC_Records;
+                winApp.p_IsShowDeleted = menuItem.Checked;
+            }
         }
     }
 }

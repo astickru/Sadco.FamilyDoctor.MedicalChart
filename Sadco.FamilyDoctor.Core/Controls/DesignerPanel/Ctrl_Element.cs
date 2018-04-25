@@ -118,7 +118,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         private Ctrl_CheckedComboBox ctrl_DopValuesMulti;
         private TextBox ctrl_DopValue;
         private Ctrl_TextBoxAutoHeight ctrl_DopValueBox;
-        private PictureBox ctrl_Image;
+        private Ctrl_Paint ctrl_Image;
 
         private Panel f_GetSymmetricalPanel(Control a_LeftControl, Control a_RightControl, string a_LeftText, string a_RightText)
         {
@@ -509,21 +509,21 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     rowPanel.Margin = new Padding(0);
                     a_Table.Controls.Add(rowPanel, 0, a_RowIndex);
                     a_Table.SetColumnSpan(rowPanel, a_Table.ColumnCount);
-                    //a_Table.RowCount = a_RowIndex - 1;
                 }
                 else
                     panel.Controls.Add(rowPanel);
                 l = new Label() { Text = p_Element.p_Name };
                 l.Margin = new Padding(0, 6, 0, 0);
                 rowPanel.Controls.Add(l);
-                ctrl_Image = new PictureBox();
+                ctrl_Image = new Ctrl_Paint();
                 ctrl_Image.Size = new Size(250, 200);
                 ctrl_Image.SizeMode = PictureBoxSizeMode.CenterImage;
-                ctrl_Image.Image = p_Element.p_Image;
                 rowPanel.Controls.Add(ctrl_Image);
 
                 if (p_Element.p_Image == null)
                 {
+                    ctrl_Image.Image = a_RecordValue.p_Image;
+                    ctrl_Image.p_ReadOnly = true;
                     var bImageLoad = new Button();
                     bImageLoad.AutoSize = true;
                     bImageLoad.Text = "загрузить";
@@ -532,6 +532,11 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 }
                 else
                 {
+                    if (a_RecordValue.p_Image != null)
+                        ctrl_Image.Image = a_RecordValue.p_Image;
+                    else
+                        ctrl_Image.Image = p_Element.p_Image;
+                    ctrl_Image.p_ReadOnly = false;
                     var bReset = new Button();
                     bReset.AutoSize = true;
                     bReset.Text = "сбросить";
@@ -704,12 +709,17 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
 
         private void BReset_Click(object sender, System.EventArgs e)
         {
-
+            if (p_Element.p_Image != null)
+                ctrl_Image.f_Clear();
         }
 
         private void BClear_Click(object sender, System.EventArgs e)
         {
-
+            if (p_Element.p_Image != null)
+            {
+                ctrl_Image.Image = p_Element.p_Image;
+                ctrl_Image.f_Clear();
+            }
         }
     }
 }
