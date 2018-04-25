@@ -1,7 +1,10 @@
 ﻿using Sadco.FamilyDoctor.Core.Entities;
-using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
+using System;
+using System.Linq;
+using FD.dat.mon.stb.lib;
+using System.Collections.Generic;
 
 namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
 {
@@ -13,7 +16,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         {
             InitializeComponent();
             Height = m_ElementHeight;
+
+            m_ToolTip.AutoPopDelay = 5000;
+            m_ToolTip.InitialDelay = 1000;
+            m_ToolTip.ReshowDelay = 500;
+            m_ToolTip.ShowAlways = true;
         }
+
+        ToolTip m_ToolTip = new ToolTip();
 
         public Cl_Element m_Element = null;
         public Cl_Element p_Element {
@@ -22,6 +32,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
             set {
                 m_Element = value;
+                m_ToolTip.SetToolTip(this, m_Element.p_Help);
             }
         }
 
@@ -90,15 +101,67 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
         }
 
-        /// <summary>Инициализация пользовательских контролов</summary>
-        public void f_InitUIControls()
+        /// <summary>Установка значения элемента записи</summary>
+        public void f_SetRecordElementValues(Cl_RecordValue a_RecordValue)
         {
-            f_InitUIControls(null, 0);
+            f_SetRecordElementValues(a_RecordValue, null, 0);
         }
 
-        /// <summary>Инициализация пользовательских контролов</summary>
-        public void f_InitUIControls(TableLayoutPanel a_Table, int a_RowIndex)
+        private Cl_Record m_Record = null;
+        private ComboBox ctrl_PartLocations;
+        private Ctrl_CheckedComboBox ctrl_PartLocationsMulti;
+        private Ctrl_SeparatorCombobox ctrl_Values;
+        private Ctrl_CheckedComboBox ctrl_ValuesMulti;
+        private TextBox ctrl_Value;
+        private Ctrl_TextBoxAutoHeight ctrl_ValueBox;
+        private Ctrl_SeparatorCombobox ctrl_DopValues;
+        private Ctrl_CheckedComboBox ctrl_DopValuesMulti;
+        private TextBox ctrl_DopValue;
+        private Ctrl_TextBoxAutoHeight ctrl_DopValueBox;
+        private PictureBox ctrl_Image;
+
+        private Panel f_GetSymmetricalPanel(Control a_LeftControl, Control a_RightControl, string a_LeftText, string a_RightText)
         {
+            var cellPanel = new TableLayoutPanel();
+            cellPanel.AutoSize = true;
+            cellPanel.Margin = new Padding(0);
+
+            var title = new Label();
+            title.Text = a_LeftText;
+            title.RightToLeft = RightToLeft.Yes;
+            title.AutoSize = true;
+            title.Margin = new Padding(0, 6, 0, 0);
+            cellPanel.Controls.Add(title, 0, 0);
+            cellPanel.Controls.Add(a_LeftControl, 1, 0);
+
+            title = new Label();
+            title.Text = a_RightText;
+            title.RightToLeft = RightToLeft.Yes;
+            title.AutoSize = true;
+            title.Margin = new Padding(0, 6, 0, 0);
+            cellPanel.Controls.Add(title, 0, 1);
+            cellPanel.Controls.Add(a_RightControl, 1, 1);
+
+            return cellPanel;
+        }
+
+        /// <summary>Инициализация пользовательских контролов для записи</summary>
+        public void f_SetRecordElementValues(Cl_RecordValue a_RecordValue, TableLayoutPanel a_Table, int a_RowIndex)
+        {
+            if (a_RecordValue == null || a_RecordValue.p_Record == null || p_Element == null) return;
+            m_Record = a_RecordValue.p_Record;
+            ctrl_PartLocationsMulti = null;
+            ctrl_PartLocations = null;
+            ctrl_Values = null;
+            ctrl_ValuesMulti = null;
+            ctrl_Value = null;
+            ctrl_ValueBox = null;
+            ctrl_DopValues = null;
+            ctrl_DopValuesMulti = null;
+            ctrl_DopValue = null;
+            ctrl_DopValueBox = null;
+            ctrl_Image = null;
+
             FlowLayoutPanel panel = null;
             if (a_Table == null)
             {
@@ -109,14 +172,13 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 Controls.Add(panel);
             }
             Label l = null;
-            TextBox tb = null;
-            ComboBox cb = null;
             if (p_Element.p_IsText)
             {
                 if (p_Element.p_IsPartPre)
                 {
                     l = new Label() { Text = p_Element.p_PartPre };
-                    l.TextAlign = ContentAlignment.MiddleLeft;
+                    l.AutoSize = true;
+                    l.Margin = new Padding(0, 6, 0, 0);
                     if (a_Table != null)
                         a_Table.Controls.Add(l, 0, a_RowIndex);
                     else
@@ -124,81 +186,298 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 }
                 if (p_Element.p_IsPartLocations && p_Element.p_PartLocations != null && p_Element.p_PartLocations.Length > 0)
                 {
-                    cb = new ComboBox();
-                    cb.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                    cb.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                    cb.AutoCompleteCustomSource.AddRange(p_Element.p_PartLocations.Select(e => e.p_Value).ToArray());
-                    cb.DataSource = new BindingSource(p_Element.p_PartLocations, null);
-                    cb.DisplayMember = "p_Value";
-                    cb.ValueMember = "p_ID";
-                    cb.Width = 200;
-
-                    if (a_Table != null)
-                        a_Table.Controls.Add(cb, 1, a_RowIndex);
+                    if (p_Element.p_IsPartLocationsMulti)
+                    {
+                        ctrl_PartLocationsMulti = new Ctrl_CheckedComboBox();
+                        ctrl_PartLocationsMulti.Enabled = p_Element.p_Editing;
+                        ctrl_PartLocationsMulti.DisplayMember = "p_Value";
+                        ctrl_PartLocationsMulti.ValueMember = "p_ID";
+                        ctrl_PartLocationsMulti.Width = 300;
+                        ctrl_PartLocationsMulti.MaxDropDownItems = 10;
+                        ctrl_PartLocationsMulti.ValueSeparator = ", ";
+                        for (int i = 0; i < p_Element.p_PartLocations.Length; i++)
+                        {
+                            ctrl_PartLocationsMulti.Items.Add(p_Element.p_PartLocations[i]);
+                            if (a_RecordValue.p_Params != null)
+                            {
+                                var rValue = a_RecordValue.p_PartLocations.FirstOrDefault(rv => rv.p_ElementParamID == p_Element.p_PartLocations[i].p_ID);
+                                if (rValue != null)
+                                    ctrl_PartLocationsMulti.SetItemChecked(i, true);
+                            }
+                        }
+                        if (a_Table != null)
+                            a_Table.Controls.Add(ctrl_PartLocationsMulti, 1, a_RowIndex);
+                        else
+                            panel.Controls.Add(ctrl_PartLocationsMulti);
+                    }
                     else
-                        panel.Controls.Add(cb);
+                    {
+                        ctrl_PartLocations = new ComboBox();
+                        ctrl_PartLocations.Enabled = p_Element.p_Editing;
+                        ctrl_PartLocations.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                        ctrl_PartLocations.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                        ctrl_PartLocations.AutoCompleteCustomSource.AddRange(p_Element.p_PartLocations.Select(e => e.p_Value).ToArray());
+                        foreach (var pLoc in p_Element.p_PartLocations)
+                        {
+                            ctrl_PartLocations.Items.Add(pLoc);
+                        }
+                        ctrl_PartLocations.DisplayMember = "p_Value";
+                        ctrl_PartLocations.ValueMember = "p_ID";
+                        ctrl_PartLocations.Width = 300;
+                        var lParam = a_RecordValue.p_PartLocations.FirstOrDefault();
+                        if (lParam != null)
+                            ctrl_PartLocations.SelectedItem = p_Element.p_PartLocations.FirstOrDefault(pl => pl.p_ID == lParam.p_ElementParamID);
+                        if (a_Table != null)
+                            a_Table.Controls.Add(ctrl_PartLocations, 1, a_RowIndex);
+                        else
+                            panel.Controls.Add(ctrl_PartLocations);
+                    }
                 }
-                if (p_Element.p_IsListBox)
+                if (p_Element.p_IsTextFromCatalog)
                 {
-                    var scb = new Ctrl_SeparatorCombobox();
-                    scb.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                    scb.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                    scb.AutoCompleteCustomSource.AddRange(p_Element.p_NormValues.Select(e => e.p_Value).ToArray());
-                    scb.AutoCompleteCustomSource.AddRange(p_Element.p_PatValues.Select(e => e.p_Value).ToArray());
-                    scb.FormattingEnabled = true;
-                    scb.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-                    scb.Width = 200;
-                    foreach (var val in p_Element.p_NormValues)
+                    var normValues = p_Element.p_NormValues.Select(e => e.p_Value).ToArray();
+                    var patValues = p_Element.p_PatValues.Select(e => e.p_Value).ToArray();
+                    if (p_Element.p_IsMultiSelect)
                     {
-                        scb.f_AddObject(val);
+                        ctrl_ValuesMulti = new Ctrl_CheckedComboBox();
+                        ctrl_ValuesMulti.Enabled = p_Element.p_Editing;
+                        ctrl_ValuesMulti.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+                        ctrl_ValuesMulti.ValueSeparator = ", ";
+                        ctrl_ValuesMulti.DisplayMember = "p_Value";
+                        ctrl_ValuesMulti.ValueMember = "p_ID";
+                        ctrl_ValuesMulti.Width = 300;
+                        if (p_Element.p_Symmetrical)
+                        {
+                            ctrl_DopValuesMulti = new Ctrl_CheckedComboBox();
+                            ctrl_DopValuesMulti.Enabled = p_Element.p_Editing;
+                            ctrl_DopValuesMulti.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+                            ctrl_DopValuesMulti.ValueSeparator = ", ";
+                            ctrl_DopValuesMulti.DisplayMember = "p_Value";
+                            ctrl_DopValuesMulti.ValueMember = "p_ID";
+                            ctrl_DopValuesMulti.Width = 300;
+                        }
+                        for (int i = 0; i < p_Element.p_NormValues.Length; i++)
+                        {
+                            var val = p_Element.p_NormValues[i];
+                            ctrl_ValuesMulti.Items.Add(val);
+                            if (p_Element.p_Symmetrical)
+                                ctrl_DopValuesMulti.Items.Add(val);
+                        }
+                        ctrl_ValuesMulti.f_SetSeparator(p_Element.p_NormValues.Length);
+                        if (p_Element.p_Symmetrical)
+                            ctrl_DopValuesMulti.f_SetSeparator(p_Element.p_NormValues.Length);
+                        for (int i = 0; i < p_Element.p_PatValues.Length; i++)
+                        {
+                            var val = p_Element.p_PatValues[i];
+                            ctrl_ValuesMulti.Items.Add(val);
+                            if (p_Element.p_Symmetrical)
+                                ctrl_DopValuesMulti.Items.Add(val);
+                        }
+
+                        if (m_Record.p_Version > 0)
+                        {
+                            for (int i = 0; i < ctrl_ValuesMulti.Items.Count; i++)
+                            {
+                                var val = (Cl_ElementParam)ctrl_ValuesMulti.Items[i];
+                                var rValue = a_RecordValue.p_ValuesCatalog.FirstOrDefault(rv => rv.p_ElementParamID == val.p_ID);
+                                if (rValue != null)
+                                    ctrl_ValuesMulti.SetItemChecked(i, true);
+                            }
+                            if (p_Element.p_Symmetrical)
+                            {
+                                for (int i = 0; i < ctrl_DopValuesMulti.Items.Count; i++)
+                                {
+                                    var val = (Cl_ElementParam)ctrl_DopValuesMulti.Items[i];
+                                    var rValue = a_RecordValue.p_ValuesDopCatalog.FirstOrDefault(rv => rv.p_ElementParamID == val.p_ID);
+                                    if (rValue != null)
+                                        ctrl_DopValuesMulti.SetItemChecked(i, true);
+                                }
+                            }
+                        }
+                        else if (p_Element.p_Default != null)
+                        {
+                            for (int i = 0; i < ctrl_ValuesMulti.Items.Count; i++)
+                            {
+                                var val = (Cl_ElementParam)ctrl_ValuesMulti.Items[i];
+                                if (p_Element.p_Default.p_ID == val.p_ID)
+                                    ctrl_ValuesMulti.SetItemChecked(i, true);
+                            }
+                            if (p_Element.p_Symmetrical)
+                            {
+                                for (int i = 0; i < ctrl_DopValuesMulti.Items.Count; i++)
+                                {
+                                    var val = (Cl_ElementParam)ctrl_DopValuesMulti.Items[i];
+                                    if (p_Element.p_Default.p_ID == val.p_ID)
+                                        ctrl_DopValuesMulti.SetItemChecked(i, true);
+                                }
+                            }
+                        }
+
+                        if (p_Element.p_Symmetrical)
+                        {
+                            var cellPanel = f_GetSymmetricalPanel(ctrl_ValuesMulti, ctrl_DopValuesMulti, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
+                            if (a_Table != null)
+                                a_Table.Controls.Add(cellPanel, 2, a_RowIndex);
+                            else
+                                panel.Controls.Add(cellPanel);
+                        }
+                        else
+                        {
+                            if (a_Table != null)
+                                a_Table.Controls.Add(ctrl_ValuesMulti, 2, a_RowIndex);
+                            else
+                                panel.Controls.Add(ctrl_ValuesMulti);
+                        }
                     }
-                    scb.f_SetSeparator(p_Element.p_NormValues.Length);
-                    foreach (var val in p_Element.p_PatValues)
-                    {
-                        scb.f_AddObject(val);
-                    }
-                    if (scb.Items.Count > 0)
-                        scb.SelectedIndex = 0;
-                    if (a_Table != null)
-                        a_Table.Controls.Add(scb, 2, a_RowIndex);
                     else
-                        panel.Controls.Add(scb);
+                    {
+                        ctrl_Values = new Ctrl_SeparatorCombobox();
+                        ctrl_Values.Enabled = p_Element.p_Editing;
+                        ctrl_Values.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                        ctrl_Values.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                        ctrl_Values.FormattingEnabled = true;
+                        ctrl_Values.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+                        ctrl_Values.Width = 300;
+                        ctrl_Values.AutoCompleteCustomSource.AddRange(normValues);
+                        ctrl_Values.AutoCompleteCustomSource.AddRange(patValues);
+                        if (p_Element.p_Symmetrical)
+                        {
+                            ctrl_DopValues = new Ctrl_SeparatorCombobox();
+                            ctrl_DopValues.Enabled = p_Element.p_Editing;
+                            ctrl_DopValues.AutoCompleteMode = ctrl_Values.AutoCompleteMode;
+                            ctrl_DopValues.AutoCompleteSource = ctrl_Values.AutoCompleteSource;
+                            ctrl_DopValues.FormattingEnabled = ctrl_Values.FormattingEnabled;
+                            ctrl_DopValues.p_SeparatorStyle = ctrl_Values.p_SeparatorStyle;
+                            ctrl_DopValues.Width = ctrl_Values.Width;
+                            ctrl_DopValues.AutoCompleteCustomSource.AddRange(normValues);
+                            ctrl_DopValues.AutoCompleteCustomSource.AddRange(patValues);
+                        }
+                        foreach (var val in p_Element.p_NormValues)
+                        {
+                            ctrl_Values.f_AddObject(val);
+                            if (p_Element.p_Symmetrical)
+                                ctrl_DopValues.f_AddObject(val);
+                        }
+                        ctrl_Values.f_SetSeparator(p_Element.p_NormValues.Length);
+                        if (p_Element.p_Symmetrical)
+                            ctrl_DopValues.f_SetSeparator(p_Element.p_NormValues.Length);
+                        foreach (var val in p_Element.p_PatValues)
+                        {
+                            ctrl_Values.f_AddObject(val);
+                            if (p_Element.p_Symmetrical)
+                                ctrl_DopValues.f_AddObject(val);
+                        }
+
+                        if (m_Record.p_Version > 0)
+                        {
+                            var rValue = a_RecordValue.p_ValuesCatalog.FirstOrDefault();
+                            if (rValue != null)
+                            {
+                                ctrl_Values.SelectedItem = rValue.p_ElementParam;
+                            }
+                            if (p_Element.p_Symmetrical)
+                            {
+                                rValue = a_RecordValue.p_ValuesDopCatalog.FirstOrDefault();
+                                if (rValue != null)
+                                {
+                                    ctrl_DopValues.SelectedItem = rValue.p_ElementParam;
+                                }
+                            }
+                        }
+                        else if (p_Element.p_Default != null)
+                        {
+                            ctrl_Values.SelectedItem = p_Element.p_Default;
+                            if (p_Element.p_Symmetrical)
+                                ctrl_DopValues.SelectedItem = p_Element.p_Default;
+                        }
+
+                        if (p_Element.p_Symmetrical)
+                        {
+                            var cellPanel = f_GetSymmetricalPanel(ctrl_Values, ctrl_DopValues, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
+                            if (a_Table != null)
+                                a_Table.Controls.Add(cellPanel, 2, a_RowIndex);
+                            else
+                                panel.Controls.Add(cellPanel);
+                        }
+                        else
+                        {
+                            if (a_Table != null)
+                                a_Table.Controls.Add(ctrl_Values, 2, a_RowIndex);
+                            else
+                                panel.Controls.Add(ctrl_Values);
+                        }
+                    }
                 }
                 else
                 {
                     if (p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Float || p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Line)
                     {
-                        tb = new TextBox();
-                        tb.Width = 200;
-                        if (a_Table != null)
-                            a_Table.Controls.Add(tb, 2, a_RowIndex);
+                        ctrl_Value = new TextBox();
+                        ctrl_Value.Enabled = p_Element.p_Editing;
+                        ctrl_Value.Width = 400;
+                        ctrl_Value.Text = a_RecordValue.p_ValueUser;
+                        if (p_Element.p_Symmetrical)
+                        {
+                            ctrl_DopValue = new TextBox();
+                            ctrl_DopValue.Enabled = p_Element.p_Editing;
+                            ctrl_DopValue.Width = ctrl_Value.Width;
+                            ctrl_DopValue.Text = a_RecordValue.p_ValueDopUser;
+                            var cellPanel = f_GetSymmetricalPanel(ctrl_Value, ctrl_DopValue, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
+                            if (a_Table != null)
+                                a_Table.Controls.Add(cellPanel, 2, a_RowIndex);
+                            else
+                                panel.Controls.Add(cellPanel);
+                        }
                         else
-                            panel.Controls.Add(tb);
+                        {
+                            if (a_Table != null)
+                                a_Table.Controls.Add(ctrl_Value, 2, a_RowIndex);
+                            else
+                                panel.Controls.Add(ctrl_Value);
+                        }
                     }
                     else
                     {
-                        Ctrl_TextBoxAutoHeight tbh = new Ctrl_TextBoxAutoHeight() { p_MinLines = 3 };
-                        tbh.Width = 200;
-                        if (a_Table != null)
-                            a_Table.Controls.Add(tbh, 2, a_RowIndex);
+                        ctrl_ValueBox = new Ctrl_TextBoxAutoHeight() { p_MinLines = 3 };
+                        ctrl_ValueBox.Enabled = p_Element.p_Editing;
+                        ctrl_ValueBox.Width = 400;
+                        ctrl_ValueBox.Text = a_RecordValue.p_ValueUser;
+                        if (p_Element.p_Symmetrical)
+                        {
+                            ctrl_DopValueBox = new Ctrl_TextBoxAutoHeight() { p_MinLines = 3 };
+                            ctrl_DopValueBox.Width = ctrl_ValueBox.Width;
+                            ctrl_DopValueBox.Text = a_RecordValue.p_ValueDopUser;
+                            var cellPanel = f_GetSymmetricalPanel(ctrl_ValueBox, ctrl_DopValueBox, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
+                            if (a_Table != null)
+                                a_Table.Controls.Add(cellPanel, 2, a_RowIndex);
+                            else
+                                panel.Controls.Add(cellPanel);
+                        }
                         else
-                            panel.Controls.Add(tbh);
+                        {
+                            if (a_Table != null)
+                                a_Table.Controls.Add(ctrl_ValueBox, 2, a_RowIndex);
+                            else
+                                panel.Controls.Add(ctrl_ValueBox);
+                        }
                     }
-
                 }
                 if (p_Element.p_IsPartPost)
                 {
                     l = new Label() { Text = p_Element.p_PartPost };
-                    l.TextAlign = ContentAlignment.MiddleLeft;
+                    l.AutoSize = true;
+                    l.Margin = new Padding(0, 6, 0, 0);
                     if (a_Table != null)
                         a_Table.Controls.Add(l, 3, a_RowIndex);
                     else
                         panel.Controls.Add(l);
                 }
+                byte age = a_RecordValue.p_Record.f_GetPatientAge();
                 if (p_Element.p_IsPartNorm)
                 {
                     l = new Label() { Text = p_Element.p_PartNorm.ToString() };
-                    l.TextAlign = ContentAlignment.MiddleLeft;
+                    l.AutoSize = true;
+                    l.Margin = new Padding(0, 6, 0, 0);
                     if (a_Table != null)
                         a_Table.Controls.Add(l, 4, a_RowIndex);
                     else
@@ -206,42 +485,231 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 }
                 else if (p_Element.p_IsPartNormRange && p_Element.p_PartAgeNorms != null && p_Element.p_PartAgeNorms.Count > 0)
                 {
-                    cb = new ComboBox();
-
-                    //cb.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                    //cb.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                    //m_Elements = Cl_App.m_DataContext.p_Elements.Where(e => !e.p_IsArhive && e.p_ElementType != Cl_Element.E_ElementsTypes.Image).GroupBy(e => e.p_ElementID)
-                    //                    .Select(grp => grp
-                    //                                .OrderByDescending(v => v.p_Version).FirstOrDefault()).ToArray();
-                    ////cb.AutoCompleteCustomSource.AddRange(p_Element.p_PartAgeNorms.Select(e => e.p_).ToArray());
-                    //cb.AutoCompleteCustomSource.AddRange(p_Element.p_PartAgeNorms.Select(e => e.p_).ToArray());
-                    //cb.DataSource = new BindingSource(m_Elements, null);
-                    //cb.DisplayMember = "p_Name";
-                    //cb.ValueMember = "p_Tag";
-
-                    cb.Width = 200;
-                    foreach (var loc in p_Element.p_PartAgeNorms)
+                    Cl_AgeNorm ageNorm = p_Element.p_PartAgeNorms.FirstOrDefault(a => a.p_AgeFrom <= age && a.p_AgeTo >= age);
+                    if (ageNorm != null)
                     {
-                        cb.Items.Add(loc);
+                        l = new Label() { Text = string.Format("{0} - {1}", ageNorm.f_GetMin(a_RecordValue.p_Record.p_Sex, p_Element.p_NumberRound), ageNorm.f_GetMax(a_RecordValue.p_Record.p_Sex, p_Element.p_NumberRound)) };
+                        l.AutoSize = true;
+                        l.Margin = new Padding(0, 6, 0, 0);
+                        if (a_Table != null)
+                            a_Table.Controls.Add(l, 4, a_RowIndex);
+                        else
+                            panel.Controls.Add(l);
                     }
-                    cb.SelectedIndex = 0;
-                    if (a_Table != null)
-                        a_Table.Controls.Add(cb, 4, a_RowIndex);
-                    else
-                        panel.Controls.Add(cb);
                 }
             }
             else if (p_Element.p_IsImage)
             {
-                l = new Label() { Text = p_Element.p_Name };
-                l.TextAlign = ContentAlignment.MiddleLeft;
+                var rowPanel = new FlowLayoutPanel();
+                rowPanel.WrapContents = false;
+                rowPanel.AutoSize = true;
                 if (a_Table != null)
-                    a_Table.Controls.Add(l, 4, a_RowIndex);
+                {
+                    rowPanel.Dock = DockStyle.Fill;
+                    rowPanel.Margin = new Padding(0);
+                    a_Table.Controls.Add(rowPanel, 0, a_RowIndex);
+                    a_Table.SetColumnSpan(rowPanel, a_Table.ColumnCount);
+                    //a_Table.RowCount = a_RowIndex - 1;
+                }
                 else
-                    panel.Controls.Add(l);
-                var pb = new PictureBox();
+                    panel.Controls.Add(rowPanel);
+                l = new Label() { Text = p_Element.p_Name };
+                l.Margin = new Padding(0, 6, 0, 0);
+                rowPanel.Controls.Add(l);
+                ctrl_Image = new PictureBox();
+                ctrl_Image.Size = new Size(250, 200);
+                ctrl_Image.SizeMode = PictureBoxSizeMode.CenterImage;
+                ctrl_Image.Image = p_Element.p_Image;
+                rowPanel.Controls.Add(ctrl_Image);
 
+                if (p_Element.p_Image == null)
+                {
+                    var bImageLoad = new Button();
+                    bImageLoad.AutoSize = true;
+                    bImageLoad.Text = "загрузить";
+                    bImageLoad.Click += BImageLoad_Click;
+                    rowPanel.Controls.Add(bImageLoad);
+                }
+                else
+                {
+                    var bReset = new Button();
+                    bReset.AutoSize = true;
+                    bReset.Text = "сбросить";
+                    bReset.Click += BReset_Click;
+                    rowPanel.Controls.Add(bReset);
+                    var bClear = new Button();
+                    bClear.AutoSize = true;
+                    bClear.Text = "очистить";
+                    bClear.Click += BClear_Click;
+                    rowPanel.Controls.Add(bClear);
+                }
             }
+        }
+
+        /// <summary>Получение значения элемента записи</summary>
+        public Cl_RecordValue f_GetRecordElementValues(Cl_Record a_Record)
+        {
+            if (a_Record == null || p_Element == null) return null;
+            var recordValue = new Cl_RecordValue();
+            recordValue.p_ElementID = p_Element.p_ID;
+            recordValue.p_Element = p_Element;
+            recordValue.p_RecordID = a_Record.p_ID;
+            recordValue.p_Record = a_Record;
+            recordValue.p_Params = new List<Cl_RecordParam>();
+
+            if (p_Element.p_IsText)
+            {
+                if (p_Element.p_IsPartLocations)
+                {
+                    if (p_Element.p_IsPartLocationsMulti)
+                    {
+                        if (ctrl_PartLocationsMulti != null && ctrl_PartLocationsMulti.CheckedItems != null)
+                        {
+                            foreach (Cl_ElementParam ep in ctrl_PartLocationsMulti.CheckedItems)
+                            {
+                                recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue });
+                            }
+                        }
+                        else if (p_Element.p_Required)
+                            MonitoringStub.Message(string.Format("Локация с множественным выбором элемента {0} пустая", p_Element.p_Name));
+                    }
+                    else
+                    {
+                        if (ctrl_PartLocations != null && ctrl_PartLocations.SelectedItem != null)
+                        {
+                            var ep = (Cl_ElementParam)ctrl_PartLocations.SelectedItem;
+                            recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue });
+                        }
+                        else if (p_Element.p_Required)
+                            MonitoringStub.Message(string.Format("Локация элемента {0} пустая", p_Element.p_Name));
+                    }
+                }
+                if (p_Element.p_IsTextFromCatalog)
+                {
+                    if (p_Element.p_IsMultiSelect)
+                    {
+                        if (ctrl_ValuesMulti != null && ctrl_ValuesMulti.CheckedItems != null)
+                        {
+                            foreach (Cl_ElementParam ep in ctrl_ValuesMulti.CheckedItems)
+                            {
+                                recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue, p_IsDop = false });
+                            }
+                            if (p_Element.p_Symmetrical)
+                            {
+                                if (ctrl_DopValuesMulti != null && ctrl_DopValuesMulti.CheckedItems != null)
+                                {
+                                    foreach (Cl_ElementParam ep in ctrl_DopValuesMulti.CheckedItems)
+                                    {
+                                        recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue, p_IsDop = true });
+                                    }
+                                }
+                                else if (p_Element.p_Required)
+                                    MonitoringStub.Message(string.Format("Значения с множественным выбором из справочника для симметрического параметра элемента {0} пустые", p_Element.p_Name));
+                            }
+                        }
+                        else if (p_Element.p_Required)
+                            MonitoringStub.Message(string.Format("Значения с множественным выбором из справочника элемента {0} пустые", p_Element.p_Name));
+                    }
+                    else
+                    {
+                        if (ctrl_Values != null && ctrl_Values.SelectedItem != null)
+                        {
+                            var ep = (Cl_ElementParam)ctrl_Values.SelectedItem;
+                            recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue, p_IsDop = false });
+                            if (p_Element.p_Symmetrical)
+                            {
+                                if (ctrl_DopValues != null && ctrl_DopValues.SelectedItem != null)
+                                {
+                                    ep = (Cl_ElementParam)ctrl_DopValues.SelectedItem;
+                                    recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue, p_IsDop = true });
+                                }
+                                else if (p_Element.p_Required)
+                                    MonitoringStub.Message(string.Format("Значение из справочника для симметрического параметра элемента {0} пустое", p_Element.p_Name));
+                            }
+                        }
+                        else if (p_Element.p_Required)
+                            MonitoringStub.Message(string.Format("Значение из справочника элемента {0} пустое", p_Element.p_Name));
+                    }
+                }
+                else
+                {
+                    if (p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Float || p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Line)
+                    {
+                        if (ctrl_Value != null && !string.IsNullOrWhiteSpace(ctrl_Value.Text))
+                        {
+                            recordValue.p_ValueUser = ctrl_Value.Text;
+                            if (p_Element.p_Symmetrical)
+                            {
+                                if (ctrl_DopValue != null && !string.IsNullOrWhiteSpace(ctrl_DopValue.Text))
+                                {
+                                    recordValue.p_ValueDopUser = ctrl_DopValue.Text;
+                                }
+                                else if (p_Element.p_Required)
+                                    MonitoringStub.Message(string.Format("Значение для симметрического параметра элемента {0} пустое", p_Element.p_Name));
+                            }
+                        }
+                        else if (p_Element.p_Required)
+                            MonitoringStub.Message(string.Format("Значение элемента {0} пустое", p_Element.p_Name));
+                    }
+                    else
+                    {
+                        if (ctrl_ValueBox != null && !string.IsNullOrWhiteSpace(ctrl_ValueBox.Text))
+                        {
+                            recordValue.p_ValueUser = ctrl_ValueBox.Text;
+                            if (p_Element.p_Symmetrical)
+                            {
+                                if (ctrl_DopValueBox != null && !string.IsNullOrWhiteSpace(ctrl_DopValueBox.Text))
+                                {
+                                    recordValue.p_ValueDopUser = ctrl_DopValueBox.Text;
+                                }
+                                else if (p_Element.p_Required)
+                                    MonitoringStub.Message(string.Format("Значение для симметрического параметра элемента {0} пустое", p_Element.p_Name));
+                            }
+                        }
+                        else if (p_Element.p_Required)
+                            MonitoringStub.Message(string.Format("Значение элемента {0} пустое", p_Element.p_Name));
+                    }
+                }
+            }
+            else if (p_Element.p_IsImage)
+            {
+                if (ctrl_Image != null)
+                {
+                    recordValue.p_Image = ctrl_Image.Image;
+                }
+            }
+
+            return recordValue;
+        }
+
+        private void BImageLoad_Click(object sender, System.EventArgs e)
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
+            openFile.Filter = "Image Files |*.bmp; *.gif; *.jpg; *.jpeg; *.png";
+            openFile.FilterIndex = 1;
+            if (openFile.ShowDialog() != DialogResult.OK)
+                return;
+            Image result = null;
+            try
+            {
+                result = Image.FromFile(openFile.FileName);
+            }
+            catch (Exception ex)
+            {
+                MonitoringStub.Problem("Problem_Record", "Выбранный файл не является изображением", ex, null, null);
+                return;
+            }
+            ctrl_Image.Image = result;
+        }
+
+        private void BReset_Click(object sender, System.EventArgs e)
+        {
+
+        }
+
+        private void BClear_Click(object sender, System.EventArgs e)
+        {
+
         }
     }
 }

@@ -20,17 +20,29 @@ namespace Sadco.FamilyDoctor.Core.Controls
             }
             set {
                 m_Template = value;
-                if (m_Template != null)
-                {
-                    Text = m_Template.p_Name;
-                    Name = p_Template.p_ID.ToString();
-                    ImageKey = p_Template.p_IconName;
-                    SelectedImageKey = p_Template.p_IconName;
-                    if (p_Template.p_IsConflict)
-                        ForeColor = Color.Red;
-                    else
-                        ForeColor = Color.Blue;
-                }
+                f_Update();
+            }
+        }
+
+        /// <summary>Обновление части дерева</summary>
+        public void f_Update()
+        {
+            if (m_Template != null)
+            {
+                Text = m_Template.p_Name;
+                Name = p_Template.p_ID.ToString();
+                ImageKey = p_Template.p_IconName;
+                SelectedImageKey = p_Template.p_IconName;
+                if (p_Template.p_IsConflict)
+                    ForeColor = Color.Red;
+                else
+                    ForeColor = Color.Blue;
+            }
+            else
+            {
+                Text = "Шаблон отсутствует";
+                this.NodeFont = new Font(this.NodeFont, FontStyle.Bold);
+                ForeColor = Color.Red;
             }
         }
     }

@@ -41,6 +41,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.ctrlBSave = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.ctrl_Version = new System.Windows.Forms.Label();
             this.ctrl_CMTemplate.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -112,6 +114,8 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.ctrl_Version);
             this.panel1.Controls.Add(this.ctrlPatientFIO);
             this.panel1.Controls.Add(this.ctrlUserFIO);
             this.panel1.Controls.Add(this.label2);
@@ -176,6 +180,32 @@
             this.ctrlBSave.TabIndex = 0;
             this.ctrlBSave.Text = "сохранить";
             this.ctrlBSave.UseVisualStyleBackColor = true;
+            this.ctrlBSave.Click += new System.EventHandler(this.ctrlBSave_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Right;
+            this.label3.Location = new System.Drawing.Point(1113, 0);
+            this.label3.Name = "label3";
+            this.label3.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.label3.Size = new System.Drawing.Size(57, 18);
+            this.label3.TabIndex = 65;
+            this.label3.Text = "Версия:";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // ctrl_Version
+            // 
+            this.ctrl_Version.AutoSize = true;
+            this.ctrl_Version.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ctrl_Version.Location = new System.Drawing.Point(1170, 0);
+            this.ctrl_Version.Margin = new System.Windows.Forms.Padding(3, 0, 40, 0);
+            this.ctrl_Version.Name = "ctrl_Version";
+            this.ctrl_Version.Padding = new System.Windows.Forms.Padding(0, 5, 14, 0);
+            this.ctrl_Version.Size = new System.Drawing.Size(29, 18);
+            this.ctrl_Version.TabIndex = 64;
+            this.ctrl_Version.Text = "0";
+            this.ctrl_Version.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // Dlg_Record
             // 
@@ -216,5 +246,7 @@
         private System.Windows.Forms.Button ctrlBSave;
         private System.Windows.Forms.Label ctrlPatientFIO;
         private System.Windows.Forms.Label ctrlUserFIO;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label ctrl_Version;
     }
 }

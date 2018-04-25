@@ -42,7 +42,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             foreach (var te in templatesElements)
             {
                 templates.Add(te.p_Template);
-                templates.AddRange(f_GetConflictTemplates(te.p_ChildTemplate));
+                templates.AddRange(f_GetConflictTemplates(te.p_Template));
             }
             return templates.ToArray();
         }
@@ -55,7 +55,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             foreach (var te in templatesElements)
             {
                 templates.Add(te.p_Template);
-                templates.AddRange(f_GetConflictTemplates(te.p_ChildTemplate));
+                templates.AddRange(f_GetConflictTemplates(te.p_Template));
             }
             return templates.ToArray();
         }
@@ -158,7 +158,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     el.p_IsNumber = ctrl_IsNumber.Checked;
                     el.p_NumberRound = Convert.ToByte(ctrl_NumberRound.Value);
                     el.p_NumberFormula = ctrl_NumberFormula.Text;
-                    el.p_Default = ctrl_Default.Text;
                     el.p_VisibilityFormula = ctrl_VisibilityFormula.Text;
                     el.p_Comment = ctrl_Note.Text;
 
@@ -167,11 +166,10 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     el.p_ParamsValues.Clear();
                     if (el.p_IsPartLocations)
                     {
-                        el.f_AddValues(Cl_ElementsParams.E_TypeParam.Location, ctrl_PartLocationsValue.Lines);
+                        el.f_AddValues(Cl_ElementParam.E_TypeParam.Location, ctrl_PartLocationsValue.Lines);
                     }
-                    el.f_AddValues(Cl_ElementsParams.E_TypeParam.NormValues, ctrl_NormValues.Lines);
-                    el.f_AddValues(Cl_ElementsParams.E_TypeParam.PatValues, ctrl_PatValues.Lines);
-
+                    el.f_AddValues(Cl_ElementParam.E_TypeParam.NormValues, ctrl_NormValues.Lines);
+                    el.f_AddValues(Cl_ElementParam.E_TypeParam.PatValues, ctrl_PatValues.Lines);
                     el.p_PartAgeNorms.Clear();
                     if (el.p_IsPartNormRange)
                     {
@@ -333,6 +331,17 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     }
 
                     Cl_App.m_DataContext.SaveChanges();
+                    if (ctrl_Default.SelectedItem != null)
+                    {
+                        el.p_Default = el.p_NormValues.FirstOrDefault(v => v.p_Value == ctrl_Default.SelectedItem.ToString());
+                        if (el.p_Default == null)
+                            el.p_Default = el.p_PatValues.FirstOrDefault(v => v.p_Value == ctrl_Default.SelectedItem.ToString());
+                        if (el.p_Default != null)
+                            el.p_DefaultID = el.p_Default.p_ID;
+                        else
+                            el.p_DefaultID = null;
+                    }
+                    Cl_App.m_DataContext.SaveChanges();
                     if (templates.Length > 0)
                     {
                         foreach (var t in templates)
@@ -404,20 +413,13 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 var row = dt.NewRow();
                 row["p_AgeFrom"] = norm.p_AgeFrom;
                 row["p_AgeTo"] = norm.p_AgeTo;
-                row["p_MaleMin"] = norm.p_MaleMin;
-                row["p_MaleMax"] = norm.p_MaleMax;
-                row["p_FemaleMin"] = norm.p_FemaleMin;
-                row["p_FemaleMax"] = norm.p_FemaleMax;
+                row["p_MaleMin"] = Math.Round(norm.p_MaleMin, p_EditingElement.p_NumberRound);
+                row["p_MaleMax"] = Math.Round(norm.p_MaleMax, p_EditingElement.p_NumberRound);
+                row["p_FemaleMin"] = Math.Round(norm.p_FemaleMin, p_EditingElement.p_NumberRound);
+                row["p_FemaleMax"] = Math.Round(norm.p_FemaleMax, p_EditingElement.p_NumberRound);
                 dt.Rows.Add(row);
             }
             ctrl_TPartNormRangeValues.DataSource = dt;
-
-            //foreach (Cl_AgeNorm norm in ageNorms)
-            //{
-            //    ctrl_TPartNormRangeValues.Rows.Add(new DataGridViewRow() { Cells  });
-            //}
-
-            //ctrl_PartNormRangeValue.Text = p_EditingElement.p_PartNormRange;
             ctrl_IsChangeNotNormValues.Checked = p_EditingElement.p_IsChangeNotNormValues;
 
             ctrl_IsVisible.Checked = p_EditingElement.p_Visible;
@@ -432,13 +434,15 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             ctrl_NumberRound.Value = p_EditingElement.p_NumberRound;
             ctrl_NumberFormula.Text = p_EditingElement.p_NumberFormula;
             ctrl_VisibilityFormula.Text = p_EditingElement.p_VisibilityFormula;
-            ctrl_Default.Text = p_EditingElement.p_Default;
             ctrl_Note.Text = p_EditingElement.p_Comment;
 
             ctrl_PartLocationsValue.Text = string.Join("\n", p_EditingElement.p_PartLocations.ToList());
             ctrl_NormValues.Text = string.Join("\n", p_EditingElement.p_NormValues.ToList());
             ctrl_PatValues.Text = string.Join("\n", p_EditingElement.p_PatValues.ToList());
-
+            if (p_EditingElement.p_Default != null)
+            {
+                ctrl_Default.SelectedIndex = ctrl_Default.Items.IndexOf(p_EditingElement.p_Default.p_Value);
+            }
             f_UpdateModeTextType((E_TextTypes)ctrl_ControlType.f_GetSelectedItem());
         }
 

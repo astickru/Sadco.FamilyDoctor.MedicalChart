@@ -15,7 +15,10 @@ namespace Sadco.FamilyDoctor.Core.Permision
             Man,
             /// <summary>Женский</summary>
             [Description("Женский")]
-            Female
+            Female,
+            /// <summary>Нет данных</summary>
+            [Description("Нет данных")]
+            None
         }
 
         /// <summary>ID пользователя</summary>

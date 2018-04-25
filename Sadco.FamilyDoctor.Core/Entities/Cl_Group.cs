@@ -9,7 +9,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
     /// Класс сущности групп
     /// </summary>
     [Table("T_GROUPS")]
-    public class Cl_Group : I_Delete
+    public class Cl_Group : I_Entity, I_Delete
     {
         /// <summary>
         /// Тип групп

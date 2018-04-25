@@ -173,7 +173,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
                     {
                         Cl_App.m_DataContext.Entry(te).Reference(d => d.p_ChildTemplate).Load();
                         f_RecursiveLoadTE(te.p_ChildTemplate);
-                        Cl_App.m_DataContext.Entry(te).Reference(d => d.p_ChildElement).Query().Include(p => p.p_ParamsValues).Load();
+                        Cl_App.m_DataContext.Entry(te).Reference(d => d.p_ChildElement).Query().Include(p => p.p_ParamsValues).Include(p => p.p_PartAgeNorms).Load();
                     }
                 }
             }
@@ -181,11 +181,14 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Загрузка полного списка элементов шаблона</summary>
         public void f_LoadTemplatesElements()
         {
-            var elements = Cl_App.m_DataContext.p_TemplatesElements.Include(te => te.p_ChildElement).Include(te => te.p_ChildElement.p_ParamsValues).Include(te => te.p_ChildTemplate)
-               .Where(t => t.p_TemplateID == p_ID).OrderBy(t => t.p_Index).ToArray();
-            foreach (var el in elements)
+            if (p_TemplateElements == null)
             {
-                f_RecursiveLoadTE(el.p_ChildTemplate);
+                var elements = Cl_App.m_DataContext.p_TemplatesElements.Include(te => te.p_ChildElement).Include(te => te.p_ChildElement.p_ParamsValues).Include(te => te.p_ChildElement.p_PartAgeNorms).Include(te => te.p_ChildTemplate)
+                   .Where(t => t.p_TemplateID == p_ID).OrderBy(t => t.p_Index).ToArray();
+                foreach (var el in elements)
+                {
+                    f_RecursiveLoadTE(el.p_ChildTemplate);
+                }
             }
         }
     }

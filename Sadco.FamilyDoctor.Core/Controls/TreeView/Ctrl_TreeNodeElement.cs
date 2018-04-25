@@ -22,13 +22,26 @@ namespace Sadco.FamilyDoctor.Core.Controls
 			}
 			set {
 				m_Element = value;
-				if (m_Element != null) {
-					Text = m_Element.p_Name;
-					Name = p_Element.p_ID.ToString();
-					ImageKey = p_Element.p_IconName;
-					SelectedImageKey = p_Element.p_IconName;
-				}
-			}
+                f_Update();
+            }
 		}
-	}
+
+        /// <summary>Обновление части дерева</summary>
+        public void f_Update()
+        {
+            if (m_Element != null)
+            {
+                Text = m_Element.p_Name;
+                Name = p_Element.p_ID.ToString();
+                ImageKey = p_Element.p_IconName;
+                SelectedImageKey = p_Element.p_IconName;
+            }
+            else
+            {
+                Text = "Элемент отсутствует";
+                this.NodeFont = new Font(this.NodeFont, FontStyle.Bold);
+                ForeColor = Color.Red;
+            }
+        }
+    }
 }

@@ -34,11 +34,11 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Возвращает уникальный ID записи</summary>
         int I_ELog.p_GetLogEntityID => this.p_RecordID;
 
-        /// <summary>Пол</summary>
+        /// <summary>Пол пациента</summary>
         [Column("F_SEX")]
         public Permision.Cl_User.E_Sex p_Sex { get; set; }
 
-        /// <summary>Дата рождения</summary>
+        /// <summary>Дата рождения пациента</summary>
         [Column("F_DATEBIRTH", TypeName = "Date")]
         public DateTime p_DateBirth { get; set; }
 
@@ -49,6 +49,10 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Время создания записи</summary>
         [Column("F_DATECREATE")]
         public DateTime p_DateCreate { get; set; }
+
+        /// <summary>Время последнего изменения записи</summary>
+        [Column("F_DATELASTCHANGE")]
+        public DateTime p_DateLastChange { get; set; }
 
         /// <summary>ID медицинской карты</summary>
         [Column("F_CARD_ID")]
@@ -131,9 +135,25 @@ namespace Sadco.FamilyDoctor.Core.Entities
             return string.Format("{0} {1} {2}", p_PatientSurName, string.IsNullOrWhiteSpace(p_PatientName) ? "" : p_PatientName[0].ToString() + ".", string.IsNullOrWhiteSpace(p_PatientLastName) ? "" : p_PatientLastName[0].ToString() + ".");
         }
 
+        /// <summary>Возвращает возраст пациента</summary>
+        public byte f_GetPatientAge()
+        {
+            byte age = 0;
+            if (p_DateBirth != null)
+            {
+                DateTime dateNow = DateTime.Now;
+                byte year = (byte)(dateNow.Year - p_DateBirth.Year);
+                if (dateNow.Month < p_DateBirth.Month ||
+                    (dateNow.Month == p_DateBirth.Month && dateNow.Day < p_DateBirth.Day)) year--;
+                return year;
+            }
+            return age;
+        }
+
         /// <summary>Установка пользователя</summary>
         public void f_SetUser(Cl_User a_User)
         {
+            p_UserID = a_User.p_UserID;
             p_UserSurName = a_User.p_UserSurName;
             p_UserName = a_User.p_UserName;
             p_UserLastName = a_User.p_UserLastName;
@@ -142,6 +162,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Установка пациента</summary>
         public void f_SetPatient(Cl_User a_User)
         {
+            p_PatientID = a_User.p_UserID;
             p_PatientSurName = a_User.p_UserSurName;
             p_PatientName = a_User.p_UserName;
             p_PatientLastName = a_User.p_UserLastName;

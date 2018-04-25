@@ -108,6 +108,31 @@ namespace Sadco.FamilyDoctor.Core.Controls
             }
         }
 
+        /// <summary>Обновление дерева</summary>
+        public void f_Update()
+        {
+            foreach (TreeNode node in Nodes)
+            {
+                f_Update(node);
+            }
+        }
+
+        private void f_Update(TreeNode a_TreeNode)
+        {
+            if (a_TreeNode != null)
+            {
+                if (a_TreeNode is I_TreeNode)
+                    ((I_TreeNode)a_TreeNode).f_Update();
+                if (a_TreeNode.Nodes != null)
+                {
+                    foreach (TreeNode node in a_TreeNode.Nodes)
+                    {
+                        f_Update(node);
+                    }
+                }
+            }
+        }
+
         /// <summary>Флаг отображения удаленных элементов</summary>
         public bool p_IsShowDeleted { get; set; }
 

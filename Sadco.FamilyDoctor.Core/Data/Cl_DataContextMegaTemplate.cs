@@ -24,11 +24,12 @@ namespace Sadco.FamilyDoctor.Core.Data
 		public DbSet<Cl_TemplateElement> p_TemplatesElements { get; set; }
 
 		public DbSet<Cl_Element> p_Elements { get; set; }
-		public DbSet<Cl_ElementsParams> p_ElementsParams { get; set; }
+		public DbSet<Cl_ElementParam> p_ElementsParams { get; set; }
 		public DbSet<Cl_AgeNorm> p_AgeNorms { get; set; }
 
         public DbSet<Cl_Record> p_Records { get; set; }
         public DbSet<Cl_RecordValue> p_RecordsValues { get; set; }
+        public DbSet<Cl_RecordParam> p_RecordsParams { get; set; }
 
         public void f_Init() {
 			p_Groups.Load();
@@ -67,6 +68,7 @@ namespace Sadco.FamilyDoctor.Core.Data
 			modelBuilder.Entity<Cl_AgeNorm>().Property(n => n.p_FemaleMax).HasPrecision(10, 6);
 
             modelBuilder.Entity<Cl_RecordValue>().HasRequired(rv => rv.p_Record).WithMany(r => r.p_Values).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Cl_RecordParam>().HasRequired(rv => rv.p_RecordValue).WithMany(r => r.p_Params).WillCascadeOnDelete(false);
         }
 	}
 }

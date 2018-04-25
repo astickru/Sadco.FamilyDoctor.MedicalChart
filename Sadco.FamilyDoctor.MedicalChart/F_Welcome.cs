@@ -36,7 +36,6 @@ namespace Sadco.FamilyDoctor.MedicalChart
 
             ctrlDateStart.Value = min;
             ctrlDateEnd.Value = max;
-            ctrlPatientDateBirth.Value = min;
 
             if (typeof(E_Roles).IsEnum)
             {

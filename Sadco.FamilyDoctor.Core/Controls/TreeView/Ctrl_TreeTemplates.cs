@@ -280,9 +280,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                             Cl_App.m_DataContext.SaveChanges();
                             eLog.SaveEntity(lastVersion);
                             transaction.Commit();
-
                             SelectedNode.Remove();
-                            //transaction.Commit();
                         }
                     }
                     else

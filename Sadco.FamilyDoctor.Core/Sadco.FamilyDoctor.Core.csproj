@@ -73,6 +73,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cl_App.cs" />
+    <Compile Include="Controls\Ctrl_CheckedComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\Ctrl_ImageLabel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -144,16 +147,18 @@
       <DependentUpon>Dlg_EditorGroup.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\TreeView\I_TreeNode.cs" />
+    <Compile Include="Entities\Cl_RecordParam.cs" />
     <Compile Include="Entities\Cl_RecordValue.cs" />
     <Compile Include="Entities\Cl_Record.cs" />
     <Compile Include="Entities\Cl_AgeNorms.cs" />
-    <Compile Include="Entities\Cl_ElementsParams.cs" />
+    <Compile Include="Entities\Cl_ElementParam.cs" />
     <Compile Include="Entities\Cl_Group.cs" />
-    <Compile Include="Entities\Cl_TemplatesElements.cs" />
+    <Compile Include="Entities\Cl_TemplateElement.cs" />
     <Compile Include="Entities\Cl_Template.cs" />
     <Compile Include="Data\Cl_DataContextMegaTemplate.cs" />
     <Compile Include="Entities\Cl_Element.cs" />
     <Compile Include="Entities\I_Delete.cs" />
+    <Compile Include="Entities\I_Entity.cs" />
     <Compile Include="EntityLogs\Cl_Log.cs" />
     <Compile Include="EntityLogs\ELogClassAttribute.cs" />
     <Compile Include="EntityLogs\ELogPropertyAttribute.cs" />
@@ -172,6 +177,26 @@
     <Compile Include="Migrations\201804160741168_appRecordEl.cs" />
     <Compile Include="Migrations\201804160741168_appRecordEl.Designer.cs">
       <DependentUpon>201804160741168_appRecordEl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804231121572_appDelRecordLocatUserValues.cs" />
+    <Compile Include="Migrations\201804231121572_appDelRecordLocatUserValues.Designer.cs">
+      <DependentUpon>201804231121572_appDelRecordLocatUserValues.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804240755477_appRecordLocations.cs" />
+    <Compile Include="Migrations\201804240755477_appRecordLocations.Designer.cs">
+      <DependentUpon>201804240755477_appRecordLocations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804241202347_appRecordCatalogNew.cs" />
+    <Compile Include="Migrations\201804241202347_appRecordCatalogNew.Designer.cs">
+      <DependentUpon>201804241202347_appRecordCatalogNew.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804241231500_appRecordDateChange.cs" />
+    <Compile Include="Migrations\201804241231500_appRecordDateChange.Designer.cs">
+      <DependentUpon>201804241231500_appRecordDateChange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804241345086_appElementDefault.cs" />
+    <Compile Include="Migrations\201804241345086_appElementDefault.Designer.cs">
+      <DependentUpon>201804241345086_appElementDefault.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\Cl_AccessLevelAttribute.cs" />
@@ -245,6 +270,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804160741168_appRecordEl.resx">
       <DependentUpon>201804160741168_appRecordEl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804231121572_appDelRecordLocatUserValues.resx">
+      <DependentUpon>201804231121572_appDelRecordLocatUserValues.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804240755477_appRecordLocations.resx">
+      <DependentUpon>201804240755477_appRecordLocations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804241202347_appRecordCatalogNew.resx">
+      <DependentUpon>201804241202347_appRecordCatalogNew.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804241231500_appRecordDateChange.resx">
+      <DependentUpon>201804241231500_appRecordDateChange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804241345086_appElementDefault.resx">
+      <DependentUpon>201804241345086_appElementDefault.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

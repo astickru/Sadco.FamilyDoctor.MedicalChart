@@ -1,7 +1,9 @@
-﻿using Sadco.FamilyDoctor.Core;
+﻿using FD.dat.mon.stb.lib;
+using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Controls;
 using Sadco.FamilyDoctor.Core.Controls.DesignerPanel;
 using Sadco.FamilyDoctor.Core.Entities;
+using System;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
@@ -59,23 +61,26 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
         }
 
+        private Ctrl_Template m_ControlTemplate = null;
+
         private void f_UpdateControls()
         {
+            m_ControlTemplate = null;
             ctrlPContent.Controls.Clear();
             if (m_Record != null && m_Record.p_Template != null)
             {
                 if (m_Record.p_Template.p_TemplateElements == null)
                 {
-                    var cTe = Cl_App.m_DataContext.Entry(m_Record.p_Template).Collection(g => g.p_TemplateElements).Query().Include(te => te.p_ChildElement).Include(te => te.p_ChildTemplate);
+                    var cTe = Cl_App.m_DataContext.Entry(m_Record.p_Template).Collection(g => g.p_TemplateElements).Query().Include(te => te.p_ChildElement).Include(te => te.p_ChildElement.p_Default).Include(te => te.p_ChildTemplate);
                     cTe.Load();
                 }
-                var ctrlTemp = new Ctrl_Template();
-                ctrlTemp.Dock = DockStyle.Fill;
-                ctrlTemp.p_Template = m_Record.p_Template;
-                ctrlTemp.p_PaddingX = p_PaddingX;
-                ctrlTemp.p_PaddingY = p_PaddingY;
-                ctrlTemp.f_InitUIControls();
-                ctrlPContent.Controls.Add(ctrlTemp);
+                m_ControlTemplate = new Ctrl_Template();
+                m_ControlTemplate.Dock = DockStyle.Fill;
+                m_ControlTemplate.p_Template = m_Record.p_Template;
+                m_ControlTemplate.p_PaddingX = p_PaddingX;
+                m_ControlTemplate.p_PaddingY = p_PaddingY;
+                m_ControlTemplate.f_SetRecord(m_Record);
+                ctrlPContent.Controls.Add(m_ControlTemplate);
             }
         }
 
@@ -86,9 +91,45 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 m_Record.p_Template.f_LoadTemplatesElements();
                 ctrlUserFIO.Text = m_Record.p_UserFIO;
-                ctrlPatientFIO.Text = string.Format("{0} ({1}, {2})", m_Record.p_PatientFIO, m_Record.p_Sex == Core.Permision.Cl_User.E_Sex.Man ? "Мужчина" : "Женьщина", m_Record.p_DateBirth.ToShortDateString());
+                ctrlPatientFIO.Text = string.Format("{0} ({1}, {2})", m_Record.p_PatientFIO, 
+                    m_Record.p_Sex == Core.Permision.Cl_User.E_Sex.Man ? "Мужчина" : m_Record.p_Sex == Core.Permision.Cl_User.E_Sex.Female ? "Женьщина" : "Нет данных", 
+                    m_Record.p_DateBirth.ToShortDateString());
                 Text = string.Format("Запись \"{0}\" v{1}", m_Record.p_Template.p_Name, ConfigurationManager.AppSettings["Version"]);
+                if (m_Record.p_Version == 0)
+                    ctrl_Version.Text = "Черновик";
+                else
+                    ctrl_Version.Text = m_Record.p_Version.ToString();
                 f_UpdateControls();
+            }
+        }
+
+        private void ctrlBSave_Click(object sender, System.EventArgs e)
+        {
+            if (m_ControlTemplate != null)
+            {
+                using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var record = m_ControlTemplate.f_GetNewRecord();
+                        if (record != null)
+                        {
+                            Cl_App.m_DataContext.p_Records.Add(record);
+                            Cl_App.m_DataContext.SaveChanges();
+                            transaction.Commit();
+                            ctrl_Version.Text = record.p_Version.ToString();
+                        }
+                        else
+                        {
+                            throw new Exception("Не удалось получить запись");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        MonitoringStub.Error("Error_Editor", "При сохранении изменений записи произошла ошибка", ex, null, null);
+                    }
+                }
             }
         }
     }

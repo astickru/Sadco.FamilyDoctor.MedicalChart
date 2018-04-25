@@ -1,6 +1,7 @@
 ﻿using Sadco.FamilyDoctor.Core.Entities;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,11 +25,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             }
             set {
                 m_Group = value;
-                if (m_Group != null)
-                {
-                    this.ImageKey = "FOLDER_16" + (m_Group.p_IsDelete ? "_DEL" : "");
-                    this.SelectedImageKey = "FOLDER_16" + (m_Group.p_IsDelete ? "_DEL" : "");
-                }
+                f_Update();
             }
         }
 
@@ -36,6 +33,22 @@ namespace Sadco.FamilyDoctor.Core.Controls
         {
             p_Group.p_Name = a_Name;
             Text = p_Group.p_Name;
+        }
+
+        /// <summary>Обновление части дерева</summary>
+        public void f_Update()
+        {
+            if (m_Group != null)
+            {
+                this.ImageKey = "FOLDER_16" + (m_Group.p_IsDelete ? "_DEL" : "");
+                this.SelectedImageKey = "FOLDER_16" + (m_Group.p_IsDelete ? "_DEL" : "");
+            }
+            else
+            {
+                Text = "Группа отсутствует";
+                this.NodeFont = new Font(this.NodeFont, FontStyle.Bold);
+                ForeColor = Color.Red;
+            }
         }
     }
 }

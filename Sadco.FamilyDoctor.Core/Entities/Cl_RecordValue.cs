@@ -1,5 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Drawing;
+using System.IO;
+using System.Linq;
 
 namespace Sadco.FamilyDoctor.Core.Entities
 {
@@ -28,37 +32,65 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Элемент</summary>
         public Cl_Element p_Element { get; set; }
 
-        /// <summary>ID локации из справочника</summary>
-        [Column("F_LOCATION_ID")]
-        [ForeignKey("p_LocationCatalog")]
-        public int? p_LocationCatalogID { get; set; }
-        /// <summary>Локация из справочника</summary>
-        public Cl_ElementsParams p_LocationCatalog { get; set; }
+        private List<Cl_RecordParam> m_Params = new List<Cl_RecordParam>();
+        /// <summary>Список параметров элементов</summary>
+        [ForeignKey("p_ElementID")]
+        public List<Cl_RecordParam> p_Params {
+            get { return m_Params; }
+            set { m_Params = value; }
+        }
 
-        /// <summary>Произвольное локация</summary>
-        [Column("F_LOCATION")]
-        public string p_LocationUser { get; set; }
+        /// <summary>Локации</summary>
+        public Cl_RecordParam[] p_PartLocations {
+            get { return p_Params.Where(p => p.p_ElementParam.p_TypeParam == Cl_ElementParam.E_TypeParam.Location).ToArray(); }
+        }
 
-        /// <summary>ID значения из справочника</summary>
-        [Column("F_VALUE_ID")]
-        [ForeignKey("p_ValueCatalog")]
-        public int? p_ValueCatalogID { get; set; }
-        /// <summary>Значение из справочника</summary>
-        public Cl_ElementsParams p_ValueCatalog { get; set; }
+        /// <summary>Значения из справочника</summary>
+        public Cl_RecordParam[] p_ValuesCatalog {
+            get { return p_Params.Where(p => !p.p_IsDop && (p.p_ElementParam.p_TypeParam == Cl_ElementParam.E_TypeParam.NormValues || p.p_ElementParam.p_TypeParam == Cl_ElementParam.E_TypeParam.PatValues)).ToArray(); }
+        }
+
+        /// <summary>Дополнительные значения из справочника</summary>
+        public Cl_RecordParam[] p_ValuesDopCatalog {
+            get { return p_Params.Where(p => p.p_IsDop && (p.p_ElementParam.p_TypeParam == Cl_ElementParam.E_TypeParam.NormValues || p.p_ElementParam.p_TypeParam == Cl_ElementParam.E_TypeParam.PatValues)).ToArray(); }
+        }
 
         /// <summary>Произвольное значение</summary>
         [Column("F_VALUE")]
         public string p_ValueUser { get; set; }
 
-        /// <summary>ID дополнительного значения из справочника</summary>
-        [Column("F_VALUEDOP_ID")]
-        [ForeignKey("p_ValueCatalogDop")]
-        public int? p_ValueCatalogDopID { get; set; }
-        /// <summary>Дополнительное значение из справочника</summary>
-        public Cl_ElementsParams p_ValueCatalogDop { get; set; }
-
-        /// <summary>Дополнительное значение</summary>
+        /// <summary>Произвольное дополнительное значение</summary>
         [Column("F_VALUEDOP")]
-        public string p_ValueUserDop { get; set; }
+        public string p_ValueDopUser { get; set; }
+
+        /// <summary>Данные рисунка</summary>
+        [Column("F_VALUEIMAGE")]
+        public byte[] p_ImageBytes { get; set; }
+        [NotMapped]
+        /// <summary>Рисунок</summary>
+        public Image p_Image {
+            get {
+                if (p_ImageBytes != null && p_ImageBytes.Length > 0)
+                {
+                    MemoryStream ms = new MemoryStream(p_ImageBytes);
+                    return Image.FromStream(ms);
+                }
+                return null;
+            }
+            set {
+                if (value != null)
+                {
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        value.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        p_ImageBytes = ms.ToArray();
+                    }
+                }
+                else
+                {
+                    p_ImageBytes = null;
+                }
+            }
+        }
     }
 }

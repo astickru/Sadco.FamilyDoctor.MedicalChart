@@ -226,11 +226,13 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [ELogProperty("Симметричность справа")]
         public string p_SymmetryParamRight { get; set; }
 
+        /// <summary>ID значения по умолчанию</summary>
+        [Column("F_DEFAULT_ID")]
+        [ForeignKey("p_Default")]
+        public int? p_DefaultID { get; set; }
         /// <summary>Значение по умолчанию</summary>
-        [Column("F_DEFAULT", TypeName = "varchar")]
-        [MaxLength(100)]
-        [ELogProperty("Значение по-умолчанию")]
-        public string p_Default { get; set; }
+        [ELogProperty("Значение по-умолчанию", IsCustomDescription = true)]
+        public Cl_ElementParam p_Default { get; set; }
 
         #region Часть
         /// <summary>Часть. Использование префикса</summary>
@@ -294,30 +296,30 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [ELogProperty("Ввод не стандартных значений")]
         public bool p_IsChangeNotNormValues { get; set; }
 
-        private List<Cl_ElementsParams> m_ParamsValues = new List<Cl_ElementsParams>();
+        private List<Cl_ElementParam> m_ParamsValues = new List<Cl_ElementParam>();
         /// <summary>Список значений параметров</summary>
         [ForeignKey("p_ElementID")]
-        public List<Cl_ElementsParams> p_ParamsValues {
+        public List<Cl_ElementParam> p_ParamsValues {
             get { return m_ParamsValues; }
             set { m_ParamsValues = value; }
         }
 
         /// <summary>Часть. Возможные локации</summary>
         [ELogProperty("Изменился набор значений для поля \"Локация\"", IsCustomDescription = true, IsNewValueOnly = true)]
-        public Cl_ElementsParams[] p_PartLocations {
-            get { return m_ParamsValues.Where(p => p.p_TypeParam == Cl_ElementsParams.E_TypeParam.Location).ToArray(); }
+        public Cl_ElementParam[] p_PartLocations {
+            get { return m_ParamsValues.Where(p => p.p_TypeParam == Cl_ElementParam.E_TypeParam.Location).ToArray(); }
         }
 
         /// <summary>Список стандартных нормальных значений</summary>
         [ELogProperty("Изменился набор значений для поля \"Нормальные значения\"", IsCustomDescription = true, IsNewValueOnly = true)]
-        public Cl_ElementsParams[] p_NormValues {
-            get { return m_ParamsValues.Where(p => p.p_TypeParam == Cl_ElementsParams.E_TypeParam.NormValues).ToArray(); }
+        public Cl_ElementParam[] p_NormValues {
+            get { return m_ParamsValues.Where(p => p.p_TypeParam == Cl_ElementParam.E_TypeParam.NormValues).ToArray(); }
         }
 
         /// <summary>Список стандартных патологических значений</summary>
         [ELogProperty("Изменился набор значений для поля \"Паталогические значения\"", IsCustomDescription = true, IsNewValueOnly = true)]
-        public Cl_ElementsParams[] p_PatValues {
-            get { return m_ParamsValues.Where(p => p.p_TypeParam == Cl_ElementsParams.E_TypeParam.PatValues).ToArray(); }
+        public Cl_ElementParam[] p_PatValues {
+            get { return m_ParamsValues.Where(p => p.p_TypeParam == Cl_ElementParam.E_TypeParam.PatValues).ToArray(); }
         }
 
         /// <summary>Условная видимость</summary>
@@ -377,14 +379,14 @@ namespace Sadco.FamilyDoctor.Core.Entities
         }
 
         /// <summary>Добавление значений для поля массива</summary>
-        public void f_AddValues(Cl_ElementsParams.E_TypeParam a_TypeParam, string[] a_Values)
+        public void f_AddValues(Cl_ElementParam.E_TypeParam a_TypeParam, string[] a_Values)
         {
             if (a_Values != null)
             {
                 foreach (string val in a_Values)
                 {
                     if (!string.IsNullOrWhiteSpace(val))
-                        p_ParamsValues.Add(new Cl_ElementsParams() { p_ElementID = p_ID, p_TypeParam = a_TypeParam, p_Value = val });
+                        p_ParamsValues.Add(new Cl_ElementParam() { p_ElementID = p_ID, p_TypeParam = a_TypeParam, p_Value = val });
                 }
             }
         }
@@ -392,24 +394,31 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Возвращает уникальный ID элемента</summary>
         int I_ELog.p_GetLogEntityID => this.p_ElementID;
 
+        /// <summary>Является ли значение элемента текстом пользователя</summary>
+        public bool p_IsTextUser {
+            get {
+                return p_IsChangeNotNormValues || ((p_NormValues == null || p_NormValues.Length == 0) && (p_NormValues == null || p_NormValues.Length == 0));
+            }
+        }
+
+        /// <summary>Является ли значение элемента из справочника</summary>
+        public bool p_IsTextFromCatalog {
+            get {
+                return !p_IsTextUser;
+            }
+        }
+
         /// <summary>Является ли значение элемента текстом</summary>
         public bool p_IsText {
             get {
-                return p_IsChangeNotNormValues || ((p_NormValues == null || p_NormValues.Length == 0) && (p_NormValues == null || p_NormValues.Length == 0));
+                return p_ElementType == E_ElementsTypes.Float || p_ElementType == E_ElementsTypes.Line || p_ElementType == E_ElementsTypes.Bigbox;
             }
         }
 
         /// <summary>Является ли значение элемента текстом</summary>
         public bool p_IsImage {
             get {
-                return !p_IsText;
-            }
-        }
-
-        /// <summary>Является ли значение элемента из справочника</summary>
-        public bool p_IsListBox {
-            get {
-                return !p_IsText;
+                return p_ElementType == E_ElementsTypes.Image;
             }
         }
     }

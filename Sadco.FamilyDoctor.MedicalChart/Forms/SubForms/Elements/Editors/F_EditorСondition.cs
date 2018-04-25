@@ -67,7 +67,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 				{
 					return p_Object.ToString();
 				}
-				else if (p_Object is Cl_ElementsParams)
+				else if (p_Object is Cl_ElementParam)
 				{
 					string preValue = p_Object.ToString();
 					return preValue = "\"" + preValue.Trim() + "\"";
@@ -104,7 +104,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 				{
 					return Color.Blue;
 				}
-				else if (p_Object is Cl_ElementsParams)
+				else if (p_Object is Cl_ElementParam)
 				{
 					return Color.BlueViolet;
 				}
@@ -173,12 +173,12 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 			ctrlStandartValues.f_Clear();
 			if (!a_Element.p_IsNumber)
 			{
-				foreach (Cl_ElementsParams val in a_Element.p_NormValues)
+				foreach (Cl_ElementParam val in a_Element.p_NormValues)
 				{
 					ctrlStandartValues.f_AddObject(val);
 				}
 				ctrlStandartValues.f_SetSeparator(a_Element.p_NormValues.Length);
-				foreach (Cl_ElementsParams val in a_Element.p_PatValues)
+				foreach (Cl_ElementParam val in a_Element.p_PatValues)
 				{
 					ctrlStandartValues.f_AddObject(val);
 				}
@@ -328,7 +328,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 				if (m_Blocks.Count < 2) return false;
 				Cl_Element el = m_Blocks[m_Blocks.Count - 2].p_Object as Cl_Element;
 				if (el == null || el.p_IsNumber) return false;
-				Cl_ElementsParams prm = el.p_NormValues.FirstOrDefault(val => val.p_Value == txt);
+				Cl_ElementParam prm = el.p_NormValues.FirstOrDefault(val => val.p_Value == txt);
 				if (prm != null)
 				{
 					a_Block.p_Object = prm;

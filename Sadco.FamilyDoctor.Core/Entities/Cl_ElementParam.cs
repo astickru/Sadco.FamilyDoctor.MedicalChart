@@ -6,7 +6,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
 {
     /// <summary>Класс параметров текстовых элементов шаблона</summary>
     [Table("T_ELEMENTSPRMS")]
-    public class Cl_ElementsParams 
+    public class Cl_ElementParam : I_Entity
     {
         /// <summary>Тип параметра</summary>
         public enum E_TypeParam : byte

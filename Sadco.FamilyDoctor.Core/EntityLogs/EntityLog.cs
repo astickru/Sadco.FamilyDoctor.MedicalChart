@@ -231,8 +231,8 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 
             if (type == typeof(String))
                 outResult = Compare_String(val1, val2);
-            else if (type == typeof(Cl_Group))
-                outResult = Compare_Cl_Group(val1, val2);
+            else if (type.GetInterface(nameof(I_Entity)) != null)
+                outResult = Compare_Entity(val1, val2);
             else if (type == typeof(Byte))
                 outResult = Compare_Byte(val1, val2);
             else if (type == typeof(Boolean))
@@ -288,7 +288,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
                 return true;
         }
 
-        private bool Compare_Cl_Group(object val1, object val2)
+        private bool Compare_Entity(object val1, object val2)
         {
             if (val1 == null || val2 == null)
             {
@@ -301,10 +301,12 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             if (val1.GetType().BaseType != val2.GetType().BaseType)
                 return false;
 
-            Cl_Group group1 = (Cl_Group)val1;
-            Cl_Group group2 = (Cl_Group)val2;
-
-            return group1.p_ID == group2.p_ID;
+            if (val1 is I_Entity && val2 is I_Entity)
+            {
+                return ((I_Entity)val1).p_ID == ((I_Entity)val2).p_ID;
+            }
+            else
+                return false;
         }
 
         private bool Compare_Collection(object val1, object val2)
@@ -402,7 +404,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             Type type = val1.GetType();
             Type elementType = type.GetElementType();
 
-            if (elementType == typeof(Cl_ElementsParams))
+            if (elementType == typeof(Cl_ElementParam))
                 return Compare_Array_Cl_ElementsParams(val1, val2);
             else if (elementType == typeof(Byte))
                 return Compare_Array_Byte(val1, val2);
@@ -427,8 +429,8 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 
         private bool Compare_Array_Cl_ElementsParams(object val1, object val2)
         {
-            Cl_ElementsParams[] elm1 = (Cl_ElementsParams[])val1;
-            Cl_ElementsParams[] elm2 = (Cl_ElementsParams[])val2;
+            Cl_ElementParam[] elm1 = (Cl_ElementParam[])val1;
+            Cl_ElementParam[] elm2 = (Cl_ElementParam[])val2;
 
             if (val1 == null || val2 == null)
             {
@@ -450,7 +452,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             return true;
         }
 
-        private bool Compare_Cl_ElementsParams(Cl_ElementsParams elm1, Cl_ElementsParams elm2)
+        private bool Compare_Cl_ElementsParams(Cl_ElementParam elm1, Cl_ElementParam elm2)
         {
             if (elm1 == null || elm2 == null)
             {
@@ -528,6 +530,8 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
                 outValue = GetDefaultValue(value);
             else if (type == typeof(Cl_Group))
                 outValue = GetGroupValue(value);
+            else if (type.GetInterface(nameof(I_Entity)) != null)
+                outValue = value != null ? value.ToString() : "";
             else if (type == typeof(Enum))
                 outValue = GetEnumValue(value);
             else if (type == typeof(Boolean))
@@ -720,10 +724,10 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 
             using (MD5 md5Hash = MD5.Create())
             {
-                if (elementType == typeof(Cl_ElementsParams))
+                if (elementType == typeof(Cl_ElementParam))
                 {
-                    Cl_ElementsParams[] elements = value as Cl_ElementsParams[];
-                    foreach (Cl_ElementsParams item in elements)
+                    Cl_ElementParam[] elements = value as Cl_ElementParam[];
+                    foreach (Cl_ElementParam item in elements)
                     {
                         //result = CalcStringHash(md5Hash, item.p_Value);
                         result += item.p_Value + "\r\n";
@@ -853,6 +857,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 
         private string GetDefaultValue(object value)
         {
+            if (value == null) return "";
             return value.ToString();
         }
         #endregion

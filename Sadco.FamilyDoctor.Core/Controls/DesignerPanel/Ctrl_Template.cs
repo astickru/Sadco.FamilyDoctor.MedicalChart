@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Sadco.FamilyDoctor.Core.Entities;
 using System.Windows.Forms.VisualStyles;
 using System.Data.Entity;
+using FD.dat.mon.stb.lib;
 
 namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
 {
@@ -36,7 +37,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 Height = f_GetHeight(m_Template) + 25;
                 if (m_Template != null)
                 {
-                    Text = m_Template.p_Name;
+                    Text = string.Format("{0} ({1})", p_Name, m_Template.p_Version == 0 ? "Черновик" : "v" + m_Template.p_Version);
                 }
             }
         }
@@ -149,14 +150,17 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             return ctrlTable;
         }
 
+        private List<Ctrl_Element> m_Elements = new List<Ctrl_Element>();
+
+        private Cl_Record m_Record = null;
         /// <summary>Инициализация пользовательских контролов</summary>
         private void f_AddControlsTemplate(Cl_Template a_Template, ControlCollection a_Controls = null)
         {
-            if (a_Template != null)
+            if (m_Record != null && a_Template != null)
             {
                 if (a_Template.p_TemplateElements == null)
                 {
-                    var cTe = Cl_App.m_DataContext.Entry(a_Template).Collection(g => g.p_TemplateElements).Query().Include(te => te.p_ChildElement).Include(te => te.p_ChildTemplate);
+                    var cTe = Cl_App.m_DataContext.Entry(a_Template).Collection(g => g.p_TemplateElements).Query().Include(te => te.p_ChildElement).Include(te => te.p_ChildElement.p_Default).Include(te => te.p_ChildElement.p_ParamsValues).Include(te => te.p_ChildElement.p_PartAgeNorms).Include(te => te.p_ChildTemplate);
                     cTe.Load();
                 }
                 if (a_Template.p_TemplateElements != null && a_Template.p_TemplateElements.Count > 0)
@@ -175,20 +179,32 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         {
                             var ctrlEl = new Ctrl_Element();
                             ctrlEl.p_Element = te.p_ChildElement;
+
+                            Cl_RecordValue recval = m_Record.p_Values.FirstOrDefault(v => v.p_ElementID == te.p_ChildElement.p_ID);
+                            if (recval == null)
+                            {
+                                recval = new Cl_RecordValue();
+                                recval.p_ElementID = ctrlEl.p_Element.p_ID;
+                                recval.p_Element = ctrlEl.p_Element;
+                                recval.p_RecordID = m_Record.p_ID;
+                                recval.p_Record = m_Record;
+                            }
+
                             if (controls is TableLayoutControlCollection && controls.Owner is TableLayoutPanel)
                             {
                                 var table = (TableLayoutPanel)controls.Owner;
                                 table.RowCount++;
                                 table.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-                                ctrlEl.f_InitUIControls(table, table.RowCount - 1);
+                                ctrlEl.f_SetRecordElementValues(recval, table, table.RowCount);
                             }
                             else
-                                ctrlEl.f_InitUIControls();
+                                ctrlEl.f_SetRecordElementValues(recval);
 
                             ctrlEl.Top = top;
                             ctrlEl.Left = m_PaddingX;
                             top += ctrlEl.Height + m_PaddingY;
                             controls.Add(ctrlEl);
+                            m_Elements.Add(ctrlEl);
                         }
                         else if (te.p_ChildTemplate != null)
                         {
@@ -216,13 +232,13 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 top += 10;
                                 ctrlTable.Top = top;
                                 ctrlTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.InsetDouble;
-                                ctrlTable.RowCount++;
+                                ctrlTable.RowCount = 0;
                                 ctrlTable.Controls.Add(new Label() { Text = "Показатель", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 0, 0);
                                 ctrlTable.Controls.Add(new Label() { Text = "Локация", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 1, 0);
                                 ctrlTable.Controls.Add(new Label() { Text = "Значение", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 2, 0);
                                 ctrlTable.Controls.Add(new Label() { Text = "Ед. изм.", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 3, 0);
                                 ctrlTable.Controls.Add(new Label() { Text = "Нормa", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 4, 0);
-                                
+
                                 controls.Add(ctrlTable);
                                 f_AddControlsTemplate(te.p_ChildTemplate, ctrlTable.Controls);
                                 top += ctrlTable.Height + m_PaddingY;
@@ -233,11 +249,60 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
         }
 
-        /// <summary>Инициализация пользовательских контролов</summary>
-        public void f_InitUIControls()
+        /// <summary>Установка записи</summary>
+        public void f_SetRecord(Cl_Record a_Record)
         {
             ctrlContent.Controls.Clear();
+            m_Record = a_Record;
+            if (m_Record.p_Version > 0)
+            {
+                if (m_Record.p_Values == null)
+                {
+                    var recs = Cl_App.m_DataContext.Entry(m_Record).Collection(g => g.p_Values).Query().Include(te => te.p_Element).Include(te => te.p_Element.p_Default).Include(te => te.p_Params);
+                    recs.Load();
+                }
+            }
+            if (m_Record.p_Values == null)
+            {
+                m_Record.p_Values = new List<Cl_RecordValue>();
+            }
             f_AddControlsTemplate(m_Template);
+        }
+
+        /// <summary>Получение новой версии записи</summary>
+        public Cl_Record f_GetNewRecord()
+        {
+            if (m_Template == null || m_Record == null) return null;
+            var record = new Cl_Record();
+            record.p_DateLastChange = DateTime.Now;
+            record.p_Template = m_Template;
+            record.p_UserID = m_Record.p_UserID;
+            record.p_UserSurName = m_Record.p_UserSurName;
+            record.p_UserName = m_Record.p_UserName;
+            record.p_UserLastName = m_Record.p_UserLastName;
+            record.p_PatientID = m_Record.p_PatientID;
+            record.p_PatientSurName = m_Record.p_PatientSurName;
+            record.p_PatientName = m_Record.p_PatientName;
+            record.p_PatientLastName = m_Record.p_PatientLastName;
+            record.p_Sex = m_Record.p_Sex;
+            record.p_DateBirth = m_Record.p_DateBirth;
+            record.p_DateCreate = m_Record.p_DateCreate;
+            record.p_DateForming = m_Record.p_DateForming;
+            record.p_Version = m_Record.p_Version + 1;
+            record.p_Values = new List<Cl_RecordValue>();
+            foreach (var el in m_Elements)
+            {
+                var recEl = el.f_GetRecordElementValues(record);
+                if (recEl != null)
+                {
+                    record.p_Values.Add(recEl);
+                }
+                else
+                {
+                    MonitoringStub.Error("Error_EditorRecord", "Значение элемента пустые", null, null, null);
+                }
+            }
+            return record;
         }
 
         private int f_GetHeight(Cl_Template a_Template)

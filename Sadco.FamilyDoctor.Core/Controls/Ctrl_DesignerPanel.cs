@@ -1,13 +1,9 @@
 ﻿using Sadco.FamilyDoctor.Core.Controls.DesignerPanel;
 using Sadco.FamilyDoctor.Core.Entities;
 using System;
-using System.Linq;
 using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Design;
 using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.Core.Controls
@@ -588,6 +584,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 return;
 
             Ctrl_Template ctrlEl = new Ctrl_Template();
+            a_NodeTemplate.p_Template.f_LoadTemplatesElements();
             ctrlEl.p_Template = a_NodeTemplate.p_Template;
             ctrlEl.Name = f_CreateName(ctrlEl.p_Name);
             Items.Add(ctrlEl);

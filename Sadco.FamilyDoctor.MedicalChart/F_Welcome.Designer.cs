@@ -30,7 +30,6 @@
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(F_Welcome));
             this.mainPanel = new System.Windows.Forms.Panel();
-            this.ctrl_TextBoxAutoHeight1 = new Sadco.FamilyDoctor.Core.Controls.Ctrl_TextBoxAutoHeight();
             this.panel7 = new System.Windows.Forms.Panel();
             this.ctrlDateEnd = new System.Windows.Forms.DateTimePicker();
             this.ctrlDateStart = new System.Windows.Forms.DateTimePicker();
@@ -76,7 +75,6 @@
             // mainPanel
             // 
             this.mainPanel.BackColor = System.Drawing.SystemColors.Control;
-            this.mainPanel.Controls.Add(this.ctrl_TextBoxAutoHeight1);
             this.mainPanel.Controls.Add(this.panel7);
             this.mainPanel.Controls.Add(this.panel4);
             this.mainPanel.Controls.Add(this.panel1);
@@ -85,16 +83,8 @@
             this.mainPanel.Margin = new System.Windows.Forms.Padding(0);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Padding = new System.Windows.Forms.Padding(0, 4, 0, 4);
-            this.mainPanel.Size = new System.Drawing.Size(373, 620);
+            this.mainPanel.Size = new System.Drawing.Size(373, 313);
             this.mainPanel.TabIndex = 0;
-            // 
-            // ctrl_TextBoxAutoHeight1
-            // 
-            this.ctrl_TextBoxAutoHeight1.Location = new System.Drawing.Point(65, 438);
-            this.ctrl_TextBoxAutoHeight1.Multiline = true;
-            this.ctrl_TextBoxAutoHeight1.Name = "ctrl_TextBoxAutoHeight1";
-            this.ctrl_TextBoxAutoHeight1.Size = new System.Drawing.Size(241, 16);
-            this.ctrl_TextBoxAutoHeight1.TabIndex = 5;
             // 
             // panel7
             // 
@@ -103,7 +93,7 @@
             this.panel7.Controls.Add(this.label9);
             this.panel7.Controls.Add(this.label7);
             this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel7.Location = new System.Drawing.Point(0, 228);
+            this.panel7.Location = new System.Drawing.Point(0, 248);
             this.panel7.Margin = new System.Windows.Forms.Padding(0);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(373, 25);
@@ -165,7 +155,7 @@
             this.panel4.Location = new System.Drawing.Point(0, 98);
             this.panel4.Margin = new System.Windows.Forms.Padding(0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(373, 130);
+            this.panel4.Size = new System.Drawing.Size(373, 150);
             this.panel4.TabIndex = 1;
             // 
             // ctrlPatientSex
@@ -174,7 +164,7 @@
             this.ctrlPatientSex.FormattingEnabled = true;
             this.ctrlPatientSex.Location = new System.Drawing.Point(103, 23);
             this.ctrlPatientSex.Name = "ctrlPatientSex";
-            this.ctrlPatientSex.Size = new System.Drawing.Size(266, 34);
+            this.ctrlPatientSex.Size = new System.Drawing.Size(266, 49);
             this.ctrlPatientSex.TabIndex = 17;
             // 
             // label5
@@ -191,7 +181,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(0, 110);
+            this.label11.Location = new System.Drawing.Point(0, 125);
             this.label11.Margin = new System.Windows.Forms.Padding(0);
             this.label11.Name = "label11";
             this.label11.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -201,7 +191,7 @@
             // 
             // ctrlPatientLastName
             // 
-            this.ctrlPatientLastName.Location = new System.Drawing.Point(103, 106);
+            this.ctrlPatientLastName.Location = new System.Drawing.Point(103, 121);
             this.ctrlPatientLastName.Margin = new System.Windows.Forms.Padding(0);
             this.ctrlPatientLastName.Name = "ctrlPatientLastName";
             this.ctrlPatientLastName.Size = new System.Drawing.Size(266, 20);
@@ -211,7 +201,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(0, 87);
+            this.label12.Location = new System.Drawing.Point(0, 102);
             this.label12.Margin = new System.Windows.Forms.Padding(0);
             this.label12.Name = "label12";
             this.label12.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -221,7 +211,7 @@
             // 
             // ctrlPatientName
             // 
-            this.ctrlPatientName.Location = new System.Drawing.Point(103, 83);
+            this.ctrlPatientName.Location = new System.Drawing.Point(103, 98);
             this.ctrlPatientName.Margin = new System.Windows.Forms.Padding(0);
             this.ctrlPatientName.Name = "ctrlPatientName";
             this.ctrlPatientName.Size = new System.Drawing.Size(266, 20);
@@ -231,7 +221,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(0, 64);
+            this.label13.Location = new System.Drawing.Point(0, 79);
             this.label13.Margin = new System.Windows.Forms.Padding(0);
             this.label13.Name = "label13";
             this.label13.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -241,7 +231,7 @@
             // 
             // ctrlPatientSurName
             // 
-            this.ctrlPatientSurName.Location = new System.Drawing.Point(103, 60);
+            this.ctrlPatientSurName.Location = new System.Drawing.Point(103, 75);
             this.ctrlPatientSurName.Margin = new System.Windows.Forms.Padding(0);
             this.ctrlPatientSurName.Name = "ctrlPatientSurName";
             this.ctrlPatientSurName.Size = new System.Drawing.Size(266, 20);
@@ -255,7 +245,7 @@
             this.ctrlPatientDateBirth.Name = "ctrlPatientDateBirth";
             this.ctrlPatientDateBirth.Size = new System.Drawing.Size(120, 20);
             this.ctrlPatientDateBirth.TabIndex = 9;
-            this.ctrlPatientDateBirth.Value = new System.DateTime(1992, 4, 16, 14, 44, 0, 0);
+            this.ctrlPatientDateBirth.Value = new System.DateTime(1991, 4, 16, 14, 44, 0, 0);
             // 
             // label6
             // 
@@ -418,7 +408,7 @@
             this.buttonsPanel.Controls.Add(this.button1);
             this.buttonsPanel.Controls.Add(this.button2);
             this.buttonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonsPanel.Location = new System.Drawing.Point(5, 647);
+            this.buttonsPanel.Location = new System.Drawing.Point(5, 340);
             this.buttonsPanel.Name = "buttonsPanel";
             this.buttonsPanel.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
             this.buttonsPanel.Size = new System.Drawing.Size(373, 34);
@@ -478,7 +468,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(383, 686);
+            this.ClientSize = new System.Drawing.Size(383, 379);
             this.Controls.Add(this.buttonsPanel);
             this.Controls.Add(this.mainPanel);
             this.Controls.Add(this.pictureBox1);
@@ -489,7 +479,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Startup Form";
             this.mainPanel.ResumeLayout(false);
-            this.mainPanel.PerformLayout();
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
             this.panel4.ResumeLayout(false);
@@ -540,7 +529,6 @@
         private System.Windows.Forms.TextBox ctrlUserName;
         private System.Windows.Forms.Label label5;
         private Core.Controls.Ctrl_RadioButtonList ctrlPatientSex;
-        private Core.Controls.Ctrl_TextBoxAutoHeight ctrl_TextBoxAutoHeight1;
     }
 }
 

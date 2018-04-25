@@ -68,7 +68,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 treeNode.p_Template = tpl;
                 F_DesignerTemplate editor = new F_DesignerTemplate();
                 editor.p_ActiveTemplate = treeNode.p_Template;
-                editor.Show(ParentForm);
+                editor.ShowDialog(ParentForm);
+                ctrl_TreeTemplates.f_Update();
             }
         }
 

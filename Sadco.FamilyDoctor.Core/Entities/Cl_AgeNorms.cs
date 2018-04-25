@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sadco.FamilyDoctor.Core.Permision;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -48,5 +49,28 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Жен макс</summary>
         [Column("F_FEMALEMAX")]
         public decimal p_FemaleMax { get; set; }
+
+        /// <summary>Получение минимального значения нормы</summary>
+        public decimal f_GetMin(Cl_User.E_Sex a_Sex, byte a_Round)
+        {
+            if (a_Sex == Cl_User.E_Sex.Man)
+                return Math.Round(p_MaleMin, a_Round);
+            else if (a_Sex == Cl_User.E_Sex.Female)
+                return Math.Round(p_FemaleMin, a_Round);
+            else
+                return 0;
+        }
+
+
+        /// <summary>Получение максимального значения нормы</summary>
+        public decimal f_GetMax(Cl_User.E_Sex a_Sex, byte a_Round)
+        {
+            if (a_Sex == Cl_User.E_Sex.Man)
+                return Math.Round(p_MaleMax, a_Round);
+            else if(a_Sex == Cl_User.E_Sex.Female)
+                return Math.Round(p_FemaleMax, a_Round);
+            else
+                return 0;
+        }
     }
 }
