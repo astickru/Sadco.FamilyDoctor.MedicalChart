@@ -35,14 +35,15 @@
             this.ctrl_MITemplateDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlPContent = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.ctrl_Version = new System.Windows.Forms.Label();
             this.ctrlPatientFIO = new System.Windows.Forms.Label();
             this.ctrlUserFIO = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.ctrlBSave = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.ctrl_Version = new System.Windows.Forms.Label();
+            this.ctrlBHistory = new System.Windows.Forms.Button();
             this.ctrl_CMTemplate.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -126,6 +127,31 @@
             this.panel1.Size = new System.Drawing.Size(1199, 51);
             this.panel1.TabIndex = 2;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Right;
+            this.label3.Location = new System.Drawing.Point(1113, 0);
+            this.label3.Name = "label3";
+            this.label3.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.label3.Size = new System.Drawing.Size(57, 18);
+            this.label3.TabIndex = 65;
+            this.label3.Text = "Версия:";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // ctrl_Version
+            // 
+            this.ctrl_Version.AutoSize = true;
+            this.ctrl_Version.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ctrl_Version.Location = new System.Drawing.Point(1170, 0);
+            this.ctrl_Version.Margin = new System.Windows.Forms.Padding(3, 0, 40, 0);
+            this.ctrl_Version.Name = "ctrl_Version";
+            this.ctrl_Version.Padding = new System.Windows.Forms.Padding(0, 5, 14, 0);
+            this.ctrl_Version.Size = new System.Drawing.Size(29, 18);
+            this.ctrl_Version.TabIndex = 64;
+            this.ctrl_Version.Text = "0";
+            this.ctrl_Version.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // ctrlPatientFIO
             // 
             this.ctrlPatientFIO.AutoSize = true;
@@ -164,6 +190,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.ctrlBHistory);
             this.panel2.Controls.Add(this.ctrlBSave);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel2.Location = new System.Drawing.Point(14, 545);
@@ -182,30 +209,16 @@
             this.ctrlBSave.UseVisualStyleBackColor = true;
             this.ctrlBSave.Click += new System.EventHandler(this.ctrlBSave_Click);
             // 
-            // label3
+            // ctrlBHistory
             // 
-            this.label3.AutoSize = true;
-            this.label3.Dock = System.Windows.Forms.DockStyle.Right;
-            this.label3.Location = new System.Drawing.Point(1113, 0);
-            this.label3.Name = "label3";
-            this.label3.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
-            this.label3.Size = new System.Drawing.Size(57, 18);
-            this.label3.TabIndex = 65;
-            this.label3.Text = "Версия:";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // ctrl_Version
-            // 
-            this.ctrl_Version.AutoSize = true;
-            this.ctrl_Version.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ctrl_Version.Location = new System.Drawing.Point(1170, 0);
-            this.ctrl_Version.Margin = new System.Windows.Forms.Padding(3, 0, 40, 0);
-            this.ctrl_Version.Name = "ctrl_Version";
-            this.ctrl_Version.Padding = new System.Windows.Forms.Padding(0, 5, 14, 0);
-            this.ctrl_Version.Size = new System.Drawing.Size(29, 18);
-            this.ctrl_Version.TabIndex = 64;
-            this.ctrl_Version.Text = "0";
-            this.ctrl_Version.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.ctrlBHistory.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ctrlBHistory.Location = new System.Drawing.Point(1001, 0);
+            this.ctrlBHistory.Name = "ctrlBHistory";
+            this.ctrlBHistory.Size = new System.Drawing.Size(99, 25);
+            this.ctrlBHistory.TabIndex = 1;
+            this.ctrlBHistory.Text = "история";
+            this.ctrlBHistory.UseVisualStyleBackColor = true;
+            this.ctrlBHistory.Click += new System.EventHandler(this.ctrlBHistory_Click);
             // 
             // Dlg_Record
             // 
@@ -248,5 +261,6 @@
         private System.Windows.Forms.Label ctrlUserFIO;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label ctrl_Version;
+        private System.Windows.Forms.Button ctrlBHistory;
     }
 }

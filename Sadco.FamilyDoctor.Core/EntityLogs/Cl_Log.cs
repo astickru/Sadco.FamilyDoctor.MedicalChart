@@ -24,7 +24,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 		/// Тип элемента
 		/// </summary>
 		[Column("F_TYPE")]
-		public EntityTypes p_EntityType { get; set; }
+		public E_EntityTypes p_EntityType { get; set; }
 
 		/// <summary>
 		/// Время, когда было сделано изменение

@@ -3,6 +3,7 @@ using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Controls;
 using Sadco.FamilyDoctor.Core.Controls.DesignerPanel;
 using Sadco.FamilyDoctor.Core.Entities;
+using Sadco.FamilyDoctor.Core.EntityLogs;
 using System;
 using System.ComponentModel;
 using System.Configuration;
@@ -15,6 +16,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
     public partial class Dlg_Record : Form
     {
+        private Cl_EntityLog m_Log = new Cl_EntityLog();
+
         public Dlg_Record()
         {
             this.Font = new System.Drawing.Font(ConfigurationManager.AppSettings["FontFamily"],
@@ -100,6 +103,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 else
                     ctrl_Version.Text = m_Record.p_Version.ToString();
                 f_UpdateControls();
+                m_Log.f_SetEntity(m_Record);
             }
         }
 
@@ -114,7 +118,15 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         var record = m_ControlTemplate.f_GetNewRecord();
                         if (record != null)
                         {
+                            if (m_Log.f_IsChanged(record) == false)
+                            {
+                                MonitoringStub.Message("Элемент не изменялся!");
+                                transaction.Rollback();
+                                return;
+                            }
+
                             Cl_App.m_DataContext.p_Records.Add(record);
+                            m_Log.f_SaveEntity(record);
                             Cl_App.m_DataContext.SaveChanges();
                             transaction.Commit();
                             ctrl_Version.Text = record.p_Version.ToString();
@@ -131,6 +143,13 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     }
                 }
             }
+        }
+
+        private void ctrlBHistory_Click(object sender, EventArgs e)
+        {
+            Dlg_HistoryViewer viewer = new Dlg_HistoryViewer();
+            viewer.LoadHistory(p_Record.p_RecordID, E_EntityTypes.Records);
+            viewer.ShowDialog(this);
         }
     }
 }

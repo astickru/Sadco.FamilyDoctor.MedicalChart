@@ -126,8 +126,8 @@ namespace Sadco.FamilyDoctor.Core.Controls
                         Ctrl_TreeNodeElement draggedNodeElement = (Ctrl_TreeNodeElement)e.Data.GetData(typeof(Ctrl_TreeNodeElement));
                         if (e.Effect == DragDropEffects.Move)
                         {
-                            EntityLog eLog = new EntityLog();
-                            eLog.SetEntity(draggedNodeElement.p_Element);
+                            Cl_EntityLog eLog = new Cl_EntityLog();
+                            eLog.f_SetEntity(draggedNodeElement.p_Element);
 
                             var elsDraggeds = Cl_App.m_DataContext.p_Elements.Where(el => el.p_ElementID == draggedNodeElement.p_Element.p_ElementID);
                             if (elsDraggeds != null)
@@ -142,7 +142,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                                 if (isChange)
                                 {
                                     Cl_App.m_DataContext.SaveChanges();
-                                    eLog.SaveEntity(draggedNodeElement.p_Element);
+                                    eLog.f_SaveEntity(draggedNodeElement.p_Element);
                                     transaction.Commit();
                                     draggedNodeElement.Remove();
                                     a_TargetNodeGroup.Nodes.Insert(f_GetFirstGroupInNode(a_TargetNodeGroup.Nodes), draggedNodeElement);
@@ -170,9 +170,9 @@ namespace Sadco.FamilyDoctor.Core.Controls
             {
                 try
                 {
-                    EntityLog eLog = new EntityLog();
+                    Cl_EntityLog eLog = new Cl_EntityLog();
                     Cl_Element newElement = (Cl_Element)Activator.CreateInstance(typeof(Cl_Element));
-                    eLog.SetEntity(newElement);
+                    eLog.f_SetEntity(newElement);
                     Cl_Group group = null;
                     if (p_SelectedGroup != null && p_SelectedGroup.p_Group != null)
                     {
@@ -205,7 +205,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     Cl_App.m_DataContext.SaveChanges();
                     newElement.p_ElementID = newElement.p_ID;
                     Cl_App.m_DataContext.SaveChanges();
-                    eLog.SaveEntity(newElement);
+                    eLog.f_SaveEntity(newElement);
                     transaction.Commit();
 
                     Ctrl_TreeNodeElement newNode = new Ctrl_TreeNodeElement(group, newElement);
@@ -228,10 +228,10 @@ namespace Sadco.FamilyDoctor.Core.Controls
             {
                 try
                 {
-                    EntityLog eLog = new EntityLog();
+                    Cl_EntityLog eLog = new Cl_EntityLog();
 
                     Cl_Element newElement = (Cl_Element)Activator.CreateInstance(typeof(Cl_Element));
-                    eLog.SetEntity(newElement);
+                    eLog.f_SetEntity(newElement);
                     Cl_Group group = null;
                     if (p_SelectedGroup != null && p_SelectedGroup.p_Group != null)
                     {
@@ -252,7 +252,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     Cl_App.m_DataContext.SaveChanges();
                     newElement.p_ElementID = newElement.p_ID;
                     Cl_App.m_DataContext.SaveChanges();
-                    eLog.SaveEntity(newElement);
+                    eLog.f_SaveEntity(newElement);
                     transaction.Commit();
 
                     Ctrl_TreeNodeElement newNode = new Ctrl_TreeNodeElement(group, newElement);
@@ -277,12 +277,12 @@ namespace Sadco.FamilyDoctor.Core.Controls
             {
                 try
                 {
-                    EntityLog eLog = new EntityLog();
+                    Cl_EntityLog eLog = new Cl_EntityLog();
                     var els = Cl_App.m_DataContext.p_Elements.Where(el => el.p_ElementID == p_SelectedElement.p_Element.p_ElementID).OrderByDescending(v => v.p_Version);
                     if (els != null)
                     {
                         Cl_Element lastVersion = els.FirstOrDefault();
-                        eLog.SetEntity(lastVersion);
+                        eLog.f_SetEntity(lastVersion);
                         bool isChange = false;
                         foreach (Cl_Element el in els)
                         {
@@ -292,7 +292,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                         if (isChange)
                         {
                             Cl_App.m_DataContext.SaveChanges();
-                            eLog.SaveEntity(lastVersion);
+                            eLog.f_SaveEntity(lastVersion);
                             transaction.Commit();
 
                             if (!p_IsShowDeleted)

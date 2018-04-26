@@ -9,7 +9,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
     /// Класс сущности групп
     /// </summary>
     [Table("T_GROUPS")]
-    public class Cl_Group : I_Entity, I_Delete
+    public class Cl_Group : I_Delete
     {
         /// <summary>
         /// Тип групп
@@ -73,6 +73,11 @@ namespace Sadco.FamilyDoctor.Core.Entities
                 return f_GetParentName(p_Parent) + "/" + p_Name;
             }
             return p_Name;
+        }
+
+        public override string ToString()
+        {
+            return f_GetFullName();
         }
     }
 }

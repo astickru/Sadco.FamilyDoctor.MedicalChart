@@ -14,7 +14,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
     public partial class UC_EditorTextual : UserControl, I_EditPanel
     {
-        private EntityLog m_Log = new EntityLog();
+        private Cl_EntityLog m_Log = new Cl_EntityLog();
 
         public Cl_Element p_EditingElement { get; private set; }
 
@@ -350,7 +350,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         }
                     }
 
-                    if (m_Log.IsChanged(el) == false)
+                    if (m_Log.f_IsChanged(el) == false)
                     {
                         if (el.Equals(p_EditingElement) && el.p_Version == 1)
                         {
@@ -362,7 +362,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         return null;
                     }
 
-                    m_Log.SaveEntity(el);
+                    m_Log.f_SaveEntity(el);
                     transaction.Commit();
                     f_SetElement(el);
                     return el;
@@ -379,7 +379,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         public void f_SetElement(Cl_Element a_Element)
         {
             if (a_Element == null || !a_Element.f_IsText()) return;
-            m_Log.SetEntity(a_Element);
+            m_Log.f_SetEntity(a_Element);
             p_EditingElement = a_Element;
             if (p_EditingElement.p_Version == 0)
                 ctrl_Version.Text = "Черновик";

@@ -40,13 +40,13 @@ namespace Sadco.FamilyDoctor.Core.Data
 
         /// <summary>Сохранение изменений БД с логированием изменений</summary>
 		/// <param name="obj"></param>
-		public void f_SaveChanges(EntityLog a_Log, I_ELog a_Obj) {
+		public void f_SaveChanges(Cl_EntityLog a_Log, I_ELog a_Obj) {
             using (var transaction = Database.BeginTransaction())
             {
                 try
                 {
                     SaveChanges();
-                    a_Log.SaveEntity(a_Obj);
+                    a_Log.f_SaveEntity(a_Obj);
                     transaction.Commit();
                 }
                 catch (Exception ex)

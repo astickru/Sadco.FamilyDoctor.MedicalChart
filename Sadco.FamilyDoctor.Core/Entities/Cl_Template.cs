@@ -12,7 +12,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
     /// <summary>
     /// Класс шаблона
     /// </summary>
-    [ELogClass(EntityTypes.Templates)]
+    [Cl_ELogClass(E_EntityTypes.Templates)]
     [Table("T_TEMPLATES")]
     public class Cl_Template : I_Version, I_Delete, I_ELog
     {
@@ -53,7 +53,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [ForeignKey("p_ParentGroup")]
         public int p_ParentGroupID { get; set; }
         /// <summary>Группа шаблонов</summary>
-        [ELogProperty("Изменилась группа", IsCustomDescription = true)]
+        [Cl_ELogProperty("Изменилась группа", p_IsCustomDescription = true)]
         public Cl_Group p_ParentGroup { get; set; }
 
         /// <summary>Типы шаблона</summary>
@@ -63,18 +63,18 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Системное имя шаблона</summary>
         [Column("F_NAME", TypeName = "varchar")]
         [MaxLength(100)]
-        [ELogProperty("Название шаблона")]
+        [Cl_ELogProperty("Название шаблона")]
         public string p_Name { get; set; }
 
         /// <summary>Описание шаблона</summary>
         [Column("F_DESC", TypeName = "varchar")]
         [MaxLength(1000)]
-        [ELogProperty("Описание")]
+        [Cl_ELogProperty("Описание")]
         public string p_Description { get; set; }
 
         /// <summary>Возвращает список элементов шаблона</summary>
         [ForeignKey("p_TemplateID")]
-        [ELogProperty("Изменился набор элементов шаблона", IsCustomDescription = true, IsNewValueOnly = true)]
+        [Cl_ELogProperty("Изменился набор элементов шаблона", p_IsCustomDescription = true, p_IsNewValueOnly = true)]
         public ICollection<Cl_TemplateElement> p_TemplateElements { get; set; }
 
         /// <summary>Версия шаблона</summary>
@@ -87,7 +87,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
         /// <summary>Флаг нахождения шаблона в удалении</summary>
         [Column("F_ISDEL")]
-        [ELogProperty("Шаблон удален", IsCustomDescription = true, IgnoreValue = true)]
+        [Cl_ELogProperty("Шаблон удален", p_IsCustomDescription = true, p_IgnoreValue = true)]
         public bool p_IsDelete { get; set; }
 
         /// <summary>Системное наименование иконки</summary>

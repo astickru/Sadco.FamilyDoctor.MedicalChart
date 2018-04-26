@@ -79,14 +79,14 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Elements.Editors
 
 		private void ctrl_BCancel_Click(object sender, EventArgs e)
 		{
-            EntityLog.CustomMessageLog(p_EditableElement.p_Element, "Нажата кнопка \"Отмена\"");
+            Cl_EntityLog.f_CustomMessageLog(p_EditableElement.p_Element, "Нажата кнопка \"Отмена\"");
             p_IsReadOnly = true;
 			p_EditPanel.f_SetElement(p_EditableElement.p_Element);
 		}
 
 		private void ctrl_BEdit_Click(object sender, EventArgs e)
 		{
-            EntityLog.CustomMessageLog(p_EditableElement.p_Element, "Нажата кнопка \"Редактировать\"");
+            Cl_EntityLog.f_CustomMessageLog(p_EditableElement.p_Element, "Нажата кнопка \"Редактировать\"");
 			p_IsReadOnly = false;
 		}
 
@@ -95,7 +95,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Elements.Editors
             Cl_Element el = p_EditPanel.f_ConfirmChanges() as Cl_Element;
 			if (el != null)
 			{
-                EntityLog.CustomMessageLog(p_EditableElement.p_Element, "Нажата кнопка \"Сохранить\"");
+                Cl_EntityLog.f_CustomMessageLog(p_EditableElement.p_Element, "Нажата кнопка \"Сохранить\"");
                 m_EditableElement.p_Element = el;
 				p_IsReadOnly = true;
 			}
@@ -104,7 +104,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Elements.Editors
 		private void ctrl_BHistory_Click(object sender, EventArgs e)
 		{
 			Dlg_HistoryViewer viewer = new Dlg_HistoryViewer();
-			viewer.LoadHistory(p_EditableElement.p_Element.p_ElementID, EntityTypes.Elements);
+			viewer.LoadHistory(p_EditableElement.p_Element.p_ElementID, E_EntityTypes.Elements);
 			viewer.ShowDialog(this);
 		}
 	}

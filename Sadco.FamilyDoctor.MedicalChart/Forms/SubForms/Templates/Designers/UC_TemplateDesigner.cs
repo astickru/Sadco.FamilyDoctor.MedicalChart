@@ -13,7 +13,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
     public partial class UC_TemplateDesigner : UserControl
     {
-        private EntityLog m_Log = new EntityLog();
+        private Cl_EntityLog m_Log = new Cl_EntityLog();
 
         public UC_TemplateDesigner()
         {
@@ -39,7 +39,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             else
                 ctrl_Version.Text = p_EditingTemplate.p_Version.ToString();
             a_Template.f_LoadTemplatesElements();
-            m_Log.SetEntity(a_Template);
+            m_Log.f_SetEntity(a_Template);
             if (a_Template.p_TemplateElements != null)
                 ctrl_EditorPanel.f_SetTemplatesElements(a_Template.p_TemplateElements.ToArray());
         }
@@ -93,7 +93,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     }
                     Cl_App.m_DataContext.SaveChanges();
 
-                    if (m_Log.IsChanged(tpl) == false)
+                    if (m_Log.f_IsChanged(tpl) == false)
                     {
                         if (tpl.Equals(p_EditingTemplate) && tpl.p_Version == 1)
                         {
@@ -105,7 +105,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         return;
                     }
 
-                    m_Log.SaveEntity(tpl);
+                    m_Log.f_SaveEntity(tpl);
                     transaction.Commit();
                     f_SetTemplate(tpl);
                 }
@@ -120,7 +120,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         private void ctrl_B_History_Click(object sender, EventArgs e)
         {
             Dlg_HistoryViewer viewer = new Dlg_HistoryViewer();
-            viewer.LoadHistory(p_EditingTemplate.p_TemplateID, EntityTypes.Templates);
+            viewer.LoadHistory(p_EditingTemplate.p_TemplateID, E_EntityTypes.Templates);
             viewer.ShowDialog(this);
         }
     }

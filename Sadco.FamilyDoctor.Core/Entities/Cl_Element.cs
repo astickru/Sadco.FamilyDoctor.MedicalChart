@@ -13,7 +13,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
     /// <summary>
     /// Класс элемента шаблона
     /// </summary>
-    [ELogClass(EntityTypes.Elements)]
+    [Cl_ELogClass(E_EntityTypes.Elements)]
     [Table("T_ELEMENTS")]
     public class Cl_Element : I_Version, I_Delete, I_ELog
     {
@@ -76,13 +76,13 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Системное имя элемента</summary>
         [Column("F_NAME", TypeName = "varchar")]
         [MaxLength(100)]
-        [ELogProperty("Название элемента")]
+        [Cl_ELogProperty("Название элемента")]
         public string p_Name { get; set; }
 
         /// <summary>Тэг элемента</summary>
         [Column("F_TAG", TypeName = "varchar")]
         [MaxLength(60)]
-        [ELogProperty("Тег элемента")]
+        [Cl_ELogProperty("Тег элемента")]
         public string p_Tag { get; set; }
 
         /// <summary>ID обработчик</summary>
@@ -97,7 +97,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
         /// <summary>Вид текстового элемента</summary>
         [Column("F_ELEMENT_TYPE")]
-        [ELogProperty("Вид текстового элемента")]
+        [Cl_ELogProperty("Вид текстового элемента")]
         public E_ElementsTypes p_ElementType {
             get { return m_Types; }
             set {
@@ -162,68 +162,68 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
         /// <summary>Обязательность заполнения</summary>
         [Column("F_REQUIRED")]
-        [ELogProperty("Обязательное поле для заполнения")]
+        [Cl_ELogProperty("Обязательное поле для заполнения")]
         public bool p_Required { get { return m_Required; } set { m_Required = value; } }
 
         /// <summary>Возможность редактирования</summary>
         [Column("F_EDITING")]
-        [ELogProperty("Редактируемое поле")]
+        [Cl_ELogProperty("Редактируемое поле")]
         public bool p_Editing { get { return m_Editing; } set { m_Editing = value; } }
 
         // <summary>Множественный выбор</summary>
         [Column("F_ISMULTI")]
-        [ELogProperty("Множественный выбор")]
+        [Cl_ELogProperty("Множественный выбор")]
         public bool p_IsMultiSelect { get; set; }
 
         // <summary>Является числовым</summary>
         [Column("F_ISNUMBER")]
-        [ELogProperty("Является числовым")]
+        [Cl_ELogProperty("Является числовым")]
         public bool p_IsNumber { get; set; }
 
         // <summary>Точность числа</summary>
         [Column("F_NUMROUND")]
-        [ELogProperty("Точность числа")]
+        [Cl_ELogProperty("Точность числа")]
         public byte p_NumberRound { get; set; }
 
         // <summary>Формула числа</summary>
         [Column("F_NUMFORMULA", TypeName = "varchar")]
         [MaxLength(300)]
-        [ELogProperty("Формула", IgnoreValue = true)]
+        [Cl_ELogProperty("Формула", p_IgnoreValue = true)]
         public string p_NumberFormula { get; set; }
 
         /// <summary>Видимость безусловная</summary>
         [Column("F_VISIBLE")]
-        [ELogProperty("Видимое поле")]
+        [Cl_ELogProperty("Видимое поле")]
         public bool p_Visible { get { return m_Visible; } set { m_Visible = value; } }
 
         /// <summary>Видимость для пациента</summary>
         [Column("F_VISIBLEPATIENT")]
-        [ELogProperty("Видимое поле для пациента")]
+        [Cl_ELogProperty("Видимое поле для пациента")]
         public bool p_VisiblePatient { get; set; }
 
         /// <summary>Подсказка по заполнению (отображается всплывающей подсказкой или сообщение по F1)</summary>
         [Column("F_HELP", TypeName = "varchar")]
         [MaxLength(500)]
-        [ELogProperty("Подсказка")]
+        [Cl_ELogProperty("Подсказка")]
         public string p_Help { get; set; }
 
         /// <summary>Признак симметричности.
         /// Симметричность подразумевает повторение содержимого блока 2 раза (это используется для описания одинаковых правых и левых органов)
         /// с автоматически добавляемыми заголовками, указанными в его свойствах (напр., «справа» и «слева» или “OD” и “OS”)</summary>
         [Column("F_SYMMETRICAL")]
-        [ELogProperty("Является симметричным")]
+        [Cl_ELogProperty("Является симметричным")]
         public bool p_Symmetrical { get { return m_Symmetrical; } set { m_Symmetrical = value; } }
 
         /// <summary>Текст обозначения 1 стороны симметричности</summary>
         [Column("F_SYMMETRYPARAMLEFT", TypeName = "varchar")]
         [MaxLength(50)]
-        [ELogProperty("Симметричность слева")]
+        [Cl_ELogProperty("Симметричность слева")]
         public string p_SymmetryParamLeft { get; set; }
 
         /// <summary>Текст обозначения 2 стороны симметричности</summary>
         [Column("F_SYMMETRYPARAMRIGHT", TypeName = "varchar")]
         [MaxLength(50)]
-        [ELogProperty("Симметричность справа")]
+        [Cl_ELogProperty("Симметричность справа")]
         public string p_SymmetryParamRight { get; set; }
 
         /// <summary>ID значения по умолчанию</summary>
@@ -231,55 +231,55 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [ForeignKey("p_Default")]
         public int? p_DefaultID { get; set; }
         /// <summary>Значение по умолчанию</summary>
-        [ELogProperty("Значение по-умолчанию", IsCustomDescription = true)]
+        [Cl_ELogProperty("Значение по-умолчанию", p_IsCustomDescription = true)]
         public Cl_ElementParam p_Default { get; set; }
 
         #region Часть
         /// <summary>Часть. Использование префикса</summary>
         [Column("F_ISPARTPRE")]
-        [ELogProperty("Префикс")]
+        [Cl_ELogProperty("Префикс")]
         public bool p_IsPartPre { get; set; }
 
         /// <summary>Часть. Значение префикса</summary>
         [Column("F_PARTPRE", TypeName = "varchar")]
         [MaxLength(100)]
-        [ELogProperty("Значение префикса")]
+        [Cl_ELogProperty("Значение префикса")]
         public string p_PartPre { get; set; }
 
         /// <summary>Часть. Использование постфикса</summary>
         [Column("F_ISPARTPOST")]
-        [ELogProperty("Постфикс")]
+        [Cl_ELogProperty("Постфикс")]
         public bool p_IsPartPost { get; set; }
 
         /// <summary>Часть. Значение постфикса</summary>
         [Column("F_PARTPOST", TypeName = "varchar")]
         [MaxLength(100)]
-        [ELogProperty("Значение постфикса")]
+        [Cl_ELogProperty("Значение постфикса")]
         public string p_PartPost { get; set; }
 
         /// <summary>Часть. Использование локации</summary>
         [Column("F_ISPARTLOCATIONS")]
-        [ELogProperty("Локация")]
+        [Cl_ELogProperty("Локация")]
         public bool p_IsPartLocations { get; set; }
 
         /// <summary>Часть. Возможность множественного выбора локации</summary>
         [Column("F_ISPARTLOCATIONSMULTI")]
-        [ELogProperty("Множественный выбор локации")]
+        [Cl_ELogProperty("Множественный выбор локации")]
         public bool p_IsPartLocationsMulti { get; set; }
 
         /// <summary>Часть. Использование нормы</summary>
         [Column("F_ISPARTNORM")]
-        [ELogProperty("Норма")]
+        [Cl_ELogProperty("Норма")]
         public bool p_IsPartNorm { get; set; }
 
         /// <summary>Часть. Значение нормы</summary>
         [Column("F_PARTNORM")]
-        [ELogProperty("Значение нормы")]
+        [Cl_ELogProperty("Значение нормы")]
         public decimal p_PartNorm { get; set; }
 
         /// <summary>Часть. Использование нормы диапозон</summary>
         [Column("F_ISPARTNORMRANGE")]
-        [ELogProperty("Норма диапазон")]
+        [Cl_ELogProperty("Норма диапазон")]
         public bool p_IsPartNormRange { get; set; }
 
         private List<Cl_AgeNorm> m_PartAgeNorms = new List<Cl_AgeNorm>();
@@ -293,7 +293,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
         /// <summary>Возможность ввода не стандартных значений</summary>
         [Column("F_ISCHANGENOTNORM")]
-        [ELogProperty("Ввод не стандартных значений")]
+        [Cl_ELogProperty("Ввод не стандартных значений")]
         public bool p_IsChangeNotNormValues { get; set; }
 
         private List<Cl_ElementParam> m_ParamsValues = new List<Cl_ElementParam>();
@@ -305,19 +305,19 @@ namespace Sadco.FamilyDoctor.Core.Entities
         }
 
         /// <summary>Часть. Возможные локации</summary>
-        [ELogProperty("Изменился набор значений для поля \"Локация\"", IsCustomDescription = true, IsNewValueOnly = true)]
+        [Cl_ELogProperty("Изменился набор значений для поля \"Локация\"", p_IsCustomDescription = true, p_IsNewValueOnly = true)]
         public Cl_ElementParam[] p_PartLocations {
             get { return m_ParamsValues.Where(p => p.p_TypeParam == Cl_ElementParam.E_TypeParam.Location).ToArray(); }
         }
 
         /// <summary>Список стандартных нормальных значений</summary>
-        [ELogProperty("Изменился набор значений для поля \"Нормальные значения\"", IsCustomDescription = true, IsNewValueOnly = true)]
+        [Cl_ELogProperty("Изменился набор значений для поля \"Нормальные значения\"", p_IsCustomDescription = true, p_IsNewValueOnly = true)]
         public Cl_ElementParam[] p_NormValues {
             get { return m_ParamsValues.Where(p => p.p_TypeParam == Cl_ElementParam.E_TypeParam.NormValues).ToArray(); }
         }
 
         /// <summary>Список стандартных патологических значений</summary>
-        [ELogProperty("Изменился набор значений для поля \"Паталогические значения\"", IsCustomDescription = true, IsNewValueOnly = true)]
+        [Cl_ELogProperty("Изменился набор значений для поля \"Паталогические значения\"", p_IsCustomDescription = true, p_IsNewValueOnly = true)]
         public Cl_ElementParam[] p_PatValues {
             get { return m_ParamsValues.Where(p => p.p_TypeParam == Cl_ElementParam.E_TypeParam.PatValues).ToArray(); }
         }
@@ -325,13 +325,13 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Условная видимость</summary>
         [Column("F_VISIBILITYFORMULA", TypeName = "varchar")]
         [MaxLength(1000)]
-        [ELogProperty("Формула условной видимости", IgnoreValue = true)]
+        [Cl_ELogProperty("Формула условной видимости", p_IgnoreValue = true)]
         public string p_VisibilityFormula { get; set; }
 
         /// <summary>Примечание</summary>
         [Column("F_COMMENT", TypeName = "varchar")]
         [MaxLength(100)]
-        [ELogProperty("Примечание")]
+        [Cl_ELogProperty("Примечание")]
         public string p_Comment { get; set; }
 
         /// <summary>ID группы элементов</summary>
@@ -339,17 +339,17 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [ForeignKey("p_ParentGroup")]
         public int p_ParentGroupID { get; set; }
         /// <summary>Группа элементов</summary>
-        [ELogProperty("Изменилась группа", IsCustomDescription = true)]
+        [Cl_ELogProperty("Изменилась группа", p_IsCustomDescription = true)]
         public Cl_Group p_ParentGroup { get; set; }
 
         /// <summary>Флаг нахождения элемента в удалении</summary>
         [Column("F_ISDEL")]
-        [ELogProperty("Элемент удален", IsCustomDescription = true, IgnoreValue = true)]
+        [Cl_ELogProperty("Элемент удален", p_IsCustomDescription = true, p_IgnoreValue = true)]
         public bool p_IsDelete { get; set; }
 
         /// <summary>Данные рисунка</summary>
         [Column("F_IMAGE")]
-        [ELogProperty("Изменился рисунок", IsCustomDescription = true, IgnoreValue = true)]
+        [Cl_ELogProperty("Изменился рисунок", p_IsCustomDescription = true, p_IgnoreValue = true)]
         public byte[] p_ImageBytes { get; set; }
         [NotMapped]
         /// <summary>Рисунок</summary>

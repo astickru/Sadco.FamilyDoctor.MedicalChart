@@ -10,6 +10,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
     /// <summary>
     /// Класс сущности записи
     /// </summary>
+    [Cl_ELogClass(E_EntityTypes.Records)]
     [Table("T_RECORDS")]
     public class Cl_Record : I_Version, I_Delete, I_ELog
     {
@@ -28,7 +29,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
         /// <summary>Флаг нахождения записи в удалении</summary>
         [Column("F_ISDEL")]
-        [ELogProperty("Запись удалена", IsCustomDescription = true, IgnoreValue = true)]
+        [Cl_ELogProperty("Запись удалена", p_IsCustomDescription = true, p_IgnoreValue = true)]
         public bool p_IsDelete { get; set; }
 
         /// <summary>Возвращает уникальный ID записи</summary>
@@ -112,6 +113,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         private List<Cl_RecordValue> m_Values = new List<Cl_RecordValue>();
         /// <summary>Список значений элементов записи</summary>
         [ForeignKey("p_RecordID")]
+        [Cl_ELogProperty()]
         public List<Cl_RecordValue> p_Values {
             get { return m_Values; }
             set { m_Values = value; }
