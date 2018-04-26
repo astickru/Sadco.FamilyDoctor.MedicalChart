@@ -88,24 +88,30 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 
                         string action = "";
 
-                        if (propAttr.p_IsCustomDescription)
-                            action = propAttr.p_Description + ".";
-                        else
+                        if (!propAttr.p_IsComputedLog)
                         {
-                            action = "Изменилось поле: \"";
-
-                            if (string.IsNullOrEmpty(propAttr.p_Description))
-                                action += item.Key.Name + "\".";
+                            if (propAttr.p_IsCustomDescription)
+                            {
+                                if (!string.IsNullOrEmpty(propAttr.p_Description))
+                                    action = propAttr.p_Description + ".";
+                            }
                             else
-                                action += propAttr.p_Description + "\".";
+                            {
+                                action = "Изменилось поле: \"";
+
+                                if (string.IsNullOrEmpty(propAttr.p_Description))
+                                    action += item.Key.Name + "\".";
+                                else
+                                    action += propAttr.p_Description + "\".";
+                            }
                         }
 
                         if (!propAttr.p_IgnoreValue)
                         {
-                            if (!propAttr.p_IsNewValueOnly)
+                            if (!propAttr.p_IsNewValueOnly && propAttr.p_IsComputedLog == false)
                                 action += " Старое значение: \"" + Cl_EntityValue.f_GetValue(item.Key, lastValues[item.Key], null) + "\".";
 
-                            action += " Новое значение: \"" + Cl_EntityValue.f_GetValue(item.Key, item.Value, lastValues[item.Key]) + "\".";
+                            action += (propAttr.p_IsComputedLog ? "" : " Новое значение: \"") + Cl_EntityValue.f_GetValue(item.Key, item.Value, lastValues[item.Key]) + (propAttr.p_IsComputedLog ? "" : "\".");
                         }
 
                         sbAction.AppendLine(action);

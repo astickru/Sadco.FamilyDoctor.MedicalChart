@@ -35,6 +35,8 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             {
                 if (type.Name == "ICollection`1")
                     outValue = f_GetCollectionValue(pInfo, value);
+                else if (type.Name == "List`1")
+                    outValue = f_GetListValue(pInfo, value);
                 else
                 {
                     if (type.BaseType != null)
@@ -52,6 +54,108 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             }
 
             return outValue;
+        }
+
+        private static string f_GetListValue(PropertyInfo pInfo, object value)
+        {
+            Type valType = pInfo.PropertyType.GetGenericArguments().Single();
+
+            if (valType.Name == nameof(Cl_RecordValue))
+                return f_GetRecordValueValue(pInfo, value);
+            else
+                throw new NotImplementedException();
+        }
+
+        private static string f_GetRecordValueValue(PropertyInfo pInfo, object value)
+        {
+            StringBuilder sBuilder = new StringBuilder();
+            List<Cl_RecordValue> last = (List<Cl_RecordValue>)Cl_EntityValue.lastValue;
+            List<Cl_RecordValue> current = (List<Cl_RecordValue>)value;
+
+            if (last == null)
+                last = new List<Cl_RecordValue>();
+            if (current == null)
+                current = new List<Cl_RecordValue>();
+
+            for (int i = 0; i < current.Count; i++)
+            {
+                sBuilder.AppendLine(f_GetRecordValue(pInfo, current.ElementAt(i), last.ElementAt(i)));
+            }
+
+            return sBuilder.ToString().Trim();
+        }
+
+        private static string f_GetRecordValue(PropertyInfo pInfo, Cl_RecordValue cur, Cl_RecordValue last)
+        {
+            StringBuilder sBuild = new StringBuilder();
+            Cl_Element baseElement = cur.p_Element;
+
+            if (baseElement.p_IsText)
+            {
+                if (baseElement.p_IsPartLocations)
+                {
+                    if (Cl_EntityCompare.f_IsCompare(typeof(Array), cur.p_PartLocations, last.p_PartLocations) == false)
+                        sBuild.AppendLine(f_GetRecordParamsValue(cur.p_PartLocations, last.p_PartLocations));
+                }
+
+                if (baseElement.p_IsTextFromCatalog)
+                {
+                    if (Cl_EntityCompare.f_IsCompare(typeof(Array), cur.p_ValuesCatalog, last.p_ValuesCatalog) == false)
+                        sBuild.AppendLine(f_GetRecordParamsValue(cur.p_ValuesCatalog, last.p_ValuesCatalog));
+
+                    if (baseElement.p_Symmetrical && Cl_EntityCompare.f_IsCompare(typeof(Array), last.p_ValuesDopCatalog, cur.p_ValuesDopCatalog) == false)
+                    {
+                        sBuild.AppendLine(f_GetRecordParamsValue(cur.p_ValuesDopCatalog, last.p_ValuesDopCatalog));
+                    }
+                }
+                else
+                {
+                    if (Cl_EntityCompare.f_IsCompare(typeof(String), last.p_ValueUser, cur.p_ValueUser) == false)
+                        sBuild.AppendLine("Старое значение: \"" + last.p_ValueUser + "\". Новое значение: \"" + cur.p_ValueUser + "\"");
+
+                    if (baseElement.p_Symmetrical && Cl_EntityCompare.f_IsCompare(typeof(String), last.p_ValueDopUser, cur.p_ValueDopUser) == false)
+                        sBuild.AppendLine("Старое значение: \"" + last.p_ValueDopUser + "\". Новое значение: \"" + cur.p_ValueDopUser + "\"");
+                }
+            }
+            else if (baseElement.p_IsImage)
+            {
+                sBuild.Append("Поле: \"" + "\"" + " изменилась картинка");
+            }
+            else
+                throw new NotImplementedException();
+
+            return sBuild.ToString().Trim();
+        }
+
+        private static string f_GetRecordParamsValue(Cl_RecordParam[] elm1, Cl_RecordParam[] elm2)
+        {
+            StringBuilder sBuild = new StringBuilder();
+
+            sBuild.Append("Старое значение: ");
+            sBuild.Append(f_GetRecordParamValue(elm2));
+
+            sBuild.Append("Новое значение: ");
+            sBuild.Append(f_GetRecordParamValue(elm1));
+
+            return sBuild.ToString().Trim();
+        }
+
+        private static string f_GetRecordParamValue(Cl_RecordParam[] elm1)
+        {
+            StringBuilder sBuild = new StringBuilder();
+
+            if (elm1.Count() == 0)
+                sBuild.Append("<пусто>. ");
+
+            for (int i = 0; i < elm1.Count(); i++)
+            {
+                sBuild.Append("\"" + elm1.ElementAt(i).p_ElementParam.p_Value + "\"");
+                if (i != elm1.Count() - 1)
+                    sBuild.Append(", ");
+            }
+
+            sBuild.Append(". ");
+            return sBuild.ToString();
         }
 
         private static string f_GetCollectionValue(PropertyInfo pInfo, object value)

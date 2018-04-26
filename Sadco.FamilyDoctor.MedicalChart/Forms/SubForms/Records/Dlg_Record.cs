@@ -126,13 +126,13 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             }
 
                             Cl_App.m_DataContext.p_Records.Add(record);
-                            m_Log.f_SaveEntity(record);
                             Cl_App.m_DataContext.SaveChanges();
                             if (record.p_Version == 1)
                             {
                                 record.p_RecordID = record.p_ID;
                                 Cl_App.m_DataContext.SaveChanges();
                             }
+                            m_Log.f_SaveEntity(record);
                             transaction.Commit();
                             ctrl_Version.Text = record.p_Version.ToString();
                         }

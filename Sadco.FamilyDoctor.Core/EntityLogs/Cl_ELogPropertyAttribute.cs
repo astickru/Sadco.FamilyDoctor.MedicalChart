@@ -37,5 +37,10 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
         /// Сохранять в истории только новое значение, старое игнорируется
         /// </summary>
         public bool p_IsNewValueOnly { get; set; }
+
+        /// <summary>
+        /// Текст лога является вычисляемым
+        /// </summary>
+        public bool p_IsComputedLog { get; set; }
     }
 }

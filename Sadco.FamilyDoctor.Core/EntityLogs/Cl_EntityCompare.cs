@@ -24,6 +24,8 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
                 outResult = f_Boolean(val1, val2);
             else if (type == typeof(Decimal))
                 outResult = f_Decimal(val1, val2);
+            else if (type == typeof(Array))
+                outResult = f_Array(val1, val2);
             else
             {
                 if (type.Name == "ICollection`1")
@@ -114,6 +116,9 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
                 case nameof(Cl_RecordValue):
                     outResult = f_Collection_Cl_RecordValue(val1, val2);
                     break;
+                case nameof(Cl_RecordParam):
+                    outResult = f_Array(val1, val2);
+                    break;
                 default:
                     if (val1 != null)
                         outResult = val1.Equals(val2);
@@ -158,8 +163,8 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             Cl_RecordValue elm2 = (Cl_RecordValue)val2;
             Cl_Element baseElement = elm1.p_Element;
 
-            bool isEqual = false;
-            bool isEqualPart = false;
+            bool isEqual = true;
+            bool isEqualPart = true;
 
             if (elm1 == null || elm2 == null)
             {

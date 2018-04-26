@@ -113,7 +113,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         private List<Cl_RecordValue> m_Values = new List<Cl_RecordValue>();
         /// <summary>Список значений элементов записи</summary>
         [ForeignKey("p_RecordID")]
-        [Cl_ELogProperty()]
+        [Cl_ELogProperty(p_IsComputedLog = true)]
         public List<Cl_RecordValue> p_Values {
             get { return m_Values; }
             set { m_Values = value; }
