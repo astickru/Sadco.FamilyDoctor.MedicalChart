@@ -172,12 +172,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 
             Cl_Log prevEvent = null;
             if (obj.p_GetLogEntityID != 0)
-            {
-                if (classAtr.p_EntityType == E_EntityTypes.Elements)
-                    prevEvent = Cl_App.m_DataContext.p_Logs.Where(l => l.p_ElementID == obj.p_GetLogEntityID).OrderByDescending(d => d.p_ChangeTime).FirstOrDefault();
-                else
-                    prevEvent = Cl_App.m_DataContext.p_Logs.Where(l => l.p_ElementID == obj.p_GetLogEntityID).OrderByDescending(d => d.p_ChangeTime).FirstOrDefault();
-            }
+                prevEvent = Cl_App.m_DataContext.p_Logs.Where(l => l.p_ElementID == obj.p_GetLogEntityID && l.p_EntityType == classAtr.p_EntityType).OrderByDescending(d => d.p_ChangeTime).FirstOrDefault();
 
             return prevEvent == null;
         }
