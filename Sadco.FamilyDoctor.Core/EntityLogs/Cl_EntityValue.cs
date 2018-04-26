@@ -95,31 +95,32 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
                 if (baseElement.p_IsPartLocations)
                 {
                     if (Cl_EntityCompare.f_IsCompare(typeof(Array), cur.p_PartLocations, last.p_PartLocations) == false)
-                        sBuild.AppendLine(f_GetRecordParamsValue(cur.p_PartLocations, last.p_PartLocations));
+
+                        sBuild.AppendLine("Локация \"" + baseElement.p_Name + "\". " + f_GetRecordParamsValue(cur.p_PartLocations, last.p_PartLocations));
                 }
 
                 if (baseElement.p_IsTextFromCatalog)
                 {
                     if (Cl_EntityCompare.f_IsCompare(typeof(Array), cur.p_ValuesCatalog, last.p_ValuesCatalog) == false)
-                        sBuild.AppendLine(f_GetRecordParamsValue(cur.p_ValuesCatalog, last.p_ValuesCatalog));
+                        sBuild.AppendLine("Локация \"" + baseElement.p_Name + "\". " + f_GetRecordParamsValue(cur.p_ValuesCatalog, last.p_ValuesCatalog));
 
                     if (baseElement.p_Symmetrical && Cl_EntityCompare.f_IsCompare(typeof(Array), last.p_ValuesDopCatalog, cur.p_ValuesDopCatalog) == false)
                     {
-                        sBuild.AppendLine(f_GetRecordParamsValue(cur.p_ValuesDopCatalog, last.p_ValuesDopCatalog));
+                        sBuild.AppendLine("Локация \"" + baseElement.p_Name + "\". " + f_GetRecordParamsValue(cur.p_ValuesDopCatalog, last.p_ValuesDopCatalog));
                     }
                 }
                 else
                 {
                     if (Cl_EntityCompare.f_IsCompare(typeof(String), last.p_ValueUser, cur.p_ValueUser) == false)
-                        sBuild.AppendLine("Старое значение: \"" + last.p_ValueUser + "\". Новое значение: \"" + cur.p_ValueUser + "\"");
+                        sBuild.AppendLine("Значение \"" + baseElement.p_Name + "\"" + (baseElement.p_Symmetrical ? " (Слева)" : "") + ". " + "Старое значение: \"" + last.p_ValueUser + "\". Новое значение: \"" + cur.p_ValueUser + "\"");
 
                     if (baseElement.p_Symmetrical && Cl_EntityCompare.f_IsCompare(typeof(String), last.p_ValueDopUser, cur.p_ValueDopUser) == false)
-                        sBuild.AppendLine("Старое значение: \"" + last.p_ValueDopUser + "\". Новое значение: \"" + cur.p_ValueDopUser + "\"");
+                        sBuild.AppendLine("Значение \"" + baseElement.p_Name + "\"" + (baseElement.p_Symmetrical ? " (Справа)" : "") + ". " + "Старое значение: \"" + last.p_ValueDopUser + "\". Новое значение: \"" + cur.p_ValueDopUser + "\"");
                 }
             }
             else if (baseElement.p_IsImage)
             {
-                sBuild.Append("Поле: \"" + "\"" + " изменилась картинка");
+                sBuild.Append("Картинка \"" + baseElement.p_Name + "\" изменилась");
             }
             else
                 throw new NotImplementedException();
