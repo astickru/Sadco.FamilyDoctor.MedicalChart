@@ -195,15 +195,17 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 var table = (TableLayoutPanel)controls.Owner;
                                 table.RowCount++;
                                 table.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-                                ctrlEl.f_SetRecordElementValues(recval, table, table.RowCount);
+                                ctrlEl.f_SetRecordElementValues(recval, table, table.RowCount - 1);
                             }
                             else
+                            {
                                 ctrlEl.f_SetRecordElementValues(recval);
+                                controls.Add(ctrlEl);
+                            }
 
                             ctrlEl.Top = top;
                             ctrlEl.Left = m_PaddingX;
                             top += ctrlEl.Height + m_PaddingY;
-                            controls.Add(ctrlEl);
                             m_Elements.Add(ctrlEl);
                         }
                         else if (te.p_ChildTemplate != null)
@@ -232,7 +234,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 top += 10;
                                 ctrlTable.Top = top;
                                 ctrlTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.InsetDouble;
-                                ctrlTable.RowCount = 0;
+                                ctrlTable.RowCount = 1;
                                 ctrlTable.Controls.Add(new Label() { Text = "Показатель", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 0, 0);
                                 ctrlTable.Controls.Add(new Label() { Text = "Локация", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 1, 0);
                                 ctrlTable.Controls.Add(new Label() { Text = "Значение", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 2, 0);
@@ -274,6 +276,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         {
             if (m_Template == null || m_Record == null) return null;
             var record = new Cl_Record();
+            record.p_RecordID = m_Record.p_RecordID;
             record.p_DateLastChange = DateTime.Now;
             record.p_Template = m_Template;
             record.p_UserID = m_Record.p_UserID;

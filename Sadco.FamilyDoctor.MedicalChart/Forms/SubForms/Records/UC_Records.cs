@@ -23,11 +23,19 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             f_UpdateRecords();
         }
 
+        /// <summary>Флаг отображения удаленных записей</summary>
+        public bool p_IsShowDeleted { get; set; }
+
         private Cl_Record[] m_Records = null;
 
         private void f_UpdateRecords()
         {
-            m_Records = Cl_App.m_DataContext.p_Records.Include(r => r.p_Template).Include(r => r.p_Values).Include(r => r.p_Values.Select(v => v.p_Params)).ToArray();
+            m_Records = Cl_App.m_DataContext.p_Records.Where(r => p_IsShowDeleted ? true : !r.p_IsDelete).GroupBy(e => e.p_RecordID)
+                    .Select(grp => grp
+                        .OrderByDescending(v => v.p_Version).FirstOrDefault())
+                        .Include(r => r.p_Template).Include(r => r.p_Values).Include(r => r.p_Values.Select(v => v.p_Params)).ToArray();
+
+
             DataTable dt = new DataTable();
             foreach (DataGridViewColumn col in ctrl_TPartNormRangeValues.Columns)
             {
