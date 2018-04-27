@@ -7,13 +7,13 @@ namespace Sadco.FamilyDoctor.Core.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class appRecordLocations : IMigrationMetadata
+    public sealed partial class appLocations : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(appRecordLocations));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(appLocations));
         
         string IMigrationMetadata.Id
         {
-            get { return "201804240755477_appRecordLocations"; }
+            get { return "201804271059014_appLocations"; }
         }
         
         string IMigrationMetadata.Source

@@ -182,25 +182,9 @@
     <Compile Include="Migrations\201804160741168_appRecordEl.Designer.cs">
       <DependentUpon>201804160741168_appRecordEl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201804231121572_appDelRecordLocatUserValues.cs" />
-    <Compile Include="Migrations\201804231121572_appDelRecordLocatUserValues.Designer.cs">
-      <DependentUpon>201804231121572_appDelRecordLocatUserValues.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804240755477_appRecordLocations.cs" />
-    <Compile Include="Migrations\201804240755477_appRecordLocations.Designer.cs">
-      <DependentUpon>201804240755477_appRecordLocations.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804241202347_appRecordCatalogNew.cs" />
-    <Compile Include="Migrations\201804241202347_appRecordCatalogNew.Designer.cs">
-      <DependentUpon>201804241202347_appRecordCatalogNew.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804241231500_appRecordDateChange.cs" />
-    <Compile Include="Migrations\201804241231500_appRecordDateChange.Designer.cs">
-      <DependentUpon>201804241231500_appRecordDateChange.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804241345086_appElementDefault.cs" />
-    <Compile Include="Migrations\201804241345086_appElementDefault.Designer.cs">
-      <DependentUpon>201804241345086_appElementDefault.cs</DependentUpon>
+    <Compile Include="Migrations\201804271059014_appLocations.cs" />
+    <Compile Include="Migrations\201804271059014_appLocations.Designer.cs">
+      <DependentUpon>201804271059014_appLocations.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\Cl_AccessLevelAttribute.cs" />
@@ -275,20 +259,8 @@
     <EmbeddedResource Include="Migrations\201804160741168_appRecordEl.resx">
       <DependentUpon>201804160741168_appRecordEl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804231121572_appDelRecordLocatUserValues.resx">
-      <DependentUpon>201804231121572_appDelRecordLocatUserValues.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804240755477_appRecordLocations.resx">
-      <DependentUpon>201804240755477_appRecordLocations.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804241202347_appRecordCatalogNew.resx">
-      <DependentUpon>201804241202347_appRecordCatalogNew.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804241231500_appRecordDateChange.resx">
-      <DependentUpon>201804241231500_appRecordDateChange.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804241345086_appElementDefault.resx">
-      <DependentUpon>201804241345086_appElementDefault.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201804271059014_appLocations.resx">
+      <DependentUpon>201804271059014_appLocations.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

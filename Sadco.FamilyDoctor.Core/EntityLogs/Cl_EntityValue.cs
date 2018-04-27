@@ -112,10 +112,10 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
                 else
                 {
                     if (Cl_EntityCompare.f_IsCompare(typeof(String), last.p_ValueUser, cur.p_ValueUser) == false)
-                        sBuild.AppendLine("Значение \"" + baseElement.p_Name + "\"" + (baseElement.p_Symmetrical ? " (Слева)" : "") + ". " + "Старое значение: \"" + last.p_ValueUser + "\". Новое значение: \"" + cur.p_ValueUser + "\"");
+                        sBuild.AppendLine("Значение \"" + baseElement.p_Name + "\"" + (baseElement.p_Symmetrical ? " (" + baseElement.p_SymmetryParamLeft + ")" : "") + ". " + "Старое значение: \"" + last.p_ValueUser + "\". Новое значение: \"" + cur.p_ValueUser + "\"");
 
                     if (baseElement.p_Symmetrical && Cl_EntityCompare.f_IsCompare(typeof(String), last.p_ValueDopUser, cur.p_ValueDopUser) == false)
-                        sBuild.AppendLine("Значение \"" + baseElement.p_Name + "\"" + (baseElement.p_Symmetrical ? " (Справа)" : "") + ". " + "Старое значение: \"" + last.p_ValueDopUser + "\". Новое значение: \"" + cur.p_ValueDopUser + "\"");
+                        sBuild.AppendLine("Значение \"" + baseElement.p_Name + "\"" + (baseElement.p_Symmetrical ? " (" + baseElement.p_SymmetryParamRight + ")" : "") + ". " + "Старое значение: \"" + last.p_ValueDopUser + "\". Новое значение: \"" + cur.p_ValueDopUser + "\"");
                 }
             }
             else if (baseElement.p_IsImage)
