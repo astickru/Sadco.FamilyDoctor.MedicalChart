@@ -46,10 +46,20 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
                         else if (type.BaseType == typeof(Array))
                             outValue = f_GetArraysValue(value);
                         else
-                            throw new NotImplementedException();
+                        {
+                            if (value != null)
+                                return value.ToString();
+                            else
+                                return "";
+                        }
                     }
                     else
-                        throw new NotImplementedException();
+                    {
+                        if (value != null)
+                            return value.ToString();
+                        else
+                            return "";
+                    }
                 }
             }
 

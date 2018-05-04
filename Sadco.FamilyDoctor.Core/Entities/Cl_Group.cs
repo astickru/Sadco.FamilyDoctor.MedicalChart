@@ -9,7 +9,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
     /// Класс сущности групп
     /// </summary>
     [Table("T_GROUPS")]
-    public class Cl_Group : I_Delete
+    public class Cl_Group : I_Delete, I_Comparable
     {
         /// <summary>
         /// Тип групп
@@ -78,6 +78,14 @@ namespace Sadco.FamilyDoctor.Core.Entities
         public override string ToString()
         {
             return f_GetFullName();
+        }
+
+        /// <summary>Метод сравнения</summary>
+        public bool f_Equals(object a_Value)
+        {
+            if (a_Value == null || !(a_Value is Cl_Group))
+                return false;
+            return p_ID == ((Cl_Group)a_Value).p_ID;
         }
     }
 }

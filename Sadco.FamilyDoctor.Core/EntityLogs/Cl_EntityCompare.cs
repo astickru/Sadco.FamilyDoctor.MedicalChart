@@ -10,16 +10,16 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
     {
         public static bool f_IsCompare(Type type, object val1, object val2)
         {
+            if (val1 == null && val2 == null) return true;
             bool outResult = false;
-
-            if (type == typeof(String))
+            if (type.GetInterface(nameof(I_Comparable)) != null)
+            {
+                if (val1 != null) outResult = ((I_Comparable)val1).f_Equals(val2);
+            }
+            else if (type == typeof(String))
                 outResult = f_String(val1, val2);
             else if (type == typeof(Byte))
                 outResult = f_Byte(val1, val2);
-            else if (type == typeof(Cl_Group))
-                outResult = f_Cl_Group(val1, val2);
-            else if (type == typeof(Cl_ElementParam))
-                outResult = f_Cl_ElementsParams(val1, val2);
             else if (type == typeof(Boolean))
                 outResult = f_Boolean(val1, val2);
             else if (type == typeof(Decimal))
@@ -75,25 +75,6 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
                 return val2.Equals(val1);
             else
                 return true;
-        }
-
-        private static bool f_Cl_Group(object val1, object val2)
-        {
-            if (val1 == null || val2 == null)
-            {
-                if ((val1 == null && val2 != null) || (val1 != null && val2 == null))
-                    return false;
-                if (val1 == null && val2 == null)
-                    return true;
-            }
-
-            if (val1.GetType().BaseType != val2.GetType().BaseType)
-                return false;
-
-            Cl_Group group1 = (Cl_Group)val1;
-            Cl_Group group2 = (Cl_Group)val2;
-
-            return group1.p_ID == group2.p_ID;
         }
 
         private static bool f_Collection(object val1, object val2)
@@ -329,6 +310,8 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 
         private static bool f_Array_Byte(object val1, object val2)
         {
+            if (val1 == null || val2 == null) return false;
+ 
             byte[] a1 = (byte[])val1;
             byte[] a2 = (byte[])val2;
 
@@ -360,28 +343,9 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 
             for (int i = 0; i < elm1.Count(); i++)
             {
-                if (f_Cl_ElementsParams(elm1.ElementAt(i), elm2.ElementAt(i)) == false)
+                if (!elm1.ElementAt(i).f_Equals(elm2.ElementAt(i)))
                     return false;
             }
-
-            return true;
-        }
-
-        private static bool f_Cl_ElementsParams(object elm1, object elm2)
-        {
-            if (elm1 == null || elm2 == null)
-            {
-                if ((elm1 == null && elm2 != null) || (elm1 != null && elm2 == null))
-                    return false;
-                if (elm1 == null && elm2 == null)
-                    return true;
-            }
-
-            Cl_ElementParam val1 = (Cl_ElementParam)elm1;
-            Cl_ElementParam val2 = (Cl_ElementParam)elm2;
-
-            if (val1.p_Value != val2.p_Value)
-                return false;
 
             return true;
         }

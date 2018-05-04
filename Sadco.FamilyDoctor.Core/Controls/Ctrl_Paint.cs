@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -17,13 +18,15 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
         private Point m_StartSelectPoint = new Point();
         private Rectangle m_SelectRect = new Rectangle();
-        private List<Rectangle> m_Elipses = new List<Rectangle>();
 
-        /// <summary>Очистка изменений</summary>
-        public void f_Clear()
-        {
-            m_Elipses.Clear();
-            Invalidate();
+        public new Image Image {
+            get { return base.Image; }
+            set {
+                if (value != null)
+                    base.Image = (Image)value.Clone();
+                else
+                    base.Image = null;
+            }
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -67,13 +70,17 @@ namespace Sadco.FamilyDoctor.Core.Controls
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
-            if (e.Button == MouseButtons.Left)
+            if (!p_ReadOnly)
             {
-                m_Elipses.Add(new Rectangle(m_SelectRect.Location, m_SelectRect.Size));
+                if (e.Button == MouseButtons.Left)
+                {
+                    Graphics grImg = Graphics.FromImage(Image);
+                    grImg.DrawEllipse(new Pen(Color.Red, 2) { DashStyle = System.Drawing.Drawing2D.DashStyle.Solid }, new Rectangle(m_SelectRect.X, m_SelectRect.Y, m_SelectRect.Width, m_SelectRect.Height));
+                }
+                m_SelectRect.Width = 0;
+                m_SelectRect.Height = 0;
+                Invalidate();
             }
-            m_SelectRect.Width = 0;
-            m_SelectRect.Height = 0;
-            Invalidate();
         }
 
         protected override void OnPaint(PaintEventArgs pe)
@@ -84,12 +91,6 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 if (m_SelectRect.Width > 0 && m_SelectRect.Height > 0)
                 {
                     pe.Graphics.DrawEllipse(new Pen(Color.Blue, 2) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash }, m_SelectRect);
-                }
-                foreach (var rect in m_Elipses)
-                {
-                    Graphics grImg = Graphics.FromImage(Image);
-                    pe.Graphics.DrawEllipse(new Pen(Color.Red, 2) { DashStyle = System.Drawing.Drawing2D.DashStyle.Solid }, rect);
-                    grImg.DrawEllipse(new Pen(Color.Red, 2) { DashStyle = System.Drawing.Drawing2D.DashStyle.Solid }, rect);
                 }
             }
         }

@@ -66,6 +66,44 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Cl_ELogProperty("Название шаблона")]
         public string p_Name { get; set; }
 
+        /// <summary>Заголовок шаблона</summary>
+        [Column("F_TITLE", TypeName = "varchar")]
+        [MaxLength(100)]
+        [Cl_ELogProperty("Заголовок шаблона")]
+        public string p_Title { get; set; }
+
+        /// <summary>ID общей категории</summary>
+        [Column("F_CATEGORYTOTAL_ID")]
+        [ForeignKey("p_CategoryTotal")]
+        public int? p_CategoryTotalID { get; set; }
+        private Cl_Category m_CategoryTotal = null;
+        /// <summary>Общая категория шаблонов</summary>
+        [Cl_ELogProperty("Изменилась общая категория", p_IsCustomDescription = true)]
+        public Cl_Category p_CategoryTotal {
+            get { return m_CategoryTotal; }
+            set {
+                m_CategoryTotal = value;
+                if (m_CategoryTotal != null)
+                    m_CategoryTotal.p_Type = Cl_Category.E_CategoriesTypes.Total;
+            }
+        }
+
+        /// <summary>ID клинической категории</summary>
+        [Column("F_CATEGORYKLINIK_ID")]
+        [ForeignKey("p_CategoryKlinik")]
+        public int? p_CategoryKlinikID { get; set; }
+        private Cl_Category m_CategoryKlinik = null;
+        /// <summary>Клиническая категория шаблонов</summary>
+        [Cl_ELogProperty("Изменилась клиническая категория", p_IsCustomDescription = true)]
+        public Cl_Category p_CategoryKlinik {
+            get { return m_CategoryKlinik; }
+            set {
+                m_CategoryKlinik = value;
+                if (m_CategoryKlinik != null)
+                    m_CategoryKlinik.p_Type = Cl_Category.E_CategoriesTypes.Klinik;
+            }
+        }
+
         /// <summary>Описание шаблона</summary>
         [Column("F_DESC", TypeName = "varchar")]
         [MaxLength(1000)]

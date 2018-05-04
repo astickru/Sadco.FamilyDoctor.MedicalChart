@@ -140,8 +140,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         private TableLayoutPanel f_GetControlTable()
         {
             var ctrlTable = new TableLayoutPanel();
-            ctrlTable.ColumnCount = 5;
-            ctrlTable.ColumnStyles.Add(new ColumnStyle());
+            ctrlTable.ColumnCount = 4;
             ctrlTable.ColumnStyles.Add(new ColumnStyle());
             ctrlTable.ColumnStyles.Add(new ColumnStyle());
             ctrlTable.ColumnStyles.Add(new ColumnStyle());
@@ -236,10 +235,10 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 ctrlTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.InsetDouble;
                                 ctrlTable.RowCount = 1;
                                 ctrlTable.Controls.Add(new Label() { Text = "Показатель", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 0, 0);
-                                ctrlTable.Controls.Add(new Label() { Text = "Локация", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 1, 0);
-                                ctrlTable.Controls.Add(new Label() { Text = "Значение", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 2, 0);
-                                ctrlTable.Controls.Add(new Label() { Text = "Ед. изм.", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 3, 0);
-                                ctrlTable.Controls.Add(new Label() { Text = "Нормa", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 4, 0);
+                                //ctrlTable.Controls.Add(new Label() { Text = "Локация", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 1, 0);
+                                ctrlTable.Controls.Add(new Label() { Text = "Значение", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 1, 0);
+                                ctrlTable.Controls.Add(new Label() { Text = "Ед. изм.", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 2, 0);
+                                ctrlTable.Controls.Add(new Label() { Text = "Нормa", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 3, 0);
 
                                 controls.Add(ctrlTable);
                                 f_AddControlsTemplate(te.p_ChildTemplate, ctrlTable.Controls);
@@ -279,6 +278,12 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             record.p_RecordID = m_Record.p_RecordID;
             record.p_DateLastChange = DateTime.Now;
             record.p_Template = m_Template;
+            record.p_KlinikName = m_Record.p_KlinikName;
+            record.p_Title = m_Record.p_Title;
+            record.p_CategoryTotalID = m_Record.p_CategoryTotalID;
+            record.p_CategoryTotal = m_Record.p_CategoryTotal;
+            record.p_CategoryKlinikID = m_Record.p_CategoryKlinikID;
+            record.p_CategoryKlinik = m_Record.p_CategoryKlinik;
             record.p_UserID = m_Record.p_UserID;
             record.p_UserSurName = m_Record.p_UserSurName;
             record.p_UserName = m_Record.p_UserName;
@@ -302,7 +307,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 }
                 else
                 {
-                    MonitoringStub.Error("Error_EditorRecord", "Значение элемента пустые", null, null, null);
+                    return null;
                 }
             }
             return record;

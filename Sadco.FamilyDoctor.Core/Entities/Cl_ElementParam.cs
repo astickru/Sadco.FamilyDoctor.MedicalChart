@@ -6,7 +6,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
 {
     /// <summary>Класс параметров текстовых элементов шаблона</summary>
     [Table("T_ELEMENTSPRMS")]
-    public class Cl_ElementParam
+    public class Cl_ElementParam : I_Comparable
     {
         /// <summary>Тип параметра</summary>
         public enum E_TypeParam : byte
@@ -45,6 +45,14 @@ namespace Sadco.FamilyDoctor.Core.Entities
         public override string ToString()
         {
             return p_Value;
+        }
+
+        /// <summary>Метод сравнения</summary>
+        public bool f_Equals(object a_Value)
+        {
+            if (a_Value == null || !(a_Value is Cl_ElementParam))
+                return false;
+            return p_Value == ((Cl_ElementParam)a_Value).p_Value;
         }
     }
 }

@@ -26,7 +26,10 @@
 		/// </summary>
 		private void InitializeComponent() {
             this.ctrl_TPartNormRangeValues = new System.Windows.Forms.DataGridView();
+            this.p_KlinikName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.p_DateForming = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p_CategoryTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p_Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.p_UserFIO = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
@@ -45,25 +48,55 @@
             // ctrl_TPartNormRangeValues
             // 
             this.ctrl_TPartNormRangeValues.AllowUserToAddRows = false;
+            this.ctrl_TPartNormRangeValues.AllowUserToResizeRows = false;
+            this.ctrl_TPartNormRangeValues.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.ctrl_TPartNormRangeValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ctrl_TPartNormRangeValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.p_KlinikName,
             this.p_DateForming,
+            this.p_CategoryTotal,
+            this.p_Title,
             this.p_UserFIO});
             this.ctrl_TPartNormRangeValues.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ctrl_TPartNormRangeValues.Location = new System.Drawing.Point(0, 0);
             this.ctrl_TPartNormRangeValues.Name = "ctrl_TPartNormRangeValues";
             this.ctrl_TPartNormRangeValues.ReadOnly = true;
+            this.ctrl_TPartNormRangeValues.RowHeadersVisible = false;
             this.ctrl_TPartNormRangeValues.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ctrl_TPartNormRangeValues.Size = new System.Drawing.Size(345, 267);
+            this.ctrl_TPartNormRangeValues.ShowCellErrors = false;
+            this.ctrl_TPartNormRangeValues.ShowCellToolTips = false;
+            this.ctrl_TPartNormRangeValues.ShowEditingIcon = false;
+            this.ctrl_TPartNormRangeValues.ShowRowErrors = false;
+            this.ctrl_TPartNormRangeValues.Size = new System.Drawing.Size(545, 267);
             this.ctrl_TPartNormRangeValues.TabIndex = 88;
             this.ctrl_TPartNormRangeValues.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ctrl_TPartNormRangeValues_CellDoubleClick);
             // 
+            // p_KlinikName
+            // 
+            this.p_KlinikName.HeaderText = "Клиника";
+            this.p_KlinikName.Name = "p_KlinikName";
+            this.p_KlinikName.ReadOnly = true;
+            // 
             // p_DateForming
             // 
-            this.p_DateForming.HeaderText = "Время";
+            this.p_DateForming.HeaderText = "Дата";
             this.p_DateForming.Name = "p_DateForming";
             this.p_DateForming.ReadOnly = true;
             this.p_DateForming.Width = 150;
+            // 
+            // p_CategoryTotal
+            // 
+            this.p_CategoryTotal.HeaderText = "Общая категория";
+            this.p_CategoryTotal.Name = "p_CategoryTotal";
+            this.p_CategoryTotal.ReadOnly = true;
+            this.p_CategoryTotal.Width = 170;
+            // 
+            // p_Title
+            // 
+            this.p_Title.HeaderText = "Запись";
+            this.p_Title.Name = "p_Title";
+            this.p_Title.ReadOnly = true;
+            this.p_Title.Width = 250;
             // 
             // p_UserFIO
             // 
@@ -130,7 +163,7 @@
             // 
             this.splitContainer1.Panel1.Controls.Add(this.ctrl_TPartNormRangeValues);
             this.splitContainer1.Size = new System.Drawing.Size(789, 267);
-            this.splitContainer1.SplitterDistance = 345;
+            this.splitContainer1.SplitterDistance = 545;
             this.splitContainer1.TabIndex = 91;
             // 
             // UC_Records
@@ -166,7 +199,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn p_AgeFrom;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_AgeTo;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn p_KlinikName;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_DateForming;
+        private System.Windows.Forms.DataGridViewTextBoxColumn p_CategoryTotal;
+        private System.Windows.Forms.DataGridViewTextBoxColumn p_Title;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_UserFIO;
     }
 }

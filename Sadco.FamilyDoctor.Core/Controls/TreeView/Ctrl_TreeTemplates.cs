@@ -213,7 +213,14 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     }
                     if (dlg.ShowDialog() != DialogResult.OK) return;
                     newTemplate.p_Name = dlg.ctrl_TBName.Text;
+                    newTemplate.p_Title = dlg.ctrlTitle.Text;
                     newTemplate.p_Type = a_TemplateType;
+                    var catTotal = (Cl_Category)dlg.ctrlCategoriesTotal.SelectedItem;
+                    newTemplate.p_CategoryTotalID = catTotal.p_ID;
+                    newTemplate.p_CategoryTotal = catTotal;
+                    var catKlinik = (Cl_Category)dlg.ctrlCategoriesKlinik.SelectedItem;
+                    newTemplate.p_CategoryKlinikID = catKlinik.p_ID;
+                    newTemplate.p_CategoryKlinik = catKlinik;
                     Cl_App.m_DataContext.p_Templates.Add(newTemplate);
                     Cl_App.m_DataContext.SaveChanges();
                     newTemplate.p_TemplateID = newTemplate.p_ID;

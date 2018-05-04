@@ -48,20 +48,21 @@ namespace Sadco.FamilyDoctor.MedicalChart
         private void f_InitSession(string[] args)
         {
             Cl_User user = new Cl_User();
-            user.p_UserID = int.Parse(args[0]);
-            user.p_UserSurName = args[1];
-            user.p_UserName = args[2];
-            user.p_UserLastName = args[3];
-            user.p_Permission = new Cl_UserPermission(args[4]);
+            user.p_KlinikName = args[0];
+            user.p_UserID = int.Parse(args[1]);
+            user.p_UserSurName = args[2];
+            user.p_UserName = args[3];
+            user.p_UserLastName = args[4];
+            user.p_Permission = new Cl_UserPermission(args[5]);
             Cl_User patient = new Cl_User();
-            patient.p_UserID = int.Parse(args[5]);
-            patient.p_UserSurName = args[6];
-            patient.p_UserName = args[7];
-            patient.p_UserLastName = args[8];
-            patient.p_Sex = (Cl_User.E_Sex)Enum.Parse(typeof(Cl_User.E_Sex), args[9]);
-            patient.p_DateBirth = DateTime.Parse(args[10]);
-            if (args.Length == 13)
-                Cl_SessionFacade.f_GetInstance().f_Init(user, patient, DateTime.Parse(args[11]), DateTime.Parse(args[12]));
+            patient.p_UserID = int.Parse(args[6]);
+            patient.p_UserSurName = args[7];
+            patient.p_UserName = args[8];
+            patient.p_UserLastName = args[9];
+            patient.p_Sex = (Cl_User.E_Sex)Enum.Parse(typeof(Cl_User.E_Sex), args[10]);
+            patient.p_DateBirth = DateTime.Parse(args[11]);
+            if (args.Length == 14)
+                Cl_SessionFacade.f_GetInstance().f_Init(user, patient, DateTime.Parse(args[12]), DateTime.Parse(args[13]));
             else
                 Cl_SessionFacade.f_GetInstance().f_Init(user, patient);
         }

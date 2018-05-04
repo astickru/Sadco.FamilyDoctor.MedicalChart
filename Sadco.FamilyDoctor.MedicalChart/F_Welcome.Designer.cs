@@ -64,12 +64,16 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.label14 = new System.Windows.Forms.Label();
+            this.ctrlKlinikName = new System.Windows.Forms.TextBox();
             this.mainPanel.SuspendLayout();
             this.panel7.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel1.SuspendLayout();
             this.buttonsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainPanel
@@ -79,11 +83,11 @@
             this.mainPanel.Controls.Add(this.panel4);
             this.mainPanel.Controls.Add(this.panel1);
             this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainPanel.Location = new System.Drawing.Point(5, 61);
+            this.mainPanel.Location = new System.Drawing.Point(5, 89);
             this.mainPanel.Margin = new System.Windows.Forms.Padding(0);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Padding = new System.Windows.Forms.Padding(0, 4, 0, 4);
-            this.mainPanel.Size = new System.Drawing.Size(373, 313);
+            this.mainPanel.Size = new System.Drawing.Size(373, 307);
             this.mainPanel.TabIndex = 0;
             // 
             // panel7
@@ -196,7 +200,7 @@
             this.ctrlPatientLastName.Name = "ctrlPatientLastName";
             this.ctrlPatientLastName.Size = new System.Drawing.Size(266, 20);
             this.ctrlPatientLastName.TabIndex = 15;
-            this.ctrlPatientLastName.Text = "Арисовна";
+            this.ctrlPatientLastName.Text = "Пациент_Отчество";
             // 
             // label12
             // 
@@ -216,7 +220,7 @@
             this.ctrlPatientName.Name = "ctrlPatientName";
             this.ctrlPatientName.Size = new System.Drawing.Size(266, 20);
             this.ctrlPatientName.TabIndex = 13;
-            this.ctrlPatientName.Text = "Эльвира";
+            this.ctrlPatientName.Text = "Пациент_Имя";
             // 
             // label13
             // 
@@ -236,7 +240,7 @@
             this.ctrlPatientSurName.Name = "ctrlPatientSurName";
             this.ctrlPatientSurName.Size = new System.Drawing.Size(266, 20);
             this.ctrlPatientSurName.TabIndex = 11;
-            this.ctrlPatientSurName.Text = "Кошка";
+            this.ctrlPatientSurName.Text = "Пациент_Фамилия";
             // 
             // ctrlPatientDateBirth
             // 
@@ -317,7 +321,7 @@
             this.ctrlUserLastName.Name = "ctrlUserLastName";
             this.ctrlUserLastName.Size = new System.Drawing.Size(266, 20);
             this.ctrlUserLastName.TabIndex = 9;
-            this.ctrlUserLastName.Text = "Иванович";
+            this.ctrlUserLastName.Text = "Пользователь_Отчество";
             // 
             // label8
             // 
@@ -337,7 +341,7 @@
             this.ctrlUserName.Name = "ctrlUserName";
             this.ctrlUserName.Size = new System.Drawing.Size(266, 20);
             this.ctrlUserName.TabIndex = 7;
-            this.ctrlUserName.Text = "Арфик";
+            this.ctrlUserName.Text = "Пользователь_Имя";
             // 
             // label2
             // 
@@ -357,7 +361,7 @@
             this.ctrlUserSurName.Name = "ctrlUserSurName";
             this.ctrlUserSurName.Size = new System.Drawing.Size(266, 20);
             this.ctrlUserSurName.TabIndex = 5;
-            this.ctrlUserSurName.Text = "Собакин";
+            this.ctrlUserSurName.Text = "Пользователь_Фамилия";
             // 
             // ctrlRoles
             // 
@@ -408,7 +412,7 @@
             this.buttonsPanel.Controls.Add(this.button1);
             this.buttonsPanel.Controls.Add(this.button2);
             this.buttonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonsPanel.Location = new System.Drawing.Point(5, 340);
+            this.buttonsPanel.Location = new System.Drawing.Point(5, 362);
             this.buttonsPanel.Name = "buttonsPanel";
             this.buttonsPanel.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
             this.buttonsPanel.Size = new System.Drawing.Size(373, 34);
@@ -463,14 +467,45 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
             // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.label14);
+            this.panel2.Controls.Add(this.ctrlKlinikName);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel2.Location = new System.Drawing.Point(5, 61);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(373, 28);
+            this.panel2.TabIndex = 4;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(2, 8);
+            this.label14.Margin = new System.Windows.Forms.Padding(0);
+            this.label14.Name = "label14";
+            this.label14.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label14.Size = new System.Drawing.Size(50, 13);
+            this.label14.TabIndex = 6;
+            this.label14.Text = "Клиника";
+            // 
+            // ctrlKlinikName
+            // 
+            this.ctrlKlinikName.Location = new System.Drawing.Point(103, 4);
+            this.ctrlKlinikName.Margin = new System.Windows.Forms.Padding(0);
+            this.ctrlKlinikName.Name = "ctrlKlinikName";
+            this.ctrlKlinikName.Size = new System.Drawing.Size(266, 20);
+            this.ctrlKlinikName.TabIndex = 7;
+            this.ctrlKlinikName.Text = "Клиника1";
+            // 
             // F_Welcome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(383, 379);
+            this.ClientSize = new System.Drawing.Size(383, 401);
             this.Controls.Add(this.buttonsPanel);
             this.Controls.Add(this.mainPanel);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -488,6 +523,8 @@
             this.buttonsPanel.ResumeLayout(false);
             this.buttonsPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
 
 		}
@@ -529,6 +566,9 @@
         private System.Windows.Forms.TextBox ctrlUserName;
         private System.Windows.Forms.Label label5;
         private Core.Controls.Ctrl_RadioButtonList ctrlPatientSex;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox ctrlKlinikName;
     }
 }
 

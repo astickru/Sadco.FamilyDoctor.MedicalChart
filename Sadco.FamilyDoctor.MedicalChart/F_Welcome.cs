@@ -67,7 +67,8 @@ namespace Sadco.FamilyDoctor.MedicalChart
 
         private void button1_Click(object sender, EventArgs e)
         {
-            bool isNotValid = ctrlUserID.Text == "";
+            bool isNotValid = ctrlKlinikName.Text == "";
+            isNotValid |= ctrlUserID.Text == "";
             isNotValid |= ctrlUserSurName.Text == "";
             isNotValid |= ctrlUserName.Text == "";
             isNotValid |= ctrlUserLastName.Text == "";
@@ -79,23 +80,24 @@ namespace Sadco.FamilyDoctor.MedicalChart
 
             if (isNotValid) return;
 
-            string[] startParams = new string[13];
-            startParams[0] = ctrlUserID.Text;
-            startParams[1] = ctrlUserSurName.Text;
-            startParams[2] = ctrlUserName.Text;
-            startParams[3] = ctrlUserLastName.Text;
-            startParams[4] = f_GetSelectedItem<E_Roles>().ToString();
-            startParams[5] = ctrlPatientID.Text;
-            startParams[6] = ctrlPatientSurName.Text;
-            startParams[7] = ctrlPatientName.Text;
-            startParams[8] = ctrlPatientLastName.Text;
-            startParams[9] = ((Cl_User.E_Sex)ctrlPatientSex.f_GetSelectedItem()).GetHashCode().ToString();
-            startParams[10] = ctrlPatientDateBirth.Value.ToString("dd.MM.yyyy");
+            string[] startParams = new string[14];
+            startParams[0] = ctrlKlinikName.Text;
+            startParams[1] = ctrlUserID.Text;
+            startParams[2] = ctrlUserSurName.Text;
+            startParams[3] = ctrlUserName.Text;
+            startParams[4] = ctrlUserLastName.Text;
+            startParams[5] = f_GetSelectedItem<E_Roles>().ToString();
+            startParams[6] = ctrlPatientID.Text;
+            startParams[7] = ctrlPatientSurName.Text;
+            startParams[8] = ctrlPatientName.Text;
+            startParams[9] = ctrlPatientLastName.Text;
+            startParams[10] = ((Cl_User.E_Sex)ctrlPatientSex.f_GetSelectedItem()).GetHashCode().ToString();
+            startParams[11] = ctrlPatientDateBirth.Value.ToString("dd.MM.yyyy");
 
             if (ctrlDateStart.Value != null)
-                startParams[11] = ctrlDateStart.Value.ToString("dd.MM.yyyy");
+                startParams[12] = ctrlDateStart.Value.ToString("dd.MM.yyyy");
             if (ctrlDateEnd.Value != null)
-                startParams[12] = ctrlDateEnd.Value.ToString("dd.MM.yyyy");
+                startParams[13] = ctrlDateEnd.Value.ToString("dd.MM.yyyy");
 
             if (ctrlIsDebug.Checked)
             {

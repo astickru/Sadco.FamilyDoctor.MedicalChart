@@ -21,6 +21,9 @@ namespace Sadco.FamilyDoctor.Core.Permision
             None
         }
 
+        /// <summary>Название клиники</summary>
+        public string p_KlinikName { get; set; }
+
         /// <summary>ID пользователя</summary>
         public int p_UserID { get; set; }
 

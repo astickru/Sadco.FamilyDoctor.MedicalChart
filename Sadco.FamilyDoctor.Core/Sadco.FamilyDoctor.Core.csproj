@@ -150,6 +150,7 @@
       <DependentUpon>Dlg_EditorGroup.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\TreeView\I_TreeNode.cs" />
+    <Compile Include="Entities\Cl_Category.cs" />
     <Compile Include="Entities\Cl_RecordParam.cs" />
     <Compile Include="Entities\Cl_RecordValue.cs" />
     <Compile Include="Entities\Cl_Record.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="Entities\Cl_Template.cs" />
     <Compile Include="Data\Cl_DataContextMegaTemplate.cs" />
     <Compile Include="Entities\Cl_Element.cs" />
+    <Compile Include="Entities\I_Comparable.cs" />
     <Compile Include="Entities\I_Delete.cs" />
     <Compile Include="EntityLogs\Cl_Log.cs" />
     <Compile Include="EntityLogs\Cl_ELogClassAttribute.cs" />
@@ -185,6 +187,18 @@
     <Compile Include="Migrations\201804271059014_appLocations.cs" />
     <Compile Include="Migrations\201804271059014_appLocations.Designer.cs">
       <DependentUpon>201804271059014_appLocations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805031100307_appTemplCategory.cs" />
+    <Compile Include="Migrations\201805031100307_appTemplCategory.Designer.cs">
+      <DependentUpon>201805031100307_appTemplCategory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805031229075_appTemplTitle.cs" />
+    <Compile Include="Migrations\201805031229075_appTemplTitle.Designer.cs">
+      <DependentUpon>201805031229075_appTemplTitle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805031250089_appRecordTitle.cs" />
+    <Compile Include="Migrations\201805031250089_appRecordTitle.Designer.cs">
+      <DependentUpon>201805031250089_appRecordTitle.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\Cl_AccessLevelAttribute.cs" />
@@ -261,6 +275,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804271059014_appLocations.resx">
       <DependentUpon>201804271059014_appLocations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805031100307_appTemplCategory.resx">
+      <DependentUpon>201805031100307_appTemplCategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805031229075_appTemplTitle.resx">
+      <DependentUpon>201805031229075_appTemplTitle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805031250089_appRecordTitle.resx">
+      <DependentUpon>201805031250089_appRecordTitle.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

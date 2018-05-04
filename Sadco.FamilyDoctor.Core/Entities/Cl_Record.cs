@@ -36,8 +36,8 @@ namespace Sadco.FamilyDoctor.Core.Entities
         int I_ELog.p_GetLogEntityID => this.p_RecordID;
 
         /// <summary>Пол пациента</summary>
-        [Column("F_SEX")]
-        public Permision.Cl_User.E_Sex p_Sex { get; set; }
+        [Column("F_GENDER")]
+        public Cl_User.E_Sex p_Sex { get; set; }
 
         /// <summary>Дата рождения пациента</summary>
         [Column("F_DATEBIRTH", TypeName = "Date")]
@@ -103,6 +103,44 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Column("F_PATIENT_LASTNAME")]
         public string p_PatientLastName { get; set; }
 
+        /// <summary>Название клиники</summary>
+        [Column("F_KLINIKNAME")]
+        public string p_KlinikName { get; set; }
+
+        /// <summary>Заголовок записи</summary>
+        [Column("F_TITLE")]
+        public string p_Title { get; set; }
+
+        /// <summary>ID общей категории</summary>
+        [Column("F_CATEGORYTOTAL_ID")]
+        [ForeignKey("p_CategoryTotal")]
+        public int? p_CategoryTotalID { get; set; }
+        private Cl_Category m_CategoryTotal = null;
+        /// <summary>Общая категория шаблонов</summary>
+        public Cl_Category p_CategoryTotal {
+            get { return m_CategoryTotal; }
+            set {
+                m_CategoryTotal = value;
+                if (m_CategoryTotal != null)
+                    m_CategoryTotal.p_Type = Cl_Category.E_CategoriesTypes.Total;
+            }
+        }
+
+        /// <summary>ID клинической категории</summary>
+        [Column("F_CATEGORYKLINIK_ID")]
+        [ForeignKey("p_CategoryKlinik")]
+        public int? p_CategoryKlinikID { get; set; }
+        private Cl_Category m_CategoryKlinik = null;
+        /// <summary>Клиническая категория шаблонов</summary>
+        public Cl_Category p_CategoryKlinik {
+            get { return m_CategoryKlinik; }
+            set {
+                m_CategoryKlinik = value;
+                if (m_CategoryKlinik != null)
+                    m_CategoryKlinik.p_Type = Cl_Category.E_CategoriesTypes.Klinik;
+            }
+        }
+
         /// <summary>ID шаблона</summary>
         [Column("F_TEMPLATE_ID")]
         [ForeignKey("p_Template")]
@@ -155,6 +193,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Установка пользователя</summary>
         public void f_SetUser(Cl_User a_User)
         {
+            p_KlinikName = a_User.p_KlinikName;
             p_UserID = a_User.p_UserID;
             p_UserSurName = a_User.p_UserSurName;
             p_UserName = a_User.p_UserName;
@@ -170,6 +209,17 @@ namespace Sadco.FamilyDoctor.Core.Entities
             p_PatientLastName = a_User.p_UserLastName;
             p_Sex = a_User.p_Sex;
             p_DateBirth = a_User.p_DateBirth;
+        }
+
+        /// <summary>Установка шаблона</summary>
+        public void f_SetTemplate(Cl_Template a_Template)
+        {
+            p_Template = a_Template;
+            p_Title = a_Template.p_Title;
+            p_CategoryTotalID = a_Template.p_CategoryTotalID;
+            p_CategoryTotal = a_Template.p_CategoryTotal;
+            p_CategoryKlinikID = a_Template.p_CategoryKlinikID;
+            p_CategoryKlinik = a_Template.p_CategoryKlinik;
         }
     }
 }

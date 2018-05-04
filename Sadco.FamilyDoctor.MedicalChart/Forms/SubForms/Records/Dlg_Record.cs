@@ -4,6 +4,7 @@ using Sadco.FamilyDoctor.Core.Controls;
 using Sadco.FamilyDoctor.Core.Controls.DesignerPanel;
 using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.EntityLogs;
+using Sadco.FamilyDoctor.Core.Facades;
 using System;
 using System.ComponentModel;
 using System.Configuration;
@@ -97,6 +98,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 ctrlPatientFIO.Text = string.Format("{0} ({1}, {2})", m_Record.p_PatientFIO, 
                     m_Record.p_Sex == Core.Permision.Cl_User.E_Sex.Man ? "Мужчина" : m_Record.p_Sex == Core.Permision.Cl_User.E_Sex.Female ? "Женьщина" : "Нет данных", 
                     m_Record.p_DateBirth.ToShortDateString());
+                ctrlTitle.Text = m_Record.p_Title;
                 Text = string.Format("Запись \"{0}\" v{1}", m_Record.p_Template.p_Name, ConfigurationManager.AppSettings["Version"]);
                 if (m_Record.p_Version == 0)
                     ctrl_Version.Text = "Черновик";
@@ -109,6 +111,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         private void ctrlBSave_Click(object sender, System.EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(ctrlTitle.Text))
+            {
+                MonitoringStub.Message("Заголовок пустой!");
+                return;
+            }
             if (m_ControlTemplate != null)
             {
                 using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
@@ -118,12 +125,15 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         var record = m_ControlTemplate.f_GetNewRecord();
                         if (record != null)
                         {
-                            if (m_Log.f_IsChanged(record) == false)
+                            if (m_Log.f_IsChanged(record) == false && record.p_Title == ctrlTitle.Text)
                             {
                                 MonitoringStub.Message("Элемент не изменялся!");
                                 transaction.Rollback();
                                 return;
                             }
+
+                            record.p_Title = ctrlTitle.Text;
+                            record.p_KlinikName = Cl_SessionFacade.f_GetInstance().p_User.p_KlinikName;
 
                             Cl_App.m_DataContext.p_Records.Add(record);
                             Cl_App.m_DataContext.SaveChanges();
@@ -134,11 +144,13 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             }
                             m_Log.f_SaveEntity(record);
                             transaction.Commit();
-                            ctrl_Version.Text = record.p_Version.ToString();
+                            //m_ControlTemplate.f_SetRecord(record);
+                            f_SetRecord(record);
+                            //ctrl_Version.Text = record.p_Version.ToString();
                         }
                         else
                         {
-                            throw new Exception("Не удалось получить запись");
+                            return;
                         }
                     }
                     catch (Exception ex)

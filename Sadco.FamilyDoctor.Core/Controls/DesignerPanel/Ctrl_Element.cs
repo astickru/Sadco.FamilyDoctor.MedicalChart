@@ -184,7 +184,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     else
                         panel.Controls.Add(l);
                 }
-                if (p_Element.p_IsPartLocations && p_Element.p_PartLocations != null && p_Element.p_PartLocations.Length > 0)
+                if (p_Element.p_IsPartLocations && p_Element.p_PartLocations != null && p_Element.p_PartLocations.Length > 0 && a_Table == null)
                 {
                     if (p_Element.p_IsPartLocationsMulti)
                     {
@@ -205,10 +205,12 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                     ctrl_PartLocationsMulti.SetItemChecked(i, true);
                             }
                         }
-                        if (a_Table != null)
-                            a_Table.Controls.Add(ctrl_PartLocationsMulti, 1, a_RowIndex);
-                        else
-                            panel.Controls.Add(ctrl_PartLocationsMulti);
+                        //if (a_Table != null)
+                        //    a_Table.Controls.Add(ctrl_PartLocationsMulti, 1, a_RowIndex);
+                        //else
+                        //    panel.Controls.Add(ctrl_PartLocationsMulti);
+
+                        panel.Controls.Add(ctrl_PartLocationsMulti);
                     }
                     else
                     {
@@ -227,10 +229,11 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         var lParam = a_RecordValue.p_PartLocations.FirstOrDefault();
                         if (lParam != null)
                             ctrl_PartLocations.SelectedItem = p_Element.p_PartLocations.FirstOrDefault(pl => pl.p_ID == lParam.p_ElementParamID);
-                        if (a_Table != null)
-                            a_Table.Controls.Add(ctrl_PartLocations, 1, a_RowIndex);
-                        else
-                            panel.Controls.Add(ctrl_PartLocations);
+                        //if (a_Table != null)
+                        //    a_Table.Controls.Add(ctrl_PartLocations, 1, a_RowIndex);
+                        //else
+                        //    panel.Controls.Add(ctrl_PartLocations);
+                        panel.Controls.Add(ctrl_PartLocations);
                     }
                 }
                 if (p_Element.p_IsTextFromCatalog)
@@ -317,14 +320,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         {
                             var cellPanel = f_GetSymmetricalPanel(ctrl_ValuesMulti, ctrl_DopValuesMulti, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
                             if (a_Table != null)
-                                a_Table.Controls.Add(cellPanel, 2, a_RowIndex);
+                                a_Table.Controls.Add(cellPanel, 1, a_RowIndex);
                             else
                                 panel.Controls.Add(cellPanel);
                         }
                         else
                         {
                             if (a_Table != null)
-                                a_Table.Controls.Add(ctrl_ValuesMulti, 2, a_RowIndex);
+                                a_Table.Controls.Add(ctrl_ValuesMulti, 1, a_RowIndex);
                             else
                                 panel.Controls.Add(ctrl_ValuesMulti);
                         }
@@ -395,14 +398,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         {
                             var cellPanel = f_GetSymmetricalPanel(ctrl_Values, ctrl_DopValues, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
                             if (a_Table != null)
-                                a_Table.Controls.Add(cellPanel, 2, a_RowIndex);
+                                a_Table.Controls.Add(cellPanel, 1, a_RowIndex);
                             else
                                 panel.Controls.Add(cellPanel);
                         }
                         else
                         {
                             if (a_Table != null)
-                                a_Table.Controls.Add(ctrl_Values, 2, a_RowIndex);
+                                a_Table.Controls.Add(ctrl_Values, 1, a_RowIndex);
                             else
                                 panel.Controls.Add(ctrl_Values);
                         }
@@ -424,14 +427,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             ctrl_DopValue.Text = a_RecordValue.p_ValueDopUser;
                             var cellPanel = f_GetSymmetricalPanel(ctrl_Value, ctrl_DopValue, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
                             if (a_Table != null)
-                                a_Table.Controls.Add(cellPanel, 2, a_RowIndex);
+                                a_Table.Controls.Add(cellPanel, 1, a_RowIndex);
                             else
                                 panel.Controls.Add(cellPanel);
                         }
                         else
                         {
                             if (a_Table != null)
-                                a_Table.Controls.Add(ctrl_Value, 2, a_RowIndex);
+                                a_Table.Controls.Add(ctrl_Value, 1, a_RowIndex);
                             else
                                 panel.Controls.Add(ctrl_Value);
                         }
@@ -449,14 +452,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             ctrl_DopValueBox.Text = a_RecordValue.p_ValueDopUser;
                             var cellPanel = f_GetSymmetricalPanel(ctrl_ValueBox, ctrl_DopValueBox, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
                             if (a_Table != null)
-                                a_Table.Controls.Add(cellPanel, 2, a_RowIndex);
+                                a_Table.Controls.Add(cellPanel, 1, a_RowIndex);
                             else
                                 panel.Controls.Add(cellPanel);
                         }
                         else
                         {
                             if (a_Table != null)
-                                a_Table.Controls.Add(ctrl_ValueBox, 2, a_RowIndex);
+                                a_Table.Controls.Add(ctrl_ValueBox, 1, a_RowIndex);
                             else
                                 panel.Controls.Add(ctrl_ValueBox);
                         }
@@ -468,7 +471,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     l.AutoSize = true;
                     l.Margin = new Padding(0, 6, 0, 0);
                     if (a_Table != null)
-                        a_Table.Controls.Add(l, 3, a_RowIndex);
+                        a_Table.Controls.Add(l, 2, a_RowIndex);
                     else
                         panel.Controls.Add(l);
                 }
@@ -479,7 +482,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     l.AutoSize = true;
                     l.Margin = new Padding(0, 6, 0, 0);
                     if (a_Table != null)
-                        a_Table.Controls.Add(l, 4, a_RowIndex);
+                        a_Table.Controls.Add(l, 3, a_RowIndex);
                     else
                         panel.Controls.Add(l);
                 }
@@ -492,7 +495,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         l.AutoSize = true;
                         l.Margin = new Padding(0, 6, 0, 0);
                         if (a_Table != null)
-                            a_Table.Controls.Add(l, 4, a_RowIndex);
+                            a_Table.Controls.Add(l, 3, a_RowIndex);
                         else
                             panel.Controls.Add(l);
                     }
@@ -517,7 +520,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 rowPanel.Controls.Add(l);
                 ctrl_Image = new Ctrl_Paint();
                 ctrl_Image.Size = new Size(250, 200);
-                ctrl_Image.SizeMode = PictureBoxSizeMode.CenterImage;
+                ctrl_Image.SizeMode = PictureBoxSizeMode.AutoSize;
                 rowPanel.Controls.Add(ctrl_Image);
 
                 if (p_Element.p_Image == null)
@@ -532,12 +535,18 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 }
                 else
                 {
-                    if (a_RecordValue.p_Image != null)
-                        ctrl_Image.Image = a_RecordValue.p_Image;
-                    else
-                        ctrl_Image.Image = p_Element.p_Image;
-                    ctrl_Image.p_ReadOnly = false;
                     var bReset = new Button();
+                    if (a_RecordValue.p_Image != null)
+                    {
+                        ctrl_Image.Image = a_RecordValue.p_Image;
+                        bReset.Tag = a_RecordValue.p_Image;
+                    }
+                    else
+                    {
+                        ctrl_Image.Image = p_Element.p_Image;
+                        bReset.Tag = p_Element.p_Image;
+                    }
+                    ctrl_Image.p_ReadOnly = false;
                     bReset.AutoSize = true;
                     bReset.Text = "сбросить";
                     bReset.Click += BReset_Click;
@@ -576,7 +585,10 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             }
                         }
                         else if (p_Element.p_Required)
+                        {
                             MonitoringStub.Message(string.Format("Локация с множественным выбором элемента {0} пустая", p_Element.p_Name));
+                            return null;
+                        }
                     }
                     else
                     {
@@ -586,7 +598,10 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue });
                         }
                         else if (p_Element.p_Required)
+                        {
                             MonitoringStub.Message(string.Format("Локация элемента {0} пустая", p_Element.p_Name));
+                            return null;
+                        }
                     }
                 }
                 if (p_Element.p_IsTextFromCatalog)
@@ -609,11 +624,17 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                     }
                                 }
                                 else if (p_Element.p_Required)
+                                {
                                     MonitoringStub.Message(string.Format("Значения с множественным выбором из справочника для симметрического параметра элемента {0} пустые", p_Element.p_Name));
+                                    return null;
+                                }
                             }
                         }
                         else if (p_Element.p_Required)
+                        {
                             MonitoringStub.Message(string.Format("Значения с множественным выбором из справочника элемента {0} пустые", p_Element.p_Name));
+                            return null;
+                        }
                     }
                     else
                     {
@@ -629,11 +650,17 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                     recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue, p_IsDop = true });
                                 }
                                 else if (p_Element.p_Required)
+                                {
                                     MonitoringStub.Message(string.Format("Значение из справочника для симметрического параметра элемента {0} пустое", p_Element.p_Name));
+                                    return null;
+                                }
                             }
                         }
                         else if (p_Element.p_Required)
+                        {
                             MonitoringStub.Message(string.Format("Значение из справочника элемента {0} пустое", p_Element.p_Name));
+                            return null;
+                        }
                     }
                 }
                 else
@@ -650,11 +677,17 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                     recordValue.p_ValueDopUser = ctrl_DopValue.Text;
                                 }
                                 else if (p_Element.p_Required)
+                                {
                                     MonitoringStub.Message(string.Format("Значение для симметрического параметра элемента {0} пустое", p_Element.p_Name));
+                                    return null;
+                                }
                             }
                         }
                         else if (p_Element.p_Required)
+                        {
                             MonitoringStub.Message(string.Format("Значение элемента {0} пустое", p_Element.p_Name));
+                            return null;
+                        }
                     }
                     else
                     {
@@ -668,11 +701,17 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                     recordValue.p_ValueDopUser = ctrl_DopValueBox.Text;
                                 }
                                 else if (p_Element.p_Required)
+                                {
                                     MonitoringStub.Message(string.Format("Значение для симметрического параметра элемента {0} пустое", p_Element.p_Name));
+                                    return null;
+                                }
                             }
                         }
                         else if (p_Element.p_Required)
+                        {
                             MonitoringStub.Message(string.Format("Значение элемента {0} пустое", p_Element.p_Name));
+                            return null;
+                        }
                     }
                 }
             }
@@ -709,8 +748,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
 
         private void BReset_Click(object sender, System.EventArgs e)
         {
-            if (p_Element.p_Image != null)
-                ctrl_Image.f_Clear();
+            var img = ((Button)sender).Tag as Image;
+            ctrl_Image.Image = img;
         }
 
         private void BClear_Click(object sender, System.EventArgs e)
@@ -718,7 +757,6 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             if (p_Element.p_Image != null)
             {
                 ctrl_Image.Image = p_Element.p_Image;
-                ctrl_Image.f_Clear();
             }
         }
     }

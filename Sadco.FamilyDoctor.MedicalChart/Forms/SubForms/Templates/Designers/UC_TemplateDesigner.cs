@@ -61,6 +61,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     {
                         tpl = new Cl_Template();
                         tpl.p_TemplateID = p_EditingTemplate.p_TemplateID;
+                        tpl.p_Title = p_EditingTemplate.p_Title;
+                        tpl.p_CategoryTotalID = p_EditingTemplate.p_CategoryTotalID;
+                        tpl.p_CategoryTotal = p_EditingTemplate.p_CategoryTotal;
+                        tpl.p_CategoryKlinikID = p_EditingTemplate.p_CategoryKlinikID;
+                        tpl.p_CategoryKlinik = p_EditingTemplate.p_CategoryKlinik;
                         tpl.p_Type = p_EditingTemplate.p_Type;
                         tpl.p_Name = p_EditingTemplate.p_Name;
                         tpl.p_Version = p_EditingTemplate.p_Version + 1;

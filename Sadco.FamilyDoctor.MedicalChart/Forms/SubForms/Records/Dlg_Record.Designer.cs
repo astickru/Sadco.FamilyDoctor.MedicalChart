@@ -42,8 +42,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.ctrlBSave = new System.Windows.Forms.Button();
             this.ctrlBHistory = new System.Windows.Forms.Button();
+            this.ctrlBSave = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.ctrlTitle = new System.Windows.Forms.TextBox();
             this.ctrl_CMTemplate.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -106,15 +108,17 @@
             // ctrlPContent
             // 
             this.ctrlPContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ctrlPContent.Location = new System.Drawing.Point(14, 61);
+            this.ctrlPContent.Location = new System.Drawing.Point(14, 84);
             this.ctrlPContent.Name = "ctrlPContent";
             this.ctrlPContent.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.ctrlPContent.Size = new System.Drawing.Size(1199, 484);
+            this.ctrlPContent.Size = new System.Drawing.Size(1199, 461);
             this.ctrlPContent.TabIndex = 1;
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel1.Controls.Add(this.ctrlTitle);
+            this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.ctrl_Version);
             this.panel1.Controls.Add(this.ctrlPatientFIO);
@@ -124,7 +128,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(14, 10);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1199, 51);
+            this.panel1.Size = new System.Drawing.Size(1199, 74);
             this.panel1.TabIndex = 2;
             // 
             // label3
@@ -198,6 +202,17 @@
             this.panel2.Size = new System.Drawing.Size(1199, 25);
             this.panel2.TabIndex = 0;
             // 
+            // ctrlBHistory
+            // 
+            this.ctrlBHistory.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ctrlBHistory.Location = new System.Drawing.Point(1001, 0);
+            this.ctrlBHistory.Name = "ctrlBHistory";
+            this.ctrlBHistory.Size = new System.Drawing.Size(99, 25);
+            this.ctrlBHistory.TabIndex = 1;
+            this.ctrlBHistory.Text = "история";
+            this.ctrlBHistory.UseVisualStyleBackColor = true;
+            this.ctrlBHistory.Click += new System.EventHandler(this.ctrlBHistory_Click);
+            // 
             // ctrlBSave
             // 
             this.ctrlBSave.Dock = System.Windows.Forms.DockStyle.Right;
@@ -209,16 +224,21 @@
             this.ctrlBSave.UseVisualStyleBackColor = true;
             this.ctrlBSave.Click += new System.EventHandler(this.ctrlBSave_Click);
             // 
-            // ctrlBHistory
+            // label5
             // 
-            this.ctrlBHistory.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ctrlBHistory.Location = new System.Drawing.Point(1001, 0);
-            this.ctrlBHistory.Name = "ctrlBHistory";
-            this.ctrlBHistory.Size = new System.Drawing.Size(99, 25);
-            this.ctrlBHistory.TabIndex = 1;
-            this.ctrlBHistory.Text = "история";
-            this.ctrlBHistory.UseVisualStyleBackColor = true;
-            this.ctrlBHistory.Click += new System.EventHandler(this.ctrlBHistory_Click);
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 51);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(81, 13);
+            this.label5.TabIndex = 66;
+            this.label5.Text = "Заголовок:";
+            // 
+            // ctrlTitle
+            // 
+            this.ctrlTitle.Location = new System.Drawing.Point(121, 48);
+            this.ctrlTitle.Name = "ctrlTitle";
+            this.ctrlTitle.Size = new System.Drawing.Size(848, 21);
+            this.ctrlTitle.TabIndex = 68;
             // 
             // Dlg_Record
             // 
@@ -262,5 +282,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label ctrl_Version;
         private System.Windows.Forms.Button ctrlBHistory;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox ctrlTitle;
     }
 }
