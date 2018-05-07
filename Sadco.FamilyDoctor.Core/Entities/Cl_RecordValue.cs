@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Sadco.FamilyDoctor.Core.EntityLogs;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
@@ -11,7 +13,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
     /// Класс сущности значения записи
     /// </summary>
     [Table("T_RECORDSVALUES")]
-    public class Cl_RecordValue
+    public class Cl_RecordValue : I_Comparable
     {
         /// <summary>ID значения записи</summary>
         [Key]
@@ -91,6 +93,50 @@ namespace Sadco.FamilyDoctor.Core.Entities
                     p_ImageBytes = null;
                 }
             }
+        }
+
+        public bool f_Equals(object a_Value)
+        {
+            if (a_Value == null || !(a_Value.GetType() == this.GetType()))
+                return false;
+
+            Cl_RecordValue m_elm = (Cl_RecordValue)a_Value;
+            Cl_Element m_baseElement = this.p_Element;
+            bool m_isEqual = true;
+            bool m_isEqualPart = true;
+
+            if (m_baseElement.p_IsText)
+            {
+                if (m_baseElement.p_IsPartLocations)
+                {
+                    m_isEqualPart = Cl_EntityCompare.f_Array(p_PartLocations, m_elm.p_PartLocations);
+                }
+
+                if (m_baseElement.p_IsTextFromCatalog)
+                {
+                    m_isEqual = Cl_EntityCompare.f_Array(p_ValuesCatalog, m_elm.p_ValuesCatalog);
+                    if (m_baseElement.p_Symmetrical && m_isEqual)
+                    {
+                        m_isEqual = Cl_EntityCompare.f_Array(p_ValuesDopCatalog, m_elm.p_ValuesDopCatalog);
+                    }
+                }
+                else
+                {
+                    m_isEqual = Cl_EntityCompare.f_String(p_ValueUser, m_elm.p_ValueUser);
+                    if (m_baseElement.p_Symmetrical && m_isEqual)
+                    {
+                        m_isEqual = Cl_EntityCompare.f_String(p_ValueDopUser, m_elm.p_ValueDopUser);
+                    }
+                }
+            }
+            else if (m_baseElement.p_IsImage)
+            {
+                return Cl_EntityCompare.f_Array_Byte(p_ImageBytes, m_elm.p_ImageBytes);
+            }
+            else
+                throw new NotImplementedException("Не реализованный метод сравнения для объекта Cl_RecordValue");
+
+            return m_isEqual && m_isEqualPart;
         }
     }
 }

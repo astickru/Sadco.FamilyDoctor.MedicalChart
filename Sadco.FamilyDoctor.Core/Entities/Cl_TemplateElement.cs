@@ -8,7 +8,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
 	/// Класс элемента шаблона
 	/// </summary>
     [Table("T_TEMPLATESELEMENTS")]
-    public class Cl_TemplateElement
+    public class Cl_TemplateElement : I_Comparable
     {
         [Column("F_ID")]
         [Key]
@@ -38,5 +38,20 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Индекс позиции элемента в шаблоне</summary>
         [Column("F_INDEX")]
         public int p_Index { get; set; }
+
+        public bool f_Equals(object a_Value)
+        {
+            if (a_Value == null || !(a_Value.GetType() == this.GetType()))
+                return false;
+
+            Cl_TemplateElement elm = (Cl_TemplateElement)a_Value;
+
+            if (this.p_ChildElement != null && elm.p_ChildElement != null)
+                return this.p_ChildElementID == elm.p_ChildElementID;
+            else if ((this.p_ChildElement != null) == false && (elm.p_ChildElement != null) == false)
+                return this.p_ChildTemplateID == elm.p_ChildTemplateID;
+            else
+                return false;
+        }
     }
 }

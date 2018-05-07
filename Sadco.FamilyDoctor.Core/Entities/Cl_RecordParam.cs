@@ -5,7 +5,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
 {
     /// <summary>Класс параметров записи</summary>
     [Table("T_RECORDSPRMS")]
-    public class Cl_RecordParam
+    public class Cl_RecordParam : I_Comparable
     {
         /// <summary>ID параметров записи</summary>
         [Key]
@@ -29,5 +29,12 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Признак принадлежности к дополнительному параметру</summary>
         [Column("F_ISDOP")]
         public bool p_IsDop { get; set; }
+
+        public bool f_Equals(object a_Value)
+        {
+            if (a_Value == null || !(a_Value.GetType() == this.GetType()))
+                return false;
+            return p_ElementParam.p_Value == ((Cl_RecordParam)a_Value).p_ElementParam.p_Value;
+        }
     }
 }

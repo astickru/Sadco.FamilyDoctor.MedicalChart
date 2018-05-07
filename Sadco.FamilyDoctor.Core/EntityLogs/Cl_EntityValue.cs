@@ -31,28 +31,16 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
                 outValue = f_GetBoolValue(value);
             else if (type == typeof(Decimal))
                 outValue = f_GetDecimalValue(value);
+            else if (type.GetInterface(nameof(System.Collections.IEnumerable)) != null)
+                outValue = f_GetCollectionValue(pInfo, value);
             else
             {
-                if (type.Name == "ICollection`1")
-                    outValue = f_GetCollectionValue(pInfo, value);
-                else if (type.Name == "List`1")
-                    outValue = f_GetListValue(pInfo, value);
-                else
+                if (type.BaseType != null)
                 {
-                    if (type.BaseType != null)
-                    {
-                        if (type.BaseType == typeof(Enum))
-                            outValue = f_GetEnumValue(value);
-                        else if (type.BaseType == typeof(Array))
-                            outValue = f_GetArraysValue(value);
-                        else
-                        {
-                            if (value != null)
-                                return value.ToString();
-                            else
-                                return "";
-                        }
-                    }
+                    if (type.BaseType == typeof(Enum))
+                        outValue = f_GetEnumValue(value);
+                    else if (type.BaseType == typeof(Array))
+                        outValue = f_GetArraysValue(value);
                     else
                     {
                         if (value != null)
@@ -61,16 +49,25 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
                             return "";
                     }
                 }
+                else
+                {
+                    if (value != null)
+                        return value.ToString();
+                    else
+                        return "";
+                }
             }
 
             return outValue;
         }
 
-        private static string f_GetListValue(PropertyInfo pInfo, object value)
+        private static string f_GetCollectionValue(PropertyInfo pInfo, object value)
         {
             Type valType = pInfo.PropertyType.GetGenericArguments().Single();
 
-            if (valType.Name == nameof(Cl_RecordValue))
+            if (valType.Name == nameof(Cl_TemplateElement))
+                return f_GetTemplateElementsValue(pInfo, value);
+            else if (valType.Name == nameof(Cl_RecordValue))
                 return f_GetRecordValueValue(pInfo, value);
             else
                 throw new NotImplementedException();
@@ -89,13 +86,13 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 
             for (int i = 0; i < current.Count; i++)
             {
-                sBuilder.AppendLine(f_GetRecordValue(pInfo, current.ElementAt(i), last.ElementAt(i)));
+                sBuilder.AppendLine(f_GetRecordValue(current.ElementAt(i), last.ElementAt(i)));
             }
 
             return sBuilder.ToString().Trim();
         }
 
-        private static string f_GetRecordValue(PropertyInfo pInfo, Cl_RecordValue cur, Cl_RecordValue last)
+        private static string f_GetRecordValue(Cl_RecordValue cur, Cl_RecordValue last)
         {
             StringBuilder sBuild = new StringBuilder();
             Cl_Element baseElement = cur.p_Element;
@@ -167,16 +164,6 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 
             sBuild.Append(". ");
             return sBuild.ToString();
-        }
-
-        private static string f_GetCollectionValue(PropertyInfo pInfo, object value)
-        {
-            Type valType = pInfo.PropertyType.GetGenericArguments().Single();
-
-            if (valType.Name == nameof(Cl_TemplateElement))
-                return f_GetTemplateElementsValue(pInfo, value);
-            else
-                throw new NotImplementedException();
         }
 
         private static string f_GetTemplateElementsValue(PropertyInfo pInfo, object value)

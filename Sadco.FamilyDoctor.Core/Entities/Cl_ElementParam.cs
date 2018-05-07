@@ -50,7 +50,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Метод сравнения</summary>
         public bool f_Equals(object a_Value)
         {
-            if (a_Value == null || !(a_Value is Cl_ElementParam))
+            if (a_Value == null || !(a_Value.GetType() == this.GetType()))
                 return false;
             return p_Value == ((Cl_ElementParam)a_Value).p_Value;
         }
