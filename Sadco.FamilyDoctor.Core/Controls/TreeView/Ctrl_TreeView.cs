@@ -199,7 +199,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             Dlg_EditorGroup dlg = new Dlg_EditorGroup();
             dlg.Text = "Новая группа";
             if (p_SelectedGroup.p_Group != null)
-                dlg.ctrl_LGroupValue.Text = p_SelectedGroup.p_Group.f_GetFullName();
+                dlg.ctrl_LGroupValue.Text = p_SelectedGroup.p_Group.p_Name;
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 Cl_Group group = new Cl_Group();
@@ -226,7 +226,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             if (p_SelectedGroup == null && p_SelectedGroup.p_Group == null) return;
             Dlg_EditorGroup dlg = new Dlg_EditorGroup();
             dlg.Text = "Изменение группы";
-            dlg.ctrl_LGroupValue.Text = p_SelectedGroup.p_Group.f_GetFullName();
+            dlg.ctrl_LGroupValue.Text = p_SelectedGroup.p_Group.p_Name;
             dlg.ctrl_TBName.Text = p_SelectedGroup.p_Group.p_Name;
             if (dlg.ShowDialog() != DialogResult.OK) return;
             p_SelectedGroup.f_SetGroupName(dlg.ctrl_TBName.Text);

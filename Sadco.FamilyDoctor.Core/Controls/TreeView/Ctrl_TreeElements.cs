@@ -183,7 +183,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     if (group != null)
                     {
                         newElement.p_ParentGroup = p_SelectedGroup.p_Group;
-                        dlg.ctrl_LGroupValue.Text = p_SelectedGroup.p_Group.f_GetFullName();
+                        dlg.ctrl_LGroupValue.Text = p_SelectedGroup.p_Group.p_Name;
                     }
                     if (dlg.ShowDialog() != DialogResult.OK) return;
                     newElement.p_Name = dlg.ctrl_TBName.Text;
@@ -242,7 +242,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     if (group != null)
                     {
                         newElement.p_ParentGroup = p_SelectedGroup.p_Group;
-                        dlg.ctrl_LGroupValue.Text = p_SelectedGroup.p_Group.f_GetFullName();
+                        dlg.ctrl_LGroupValue.Text = p_SelectedGroup.p_Group.p_Name;
                     }
                     if (dlg.ShowDialog() != DialogResult.OK) return;
                     newElement.p_Name = dlg.ctrl_TBName.Text;
