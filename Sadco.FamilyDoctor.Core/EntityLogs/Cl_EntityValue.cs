@@ -19,28 +19,26 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             Type type = pInfo.PropertyType;
             string outValue = "";
 
-            if (type == typeof(String))
-                outValue = f_GetDefaultValue(value);
-            else if (type == typeof(Byte))
-                outValue = f_GetDefaultValue(value);
-            else if (type == typeof(Cl_Group))
+            if (type == typeof(Cl_Group))
                 outValue = f_GetGroupValue(value);
             else if (type == typeof(Cl_ElementParam))
                 outValue = f_GetElementParamValue(value);
+            else if (type == typeof(String))
+                outValue = f_GetDefaultValue(value);
+            else if (type == typeof(Byte))
+                outValue = f_GetDefaultValue(value);
             else if (type == typeof(Boolean))
                 outValue = f_GetBoolValue(value);
             else if (type == typeof(Decimal))
                 outValue = f_GetDecimalValue(value);
             else if (type.GetInterface(nameof(System.Collections.IEnumerable)) != null)
-                outValue = f_GetCollectionValue(pInfo, value);
+                outValue = f_GetIEnumerableValue(pInfo, value);
             else
             {
                 if (type.BaseType != null)
                 {
                     if (type.BaseType == typeof(Enum))
                         outValue = f_GetEnumValue(value);
-                    else if (type.BaseType == typeof(Array))
-                        outValue = f_GetArraysValue(value);
                     else
                     {
                         if (value != null)
@@ -59,6 +57,16 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             }
 
             return outValue;
+        }
+
+        private static string f_GetIEnumerableValue(PropertyInfo pInfo, object value)
+        {
+            if (pInfo.PropertyType.IsArray)
+                return f_GetArraysValue(value);
+            else if (pInfo.PropertyType.IsGenericType)
+                return f_GetCollectionValue(pInfo, value);
+            else
+                return "";
         }
 
         private static string f_GetCollectionValue(PropertyInfo pInfo, object value)

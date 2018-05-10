@@ -25,18 +25,14 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
                 outResult = f_Boolean(val1, val2);
             else if (type == typeof(Decimal))
                 outResult = f_Decimal(val1, val2);
-            else if (type == typeof(Array))
-                outResult = f_Array(val1, val2);
             else if (type.GetInterface(nameof(System.Collections.IEnumerable)) != null)
-                outResult = f_IEnumerable(val1, val2);
+                outResult = f_IEnumerable(type, val1, val2);
             else
             {
                 if (type.BaseType != null)
                 {
                     if (type.BaseType == typeof(Enum))
                         outResult = f_Enum(val1, val2);
-                    else if (type.BaseType == typeof(Array))
-                        outResult = f_Array(val1, val2);
                     else
                         throw new NotImplementedException("Не реализован метод сравнения для типа " + type.Name);
                 }
@@ -157,11 +153,33 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
         /// <param name="val1">Сравниваемый объект</param>
         /// <param name="val2">Сравниваемый объект</param>
         /// <returns></returns>
-        private static bool f_IEnumerable(object val1, object val2)
+        private static bool f_IEnumerable(Type type, object val1, object val2)
         {
             bool outResult = false;
 
+            if (type.IsArray)
+                outResult = f_Array(val1, val2);
+            else if (type.IsGenericType)
+                outResult = f_Collection(val1, val2);
+            else
+                throw new NotImplementedException("Не реализован метод сравнения коллекций для типа " + type.Name);
+
+            return outResult;
+        }
+
+        private static bool f_Collection(object val1, object val2)
+        {
+            bool outResult = false;
             Type valType = null;
+
+            if (val1 == null || val2 == null)
+            {
+                if ((val1 == null && val2 != null) || (val1 != null && val2 == null))
+                    return false;
+                if (val1 == null && val2 == null)
+                    return true;
+            }
+
             if (val1 != null)
                 valType = val1.GetType().GetGenericArguments().Single();
             else if (val2 != null)
@@ -170,14 +188,14 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
                 return true;
 
             if (valType.GetInterface(nameof(I_Comparable)) != null)
-                outResult = f_IEnumerable_I_Comparable(val1, val2);
+                outResult = f_Collection_I_Comparable(val1, val2);
             else
                 throw new NotImplementedException("Не реализован метод сравнения коллекций для типа " + valType.Name);
 
             return outResult;
         }
 
-        private static bool f_IEnumerable_I_Comparable(object val1, object val2)
+        private static bool f_Collection_I_Comparable(object val1, object val2)
         {
             if (val1 == null || val2 == null)
             {
