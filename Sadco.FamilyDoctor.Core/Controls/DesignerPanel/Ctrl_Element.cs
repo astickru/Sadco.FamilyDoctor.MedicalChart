@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using FD.dat.mon.stb.lib;
 using System.Collections.Generic;
+using Sadco.FamilyDoctor.Core.Facades;
 
 namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
 {
@@ -107,6 +108,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             f_SetRecordElementValues(a_RecordValue, null, 0);
         }
 
+        public event EventHandler e_ValueChanged;
+
         private Cl_Record m_Record = null;
         private ComboBox ctrl_PartLocations;
         private Ctrl_CheckedComboBox ctrl_PartLocationsMulti;
@@ -149,9 +152,11 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         public void f_SetRecordElementValues(Cl_RecordValue a_RecordValue, TableLayoutPanel a_Table, int a_RowIndex)
         {
             if (a_RecordValue == null || a_RecordValue.p_Record == null || p_Element == null) return;
+            Visible = Cl_RecordsFacade.f_GetInstance().f_GetElementVisible(a_RecordValue.p_Record, p_Element.p_VisibilityFormula);
+
             m_Record = a_RecordValue.p_Record;
-            ctrl_PartLocationsMulti = null;
             ctrl_PartLocations = null;
+            ctrl_PartLocationsMulti = null;
             ctrl_Values = null;
             ctrl_ValuesMulti = null;
             ctrl_Value = null;
@@ -249,6 +254,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         ctrl_ValuesMulti.DisplayMember = "p_Value";
                         ctrl_ValuesMulti.ValueMember = "p_ID";
                         ctrl_ValuesMulti.Width = 300;
+                        ctrl_ValuesMulti.ItemCheck += Ctrl_ValueChanged;
                         if (p_Element.p_Symmetrical)
                         {
                             ctrl_DopValuesMulti = new Ctrl_CheckedComboBox();
@@ -258,6 +264,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             ctrl_DopValuesMulti.DisplayMember = "p_Value";
                             ctrl_DopValuesMulti.ValueMember = "p_ID";
                             ctrl_DopValuesMulti.Width = 300;
+                            ctrl_DopValuesMulti.ItemCheck += Ctrl_ValueChanged;
                         }
                         for (int i = 0; i < p_Element.p_NormValues.Length; i++)
                         {
@@ -343,6 +350,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         ctrl_Values.Width = 300;
                         ctrl_Values.AutoCompleteCustomSource.AddRange(normValues);
                         ctrl_Values.AutoCompleteCustomSource.AddRange(patValues);
+                        ctrl_Values.SelectedValueChanged += Ctrl_ValueChanged;
                         if (p_Element.p_Symmetrical)
                         {
                             ctrl_DopValues = new Ctrl_SeparatorCombobox();
@@ -354,6 +362,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             ctrl_DopValues.Width = ctrl_Values.Width;
                             ctrl_DopValues.AutoCompleteCustomSource.AddRange(normValues);
                             ctrl_DopValues.AutoCompleteCustomSource.AddRange(patValues);
+                            ctrl_DopValues.SelectedValueChanged += Ctrl_ValueChanged;
                         }
                         foreach (var val in p_Element.p_NormValues)
                         {
@@ -419,12 +428,16 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         ctrl_Value.Enabled = p_Element.p_Editing;
                         ctrl_Value.Width = 400;
                         ctrl_Value.Text = a_RecordValue.p_ValueUser;
+                        ctrl_Value.TextChanged += Ctrl_ValueChanged;
+                        if (p_Element.p_IsNumber) ctrl_Value.KeyPress += ctrl_ValidNumber_KeyPress;
                         if (p_Element.p_Symmetrical)
                         {
                             ctrl_DopValue = new TextBox();
                             ctrl_DopValue.Enabled = p_Element.p_Editing;
                             ctrl_DopValue.Width = ctrl_Value.Width;
                             ctrl_DopValue.Text = a_RecordValue.p_ValueDopUser;
+                            ctrl_DopValue.TextChanged += Ctrl_ValueChanged;
+                            if (p_Element.p_IsNumber) ctrl_DopValue.KeyPress += ctrl_ValidNumber_KeyPress;
                             var cellPanel = f_GetSymmetricalPanel(ctrl_Value, ctrl_DopValue, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
                             if (a_Table != null)
                                 a_Table.Controls.Add(cellPanel, 1, a_RowIndex);
@@ -445,11 +458,15 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         ctrl_ValueBox.Enabled = p_Element.p_Editing;
                         ctrl_ValueBox.Width = 400;
                         ctrl_ValueBox.Text = a_RecordValue.p_ValueUser;
+                        ctrl_ValueBox.TextChanged += Ctrl_ValueChanged;
+                        if (p_Element.p_IsNumber) ctrl_ValueBox.KeyPress += ctrl_ValidNumber_KeyPress;
                         if (p_Element.p_Symmetrical)
                         {
                             ctrl_DopValueBox = new Ctrl_TextBoxAutoHeight() { p_MinLines = 3 };
                             ctrl_DopValueBox.Width = ctrl_ValueBox.Width;
                             ctrl_DopValueBox.Text = a_RecordValue.p_ValueDopUser;
+                            ctrl_DopValueBox.TextChanged += Ctrl_ValueChanged;
+                            if (p_Element.p_IsNumber) ctrl_DopValueBox.KeyPress += ctrl_ValidNumber_KeyPress;
                             var cellPanel = f_GetSymmetricalPanel(ctrl_ValueBox, ctrl_DopValueBox, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
                             if (a_Table != null)
                                 a_Table.Controls.Add(cellPanel, 1, a_RowIndex);
@@ -560,8 +577,66 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
         }
 
+        private bool f_ValidNumber(string[] a_Texts)
+        {
+            bool valid = true;
+            if (p_Element != null && p_Element.p_IsNumber)
+            {
+                if (a_Texts != null && a_Texts.Length > 0)
+                {
+                    foreach (string txt in a_Texts)
+                    {
+                        if (string.IsNullOrWhiteSpace(txt)) continue;
+                        decimal x;
+                        valid = decimal.TryParse(txt, out x);
+                        if (valid)
+                        {
+                            int index = txt.IndexOf(",");
+                            if (index >= 0)
+                            {
+                                if (p_Element.p_NumberRound > 0)
+                                {
+                                    valid = index + p_Element.p_NumberRound >= txt.Length - 1;
+                                }
+                                else
+                                {
+                                    valid = false;
+                                }
+                            }
+                        }
+                        if (!valid)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return valid;
+        }
+
+        private void ctrl_ValidNumber_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            var tb = sender as TextBox;
+            if (tb != null)
+            {
+                int pos = tb.SelectionStart - tb.GetFirstCharIndexOfCurrentLine();
+                string txt = tb.Text;
+                if (tb.Lines.Length > 0)
+                {
+                    txt = tb.Lines.ElementAt(tb.GetLineFromCharIndex(tb.SelectionStart));
+                }
+                txt = string.Format("{0}{1}{2}", txt.Substring(0, pos), e.KeyChar, txt.Substring(pos, txt.Length - pos));
+                e.Handled = !f_ValidNumber(new string[] { txt });
+            }
+        }
+
+        private void Ctrl_ValueChanged(object sender, EventArgs e)
+        {
+            e_ValueChanged?.Invoke(this, e);
+        }
+
         /// <summary>Получение значения элемента записи</summary>
-        public Cl_RecordValue f_GetRecordElementValues(Cl_Record a_Record)
+        public Cl_RecordValue f_GetRecordElementValues(Cl_Record a_Record, bool a_IsRequired = true)
         {
             if (a_Record == null || p_Element == null) return null;
             var recordValue = new Cl_RecordValue();

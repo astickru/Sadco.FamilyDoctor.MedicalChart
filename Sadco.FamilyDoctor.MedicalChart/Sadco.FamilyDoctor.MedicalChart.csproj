@@ -96,6 +96,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\SubForms\Catalogs\F_Categories.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SubForms\Catalogs\F_Categories.Designer.cs">
+      <DependentUpon>F_Categories.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SubForms\Dlg_HistoryViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -189,6 +195,9 @@
       <DependentUpon>UC_EditorTemplates.cs</DependentUpon>
     </Compile>
     <Compile Include="UI_PanelManager.cs" />
+    <EmbeddedResource Include="Forms\SubForms\Catalogs\F_Categories.resx">
+      <DependentUpon>F_Categories.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SubForms\Dlg_HistoryViewer.resx">
       <DependentUpon>Dlg_HistoryViewer.cs</DependentUpon>
     </EmbeddedResource>

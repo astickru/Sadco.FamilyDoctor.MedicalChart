@@ -171,7 +171,12 @@
     <Compile Include="Entities\I_ELog.cs" />
     <Compile Include="Entities\I_Version.cs" />
     <Compile Include="EntityLogs\Cl_EntityValue.cs" />
+    <Compile Include="Facades\Cl_FormulaFacade.cs" />
+    <Compile Include="Facades\Cl_RecordsFacade.cs" />
     <Compile Include="Facades\Cl_SessionFacade.cs" />
+    <Compile Include="Facades\Cl_TemplatesFacade.cs" />
+    <Compile Include="Formula\Cl_FormulaConditionBlock.cs" />
+    <Compile Include="Formula\Cl_FormulaMathematicalBlock.cs" />
     <Compile Include="Migrations\201804131122447_appInit.cs" />
     <Compile Include="Migrations\201804131122447_appInit.Designer.cs">
       <DependentUpon>201804131122447_appInit.cs</DependentUpon>

@@ -29,14 +29,16 @@
             this.ctrlMIFile = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlMISave = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlMIExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctrlMIRecord = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlMIEditor = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuCatalogs = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuCategories = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuTemplate = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuMegaTemplate = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuMegaTemplateDeleted = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlMIInfo = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel = new System.Windows.Forms.Panel();
             this.ctrl_CustomControls = new System.Windows.Forms.Panel();
-            this.ctrlMIRecord = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuMegaTemplateDeleted = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuTemplate = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuMegaTemplate = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlMIMenu.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.SuspendLayout();
@@ -77,15 +79,54 @@
             this.ctrlMIExit.Text = "Выход";
             this.ctrlMIExit.Click += new System.EventHandler(this.ctrlMIExit_Click);
             // 
-            // редакторToolStripMenuItem
+            // ctrlMIRecord
+            // 
+            this.ctrlMIRecord.Name = "ctrlMIRecord";
+            this.ctrlMIRecord.Size = new System.Drawing.Size(59, 20);
+            this.ctrlMIRecord.Text = "Записи";
+            this.ctrlMIRecord.Click += new System.EventHandler(this.ctrlMIRecord_Click);
+            // 
+            // ctrlMIEditor
             // 
             this.ctrlMIEditor.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuCatalogs,
             this.menuTemplate,
             this.menuMegaTemplate,
             this.menuMegaTemplateDeleted});
-            this.ctrlMIEditor.Name = "редакторToolStripMenuItem";
+            this.ctrlMIEditor.Name = "ctrlMIEditor";
             this.ctrlMIEditor.Size = new System.Drawing.Size(69, 20);
             this.ctrlMIEditor.Text = "Редактор";
+            // 
+            // menuCatalogs
+            // 
+            this.menuCatalogs.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuCategories});
+            this.menuCatalogs.Name = "menuCatalogs";
+            this.menuCatalogs.Size = new System.Drawing.Size(231, 22);
+            this.menuCatalogs.Text = "Справочники";
+            // 
+            // menuCategories
+            // 
+            this.menuCategories.Name = "menuCategories";
+            this.menuCategories.Size = new System.Drawing.Size(152, 22);
+            this.menuCategories.Text = "Категории";
+            this.menuCategories.Click += new System.EventHandler(this.menuCategories_Click);
+            // 
+            // menuTemplate
+            // 
+            this.menuTemplate.Image = global::Sadco.FamilyDoctor.MedicalChart.Properties.Resources.data_sort;
+            this.menuTemplate.Name = "menuTemplate";
+            this.menuTemplate.Size = new System.Drawing.Size(231, 22);
+            this.menuTemplate.Text = "Шаблоны";
+            this.menuTemplate.Click += new System.EventHandler(this.ctrl_MenuShowTemplates_Click);
+            // 
+            // menuMegaTemplate
+            // 
+            this.menuMegaTemplate.Image = global::Sadco.FamilyDoctor.MedicalChart.Properties.Resources.data_table;
+            this.menuMegaTemplate.Name = "menuMegaTemplate";
+            this.menuMegaTemplate.Size = new System.Drawing.Size(231, 22);
+            this.menuMegaTemplate.Text = "Элементы";
+            this.menuMegaTemplate.Click += new System.EventHandler(this.ctrl_MenuShowElements_Click);
             // 
             // menuMegaTemplateDeleted
             // 
@@ -94,22 +135,6 @@
             this.menuMegaTemplateDeleted.Size = new System.Drawing.Size(231, 22);
             this.menuMegaTemplateDeleted.Text = "Показ удаленных элементов";
             this.menuMegaTemplateDeleted.Click += new System.EventHandler(this.menuMegaTemplateDeleted_Click);
-            // 
-            // menuTemplate
-            // 
-            this.menuTemplate.Image = global::Sadco.FamilyDoctor.MedicalChart.Properties.Resources.data_sort;
-            this.menuTemplate.Name = "menuTemplate";
-            this.menuTemplate.Size = new System.Drawing.Size(152, 22);
-            this.menuTemplate.Text = "Шаблоны";
-            this.menuTemplate.Click += new System.EventHandler(this.ctrl_MenuShowTemplates_Click);
-            // 
-            // menuMegaTemplate
-            // 
-            this.menuMegaTemplate.Image = global::Sadco.FamilyDoctor.MedicalChart.Properties.Resources.data_table;
-            this.menuMegaTemplate.Name = "menuMegaTemplate";
-            this.menuMegaTemplate.Size = new System.Drawing.Size(152, 22);
-            this.menuMegaTemplate.Text = "Элементы";
-            this.menuMegaTemplate.Click += new System.EventHandler(this.ctrl_MenuShowElements_Click);
             // 
             // ctrlMIInfo
             // 
@@ -126,7 +151,7 @@
             this.MainPanel.Margin = new System.Windows.Forms.Padding(0);
             this.MainPanel.Name = "MainPanel";
             this.MainPanel.Padding = new System.Windows.Forms.Padding(5, 0, 5, 5);
-            this.MainPanel.Size = new System.Drawing.Size(984, 475);
+            this.MainPanel.Size = new System.Drawing.Size(984, 857);
             this.MainPanel.TabIndex = 2;
             // 
             // ctrl_CustomControls
@@ -137,22 +162,15 @@
             this.ctrl_CustomControls.Location = new System.Drawing.Point(5, 0);
             this.ctrl_CustomControls.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_CustomControls.Name = "ctrl_CustomControls";
-            this.ctrl_CustomControls.Size = new System.Drawing.Size(974, 470);
+            this.ctrl_CustomControls.Size = new System.Drawing.Size(974, 852);
             this.ctrl_CustomControls.TabIndex = 0;
-            // 
-            // ctrlMIRecord
-            // 
-            this.ctrlMIRecord.Name = "ctrlMIRecord";
-            this.ctrlMIRecord.Size = new System.Drawing.Size(59, 20);
-            this.ctrlMIRecord.Text = "Записи";
-            this.ctrlMIRecord.Click += new System.EventHandler(this.ctrlMIRecord_Click);
             // 
             // F_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(984, 499);
+            this.ClientSize = new System.Drawing.Size(984, 881);
             this.Controls.Add(this.MainPanel);
             this.Controls.Add(this.ctrlMIMenu);
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
@@ -184,5 +202,7 @@
 		private System.Windows.Forms.Panel ctrl_CustomControls;
         private System.Windows.Forms.ToolStripMenuItem ctrlMIRecord;
         private System.Windows.Forms.ToolStripMenuItem menuMegaTemplateDeleted;
+        private System.Windows.Forms.ToolStripMenuItem menuCatalogs;
+        private System.Windows.Forms.ToolStripMenuItem menuCategories;
     }
 }

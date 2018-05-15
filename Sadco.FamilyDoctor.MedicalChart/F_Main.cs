@@ -1,7 +1,9 @@
-﻿using Sadco.FamilyDoctor.Core;
+﻿using FD.dat.mon.stb.lib;
+using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Facades;
 using Sadco.FamilyDoctor.Core.Permision;
 using Sadco.FamilyDoctor.MedicalChart.Forms.SubForms;
+using Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs;
 using System;
 using System.Configuration;
 using System.Windows.Forms;
@@ -113,6 +115,12 @@ namespace Sadco.FamilyDoctor.MedicalChart
                 var winApp = p_PanelManager.p_ActiveControl as UC_Records;
                 winApp.p_IsShowDeleted = menuItem.Checked;
             }
+        }
+
+        private void menuCategories_Click(object sender, EventArgs e)
+        {
+            var wCategories = new F_Categories();
+            wCategories.ShowDialog();
         }
     }
 }

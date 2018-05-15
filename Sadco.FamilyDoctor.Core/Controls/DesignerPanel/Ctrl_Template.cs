@@ -10,6 +10,7 @@ using Sadco.FamilyDoctor.Core.Entities;
 using System.Windows.Forms.VisualStyles;
 using System.Data.Entity;
 using FD.dat.mon.stb.lib;
+using Sadco.FamilyDoctor.Core.Facades;
 
 namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
 {
@@ -178,6 +179,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         {
                             var ctrlEl = new Ctrl_Element();
                             ctrlEl.p_Element = te.p_ChildElement;
+                            ctrlEl.e_ValueChanged += CtrlEl_e_ValueChanged;
 
                             Cl_RecordValue recval = m_Record.p_Values.FirstOrDefault(v => v.p_ElementID == te.p_ChildElement.p_ID);
                             if (recval == null)
@@ -246,6 +248,19 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             }
                         }
                     }
+                }
+            }
+        }
+
+        private void CtrlEl_e_ValueChanged(object sender, EventArgs e)
+        {
+            var record = f_GetNewRecord();
+            if (record != null)
+            {
+                foreach (var el in m_Elements)
+                {
+                    if (el.p_Element != null)
+                        el.Visible = Cl_RecordsFacade.f_GetInstance().f_GetElementVisible(record, el.p_Element.p_VisibilityFormula);
                 }
             }
         }

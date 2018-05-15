@@ -214,7 +214,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
                     if (cur.p_ChildElement != null)
                         sBuilder.AppendLine("Добавлен новый элемент \"" + cur.p_ChildElement.p_Name + "\" (" + cur.p_ChildElement.p_GetElementName + ")");
                     else
-                        sBuilder.AppendLine("Добавлен новый блок \"" + cur.p_ChildTemplate.p_Name + "\" (" + cur.p_ChildTemplate.p_GetElementName + ")");
+                        sBuilder.AppendLine("Добавлен новый блок \"" + cur.p_ChildTemplate.p_Name + "\" (" + cur.p_ChildTemplate.p_GetTypeName + ")");
             }
 
             // new position
@@ -248,7 +248,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
                     if (cur.p_ChildElement != null)
                         sBuilder.AppendLine("Изменилась позиция элемента \"" + cur.p_ChildElement.p_Name + "\" (" + cur.p_ChildElement.p_GetElementName + ")");
                     else
-                        sBuilder.AppendLine("Изменилась позиция блока \"" + cur.p_ChildTemplate.p_Name + "\" (" + cur.p_ChildTemplate.p_GetElementName + ")");
+                        sBuilder.AppendLine("Изменилась позиция блока \"" + cur.p_ChildTemplate.p_Name + "\" (" + cur.p_ChildTemplate.p_GetTypeName + ")");
             }
 
             // delete element
@@ -279,7 +279,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
                     if (l.p_ChildElement != null)
                         sBuilder.AppendLine("Удален элемент \"" + l.p_ChildElement.p_Name + "\" (" + l.p_ChildElement.p_GetElementName + ")");
                     else
-                        sBuilder.AppendLine("Удален элемент \"" + l.p_ChildTemplate.p_Name + "\" (" + l.p_ChildTemplate.p_GetElementName + ")");
+                        sBuilder.AppendLine("Удален элемент \"" + l.p_ChildTemplate.p_Name + "\" (" + l.p_ChildTemplate.p_GetTypeName + ")");
             }
 
             return sBuilder.ToString().Trim();

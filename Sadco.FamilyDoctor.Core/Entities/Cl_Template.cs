@@ -31,9 +31,9 @@ namespace Sadco.FamilyDoctor.Core.Entities
         }
 
         /// <summary>
-        /// Возвращает название элемента шаблона
+        /// Возвращает название типа шаблона
         /// </summary>
-        public string p_GetElementName {
+        public string p_GetTypeName {
             get {
                 return (Attribute.GetCustomAttribute(p_Type.GetType().GetField(p_Type.ToString()), typeof(DescriptionAttribute)) as DescriptionAttribute).Description;
             }

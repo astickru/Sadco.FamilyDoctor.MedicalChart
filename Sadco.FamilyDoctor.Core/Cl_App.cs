@@ -1,6 +1,7 @@
 ﻿
 using FD.dat.mon.stb.lib;
 using Sadco.FamilyDoctor.Core.Data;
+using Sadco.FamilyDoctor.Core.Facades;
 using System;
 using System.Configuration;
 using System.Reflection;
@@ -16,8 +17,10 @@ namespace Sadco.FamilyDoctor.Core
 
         public static void Initialize()
         {
-            Cl_App.m_DataContext = new Cl_DataContextMegaTemplate(getConnectionString());
-            Cl_App.m_DataContext.f_Init();
+            m_DataContext = new Cl_DataContextMegaTemplate(getConnectionString());
+            m_DataContext.f_Init();
+            if (!Cl_TemplatesFacade.f_GetInstance().f_Init(m_DataContext)) MonitoringStub.Error("Error_Load", "Не удалось инициализировать фасад работы с шаблонами", null, null, null);
+            if (!Cl_RecordsFacade.f_GetInstance().f_Init(m_DataContext)) MonitoringStub.Error("Error_Load", "Не удалось инициализировать фасад работы с записями", null, null, null);
         }
 
         private static string getConnectionString()

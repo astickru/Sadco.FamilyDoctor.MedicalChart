@@ -4,7 +4,7 @@ using System;
 namespace Sadco.FamilyDoctor.Core.Facades
 {
     /// <summary>
-	/// Фасад для работы с сессией пользователя
+	/// Фасад работы с сессией пользователя
 	/// </summary>
     public class Cl_SessionFacade
     {
