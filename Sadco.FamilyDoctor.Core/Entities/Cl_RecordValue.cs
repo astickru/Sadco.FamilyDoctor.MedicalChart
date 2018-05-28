@@ -1,4 +1,5 @@
 ﻿using Sadco.FamilyDoctor.Core.EntityLogs;
+using Sadco.FamilyDoctor.Core.Facades;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -95,48 +96,101 @@ namespace Sadco.FamilyDoctor.Core.Entities
             }
         }
 
+        /// <summary>Сравнение значений</summary>
         public bool f_Equals(object a_Value)
         {
             if (a_Value == null || !(a_Value.GetType() == this.GetType()))
                 return false;
 
-            Cl_RecordValue m_elm = (Cl_RecordValue)a_Value;
-            Cl_Element m_baseElement = this.p_Element;
+            Cl_RecordValue elm = (Cl_RecordValue)a_Value;
+            Cl_Element baseElement = this.p_Element;
             bool m_isEqual = true;
             bool m_isEqualPart = true;
 
-            if (m_baseElement.p_IsText)
+            if (baseElement.p_IsText)
             {
-                if (m_baseElement.p_IsPartLocations)
+                if (baseElement.p_IsPartLocations)
                 {
-                    m_isEqualPart = Cl_EntityCompare.f_Array(p_PartLocations, m_elm.p_PartLocations);
+                    m_isEqualPart = Cl_EntityCompare.f_Array(p_PartLocations, elm.p_PartLocations);
                 }
 
-                if (m_baseElement.p_IsTextFromCatalog)
+                if (baseElement.p_IsTextFromCatalog)
                 {
-                    m_isEqual = Cl_EntityCompare.f_Array(p_ValuesCatalog, m_elm.p_ValuesCatalog);
-                    if (m_baseElement.p_Symmetrical && m_isEqual)
+                    m_isEqual = Cl_EntityCompare.f_Array(p_ValuesCatalog, elm.p_ValuesCatalog);
+                    if (baseElement.p_Symmetrical && m_isEqual)
                     {
-                        m_isEqual = Cl_EntityCompare.f_Array(p_ValuesDopCatalog, m_elm.p_ValuesDopCatalog);
+                        m_isEqual = Cl_EntityCompare.f_Array(p_ValuesDopCatalog, elm.p_ValuesDopCatalog);
                     }
                 }
                 else
                 {
-                    m_isEqual = Cl_EntityCompare.f_String(p_ValueUser, m_elm.p_ValueUser);
-                    if (m_baseElement.p_Symmetrical && m_isEqual)
+                    m_isEqual = Cl_EntityCompare.f_String(p_ValueUser, elm.p_ValueUser);
+                    if (baseElement.p_Symmetrical && m_isEqual)
                     {
-                        m_isEqual = Cl_EntityCompare.f_String(p_ValueDopUser, m_elm.p_ValueDopUser);
+                        m_isEqual = Cl_EntityCompare.f_String(p_ValueDopUser, elm.p_ValueDopUser);
                     }
                 }
             }
-            else if (m_baseElement.p_IsImage)
+            else if (baseElement.p_IsImage)
             {
-                return Cl_EntityCompare.f_Array_Byte(p_ImageBytes, m_elm.p_ImageBytes);
+                return Cl_EntityCompare.f_Array_Byte(p_ImageBytes, elm.p_ImageBytes);
             }
             else
                 throw new NotImplementedException("Не реализованный метод сравнения для объекта Cl_RecordValue");
 
             return m_isEqual && m_isEqualPart;
+        }
+
+        /// <summary>Получение HTML текста для клиента</summary>
+        public string f_GetHTMLPatient()
+        {
+            return f_GetHTML(false);
+        }
+
+        /// <summary>Получение HTML текста для пользователя</summary>
+        public string f_GetHTMLUser()
+        {
+            return f_GetHTML(true);
+        }
+
+        /// <summary>Получение HTML текста запис</summary>
+        private string f_GetHTML(bool a_IsUser)
+        {
+            var html = "";
+            if (p_Element.p_Visible && Cl_RecordsFacade.f_GetInstance().f_GetElementVisible(p_Record, p_Element.p_VisibilityFormula) && (a_IsUser || p_Element.p_VisiblePatient))
+            {
+                if (p_Element.p_IsText)
+                {
+                    if (p_Element.p_IsTextFromCatalog)
+                    {
+                        var htmlVals = "";
+                        if (p_ValuesCatalog.Length > 0)
+                        {
+                            htmlVals = string.Format("<div class=\"record_value_name\">{0}</div><div class=\"record_value_val\">", p_Element.p_Name);
+                            foreach (var val in p_ValuesCatalog)
+                            {
+                                if (val.p_ElementParam != null)
+                                {
+                                    htmlVals += string.Format("<div class=\"record_value_val_item\">{0}</div>", val.p_ElementParam.p_Value);
+                                }
+                            }
+                            htmlVals += "</div>";
+                            html = string.Format("<div class=\"record_value\">{0}</div>", htmlVals);
+                        }
+                    }
+                    else
+                    {
+                        html = string.Format("<div class=\"record_value\"><div class=\"record_value_name\">{0}</div><div class=\"record_value_val\">{1}</div></div>",
+                                    p_Element.p_Name, p_ValueUser);
+                    }
+                }
+                else if (p_Element.p_IsImage)
+                {
+                    html = string.Format("<div class=\"record_value record_img\"><div class=\"record_value_name\">{0}</div><div class=\"record_value_val\">{1}</div></div>",
+                                    p_Element.p_Name, p_ImageBytes);
+                }
+            }
+            return html;
         }
     }
 }

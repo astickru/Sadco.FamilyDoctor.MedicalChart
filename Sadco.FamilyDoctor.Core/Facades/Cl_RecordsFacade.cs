@@ -86,6 +86,58 @@ namespace Sadco.FamilyDoctor.Core.Facades
             return vals.ToArray();
         }
 
+        private decimal? f_GetValuesProperty(Cl_Record a_Record, Cl_FormulaMathematicalBlock a_Block)
+        {
+            if (!a_Block.p_IsOperand && a_Block.p_Object is Cl_Element)
+            {
+                var recValue = a_Record.p_Values.FirstOrDefault(v => v.p_ElementID == ((Cl_Element)a_Block.p_Object).p_ID);
+                if (recValue != null)
+                {
+                    if (recValue.p_ValuesCatalog != null && recValue.p_ValuesCatalog.Length > 0)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        if (recValue.p_Element != null && recValue.p_Element.p_IsNumber)
+                        {
+                            decimal dVal = 0;
+                            if (decimal.TryParse(recValue.p_ValueUser, out dVal)) return dVal;
+                            else return null;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+                else return null;
+            }
+            else if (a_Block.p_Object is int)
+            {
+                return decimal.Parse(a_Block.p_Object.ToString());
+            }
+            else if (a_Block.p_Object is decimal)
+            {
+                return (decimal)a_Block.p_Object;
+            }
+            else if (a_Block.p_Object is Cl_ElementParam)
+            {
+                var elParam = (Cl_ElementParam)a_Block.p_Object;
+                if (elParam.p_Element != null && elParam.p_Element.p_IsNumber)
+                {
+                    decimal dVal = 0;
+                    if (decimal.TryParse(elParam.p_Value, out dVal)) return dVal;
+                    else return null;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else return null;
+        }
+
         /// <summary>Получает видимость элемента по формуле</summary>
         public bool f_GetElementVisible(Cl_Record a_Record, string a_Formula)
         {
@@ -179,6 +231,66 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 }
             }
             return false;
+        }
+
+
+        /// <summary>Получает видимость элемента по формуле</summary>
+        public decimal? f_GetElementMathematicValue(Cl_Record a_Record, string a_Formula)
+        {
+            if (a_Record == null || a_Record.p_Template == null) return null;
+            if (string.IsNullOrWhiteSpace(a_Formula)) return 0;
+            var elements = Cl_TemplatesFacade.f_GetInstance().f_GetElements(a_Record.p_Template);
+            if (elements != null && elements.Length > 0)
+            {
+                var blocks = Cl_FormulaFacade.f_GetInstance().f_GetMathematicalsBlocks(elements, a_Formula);
+                if (blocks != null)
+                {
+                    if (blocks.Length == 0) return 0;
+                    if (blocks[0].p_IsOperand) return null;
+
+
+                    decimal? dVal = f_GetValuesProperty(a_Record, blocks[0]);
+                    if (dVal != null)
+                    {
+                        var result = (decimal)dVal;
+                        Cl_FormulaMathematicalBlock oldOper = null;
+                        for (int i = 1; i < blocks.Length; i++)
+                        {
+                            if (i % 2 == 0 && !blocks[i].p_IsOperand)
+                            {
+                                if (oldOper != null && oldOper.p_Object is Cl_FormulaMathematicalBlock.E_Opers)
+                                {
+                                    var oper = (Cl_FormulaMathematicalBlock.E_Opers)oldOper.p_Object;
+                                    dVal = f_GetValuesProperty(a_Record, blocks[i]);
+                                    if (dVal != null)
+                                    {
+                                        if (oper == Cl_FormulaMathematicalBlock.E_Opers.minus)
+                                            result -= (decimal)dVal;
+                                        else if (oper == Cl_FormulaMathematicalBlock.E_Opers.plus)
+                                            result += (decimal)dVal;
+                                        else if (oper == Cl_FormulaMathematicalBlock.E_Opers.carve)
+                                            result /= (decimal)dVal;
+                                        else if (oper == Cl_FormulaMathematicalBlock.E_Opers.multiply)
+                                            result *= (decimal)dVal;
+                                        else
+                                            return null;
+                                    }
+                                    else return null;
+                                }
+                                else return null;
+                            }
+                            else if (i % 2 == 1 && blocks[i].p_IsOperand)
+                            {
+                                oldOper = blocks[i];
+                            }
+                            else return null;
+                        }
+                        return result;
+                    }
+                    else return null;
+                }
+            }
+            return null;
         }
     }
 }

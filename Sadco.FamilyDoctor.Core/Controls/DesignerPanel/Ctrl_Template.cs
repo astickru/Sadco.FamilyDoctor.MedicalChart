@@ -252,16 +252,35 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
         }
 
+        private bool m_IsBlockChanging = false;
         private void CtrlEl_e_ValueChanged(object sender, EventArgs e)
         {
-            var record = f_GetNewRecord();
-            if (record != null)
+            var curEl = (Ctrl_Element)sender;
+            if (!m_IsBlockChanging)
             {
-                foreach (var el in m_Elements)
+                m_IsBlockChanging = true;
+                var record = f_GetNewRecord();
+                if (record != null)
                 {
-                    if (el.p_Element != null)
-                        el.Visible = Cl_RecordsFacade.f_GetInstance().f_GetElementVisible(record, el.p_Element.p_VisibilityFormula);
+                    foreach (var el in m_Elements)
+                    {
+                        if (el.p_Element != null && el != curEl)
+                        {
+                            el.Visible = Cl_RecordsFacade.f_GetInstance().f_GetElementVisible(record, el.p_Element.p_VisibilityFormula);
+                            if (el.p_Element.p_IsNumber)
+                            {
+                                var val = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, el.p_Element.p_NumberFormula);
+                                if (val != null)
+                                {
+                                    var dVal = (decimal)val;
+                                    dVal = Math.Round(dVal, el.p_Element.p_NumberRound);
+                                    el.f_SetValue(record, dVal);
+                                }
+                            }
+                        }
+                    }
                 }
+                m_IsBlockChanging = false;
             }
         }
 

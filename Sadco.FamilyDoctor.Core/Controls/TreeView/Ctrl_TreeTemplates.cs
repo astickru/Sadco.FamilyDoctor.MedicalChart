@@ -200,6 +200,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                         group = p_SelectedGroup.p_Group;
                     }
                     Dlg_EditorTemplate dlg = new Dlg_EditorTemplate();
+                    dlg.ctrlPCategories.Enabled = a_TemplateType == Cl_Template.E_TemplateType.Template;
                     if (a_TemplateType == Cl_Template.E_TemplateType.Template)
                         dlg.Text = "Новый шаблон";
                     else if (a_TemplateType == Cl_Template.E_TemplateType.Block)
@@ -215,12 +216,15 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     newTemplate.p_Name = dlg.ctrl_TBName.Text;
                     newTemplate.p_Title = dlg.ctrlTitle.Text;
                     newTemplate.p_Type = a_TemplateType;
-                    var catTotal = (Cl_Category)dlg.ctrlCategoriesTotal.SelectedItem;
-                    newTemplate.p_CategoryTotalID = catTotal.p_ID;
-                    newTemplate.p_CategoryTotal = catTotal;
-                    var catKlinik = (Cl_Category)dlg.ctrlCategoriesKlinik.SelectedItem;
-                    newTemplate.p_CategoryKlinikID = catKlinik.p_ID;
-                    newTemplate.p_CategoryKlinik = catKlinik;
+                    if (a_TemplateType == Cl_Template.E_TemplateType.Template)
+                    {
+                        var catTotal = (Cl_Category)dlg.ctrlCategoriesTotal.SelectedItem;
+                        newTemplate.p_CategoryTotalID = catTotal.p_ID;
+                        newTemplate.p_CategoryTotal = catTotal;
+                        var catKlinik = (Cl_Category)dlg.ctrlCategoriesKlinik.SelectedItem;
+                        newTemplate.p_CategoryKlinikID = catKlinik.p_ID;
+                        newTemplate.p_CategoryKlinik = catKlinik;
+                    }
                     Cl_App.m_DataContext.p_Templates.Add(newTemplate);
                     Cl_App.m_DataContext.SaveChanges();
                     newTemplate.p_TemplateID = newTemplate.p_ID;
@@ -264,6 +268,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
         private void ctrl_TemplateDelete_Click(object sender, EventArgs e)
         {
+            if (MessageBox.Show("Удалить шаблон?", "Удаление шаблона", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
             if (p_SelectedTemplate == null && p_SelectedTemplate.p_Template == null) return;
 
             using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())

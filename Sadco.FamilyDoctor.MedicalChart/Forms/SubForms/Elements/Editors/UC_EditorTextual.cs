@@ -108,16 +108,16 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
                     el.p_ElementType = (E_ElementsTypes)ctrl_ControlType.f_GetSelectedItem();
                     el.p_ElementID = p_EditingElement.p_ElementID;
-                    el.p_Name = ctrl_Name.Text;
-                    el.p_Tag = ctrlTag.Text;
+                    el.p_Name = ctrl_Name.Text.Trim();
+                    el.p_Tag = ctrlTag.Text.Trim();
                     el.p_Help = ctrl_Hint.Text;
 
                     el.p_IsPartPre = ctrl_IsPartPre.Checked;
                     if (el.p_IsPartPre)
-                        el.p_PartPre = ctrl_PartPreValue.Text;
+                        el.p_PartPre = ctrl_PartPreValue.Text.Trim();
                     el.p_IsPartPost = ctrl_IsPartPost.Checked;
                     if (el.p_IsPartPost)
-                        el.p_PartPost = ctrl_PartPostValue.Text;
+                        el.p_PartPost = ctrl_PartPostValue.Text.Trim();
                     el.p_IsPartLocations = ctrl_IsPartLocations.Checked;
                     if (el.p_IsPartLocations)
                     {
@@ -153,8 +153,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     el.p_Editing = ctrl_IsEditing.Checked;
                     el.p_IsMultiSelect = ctrl_IsMultiSelect.Checked;
                     el.p_Symmetrical = ctrl_IsSymmentry.Checked;
-                    el.p_SymmetryParamLeft = ctrl_Symmetry1.Text;
-                    el.p_SymmetryParamRight = ctrl_Symmetry2.Text;
+                    el.p_SymmetryParamLeft = ctrl_Symmetry1.Text.Trim();
+                    el.p_SymmetryParamRight = ctrl_Symmetry2.Text.Trim();
                     el.p_IsNumber = ctrl_IsNumber.Checked;
                     el.p_NumberRound = Convert.ToByte(ctrl_NumberRound.Value);
                     el.p_NumberFormula = ctrl_NumberFormula.Text;
@@ -461,7 +461,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             bool enable = true;
             if (a_TextType == E_TextTypes.Bigbox)
+            {
                 enable = false;
+                ctrl_IsChangeNotNormValues.Checked = true;
+            }
+            ctrl_IsChangeNotNormValues.Enabled = enable;
             ctrl_LPatValues.Enabled = ctrl_PatValues.Enabled = enable;
             ctrl_IsPartLocations.Enabled = enable;
             ctrl_PartLocationsValue.Enabled = ctrl_IsPartLocationsMulti.Enabled = ctrl_IsPartLocations.Enabled && ctrl_IsPartLocations.Checked;
@@ -618,7 +622,16 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         private void ctrlTag_KeyPress(object sender, KeyPressEventArgs e)
         {
-            e.Handled = e.KeyChar != Keys.Back.GetHashCode() && e.KeyChar != Keys.Delete.GetHashCode() && (e.KeyChar < 65 || (e.KeyChar > 90 && e.KeyChar < 97) || e.KeyChar > 122);
+            if (e.KeyChar == 22)
+            {
+                IDataObject iData = Clipboard.GetDataObject();
+                var txt = iData.GetData(DataFormats.Text).ToString();
+                e.Handled = txt.Any(ch => ch > 47 && ch < 58);
+            }
+            else
+            {
+                e.Handled = e.KeyChar != 3 && e.KeyChar != Keys.Back.GetHashCode() && e.KeyChar != Keys.Delete.GetHashCode() && (e.KeyChar < 65 || (e.KeyChar > 90 && e.KeyChar < 97) || e.KeyChar > 122);
+            }
         }
 
         #region Default

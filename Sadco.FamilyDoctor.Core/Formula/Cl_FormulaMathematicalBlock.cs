@@ -31,7 +31,7 @@ namespace Sadco.FamilyDoctor.Core.Formula
         public object p_Object { get; set; }
         public const string m_OperatorTag = "tag_";
 
-        public bool IsOperand {
+        public bool p_IsOperand {
             get {
                 return p_Object is E_Opers;
             }

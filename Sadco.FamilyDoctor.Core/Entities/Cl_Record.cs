@@ -111,6 +111,18 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Column("F_TITLE")]
         public string p_Title { get; set; }
 
+        /// <summary>HTML текст записи для клиента</summary>
+        [Column("F_HTMLPATIENT")]
+        public string p_HTMLPatient { get; set; }
+
+        /// <summary>HTML текст записи для пользователя</summary>
+        [Column("F_HTMLUSER")]
+        public string p_HTMLUser { get; set; }
+
+        /// <summary>Данные рисунка</summary>
+        [Column("F_FILE")]
+        public byte[] p_FileBytes { get; set; }
+
         /// <summary>ID общей категории</summary>
         [Column("F_CATEGORYTOTAL_ID")]
         [ForeignKey("p_CategoryTotal")]
@@ -220,6 +232,108 @@ namespace Sadco.FamilyDoctor.Core.Entities
             p_CategoryTotal = a_Template.p_CategoryTotal;
             p_CategoryKlinikID = a_Template.p_CategoryKlinikID;
             p_CategoryKlinik = a_Template.p_CategoryKlinik;
+        }
+
+        /// <summary>Получение HTML текста записи для пациента</summary>
+        public string f_GetHTMLPatient()
+        {
+            return f_GetHTML(false);
+        }
+
+        /// <summary>Получение HTML текста записи для пользователя</summary>
+        public string f_GetHTMLUser()
+        {
+            return f_GetHTML(true);
+        }
+
+        /// <summary>Получение HTML текста запис</summary>
+        private string f_GetHTML(bool a_IsUser)
+        {
+            string html = @"
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv=""X-UA-Compatible"" content=""IE=11"">
+         <style type=""text/css"">
+            body
+            {
+                padding: 10px 25px;
+            }
+
+            .record_title
+            {
+                text-align: center;
+                padding-bottom: 10px;
+                border-bottom: dashed 1px black;
+            }
+
+                .record_title img
+                {
+                    width: 450px;
+                }
+
+            .record_name
+            {
+                text-align: right;
+                font: bold 14px arial;
+                padding: 10px 0;
+            }
+
+            .record_info
+            {
+                font: bold 14px arial;
+            }
+
+            .record_date
+            {
+                font: bold 14px arial;
+                padding: 10px 0;
+            }
+
+            .record_values
+            {
+                display: inline-table;
+            }
+
+            .record_value
+            {
+                display: table-row;
+            }
+
+            .record_value_name, .record_value_val
+            {
+                display: table-cell;
+                padding: 5px 0;
+            }
+
+            .record_value_name
+            {
+                padding-right: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class=""record_title"">
+            <img src=""Images/title.jpg"" />
+            <div>(495)775-75-66 | www.familydoctor.ru | company@familydoctor.ru</div>
+        </div>
+        <div class=""record_name"">";
+            html += p_KlinikName;
+            html += @"</div><div class=""record_info"">";
+            html += string.Format("№ {0} {1} {2} {3} {4} # {5}", p_RecordID, p_PatientSurName, p_PatientName, p_PatientLastName, p_DateBirth.ToString("dd.MM.yyyy"), p_ID);
+            html += @"</div><div class=""record_date"">";
+            html += p_DateCreate.ToString("dd.MM.yyyy");
+            html += @"</div><div class=""record_values"">";
+            foreach (var value in p_Values)
+            {
+                if (a_IsUser)
+                    html += value.f_GetHTMLUser();
+                else
+                    html += value.f_GetHTMLPatient();
+            }
+            html += "</div>";
+            html += "</body></html>";
+            return html;
         }
     }
 }

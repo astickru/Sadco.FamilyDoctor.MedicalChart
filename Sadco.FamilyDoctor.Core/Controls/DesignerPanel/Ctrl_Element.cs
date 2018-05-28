@@ -801,6 +801,91 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             return recordValue;
         }
 
+        /// <summary>Установка значения элемента записи</summary>
+        public void f_SetValue(Cl_Record a_Record, Cl_ElementParam a_Value)
+        {
+            if (a_Record == null || p_Element == null || a_Value == null) return;
+            if (p_Element.p_IsText)
+            {
+                if (p_Element.p_IsTextFromCatalog)
+                {
+                    if (!p_Element.p_IsMultiSelect)
+                    {
+                        if (ctrl_Values != null)
+                        {
+                            ctrl_Values.SelectedItem = a_Value;
+                            if (p_Element.p_Symmetrical)
+                            {
+                                if (ctrl_DopValues != null)
+                                {
+                                    ctrl_DopValues.SelectedItem = a_Value;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>Установка значения элемента записи</summary>
+        public void f_SetValue(Cl_Record a_Record, decimal a_Value)
+        {
+            f_SetValue(a_Record, a_Value.ToString());
+        }
+
+        /// <summary>Установка значения элемента записи</summary>
+        public void f_SetValue(Cl_Record a_Record, string a_Value)
+        {
+            if (a_Record == null || p_Element == null || a_Value == null) return;
+            if (p_Element.p_IsText)
+            {
+                if (!p_Element.p_IsTextFromCatalog)
+                {
+                    if (p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Float || p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Line)
+                    {
+                        if (ctrl_Value != null)
+                        {
+                            ctrl_Value.Text = a_Value;
+                            if (p_Element.p_Symmetrical)
+                            {
+                                if (ctrl_DopValue != null)
+                                {
+                                    ctrl_DopValue.Text = a_Value;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (ctrl_ValueBox != null)
+                        {
+                            ctrl_ValueBox.Text = a_Value;
+                            if (p_Element.p_Symmetrical)
+                            {
+                                if (ctrl_DopValueBox != null)
+                                {
+                                    ctrl_DopValueBox.Text = a_Value;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>Установка значения элемента записи</summary>
+        public void f_SetValue(Cl_Record a_Record, Image a_Value)
+        {
+            if (a_Record == null || p_Element == null || a_Value == null) return;
+            else if (p_Element.p_IsImage)
+            {
+                if (ctrl_Image != null)
+                {
+                    ctrl_Image.Image = a_Value;
+                }
+            }
+        }
+
         private void BImageLoad_Click(object sender, System.EventArgs e)
         {
             OpenFileDialog openFile = new OpenFileDialog();

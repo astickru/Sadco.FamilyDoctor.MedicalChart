@@ -652,6 +652,13 @@ namespace Sadco.FamilyDoctor.Core.Controls
             }
         }
 
+
+        public void ClearSelected()
+        {
+            dropdown.List.ClearSelected();
+            this.Text = "";
+        }
+
         public CheckState GetItemCheckState(int index)
         {
             if (index < 0 || index > Items.Count)

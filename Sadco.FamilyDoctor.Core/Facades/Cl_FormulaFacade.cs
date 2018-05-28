@@ -251,7 +251,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
         {
             Cl_FormulaMathematicalBlock block = a_Blocks.LastOrDefault();
             if (block != null)
-                return !block.IsOperand;
+                return !block.p_IsOperand;
             else
                 return true;
         }

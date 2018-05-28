@@ -157,7 +157,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
         {
             bool outResult = false;
 
-            if (type.IsArray)
+            if (type.IsArray || type == typeof(Array))
                 outResult = f_Array(val1, val2);
             else if (type.IsGenericType)
                 outResult = f_Collection(val1, val2);

@@ -8,6 +8,7 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -69,6 +70,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     record.f_SetUser(Cl_SessionFacade.f_GetInstance().p_User);
                     record.f_SetPatient(Cl_SessionFacade.f_GetInstance().p_Patient);
                     var dlgRecord = new Dlg_Record();
+                    dlgRecord.e_Save += DlgRecord_e_Save;
                     dlgRecord.p_Record = record;
                     dlgRecord.ShowDialog(this);
                 }
@@ -81,8 +83,57 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 var record = m_Records[e.RowIndex];
                 var dlgRecord = new Dlg_Record();
+                dlgRecord.e_Save += DlgRecord_e_Save;
                 dlgRecord.p_Record = record;
                 dlgRecord.ShowDialog(this);
+            }
+        }
+
+        private void DlgRecord_e_Save(object sender, EventArgs e)
+        {
+            f_UpdateRecords();
+        }
+
+        void OpenWebPage(ref WebBrowser _webBrowser, string _link)
+        {
+            if (!_webBrowser.IsDisposed)
+                _webBrowser.Dispose();
+
+            _webBrowser = new WebBrowser();
+            panel2.Controls.Add(_webBrowser);
+            _webBrowser.Dock = DockStyle.Fill;
+            _webBrowser.Show();
+            _webBrowser.Navigate(_link);
+        }
+
+        private void ctrl_TPartNormRangeValues_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (m_Records.Length > e.RowIndex)
+            {
+                var record = m_Records[e.RowIndex];
+                if (record.p_HTMLUser != null)
+                    ctrlViewer.DocumentText = record.p_HTMLUser.Replace("src=\"", "src=\"file:///" + Application.StartupPath + "/");
+                else
+                    ctrlViewer.DocumentText = "";
+
+
+                if (e.ColumnIndex > 2)
+                {
+                    ctrlViewer.Visible = false;
+                    ctrlPDFViewer.Visible = true;
+                    ctrlPDFViewer.src = "http://kaskad-asu.com/images/files/uch/lekcii.pdf#navpanes=0&toolbar=0";
+                }
+                else
+                {
+                    ctrlViewer.Visible = true;
+                    ctrlPDFViewer.Visible = false;
+                }
+
+                //var sds = new AcroPDFLib.AcroPDF();
+                //Controls.Add(sds);
+                //sds.src = "http://kaskad-asu.com/images/files/uch/lekcii.pdf#navpanes=0&toolbar=0";
+
+                //OpenWebPage(ref ctrlViewer, "http://kaskad-asu.com/images/files/uch/lekcii.pdf#navpanes=0&toolbar=0");
             }
         }
     }

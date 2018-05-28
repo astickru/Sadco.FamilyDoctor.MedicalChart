@@ -16,11 +16,6 @@ namespace Sadco.FamilyDoctor.UnitTestProject
             var record = new Cl_Record() { p_Title = "Тест проверки формул" };
             record.p_Values = new List<Cl_RecordValue>();
 
-            //record.p_Values.Add(new Cl_RecordValue()
-            //{
-            //    p_Params = new List<Cl_RecordParam>() { new Cl_RecordParam() { p_ElementParam = new Cl_ElementParam() { p_TypeParam = Cl_ElementParam.E_TypeParam.PatValues, p_Value = "pat2" } } }
-            //});
-
             var template = new Cl_Template() { p_Name = "Тест проверки формул", p_Type = Cl_Template.E_TemplateType.Template };
             var elements = new List<Cl_TemplateElement>();
             var element = new Cl_Element()
@@ -126,6 +121,89 @@ namespace Sadco.FamilyDoctor.UnitTestProject
             Assert.AreEqual(false, actual);
             actual = Cl_RecordsFacade.f_GetInstance().f_GetElementVisible(record, "tag_one = \"\" И tag_dva = 11");
             Assert.AreEqual(false, actual);
+        }
+
+        [TestMethod]
+        public void f_TestElementMathematicalFormula()
+        {
+            //tag_one = "14"; tag_dva = 11; tag_tri = 5
+            var record = new Cl_Record() { p_Title = "Тест проверки формул" };
+            record.p_Values = new List<Cl_RecordValue>();
+
+            var template = new Cl_Template() { p_Name = "Тест проверки формул", p_Type = Cl_Template.E_TemplateType.Template };
+            var elements = new List<Cl_TemplateElement>();
+
+            var element = new Cl_Element()
+            {
+                p_ID = 1,
+                p_Name = "Формула 1",
+                p_Tag = "one",
+                p_IsNumber = true,
+                p_NumberRound = 3
+            };
+            element.p_ParamsValues = new List<Cl_ElementParam>();
+            for (int i = 1; i < 4; i++)
+            {
+                element.p_ParamsValues.Add(new Cl_ElementParam() { p_Element = element, p_TypeParam = Cl_ElementParam.E_TypeParam.NormValues, p_Value = i.ToString() });
+                element.p_ParamsValues.Add(new Cl_ElementParam() { p_Element = element, p_TypeParam = Cl_ElementParam.E_TypeParam.PatValues, p_Value = i.ToString() });
+            }
+            record.p_Values.Add(new Cl_RecordValue() { p_ElementID = element.p_ID, p_Element = element, p_ValueUser = "14" });
+            elements.Add(new Cl_TemplateElement() { p_Template = template, p_ChildElement = element, p_Index = 0 });
+            element = new Cl_Element()
+            {
+                p_ID = 2,
+                p_Name = "Формула 2",
+                p_Tag = "dva",
+                p_IsNumber = true,
+                p_NumberRound = 2
+            };
+            element.p_ParamsValues = new List<Cl_ElementParam>();
+            for (int i = 1; i < 4; i++)
+            {
+                element.p_ParamsValues.Add(new Cl_ElementParam() { p_Element = element, p_TypeParam = Cl_ElementParam.E_TypeParam.NormValues, p_Value = i.ToString() });
+                element.p_ParamsValues.Add(new Cl_ElementParam() { p_Element = element, p_TypeParam = Cl_ElementParam.E_TypeParam.PatValues, p_Value = i.ToString() });
+            }
+            record.p_Values.Add(new Cl_RecordValue() { p_ElementID = element.p_ID, p_Element = element, p_ValueUser = "11" });
+            elements.Add(new Cl_TemplateElement() { p_Template = template, p_ChildElement = element, p_Index = 1 });
+            element = new Cl_Element()
+            {
+                p_ID = 3,
+                p_Name = "Формула 3",
+                p_Tag = "tri",
+                p_IsNumber = true,
+                p_NumberRound = 2
+            };
+            element.p_ParamsValues = new List<Cl_ElementParam>();
+            for (int i = 1; i < 4; i++)
+            {
+                element.p_ParamsValues.Add(new Cl_ElementParam() { p_Element = element, p_TypeParam = Cl_ElementParam.E_TypeParam.NormValues, p_Value = i.ToString() });
+                element.p_ParamsValues.Add(new Cl_ElementParam() { p_Element = element, p_TypeParam = Cl_ElementParam.E_TypeParam.PatValues, p_Value = i.ToString() });
+            }
+            record.p_Values.Add(new Cl_RecordValue() { p_ElementID = element.p_ID, p_Element = element, p_ValueUser = "5" });
+            elements.Add(new Cl_TemplateElement() { p_Template = template, p_ChildElement = element, p_Index = 2 });
+            template.p_TemplateElements = elements;
+            record.f_SetTemplate(template);
+
+            decimal? result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_one + 3");
+            Assert.AreEqual(17, result);
+            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_one + 8");
+            Assert.AreEqual(22, result);
+
+            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_one - 3");
+            Assert.AreEqual(11, result);
+            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_dva - 8");
+            Assert.AreEqual(3, result);
+            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_dva * 11");
+            Assert.AreEqual(121, result);
+            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_dva / 2");
+            Assert.AreEqual((decimal)5.5, result);
+            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_tri - 7");
+            Assert.AreEqual(-2, result);
+
+            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_one + tag_dva - tag_tri");
+            Assert.AreEqual(20, result);
+            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_one * tag_dva / tag_tri");
+            Assert.AreEqual((decimal)30.8, result);
         }
     }
 }

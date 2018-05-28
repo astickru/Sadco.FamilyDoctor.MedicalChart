@@ -61,7 +61,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 
         private static string f_GetIEnumerableValue(PropertyInfo pInfo, object value)
         {
-            if (pInfo.PropertyType.IsArray)
+            if (pInfo.PropertyType.IsArray || pInfo.PropertyType == typeof(Array))
                 return f_GetArraysValue(value);
             else if (pInfo.PropertyType.IsGenericType)
                 return f_GetCollectionValue(pInfo, value);

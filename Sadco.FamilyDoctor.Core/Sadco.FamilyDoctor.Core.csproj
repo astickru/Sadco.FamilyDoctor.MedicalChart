@@ -205,6 +205,10 @@
     <Compile Include="Migrations\201805031250089_appRecordTitle.Designer.cs">
       <DependentUpon>201805031250089_appRecordTitle.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805211522082_appRecordHTML.cs" />
+    <Compile Include="Migrations\201805211522082_appRecordHTML.Designer.cs">
+      <DependentUpon>201805211522082_appRecordHTML.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\Cl_AccessLevelAttribute.cs" />
     <Compile Include="Permision\Cl_User.cs" />
@@ -289,6 +293,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805031250089_appRecordTitle.resx">
       <DependentUpon>201805031250089_appRecordTitle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805211522082_appRecordHTML.resx">
+      <DependentUpon>201805211522082_appRecordHTML.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

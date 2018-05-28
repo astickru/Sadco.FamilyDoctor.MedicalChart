@@ -163,7 +163,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Обязательность заполнения</summary>
         [Column("F_REQUIRED")]
         [Cl_ELogProperty("Обязательное поле для заполнения")]
-        public bool p_Required { get { return m_Required; } set { m_Required = value; } }
+        public bool p_Required { get { return m_Required && m_Editing; } set { m_Required = value; } }
 
         /// <summary>Возможность редактирования</summary>
         [Column("F_EDITING")]
@@ -386,7 +386,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
                 foreach (string val in a_Values)
                 {
                     if (!string.IsNullOrWhiteSpace(val))
-                        p_ParamsValues.Add(new Cl_ElementParam() { p_ElementID = p_ID, p_TypeParam = a_TypeParam, p_Value = val });
+                        p_ParamsValues.Add(new Cl_ElementParam() { p_ElementID = p_ID, p_TypeParam = a_TypeParam, p_Value = val.Trim() });
                 }
             }
         }

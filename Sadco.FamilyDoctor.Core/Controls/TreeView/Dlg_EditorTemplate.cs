@@ -44,13 +44,13 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     e.Cancel = true;
                     return;
                 }
-                if (ctrlCategoriesTotal.SelectedItem == null)
+                if (ctrlCategoriesTotal.Enabled && ctrlCategoriesTotal.SelectedItem == null)
                 {
                     MonitoringStub.Message("Не выбрана общая категория!");
                     e.Cancel = true;
                     return;
                 }
-                if (ctrlCategoriesKlinik.SelectedItem == null)
+                if (ctrlCategoriesKlinik.Enabled && ctrlCategoriesKlinik.SelectedItem == null)
                 {
                     MonitoringStub.Message("Не выбрана клиническая категория!");
                     e.Cancel = true;

@@ -65,6 +65,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
         }
 
+        public event EventHandler e_Save;
+
         private Ctrl_Template m_ControlTemplate = null;
 
         private void f_UpdateControls()
@@ -134,18 +136,20 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
                             record.p_Title = ctrlTitle.Text;
                             record.p_KlinikName = Cl_SessionFacade.f_GetInstance().p_User.p_KlinikName;
-
                             Cl_App.m_DataContext.p_Records.Add(record);
                             Cl_App.m_DataContext.SaveChanges();
+                            record.p_HTMLUser = record.f_GetHTMLUser();
+                            record.p_HTMLPatient = record.f_GetHTMLPatient();
                             if (record.p_Version == 1)
                             {
                                 record.p_RecordID = record.p_ID;
-                                Cl_App.m_DataContext.SaveChanges();
                             }
+                            Cl_App.m_DataContext.SaveChanges();
                             m_Log.f_SaveEntity(record);
                             transaction.Commit();
                             //m_ControlTemplate.f_SetRecord(record);
                             f_SetRecord(record);
+                            e_Save?.Invoke(this, new EventArgs());
                             //ctrl_Version.Text = record.p_Version.ToString();
                         }
                         else

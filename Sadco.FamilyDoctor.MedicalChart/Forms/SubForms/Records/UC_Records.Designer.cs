@@ -25,6 +25,7 @@
 		/// содержимое этого метода с помощью редактора кода.
 		/// </summary>
 		private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UC_Records));
             this.ctrl_TPartNormRangeValues = new System.Windows.Forms.DataGridView();
             this.p_KlinikName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.p_DateForming = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -37,12 +38,16 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.ctrlBReportAdd = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.ctrlViewer = new System.Windows.Forms.WebBrowser();
+            this.ctrlPDFViewer = new AxAcroPDFLib.AxAcroPDF();
             ((System.ComponentModel.ISupportInitialize)(this.ctrl_TPartNormRangeValues)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ctrlPDFViewer)).BeginInit();
             this.SuspendLayout();
             // 
             // ctrl_TPartNormRangeValues
@@ -67,8 +72,9 @@
             this.ctrl_TPartNormRangeValues.ShowCellToolTips = false;
             this.ctrl_TPartNormRangeValues.ShowEditingIcon = false;
             this.ctrl_TPartNormRangeValues.ShowRowErrors = false;
-            this.ctrl_TPartNormRangeValues.Size = new System.Drawing.Size(545, 267);
+            this.ctrl_TPartNormRangeValues.Size = new System.Drawing.Size(480, 267);
             this.ctrl_TPartNormRangeValues.TabIndex = 88;
+            this.ctrl_TPartNormRangeValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ctrl_TPartNormRangeValues_CellClick);
             this.ctrl_TPartNormRangeValues.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ctrl_TPartNormRangeValues_CellDoubleClick);
             // 
             // p_KlinikName
@@ -156,15 +162,42 @@
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.Location = new System.Drawing.Point(0, 39);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.ctrl_TPartNormRangeValues);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.ctrlPDFViewer);
+            this.splitContainer1.Panel2.Controls.Add(this.ctrlViewer);
             this.splitContainer1.Size = new System.Drawing.Size(789, 267);
-            this.splitContainer1.SplitterDistance = 545;
+            this.splitContainer1.SplitterDistance = 480;
             this.splitContainer1.TabIndex = 91;
+            // 
+            // ctrlViewer
+            // 
+            this.ctrlViewer.AllowNavigation = false;
+            this.ctrlViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ctrlViewer.IsWebBrowserContextMenuEnabled = false;
+            this.ctrlViewer.Location = new System.Drawing.Point(0, 0);
+            this.ctrlViewer.MinimumSize = new System.Drawing.Size(20, 20);
+            this.ctrlViewer.Name = "ctrlViewer";
+            this.ctrlViewer.Size = new System.Drawing.Size(305, 267);
+            this.ctrlViewer.TabIndex = 0;
+            // 
+            // ctrlPDFViewer
+            // 
+            this.ctrlPDFViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ctrlPDFViewer.Enabled = true;
+            this.ctrlPDFViewer.Location = new System.Drawing.Point(0, 0);
+            this.ctrlPDFViewer.Name = "ctrlPDFViewer";
+            this.ctrlPDFViewer.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("ctrlPDFViewer.OcxState")));
+            this.ctrlPDFViewer.Size = new System.Drawing.Size(305, 267);
+            this.ctrlPDFViewer.TabIndex = 1;
             // 
             // UC_Records
             // 
@@ -183,8 +216,10 @@
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ctrlPDFViewer)).EndInit();
             this.ResumeLayout(false);
 
 		}
@@ -204,5 +239,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn p_CategoryTotal;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_Title;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_UserFIO;
+        private System.Windows.Forms.WebBrowser ctrlViewer;
+        private AxAcroPDFLib.AxAcroPDF ctrlPDFViewer;
     }
 }
