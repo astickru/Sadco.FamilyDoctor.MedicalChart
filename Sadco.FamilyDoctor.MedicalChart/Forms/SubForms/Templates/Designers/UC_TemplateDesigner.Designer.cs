@@ -27,6 +27,7 @@
 		private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.ctrl_B_UpSave = new System.Windows.Forms.Button();
             this.ctrl_B_Save = new System.Windows.Forms.Button();
             this.ctrl_B_History = new System.Windows.Forms.Button();
             this.ctrl_EditorPanel = new Sadco.FamilyDoctor.Core.Controls.Ctrl_DesignerPanel();
@@ -39,6 +40,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.ctrl_B_UpSave);
             this.panel2.Controls.Add(this.ctrl_B_Save);
             this.panel2.Controls.Add(this.ctrl_B_History);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -48,6 +50,18 @@
             this.panel2.Padding = new System.Windows.Forms.Padding(2);
             this.panel2.Size = new System.Drawing.Size(760, 30);
             this.panel2.TabIndex = 0;
+            // 
+            // ctrl_B_UpSave
+            // 
+            this.ctrl_B_UpSave.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ctrl_B_UpSave.Location = new System.Drawing.Point(499, 2);
+            this.ctrl_B_UpSave.Margin = new System.Windows.Forms.Padding(0);
+            this.ctrl_B_UpSave.Name = "ctrl_B_UpSave";
+            this.ctrl_B_UpSave.Size = new System.Drawing.Size(160, 26);
+            this.ctrl_B_UpSave.TabIndex = 2;
+            this.ctrl_B_UpSave.Text = "обновить и сохранить";
+            this.ctrl_B_UpSave.UseVisualStyleBackColor = true;
+            this.ctrl_B_UpSave.Click += new System.EventHandler(this.ctrl_B_UpSave_Click);
             // 
             // ctrl_B_Save
             // 
@@ -148,5 +162,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label ctrl_Version;
         private System.Windows.Forms.Button ctrl_B_History;
+        private System.Windows.Forms.Button ctrl_B_UpSave;
     }
 }

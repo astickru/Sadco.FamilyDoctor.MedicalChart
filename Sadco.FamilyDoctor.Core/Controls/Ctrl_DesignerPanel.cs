@@ -1,5 +1,6 @@
 ﻿using Sadco.FamilyDoctor.Core.Controls.DesignerPanel;
 using Sadco.FamilyDoctor.Core.Entities;
+using Sadco.FamilyDoctor.Core.Facades;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -266,6 +267,20 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     {
                         foreColor = Color.White;
                     }
+
+                    if (el is Ctrl_Element)
+                    {
+                        Ctrl_Element elm = (Ctrl_Element)el;
+                        if (Cl_TemplatesFacade.f_GetInstance().f_IsActualElement(elm.p_Element) == false)
+                            foreColor = Color.Red;
+                    }
+                    else if (el is Ctrl_Template)
+                    {
+                        Ctrl_Template tmpl = (Ctrl_Template)el;
+                        if (Cl_TemplatesFacade.f_GetInstance().f_IsActualElementsOnTemplate(tmpl.p_Template) == false)
+                            foreColor = Color.Red;
+                    }
+
                     el.f_Draw(e.Graphics, e.Bounds, Font, foreColor);
                 }
             }
@@ -423,20 +438,20 @@ namespace Sadco.FamilyDoctor.Core.Controls
             return !dragZone.Contains(location);
         }
 
-        protected bool f_HasElement(Cl_Element a_Elemnt)
+        protected bool f_HasElement(Cl_Element a_Element)
         {
             foreach (I_Element item in Items)
             {
                 if (item is Ctrl_Element)
                 {
                     var el = (Ctrl_Element)item;
-                    if (el.p_Element.Equals(a_Elemnt))
+                    if (el.p_Element.Equals(a_Element) || el.p_Element.p_ElementID == a_Element.p_ElementID)
                         return true;
                 }
                 else if (item is Ctrl_Template)
                 {
                     var tpl = (Ctrl_Template)item;
-                    if (tpl.p_Template.f_HasElement(a_Elemnt))
+                    if (tpl.p_Template.f_HasElement(a_Element))
                         return true;
                 }
             }
@@ -456,7 +471,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 else if (item is Ctrl_Template)
                 {
                     var tpl = (Ctrl_Template)item;
-                    if (a_Template.f_HasElement(tpl.p_Template))
+                    if (a_Template.f_HasElement(tpl.p_Template) || tpl.p_Template.p_TemplateID == a_Template.p_TemplateID)
                         return true;
                 }
             }
@@ -475,16 +490,16 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     if (item is Ctrl_TreeNodeElement)
                     {
                         Ctrl_TreeNodeElement nodeEl = (Ctrl_TreeNodeElement)item;
-                        if (f_HasElement(nodeEl.p_Element))
+                        if (f_HasElement(nodeEl.p_Element) || nodeEl.p_Element.p_Version == 0)
                         {
                             e.Effect = DragDropEffects.None;
                             return;
                         }
                     }
-                    else if(item is Ctrl_TreeNodeTemplate)
+                    else if (item is Ctrl_TreeNodeTemplate)
                     {
                         Ctrl_TreeNodeTemplate nodeTemp = (Ctrl_TreeNodeTemplate)item;
-                        if (f_HasElement(nodeTemp.p_Template))
+                        if (f_HasElement(nodeTemp.p_Template) || nodeTemp.p_Template.p_Version == 0)
                         {
                             e.Effect = DragDropEffects.None;
                             return;

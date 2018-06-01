@@ -53,6 +53,12 @@ namespace Sadco.FamilyDoctor.MedicalChart
                                 .ToList();
                 ctrlRoles.SelectedIndex = 1;
             }
+
+#if DEBUG
+            ctrlIsDebug.Visible = ctrlIsDebug.Checked = true;
+#else
+            ctrlIsDebug.Visible = ctrlIsDebug.Checked = false;
+#endif
         }
 
         public T f_GetSelectedItem<T>()

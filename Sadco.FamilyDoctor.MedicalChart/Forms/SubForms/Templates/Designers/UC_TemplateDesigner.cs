@@ -8,6 +8,7 @@ using System.Data.Entity;
 using System.Windows.Forms;
 using FD.dat.mon.stb.lib;
 using Sadco.FamilyDoctor.Core.EntityLogs;
+using Sadco.FamilyDoctor.Core.Facades;
 
 namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
@@ -47,79 +48,21 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         private void ctrl_B_Save_Click(object sender, EventArgs e)
         {
             if (p_EditingTemplate == null) return;
-            using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
-            {
-                try
-                {
-                    Cl_Template tpl = null;
-                    if (p_EditingTemplate.p_Version == 0)
-                    {
-                        tpl = p_EditingTemplate;
-                        tpl.p_Version = 1;
-                    }
-                    else
-                    {
-                        tpl = new Cl_Template();
-                        tpl.p_TemplateID = p_EditingTemplate.p_TemplateID;
-                        tpl.p_Title = p_EditingTemplate.p_Title;
-                        tpl.p_CategoryTotalID = p_EditingTemplate.p_CategoryTotalID;
-                        tpl.p_CategoryTotal = p_EditingTemplate.p_CategoryTotal;
-                        tpl.p_CategoryKlinikID = p_EditingTemplate.p_CategoryKlinikID;
-                        tpl.p_CategoryKlinik = p_EditingTemplate.p_CategoryKlinik;
-                        tpl.p_Type = p_EditingTemplate.p_Type;
-                        tpl.p_Name = p_EditingTemplate.p_Name;
-                        tpl.p_Version = p_EditingTemplate.p_Version + 1;
-                        tpl.p_ParentGroupID = p_EditingTemplate.p_ParentGroupID;
-                        tpl.p_ParentGroup = p_EditingTemplate.p_ParentGroup;
-                        tpl.p_Description = p_EditingTemplate.p_Description;
-                        Cl_App.m_DataContext.p_Templates.Add(tpl);
-                    }
-                    Cl_App.m_DataContext.SaveChanges();
-                    int index = 0;
-                    foreach (I_Element item in ctrl_EditorPanel.Items)
-                    {
-                        var tplEl = new Cl_TemplateElement();
-                        tplEl.p_TemplateID = tpl.p_ID;
-                        tplEl.p_Template = tpl;
-                        if (item is Ctrl_Element)
-                        {
-                            var block = (Ctrl_Element)item;
-                            tplEl.p_ChildElementID = block.p_ID;
-                            tplEl.p_ChildElement = block.p_Element;
-                        }
-                        else if (item is Ctrl_Template)
-                        {
-                            var block = (Ctrl_Template)item;
-                            tplEl.p_ChildTemplateID = block.p_ID;
-                            tplEl.p_ChildTemplate = block.p_Template;
-                        }
-                        tplEl.p_Index = index++;
-                        Cl_App.m_DataContext.p_TemplatesElements.Add(tplEl);
-                    }
-                    Cl_App.m_DataContext.SaveChanges();
 
-                    if (m_Log.f_IsChanged(tpl) == false)
-                    {
-                        if (tpl.Equals(p_EditingTemplate) && tpl.p_Version == 1)
-                        {
-                            tpl.p_Version = 0;
-                        }
+            I_Element[] templates = new I_Element[ctrl_EditorPanel.Items.Count];
+            ctrl_EditorPanel.Items.CopyTo(templates, 0);
 
-                        MonitoringStub.Message("Шаблон не изменялся!");
-                        transaction.Rollback();
-                        return;
-                    }
+            Cl_Template tpl = Cl_TemplatesFacade.f_GetInstance().f_SaveTemplate(p_EditingTemplate, templates, m_Log);
+            f_SetTemplate(tpl);
+        }
 
-                    m_Log.f_SaveEntity(tpl);
-                    transaction.Commit();
-                    f_SetTemplate(tpl);
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    MonitoringStub.Error("Error_Editor", "При сохранении изменений произошла ошибка", ex, null, null);
-                }
-            }
+        private void ctrl_B_UpSave_Click(object sender, EventArgs e)
+        {
+            I_Element[] templates = new I_Element[ctrl_EditorPanel.Items.Count];
+            ctrl_EditorPanel.Items.CopyTo(templates, 0);
+
+            Cl_Template tpl = Cl_TemplatesFacade.f_GetInstance().f_UpSaveTemplate(p_EditingTemplate, templates, m_Log);
+            f_SetTemplate(tpl);
         }
 
         private void ctrl_B_History_Click(object sender, EventArgs e)
