@@ -76,7 +76,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 if (a_Type == Cl_Group.E_Type.Elements)
                 {
                     var els = Cl_App.m_DataContext.p_Elements
-                        .Where(e => e.p_ParentGroupID == a_Group.p_ID && !e.p_IsDelete).GroupBy(e => e.p_ElementID)
+                        .Where(e => e.p_ParentGroupID == a_Group.p_ID && !e.p_IsDelete && e.p_Version > 0).GroupBy(e => e.p_ElementID)
                             .Select(grp => grp
                                 .OrderByDescending(v => v.p_Version).FirstOrDefault())
                                 .Include(e => e.p_ParamsValues);
