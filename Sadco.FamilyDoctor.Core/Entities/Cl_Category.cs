@@ -16,7 +16,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
             /// <summary>Общая категория</summary>
             Total,
             /// <summary>Клиническая категория</summary>
-            Klinik
+            Clinik
         }
 
         /// <summary>Ключ категории</summary>

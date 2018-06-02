@@ -221,9 +221,9 @@ namespace Sadco.FamilyDoctor.Core.Controls
                         var catTotal = (Cl_Category)dlg.ctrlCategoriesTotal.SelectedItem;
                         newTemplate.p_CategoryTotalID = catTotal.p_ID;
                         newTemplate.p_CategoryTotal = catTotal;
-                        var catKlinik = (Cl_Category)dlg.ctrlCategoriesKlinik.SelectedItem;
-                        newTemplate.p_CategoryKlinikID = catKlinik.p_ID;
-                        newTemplate.p_CategoryKlinik = catKlinik;
+                        var catClinik = (Cl_Category)dlg.ctrlCategoriesClinik.SelectedItem;
+                        newTemplate.p_CategoryClinikID = catClinik.p_ID;
+                        newTemplate.p_CategoryClinik = catClinik;
                     }
                     Cl_App.m_DataContext.p_Templates.Add(newTemplate);
                     Cl_App.m_DataContext.SaveChanges();

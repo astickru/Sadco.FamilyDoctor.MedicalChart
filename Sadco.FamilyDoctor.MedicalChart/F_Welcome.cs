@@ -67,7 +67,7 @@ namespace Sadco.FamilyDoctor.MedicalChart
 
         private void button1_Click(object sender, EventArgs e)
         {
-            bool isNotValid = ctrlKlinikName.Text == "";
+            bool isNotValid = ctrlClinikName.Text == "";
             isNotValid |= ctrlUserID.Text == "";
             isNotValid |= ctrlUserSurName.Text == "";
             isNotValid |= ctrlUserName.Text == "";
@@ -81,7 +81,7 @@ namespace Sadco.FamilyDoctor.MedicalChart
             if (isNotValid) return;
 
             string[] startParams = new string[14];
-            startParams[0] = ctrlKlinikName.Text;
+            startParams[0] = ctrlClinikName.Text;
             startParams[1] = ctrlUserID.Text;
             startParams[2] = ctrlUserSurName.Text;
             startParams[3] = ctrlUserName.Text;

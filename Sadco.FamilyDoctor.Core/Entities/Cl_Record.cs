@@ -14,6 +14,17 @@ namespace Sadco.FamilyDoctor.Core.Entities
     [Table("T_RECORDS")]
     public class Cl_Record : I_Version, I_Delete, I_ELog
     {
+        /// <summary>
+        /// Типы записей
+        /// </summary>
+        public enum E_Type
+        {
+            /// <summary>По шаблону</summary>
+            ByTemplate,
+            /// <summary>Готовый файл</summary>
+            FinishedFile
+        }
+        
         /// <summary>Ключ записи</summary>
         [Key]
         [Column("F_ID")]
@@ -71,6 +82,10 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Column("F_ISAUTIMATIC")]
         public bool p_IsAutimatic { get; set; }
 
+        /// <summary>Тип записи</summary>
+        [Column("F_TYPE")]
+        public E_Type p_Type { get; set; }
+
         /// <summary>ID пользователя</summary>
         [Column("F_USER_ID")]
         public int p_UserID { get; set; }
@@ -104,8 +119,8 @@ namespace Sadco.FamilyDoctor.Core.Entities
         public string p_PatientLastName { get; set; }
 
         /// <summary>Название клиники</summary>
-        [Column("F_KLINIKNAME")]
-        public string p_KlinikName { get; set; }
+        [Column("F_CLINIKNAME")]
+        public string p_ClinikName { get; set; }
 
         /// <summary>Заголовок записи</summary>
         [Column("F_TITLE")]
@@ -139,17 +154,17 @@ namespace Sadco.FamilyDoctor.Core.Entities
         }
 
         /// <summary>ID клинической категории</summary>
-        [Column("F_CATEGORYKLINIK_ID")]
-        [ForeignKey("p_CategoryKlinik")]
-        public int? p_CategoryKlinikID { get; set; }
-        private Cl_Category m_CategoryKlinik = null;
+        [Column("F_CATEGORYCLINIK_ID")]
+        [ForeignKey("p_CategoryClinik")]
+        public int? p_CategoryClinikID { get; set; }
+        private Cl_Category m_CategoryClinik = null;
         /// <summary>Клиническая категория шаблонов</summary>
-        public Cl_Category p_CategoryKlinik {
-            get { return m_CategoryKlinik; }
+        public Cl_Category p_CategoryClinik {
+            get { return m_CategoryClinik; }
             set {
-                m_CategoryKlinik = value;
-                if (m_CategoryKlinik != null)
-                    m_CategoryKlinik.p_Type = Cl_Category.E_CategoriesTypes.Klinik;
+                m_CategoryClinik = value;
+                if (m_CategoryClinik != null)
+                    m_CategoryClinik.p_Type = Cl_Category.E_CategoriesTypes.Clinik;
             }
         }
 
@@ -205,7 +220,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Установка пользователя</summary>
         public void f_SetUser(Cl_User a_User)
         {
-            p_KlinikName = a_User.p_KlinikName;
+            p_ClinikName = a_User.p_ClinikName;
             p_UserID = a_User.p_UserID;
             p_UserSurName = a_User.p_UserSurName;
             p_UserName = a_User.p_UserName;
@@ -230,8 +245,8 @@ namespace Sadco.FamilyDoctor.Core.Entities
             p_Title = a_Template.p_Title;
             p_CategoryTotalID = a_Template.p_CategoryTotalID;
             p_CategoryTotal = a_Template.p_CategoryTotal;
-            p_CategoryKlinikID = a_Template.p_CategoryKlinikID;
-            p_CategoryKlinik = a_Template.p_CategoryKlinik;
+            p_CategoryClinikID = a_Template.p_CategoryClinikID;
+            p_CategoryClinik = a_Template.p_CategoryClinik;
         }
 
         /// <summary>Получение HTML текста записи для пациента</summary>
@@ -318,7 +333,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
             <div>(495)775-75-66 | www.familydoctor.ru | company@familydoctor.ru</div>
         </div>
         <div class=""record_name"">";
-            html += p_KlinikName;
+            html += p_ClinikName;
             html += @"</div><div class=""record_info"">";
             html += string.Format("№ {0} {1} {2} {3} {4} # {5}", p_RecordID, p_PatientSurName, p_PatientName, p_PatientLastName, p_DateBirth.ToString("dd.MM.yyyy"), p_ID);
             html += @"</div><div class=""record_date"">";

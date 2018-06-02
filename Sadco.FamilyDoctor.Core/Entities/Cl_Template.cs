@@ -89,18 +89,18 @@ namespace Sadco.FamilyDoctor.Core.Entities
         }
 
         /// <summary>ID клинической категории</summary>
-        [Column("F_CATEGORYKLINIK_ID")]
-        [ForeignKey("p_CategoryKlinik")]
-        public int? p_CategoryKlinikID { get; set; }
-        private Cl_Category m_CategoryKlinik = null;
+        [Column("F_CATEGORYCLINIK_ID")]
+        [ForeignKey("p_CategoryClinik")]
+        public int? p_CategoryClinikID { get; set; }
+        private Cl_Category m_CategoryClinik = null;
         /// <summary>Клиническая категория шаблонов</summary>
         [Cl_ELogProperty("Изменилась клиническая категория", p_IsCustomDescription = true)]
-        public Cl_Category p_CategoryKlinik {
-            get { return m_CategoryKlinik; }
+        public Cl_Category p_CategoryClinik {
+            get { return m_CategoryClinik; }
             set {
-                m_CategoryKlinik = value;
-                if (m_CategoryKlinik != null)
-                    m_CategoryKlinik.p_Type = Cl_Category.E_CategoriesTypes.Klinik;
+                m_CategoryClinik = value;
+                if (m_CategoryClinik != null)
+                    m_CategoryClinik.p_Type = Cl_Category.E_CategoriesTypes.Clinik;
             }
         }
 

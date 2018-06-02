@@ -135,7 +135,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             }
 
                             record.p_Title = ctrlTitle.Text;
-                            record.p_KlinikName = Cl_SessionFacade.f_GetInstance().p_User.p_KlinikName;
+                            record.p_ClinikName = Cl_SessionFacade.f_GetInstance().p_User.p_ClinikName;
                             Cl_App.m_DataContext.p_Records.Add(record);
                             Cl_App.m_DataContext.SaveChanges();
                             record.p_HTMLUser = record.f_GetHTMLUser();

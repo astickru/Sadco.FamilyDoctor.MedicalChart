@@ -31,8 +31,8 @@
             this.ctrlCategoriesTab = new System.Windows.Forms.TabControl();
             this.ctrlTabTotal = new System.Windows.Forms.TabPage();
             this.ctrlCategoriesTotal = new System.Windows.Forms.DataGridView();
-            this.ctrlTabKlinik = new System.Windows.Forms.TabPage();
-            this.ctrlCategoriesKlinik = new System.Windows.Forms.DataGridView();
+            this.ctrlTabClinik = new System.Windows.Forms.TabPage();
+            this.ctrlCategoriesClinik = new System.Windows.Forms.DataGridView();
             this.p_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1 = new System.Windows.Forms.Panel();
             this.ctrlAdd = new System.Windows.Forms.Button();
@@ -41,15 +41,15 @@
             this.ctrlCategoriesTab.SuspendLayout();
             this.ctrlTabTotal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ctrlCategoriesTotal)).BeginInit();
-            this.ctrlTabKlinik.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ctrlCategoriesKlinik)).BeginInit();
+            this.ctrlTabClinik.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ctrlCategoriesClinik)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ctrlCategoriesTab
             // 
             this.ctrlCategoriesTab.Controls.Add(this.ctrlTabTotal);
-            this.ctrlCategoriesTab.Controls.Add(this.ctrlTabKlinik);
+            this.ctrlCategoriesTab.Controls.Add(this.ctrlTabClinik);
             this.ctrlCategoriesTab.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ctrlCategoriesTab.Location = new System.Drawing.Point(0, 0);
             this.ctrlCategoriesTab.Name = "ctrlCategoriesTab";
@@ -83,31 +83,31 @@
             this.ctrlCategoriesTotal.TabIndex = 0;
             this.ctrlCategoriesTotal.SelectionChanged += new System.EventHandler(this.ctrlCategoriesTotal_SelectionChanged);
             // 
-            // ctrlTabKlinik
+            // ctrlTabClinik
             // 
-            this.ctrlTabKlinik.Controls.Add(this.ctrlCategoriesKlinik);
-            this.ctrlTabKlinik.Location = new System.Drawing.Point(4, 22);
-            this.ctrlTabKlinik.Name = "ctrlTabKlinik";
-            this.ctrlTabKlinik.Padding = new System.Windows.Forms.Padding(3);
-            this.ctrlTabKlinik.Size = new System.Drawing.Size(594, 612);
-            this.ctrlTabKlinik.TabIndex = 1;
-            this.ctrlTabKlinik.Text = "Клиническая категория";
-            this.ctrlTabKlinik.UseVisualStyleBackColor = true;
+            this.ctrlTabClinik.Controls.Add(this.ctrlCategoriesClinik);
+            this.ctrlTabClinik.Location = new System.Drawing.Point(4, 22);
+            this.ctrlTabClinik.Name = "ctrlTabClinik";
+            this.ctrlTabClinik.Padding = new System.Windows.Forms.Padding(3);
+            this.ctrlTabClinik.Size = new System.Drawing.Size(594, 612);
+            this.ctrlTabClinik.TabIndex = 1;
+            this.ctrlTabClinik.Text = "Клиническая категория";
+            this.ctrlTabClinik.UseVisualStyleBackColor = true;
             // 
-            // ctrlCategoriesKlinik
+            // ctrlCategoriesClinik
             // 
-            this.ctrlCategoriesKlinik.AllowUserToAddRows = false;
-            this.ctrlCategoriesKlinik.AllowUserToDeleteRows = false;
-            this.ctrlCategoriesKlinik.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ctrlCategoriesKlinik.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ctrlCategoriesKlinik.Location = new System.Drawing.Point(3, 3);
-            this.ctrlCategoriesKlinik.MultiSelect = false;
-            this.ctrlCategoriesKlinik.Name = "ctrlCategoriesKlinik";
-            this.ctrlCategoriesKlinik.ReadOnly = true;
-            this.ctrlCategoriesKlinik.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ctrlCategoriesKlinik.Size = new System.Drawing.Size(588, 606);
-            this.ctrlCategoriesKlinik.TabIndex = 1;
-            this.ctrlCategoriesKlinik.SelectionChanged += new System.EventHandler(this.ctrlCategoriesKlinik_SelectionChanged);
+            this.ctrlCategoriesClinik.AllowUserToAddRows = false;
+            this.ctrlCategoriesClinik.AllowUserToDeleteRows = false;
+            this.ctrlCategoriesClinik.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ctrlCategoriesClinik.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ctrlCategoriesClinik.Location = new System.Drawing.Point(3, 3);
+            this.ctrlCategoriesClinik.MultiSelect = false;
+            this.ctrlCategoriesClinik.Name = "ctrlCategoriesClinik";
+            this.ctrlCategoriesClinik.ReadOnly = true;
+            this.ctrlCategoriesClinik.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.ctrlCategoriesClinik.Size = new System.Drawing.Size(588, 606);
+            this.ctrlCategoriesClinik.TabIndex = 1;
+            this.ctrlCategoriesClinik.SelectionChanged += new System.EventHandler(this.ctrlCategoriesClinik_SelectionChanged);
             // 
             // p_Name
             // 
@@ -176,8 +176,8 @@
             this.ctrlCategoriesTab.ResumeLayout(false);
             this.ctrlTabTotal.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ctrlCategoriesTotal)).EndInit();
-            this.ctrlTabKlinik.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ctrlCategoriesKlinik)).EndInit();
+            this.ctrlTabClinik.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ctrlCategoriesClinik)).EndInit();
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -187,10 +187,10 @@
 
         private System.Windows.Forms.TabControl ctrlCategoriesTab;
         private System.Windows.Forms.TabPage ctrlTabTotal;
-        private System.Windows.Forms.TabPage ctrlTabKlinik;
+        private System.Windows.Forms.TabPage ctrlTabClinik;
         private System.Windows.Forms.DataGridView ctrlCategoriesTotal;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_Name;
-        private System.Windows.Forms.DataGridView ctrlCategoriesKlinik;
+        private System.Windows.Forms.DataGridView ctrlCategoriesClinik;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button ctrlAdd;
         private System.Windows.Forms.Button ctrlDelete;
