@@ -66,7 +66,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label14 = new System.Windows.Forms.Label();
-            this.ctrlKlinikName = new System.Windows.Forms.TextBox();
+            this.ctrlClinikName = new System.Windows.Forms.TextBox();
             this.mainPanel.SuspendLayout();
             this.panel7.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -470,7 +470,7 @@
             // panel2
             // 
             this.panel2.Controls.Add(this.label14);
-            this.panel2.Controls.Add(this.ctrlKlinikName);
+            this.panel2.Controls.Add(this.ctrlClinikName);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(5, 61);
             this.panel2.Name = "panel2";
@@ -488,14 +488,14 @@
             this.label14.TabIndex = 6;
             this.label14.Text = "Клиника";
             // 
-            // ctrlKlinikName
+            // ctrlClinikName
             // 
-            this.ctrlKlinikName.Location = new System.Drawing.Point(103, 4);
-            this.ctrlKlinikName.Margin = new System.Windows.Forms.Padding(0);
-            this.ctrlKlinikName.Name = "ctrlKlinikName";
-            this.ctrlKlinikName.Size = new System.Drawing.Size(266, 20);
-            this.ctrlKlinikName.TabIndex = 7;
-            this.ctrlKlinikName.Text = "Клиника1";
+            this.ctrlClinikName.Location = new System.Drawing.Point(103, 4);
+            this.ctrlClinikName.Margin = new System.Windows.Forms.Padding(0);
+            this.ctrlClinikName.Name = "ctrlClinikName";
+            this.ctrlClinikName.Size = new System.Drawing.Size(266, 20);
+            this.ctrlClinikName.TabIndex = 7;
+            this.ctrlClinikName.Text = "Клиника1";
             // 
             // F_Welcome
             // 
@@ -568,7 +568,7 @@
         private Core.Controls.Ctrl_RadioButtonList ctrlPatientSex;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox ctrlKlinikName;
+        private System.Windows.Forms.TextBox ctrlClinikName;
     }
 }
 

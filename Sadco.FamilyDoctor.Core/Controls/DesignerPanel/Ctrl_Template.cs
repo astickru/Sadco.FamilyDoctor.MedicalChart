@@ -312,12 +312,12 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             record.p_RecordID = m_Record.p_RecordID;
             record.p_DateLastChange = DateTime.Now;
             record.p_Template = m_Template;
-            record.p_KlinikName = m_Record.p_KlinikName;
+            record.p_ClinikName = m_Record.p_ClinikName;
             record.p_Title = m_Record.p_Title;
             record.p_CategoryTotalID = m_Record.p_CategoryTotalID;
             record.p_CategoryTotal = m_Record.p_CategoryTotal;
-            record.p_CategoryKlinikID = m_Record.p_CategoryKlinikID;
-            record.p_CategoryKlinik = m_Record.p_CategoryKlinik;
+            record.p_CategoryClinikID = m_Record.p_CategoryClinikID;
+            record.p_CategoryClinik = m_Record.p_CategoryClinik;
             record.p_UserID = m_Record.p_UserID;
             record.p_UserSurName = m_Record.p_UserSurName;
             record.p_UserName = m_Record.p_UserName;

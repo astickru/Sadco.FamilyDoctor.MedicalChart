@@ -34,7 +34,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             m_Records = Cl_App.m_DataContext.p_Records.Where(r => p_IsShowDeleted ? true : !r.p_IsDelete).GroupBy(e => e.p_RecordID)
                     .Select(grp => grp
                         .OrderByDescending(v => v.p_Version).FirstOrDefault())
-                        .Include(r => r.p_CategoryTotal).Include(r => r.p_CategoryKlinik).Include(r => r.p_Values).Include(r => r.p_Template).Include(r => r.p_Values.Select(v => v.p_Params)).ToArray();
+                        .Include(r => r.p_CategoryTotal).Include(r => r.p_CategoryClinik).Include(r => r.p_Values).Include(r => r.p_Template).Include(r => r.p_Values.Select(v => v.p_Params)).ToArray();
 
 
             DataTable dt = new DataTable();
@@ -46,7 +46,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             foreach (var norm in m_Records)
             {
                 var row = dt.NewRow();
-                row["p_KlinikName"] = norm.p_KlinikName;
+                row["p_ClinikName"] = norm.p_ClinikName;
                 row["p_DateForming"] = norm.p_DateForming;
                 row["p_CategoryTotal"] = norm.p_CategoryTotal != null ? norm.p_CategoryTotal.p_Name : "";
                 row["p_Title"] = norm.p_Title;

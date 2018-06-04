@@ -14,18 +14,18 @@ namespace Sadco.FamilyDoctor.Core.Controls
             ctrlCategoriesTotal.AutoCompleteSource = AutoCompleteSource.CustomSource;
             ctrlCategoriesTotal.DisplayMember = "p_Name";
             ctrlCategoriesTotal.ValueMember = "p_ID";
-            ctrlCategoriesKlinik.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            ctrlCategoriesKlinik.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            ctrlCategoriesKlinik.DisplayMember = "p_Name";
-            ctrlCategoriesKlinik.ValueMember = "p_ID";
+            ctrlCategoriesClinik.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            ctrlCategoriesClinik.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            ctrlCategoriesClinik.DisplayMember = "p_Name";
+            ctrlCategoriesClinik.ValueMember = "p_ID";
 
             var categories = Cl_App.m_DataContext.p_Categories.ToArray();
             var catsTotal = categories.Where(c => c.p_Type == Entities.Cl_Category.E_CategoriesTypes.Total).ToArray();
-            var catsKlinik = categories.Where(c => c.p_Type == Entities.Cl_Category.E_CategoriesTypes.Klinik).ToArray();
+            var catsClinik = categories.Where(c => c.p_Type == Entities.Cl_Category.E_CategoriesTypes.Clinik).ToArray();
             ctrlCategoriesTotal.AutoCompleteCustomSource.AddRange(catsTotal.Select(e => e.p_Name).ToArray());
-            ctrlCategoriesKlinik.AutoCompleteCustomSource.AddRange(catsKlinik.Select(e => e.p_Name).ToArray());
+            ctrlCategoriesClinik.AutoCompleteCustomSource.AddRange(catsClinik.Select(e => e.p_Name).ToArray());
             ctrlCategoriesTotal.Items.AddRange(catsTotal);
-            ctrlCategoriesKlinik.Items.AddRange(catsKlinik);
+            ctrlCategoriesClinik.Items.AddRange(catsClinik);
         }
 
         private void Dlg_EditorTemplate_FormClosing(object sender, FormClosingEventArgs e)
@@ -50,7 +50,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     e.Cancel = true;
                     return;
                 }
-                if (ctrlCategoriesKlinik.Enabled && ctrlCategoriesKlinik.SelectedItem == null)
+                if (ctrlCategoriesClinik.Enabled && ctrlCategoriesClinik.SelectedItem == null)
                 {
                     MonitoringStub.Message("Не выбрана клиническая категория!");
                     e.Cancel = true;

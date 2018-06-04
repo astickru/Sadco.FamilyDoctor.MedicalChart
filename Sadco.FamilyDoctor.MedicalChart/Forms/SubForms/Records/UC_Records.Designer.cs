@@ -27,7 +27,7 @@
 		private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UC_Records));
             this.ctrl_TPartNormRangeValues = new System.Windows.Forms.DataGridView();
-            this.p_KlinikName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p_ClinikName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.p_DateForming = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.p_CategoryTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.p_Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -57,7 +57,7 @@
             this.ctrl_TPartNormRangeValues.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.ctrl_TPartNormRangeValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ctrl_TPartNormRangeValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.p_KlinikName,
+            this.p_ClinikName,
             this.p_DateForming,
             this.p_CategoryTotal,
             this.p_Title,
@@ -77,11 +77,11 @@
             this.ctrl_TPartNormRangeValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ctrl_TPartNormRangeValues_CellClick);
             this.ctrl_TPartNormRangeValues.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ctrl_TPartNormRangeValues_CellDoubleClick);
             // 
-            // p_KlinikName
+            // p_ClinikName
             // 
-            this.p_KlinikName.HeaderText = "Клиника";
-            this.p_KlinikName.Name = "p_KlinikName";
-            this.p_KlinikName.ReadOnly = true;
+            this.p_ClinikName.HeaderText = "Клиника";
+            this.p_ClinikName.Name = "p_ClinikName";
+            this.p_ClinikName.ReadOnly = true;
             // 
             // p_DateForming
             // 
@@ -234,7 +234,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn p_AgeFrom;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_AgeTo;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn p_KlinikName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn p_ClinikName;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_DateForming;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_CategoryTotal;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_Title;
