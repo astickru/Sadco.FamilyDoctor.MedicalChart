@@ -102,16 +102,22 @@ namespace Sadco.FamilyDoctor.Core.Facades
             Cl_Template actTemplate = this.f_GetActualTemplate(template);
             defNewTemplate = actTemplate.p_ID != template.p_ID;
 
+            if (template.p_TemplateElements == null || template.p_TemplateElements.Count == 0)
+                return true;
+
             foreach (Cl_TemplateElement item in template.p_TemplateElements)
             {
-                if (this.f_IsActualElement(item.p_ChildElement) == false)
+                if (item.p_ChildElement != null)
                 {
-                    defNewElements = true;
-                    break;
+                    if (this.f_IsActualElement(item.p_ChildElement) == false)
+                    {
+                        defNewElements = true;
+                        break;
+                    }
                 }
 
-                if (this.f_IsActualElementsOnTemplate(item.p_ChildTemplate))
-                    return false;
+                if (item.p_ChildTemplate != null)
+                    return this.f_IsActualElementsOnTemplate(item.p_ChildTemplate);
             }
 
             return defNewTemplate == false && defNewElements == false;
@@ -213,16 +219,16 @@ namespace Sadco.FamilyDoctor.Core.Facades
 
         public Cl_Template f_UpSaveTemplate(Cl_Template curTemplate, I_Element[] elements, Cl_EntityLog m_Log)
         {
+            Cl_Template newTemplate = curTemplate;
+
+            if (this.f_IsActualElementsOnTemplate(curTemplate))
+                return f_SaveTemplate(curTemplate, elements, m_Log);
+
             using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
             {
-                Cl_Template newTemplate = null;
-
                 try
                 {
-                    if (this.f_IsActualElementsOnTemplate(curTemplate))
-                        f_SaveTemplate(curTemplate, elements, m_Log);
-
-                    newTemplate = f_UpdateTemplate(curTemplate);
+                    newTemplate = f_UpdateTemplate(newTemplate);
 
                     m_Log.f_SaveEntity(newTemplate);
                     transaction.Commit();
@@ -232,13 +238,20 @@ namespace Sadco.FamilyDoctor.Core.Facades
                     transaction.Rollback();
                     MonitoringStub.Error("Error_Editor", "При сохранении изменений произошла ошибка", ex, null, null);
                 }
-
-                return newTemplate;
             }
+
+            return newTemplate;
         }
 
         private Cl_Template f_UpdateTemplate(Cl_Template template)
         {
+            Cl_Template defNewTemplate = this.f_GetActualTemplate(template);
+            if (defNewTemplate.p_Version > template.p_Version)
+                return defNewTemplate;
+
+            if (template.p_TemplateElements == null || template.p_TemplateElements.Count == 0)
+                return template;
+
             Cl_Template newTemplate = new Cl_Template();
             newTemplate.p_TemplateID = template.p_TemplateID;
             newTemplate.p_Title = template.p_Title;
@@ -268,13 +281,11 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 }
                 else if (item.p_ChildTemplate != null)
                 {
-                    if (this.f_IsActualElementsOnTemplate(item.p_ChildTemplate))
+                    tplEl.p_ChildTemplate = this.f_UpdateTemplate(item.p_ChildTemplate);
+
+                    if (this.f_IsActualElementsOnTemplate(item.p_ChildTemplate) == false)
                     {
-                        tplEl.p_ChildTemplate = this.f_GetActualTemplate(item.p_ChildTemplate);
-                    }
-                    else
-                    {
-                        tplEl.p_ChildTemplate = this.f_UpdateTemplate(item.p_ChildTemplate);
+                        tplEl.p_ChildTemplate = this.f_UpdateTemplate(tplEl.p_ChildTemplate);
                     }
                 }
 
