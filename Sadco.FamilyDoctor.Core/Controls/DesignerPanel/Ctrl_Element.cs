@@ -508,7 +508,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     Cl_AgeNorm ageNorm = p_Element.p_PartAgeNorms.FirstOrDefault(a => a.p_AgeFrom <= age && a.p_AgeTo >= age);
                     if (ageNorm != null)
                     {
-                        l = new Label() { Text = string.Format("{0} - {1}", ageNorm.f_GetMin(a_RecordValue.p_Record.p_Sex, p_Element.p_NumberRound), ageNorm.f_GetMax(a_RecordValue.p_Record.p_Sex, p_Element.p_NumberRound)) };
+                        l = new Label() { Text = string.Format("{0} - {1}", ageNorm.f_GetMin(a_RecordValue.p_Record.p_PatientSex, p_Element.p_NumberRound), ageNorm.f_GetMax(a_RecordValue.p_Record.p_PatientSex, p_Element.p_NumberRound)) };
                         l.AutoSize = true;
                         l.Margin = new Padding(0, 6, 0, 0);
                         if (a_Table != null)

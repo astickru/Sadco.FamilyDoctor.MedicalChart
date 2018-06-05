@@ -17,14 +17,31 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>
         /// Типы записей
         /// </summary>
-        public enum E_Type
+        public enum E_RecordType : byte
         {
             /// <summary>По шаблону</summary>
             ByTemplate,
             /// <summary>Готовый файл</summary>
             FinishedFile
         }
-        
+
+        /// <summary>
+        /// Типы вложенных файлов записей
+        /// </summary>
+        public enum E_RecordFileType : byte
+        {
+            HTML,
+            PDF,
+            JPG,
+            JPEG,
+            JPE,
+            JFIF,
+            JIF,
+            PNG,
+            GIF,
+            XML
+        }
+
         /// <summary>Ключ записи</summary>
         [Key]
         [Column("F_ID")]
@@ -45,14 +62,6 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
         /// <summary>Возвращает уникальный ID записи</summary>
         int I_ELog.p_GetLogEntityID => this.p_RecordID;
-
-        /// <summary>Пол пациента</summary>
-        [Column("F_GENDER")]
-        public Cl_User.E_Sex p_Sex { get; set; }
-
-        /// <summary>Дата рождения пациента</summary>
-        [Column("F_DATEBIRTH", TypeName = "Date")]
-        public DateTime p_DateBirth { get; set; }
 
         /// <summary>Время формирования записи</summary>
         [Column("F_DATEFORMING")]
@@ -84,7 +93,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
         /// <summary>Тип записи</summary>
         [Column("F_TYPE")]
-        public E_Type p_Type { get; set; }
+        public E_RecordType p_Type { get; set; }
 
         /// <summary>ID пользователя</summary>
         [Column("F_USER_ID")]
@@ -106,6 +115,10 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Column("F_PATIENT_ID")]
         public int p_PatientID { get; set; }
 
+        /// <summary>Пол пациента</summary>
+        [Column("F_GENDER")]
+        public Cl_User.E_Sex p_PatientSex { get; set; }
+
         /// <summary>Имя пациента</summary>
         [Column("F_PATIENT_NAME")]
         public string p_PatientName { get; set; }
@@ -117,6 +130,10 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Отчество пациента</summary>
         [Column("F_PATIENT_LASTNAME")]
         public string p_PatientLastName { get; set; }
+
+        /// <summary>Дата рождения пациента</summary>
+        [Column("F_PATIENT_DATEBIRTH")]
+        public DateTime p_PatientDateBirth { get; set; }
 
         /// <summary>Название клиники</summary>
         [Column("F_CLINIKNAME")]
@@ -134,7 +151,11 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Column("F_HTMLUSER")]
         public string p_HTMLUser { get; set; }
 
-        /// <summary>Данные рисунка</summary>
+        /// <summary>Тип файла</summary>
+        [Column("F_FILETYPE")]
+        public E_RecordFileType p_FileType { get; set; }
+
+        /// <summary>Данные файла</summary>
         [Column("F_FILE")]
         public byte[] p_FileBytes { get; set; }
 
@@ -171,7 +192,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>ID шаблона</summary>
         [Column("F_TEMPLATE_ID")]
         [ForeignKey("p_Template")]
-        public int p_TemplateID { get; set; }
+        public int? p_TemplateID { get; set; }
         /// <summary>Шаблон</summary>
         public Cl_Template p_Template { get; set; }
 
@@ -206,12 +227,12 @@ namespace Sadco.FamilyDoctor.Core.Entities
         public byte f_GetPatientAge()
         {
             byte age = 0;
-            if (p_DateBirth != null)
+            if (p_PatientDateBirth != null)
             {
                 DateTime dateNow = DateTime.Now;
-                byte year = (byte)(dateNow.Year - p_DateBirth.Year);
-                if (dateNow.Month < p_DateBirth.Month ||
-                    (dateNow.Month == p_DateBirth.Month && dateNow.Day < p_DateBirth.Day)) year--;
+                byte year = (byte)(dateNow.Year - p_PatientDateBirth.Year);
+                if (dateNow.Month < p_PatientDateBirth.Month ||
+                    (dateNow.Month == p_PatientDateBirth.Month && dateNow.Day < p_PatientDateBirth.Day)) year--;
                 return year;
             }
             return age;
@@ -234,8 +255,8 @@ namespace Sadco.FamilyDoctor.Core.Entities
             p_PatientSurName = a_User.p_UserSurName;
             p_PatientName = a_User.p_UserName;
             p_PatientLastName = a_User.p_UserLastName;
-            p_Sex = a_User.p_Sex;
-            p_DateBirth = a_User.p_DateBirth;
+            p_PatientSex = a_User.p_Sex;
+            p_PatientDateBirth = a_User.p_DateBirth;
         }
 
         /// <summary>Установка шаблона</summary>
@@ -335,7 +356,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         <div class=""record_name"">";
             html += p_ClinikName;
             html += @"</div><div class=""record_info"">";
-            html += string.Format("№ {0} {1} {2} {3} {4} # {5}", p_RecordID, p_PatientSurName, p_PatientName, p_PatientLastName, p_DateBirth.ToString("dd.MM.yyyy"), p_ID);
+            html += string.Format("№ {0} {1} {2} {3} {4} # {5}", p_RecordID, p_PatientSurName, p_PatientName, p_PatientLastName, p_PatientDateBirth.ToString("dd.MM.yyyy"), p_ID);
             html += @"</div><div class=""record_date"">";
             html += p_DateCreate.ToString("dd.MM.yyyy");
             html += @"</div><div class=""record_values"">";

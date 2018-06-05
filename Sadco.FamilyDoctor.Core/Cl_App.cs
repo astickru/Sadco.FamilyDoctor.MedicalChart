@@ -21,6 +21,7 @@ namespace Sadco.FamilyDoctor.Core
             m_DataContext.f_Init();
             if (!Cl_TemplatesFacade.f_GetInstance().f_Init(m_DataContext)) MonitoringStub.Error("Error_Load", "Не удалось инициализировать фасад работы с шаблонами", null, null, null);
             if (!Cl_RecordsFacade.f_GetInstance().f_Init(m_DataContext)) MonitoringStub.Error("Error_Load", "Не удалось инициализировать фасад работы с записями", null, null, null);
+            if (!Cl_CatalogsFacade.f_GetInstance().f_Init(m_DataContext)) MonitoringStub.Error("Error_Load", "Не удалось инициализировать фасад работы со справочниками", null, null, null);
         }
 
         private static string getConnectionString()

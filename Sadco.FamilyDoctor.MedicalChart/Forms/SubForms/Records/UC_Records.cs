@@ -10,6 +10,7 @@ using System.Data;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
@@ -94,46 +95,49 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             f_UpdateRecords();
         }
 
-        void OpenWebPage(ref WebBrowser _webBrowser, string _link)
-        {
-            if (!_webBrowser.IsDisposed)
-                _webBrowser.Dispose();
-
-            _webBrowser = new WebBrowser();
-            panel2.Controls.Add(_webBrowser);
-            _webBrowser.Dock = DockStyle.Fill;
-            _webBrowser.Show();
-            _webBrowser.Navigate(_link);
-        }
-
         private void ctrl_TPartNormRangeValues_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (m_Records.Length > e.RowIndex)
+            if (e.RowIndex >= 0 && m_Records.Length > e.RowIndex)
             {
                 var record = m_Records[e.RowIndex];
                 if (record.p_HTMLUser != null)
-                    ctrlViewer.DocumentText = record.p_HTMLUser.Replace("src=\"", "src=\"file:///" + Application.StartupPath + "/");
-                else
-                    ctrlViewer.DocumentText = "";
-
-
-                if (e.ColumnIndex > 2)
                 {
-                    ctrlViewer.Visible = false;
-                    ctrlPDFViewer.Visible = true;
-                    ctrlPDFViewer.src = "http://kaskad-asu.com/images/files/uch/lekcii.pdf#navpanes=0&toolbar=0";
-                }
-                else
-                {
-                    ctrlViewer.Visible = true;
+                    ctrlHTMLViewer.DocumentText = record.p_HTMLUser.Replace("src=\"", "src=\"file:///" + Application.StartupPath + "/");
+                    ctrlHTMLViewer.Visible = true;
                     ctrlPDFViewer.Visible = false;
                 }
-
-                //var sds = new AcroPDFLib.AcroPDF();
-                //Controls.Add(sds);
-                //sds.src = "http://kaskad-asu.com/images/files/uch/lekcii.pdf#navpanes=0&toolbar=0";
-
-                //OpenWebPage(ref ctrlViewer, "http://kaskad-asu.com/images/files/uch/lekcii.pdf#navpanes=0&toolbar=0");
+                else
+                {
+                    if (record.p_Type == Cl_Record.E_RecordType.FinishedFile)
+                    {
+                        if (record.p_FileType == Cl_Record.E_RecordFileType.HTML)
+                        {
+                            ctrlHTMLViewer.DocumentText = Encoding.UTF8.GetString(record.p_FileBytes).Replace(@"\\family-doctor.local\fd$\FD.med\Images\Logo.jpg", "file:///" + Application.StartupPath + "/Images/title.jpg");
+                            ctrlHTMLViewer.Visible = true;
+                            ctrlPDFViewer.Visible = false;
+                        }
+                        else if (record.p_FileType == Cl_Record.E_RecordFileType.PDF)
+                        {
+                            var path = string.Format("{0}medicalChartTemp.pdf", Path.GetTempPath());
+                            File.WriteAllBytes(path, record.p_FileBytes);
+                            ctrlPDFViewer.src = path;
+                            ctrlHTMLViewer.Visible = false;
+                            ctrlPDFViewer.Visible = true;
+                        }
+                        else if (record.p_FileType == Cl_Record.E_RecordFileType.JFIF || record.p_FileType == Cl_Record.E_RecordFileType.JIF || record.p_FileType == Cl_Record.E_RecordFileType.JPE ||
+                            record.p_FileType == Cl_Record.E_RecordFileType.JPEG || record.p_FileType == Cl_Record.E_RecordFileType.JPG || record.p_FileType == Cl_Record.E_RecordFileType.PNG)
+                        {
+                            ctrlHTMLViewer.DocumentText = string.Format(@"<img src=""data:image/{0};base64,{1}"" />", Enum.GetName(typeof(Cl_Record.E_RecordFileType), record.p_FileType).ToLower(), Convert.ToBase64String(record.p_FileBytes));
+                            ctrlHTMLViewer.Visible = true;
+                            ctrlPDFViewer.Visible = false;
+                        }
+                    }
+                    else
+                    {
+                        ctrlHTMLViewer.Visible = false;
+                        ctrlPDFViewer.Visible = false;
+                    }
+                }
             }
         }
     }

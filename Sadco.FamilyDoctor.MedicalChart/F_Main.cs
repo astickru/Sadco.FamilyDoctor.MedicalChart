@@ -61,12 +61,12 @@ namespace Sadco.FamilyDoctor.MedicalChart
             patient.p_UserSurName = args[7];
             patient.p_UserName = args[8];
             patient.p_UserLastName = args[9];
-            patient.p_Sex = (Cl_User.E_Sex)Enum.Parse(typeof(Cl_User.E_Sex), args[10]);
-            patient.p_DateBirth = DateTime.Parse(args[11]);
-            if (args.Length == 14)
-                Cl_SessionFacade.f_GetInstance().f_Init(user, patient, DateTime.Parse(args[12]), DateTime.Parse(args[13]));
+            patient.p_Sex = (Cl_User.E_Sex)Enum.Parse(typeof(Cl_User.E_Sex), args[11]);
+            patient.p_DateBirth = DateTime.Parse(args[12]);
+            if (args.Length == 15)
+                Cl_SessionFacade.f_GetInstance().f_Init(user, patient, int.Parse(args[10]), DateTime.Parse(args[13]), DateTime.Parse(args[14]));
             else
-                Cl_SessionFacade.f_GetInstance().f_Init(user, patient);
+                Cl_SessionFacade.f_GetInstance().f_Init(user, patient, int.Parse(args[10]));
         }
 
         private void ctrlMIRecord_Click(object sender, EventArgs e)

@@ -1,4 +1,5 @@
-﻿using Sadco.FamilyDoctor.Core.Data;
+﻿using FD.dat.mon.stb.lib;
+using Sadco.FamilyDoctor.Core.Data;
 using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.Formula;
 using System;
@@ -291,6 +292,32 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 }
             }
             return null;
+        }
+
+        /// <summary>Добавление записей в БД</summary>
+        public bool f_AddRecords(IEnumerable<Cl_Record> a_Records)
+        {
+            using (var transaction = m_DataContextMegaTemplate.Database.BeginTransaction())
+            {
+                try
+                {
+                    m_DataContextMegaTemplate.p_Records.AddRange(a_Records);
+                    m_DataContextMegaTemplate.SaveChanges();
+                    foreach (var record in a_Records)
+                    {
+                        record.p_RecordID = record.p_ID;
+                    }
+                    m_DataContextMegaTemplate.SaveChanges();
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    MonitoringStub.Error("Error_Editor", "При сохранении изменений записей произошла ошибка", ex, null, null);
+                    return false;
+                }
+            }
         }
     }
 }

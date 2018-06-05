@@ -38,7 +38,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.ctrlBReportAdd = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.ctrlViewer = new System.Windows.Forms.WebBrowser();
+            this.ctrlHTMLViewer = new System.Windows.Forms.WebBrowser();
             this.ctrlPDFViewer = new AxAcroPDFLib.AxAcroPDF();
             ((System.ComponentModel.ISupportInitialize)(this.ctrl_TPartNormRangeValues)).BeginInit();
             this.panel1.SuspendLayout();
@@ -173,21 +173,21 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.ctrlPDFViewer);
-            this.splitContainer1.Panel2.Controls.Add(this.ctrlViewer);
+            this.splitContainer1.Panel2.Controls.Add(this.ctrlHTMLViewer);
             this.splitContainer1.Size = new System.Drawing.Size(789, 267);
             this.splitContainer1.SplitterDistance = 480;
             this.splitContainer1.TabIndex = 91;
             // 
             // ctrlViewer
             // 
-            this.ctrlViewer.AllowNavigation = false;
-            this.ctrlViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ctrlViewer.IsWebBrowserContextMenuEnabled = false;
-            this.ctrlViewer.Location = new System.Drawing.Point(0, 0);
-            this.ctrlViewer.MinimumSize = new System.Drawing.Size(20, 20);
-            this.ctrlViewer.Name = "ctrlViewer";
-            this.ctrlViewer.Size = new System.Drawing.Size(305, 267);
-            this.ctrlViewer.TabIndex = 0;
+            this.ctrlHTMLViewer.AllowNavigation = true;
+            this.ctrlHTMLViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ctrlHTMLViewer.IsWebBrowserContextMenuEnabled = false;
+            this.ctrlHTMLViewer.Location = new System.Drawing.Point(0, 0);
+            this.ctrlHTMLViewer.MinimumSize = new System.Drawing.Size(20, 20);
+            this.ctrlHTMLViewer.Name = "ctrlViewer";
+            this.ctrlHTMLViewer.Size = new System.Drawing.Size(305, 267);
+            this.ctrlHTMLViewer.TabIndex = 0;
             // 
             // ctrlPDFViewer
             // 
@@ -239,7 +239,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn p_CategoryTotal;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_Title;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_UserFIO;
-        private System.Windows.Forms.WebBrowser ctrlViewer;
+        private System.Windows.Forms.WebBrowser ctrlHTMLViewer;
         private AxAcroPDFLib.AxAcroPDF ctrlPDFViewer;
     }
 }

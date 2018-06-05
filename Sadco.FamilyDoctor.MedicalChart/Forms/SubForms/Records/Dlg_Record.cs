@@ -98,8 +98,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 m_Record.p_Template.f_LoadTemplatesElements();
                 ctrlUserFIO.Text = m_Record.p_UserFIO;
                 ctrlPatientFIO.Text = string.Format("{0} ({1}, {2})", m_Record.p_PatientFIO, 
-                    m_Record.p_Sex == Core.Permision.Cl_User.E_Sex.Man ? "Мужчина" : m_Record.p_Sex == Core.Permision.Cl_User.E_Sex.Female ? "Женьщина" : "Нет данных", 
-                    m_Record.p_DateBirth.ToShortDateString());
+                    m_Record.p_PatientSex == Core.Permision.Cl_User.E_Sex.Man ? "Мужчина" : m_Record.p_PatientSex == Core.Permision.Cl_User.E_Sex.Female ? "Женьщина" : "Нет данных", 
+                    m_Record.p_PatientDateBirth.ToShortDateString());
                 ctrlTitle.Text = m_Record.p_Title;
                 Text = string.Format("Запись \"{0}\" v{1}", m_Record.p_Template.p_Name, ConfigurationManager.AppSettings["Version"]);
                 if (m_Record.p_Version == 0)

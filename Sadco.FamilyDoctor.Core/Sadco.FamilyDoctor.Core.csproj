@@ -171,6 +171,7 @@
     <Compile Include="Entities\I_ELog.cs" />
     <Compile Include="Entities\I_Version.cs" />
     <Compile Include="EntityLogs\Cl_EntityValue.cs" />
+    <Compile Include="Facades\Cl_CatalogsFacade.cs" />
     <Compile Include="Facades\Cl_FormulaFacade.cs" />
     <Compile Include="Facades\Cl_RecordsFacade.cs" />
     <Compile Include="Facades\Cl_SessionFacade.cs" />
@@ -208,6 +209,26 @@
     <Compile Include="Migrations\201805211522082_appRecordHTML.cs" />
     <Compile Include="Migrations\201805211522082_appRecordHTML.Designer.cs">
       <DependentUpon>201805211522082_appRecordHTML.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806020824326_appReportType.cs" />
+    <Compile Include="Migrations\201806020824326_appReportType.Designer.cs">
+      <DependentUpon>201806020824326_appReportType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806021120167_appReportMedicCardID.cs" />
+    <Compile Include="Migrations\201806021120167_appReportMedicCardID.Designer.cs">
+      <DependentUpon>201806021120167_appReportMedicCardID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806021348582_appRecordFileType.cs" />
+    <Compile Include="Migrations\201806021348582_appRecordFileType.Designer.cs">
+      <DependentUpon>201806021348582_appRecordFileType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806040848176_appRecordTemplateID.cs" />
+    <Compile Include="Migrations\201806040848176_appRecordTemplateID.Designer.cs">
+      <DependentUpon>201806040848176_appRecordTemplateID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806040935151_appRecordDateBith.cs" />
+    <Compile Include="Migrations\201806040935151_appRecordDateBith.Designer.cs">
+      <DependentUpon>201806040935151_appRecordDateBith.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\Cl_AccessLevelAttribute.cs" />
@@ -296,6 +317,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805211522082_appRecordHTML.resx">
       <DependentUpon>201805211522082_appRecordHTML.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806020824326_appReportType.resx">
+      <DependentUpon>201806020824326_appReportType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806021120167_appReportMedicCardID.resx">
+      <DependentUpon>201806021120167_appReportMedicCardID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806021348582_appRecordFileType.resx">
+      <DependentUpon>201806021348582_appRecordFileType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806040848176_appRecordTemplateID.resx">
+      <DependentUpon>201806040848176_appRecordTemplateID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806040935151_appRecordDateBith.resx">
+      <DependentUpon>201806040935151_appRecordDateBith.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
