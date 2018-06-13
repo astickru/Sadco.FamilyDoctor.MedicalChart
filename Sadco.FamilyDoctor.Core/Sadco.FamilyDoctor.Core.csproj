@@ -151,6 +151,7 @@
     </Compile>
     <Compile Include="Controls\TreeView\I_TreeNode.cs" />
     <Compile Include="Entities\Cl_Category.cs" />
+    <Compile Include="Entities\Cl_Rating.cs" />
     <Compile Include="Entities\Cl_RecordParam.cs" />
     <Compile Include="Entities\Cl_RecordValue.cs" />
     <Compile Include="Entities\Cl_Record.cs" />
@@ -229,6 +230,10 @@
     <Compile Include="Migrations\201806040935151_appRecordDateBith.cs" />
     <Compile Include="Migrations\201806040935151_appRecordDateBith.Designer.cs">
       <DependentUpon>201806040935151_appRecordDateBith.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806121822108_appRatings.cs" />
+    <Compile Include="Migrations\201806121822108_appRatings.Designer.cs">
+      <DependentUpon>201806121822108_appRatings.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\Cl_AccessLevelAttribute.cs" />
@@ -332,6 +337,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806040935151_appRecordDateBith.resx">
       <DependentUpon>201806040935151_appRecordDateBith.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806121822108_appRatings.resx">
+      <DependentUpon>201806121822108_appRatings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

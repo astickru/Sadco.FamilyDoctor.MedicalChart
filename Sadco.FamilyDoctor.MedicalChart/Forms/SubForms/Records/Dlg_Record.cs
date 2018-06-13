@@ -26,6 +26,13 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     (System.Drawing.FontStyle)int.Parse(ConfigurationManager.AppSettings["FontStyle"]),
                     System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             InitializeComponent();
+
+            this.Load += Dlg_Record_Load;
+        }
+
+        private void Dlg_Record_Load(object sender, EventArgs e)
+        {
+            InitRating();
         }
 
         private Cl_Record m_Record = null;
@@ -97,8 +104,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 m_Record.p_Template.f_LoadTemplatesElements();
                 ctrlUserFIO.Text = m_Record.p_UserFIO;
-                ctrlPatientFIO.Text = string.Format("{0} ({1}, {2})", m_Record.p_PatientFIO, 
-                    m_Record.p_PatientSex == Core.Permision.Cl_User.E_Sex.Man ? "Мужчина" : m_Record.p_PatientSex == Core.Permision.Cl_User.E_Sex.Female ? "Женьщина" : "Нет данных", 
+                ctrlPatientFIO.Text = string.Format("{0} ({1}, {2})", m_Record.p_PatientFIO,
+                    m_Record.p_PatientSex == Core.Permision.Cl_User.E_Sex.Man ? "Мужчина" : m_Record.p_PatientSex == Core.Permision.Cl_User.E_Sex.Female ? "Женьщина" : "Нет данных",
                     m_Record.p_PatientDateBirth.ToShortDateString());
                 ctrlTitle.Text = m_Record.p_Title;
                 Text = string.Format("Запись \"{0}\" v{1}", m_Record.p_Template.p_Name, ConfigurationManager.AppSettings["Version"]);
@@ -172,5 +179,35 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             viewer.LoadHistory(p_Record.p_RecordID, E_EntityTypes.Records);
             viewer.ShowDialog(this);
         }
+
+        #region Рейтинг
+        private void ctrlBRating_Click(object sender, EventArgs e)
+        {
+            Dlg_RatingViewer viewer = new Dlg_RatingViewer();
+            viewer.LoadRating(p_Record.p_RecordID);
+            viewer.ShowDialog(this);
+        }
+
+        private void InitRating()
+        {
+            double rate = 0;
+            int total = 0;
+            if (p_Record == null) return;
+
+            ctrlBRating.Visible = Cl_SessionFacade.f_GetInstance().p_User.p_Permission.p_IsEditAllRatings;
+
+            IQueryable<Cl_Rating> ratings = Cl_App.m_DataContext.p_Ratings.Where(l => l.p_RecordID == p_Record.p_RecordID);
+            foreach (Cl_Rating item in ratings)
+            {
+                rate = rate + item.p_Value;
+                total++;
+            }
+
+            if (rate > 0)
+            {
+                this.Text += "   Оценка: " + Math.Round(rate / total, 1).ToString();
+            }
+        }
+        #endregion
     }
 }
