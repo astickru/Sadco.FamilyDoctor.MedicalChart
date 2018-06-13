@@ -171,7 +171,7 @@ namespace OutlookStyleControls
                     return;
                 }
             }
-            base.OnCellClick(e);
+            base.OnCellDoubleClick(e);
         }
 
         // the OnCellMouseDown is overriden so the control can check to see if the

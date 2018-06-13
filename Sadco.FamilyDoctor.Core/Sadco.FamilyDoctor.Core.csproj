@@ -244,6 +244,10 @@
     <Compile Include="Migrations\201806121822108_appRatings.Designer.cs">
       <DependentUpon>201806121822108_appRatings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806130958158_appRecordPatientUID.cs" />
+    <Compile Include="Migrations\201806130958158_appRecordPatientUID.Designer.cs">
+      <DependentUpon>201806130958158_appRecordPatientUID.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\Cl_AccessLevelAttribute.cs" />
     <Compile Include="Permision\Cl_User.cs" />
@@ -349,6 +353,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806121822108_appRatings.resx">
       <DependentUpon>201806121822108_appRatings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806130958158_appRecordPatientUID.resx">
+      <DependentUpon>201806130958158_appRecordPatientUID.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

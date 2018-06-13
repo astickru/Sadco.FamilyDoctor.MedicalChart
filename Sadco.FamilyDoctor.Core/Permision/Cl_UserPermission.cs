@@ -37,7 +37,10 @@ namespace Sadco.FamilyDoctor.Core.Permision
 		
         /// <summary>Доступ на чтение, только выбранных записей</summary>
 		public bool p_IsReadSelectedRecords { get { return (p_AccessLevel & E_AccessLevels.ReadSelectedRecords) == E_AccessLevels.ReadSelectedRecords; } }
-		
+
+        /// <summary>Доступ архивирования</summary>
+        public bool p_IsEditArchive { get { return (p_AccessLevel & E_AccessLevels.EditArchive) == E_AccessLevels.EditArchive; } }
+
         /// <summary>Доступ к системе оценок</summary>
 		public bool p_IsEditAllRatings { get { return (p_AccessLevel & E_AccessLevels.EditAllRatings) == E_AccessLevels.EditAllRatings; } }
 		

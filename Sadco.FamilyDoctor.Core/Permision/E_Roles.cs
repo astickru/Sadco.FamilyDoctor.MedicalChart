@@ -41,7 +41,7 @@ namespace Sadco.FamilyDoctor.Core.Permision
 		/// Архивариус
 		/// </summary>
 		[Description("Архивариус")]
-		[Cl_AccessLevel(E_AccessLevels.EditAllRecords)]
+		[Cl_AccessLevel(E_AccessLevels.EditAllRecords | E_AccessLevels.EditArchive)]
 		Archivarius,
 		/// <summary>
 		/// Проверяющий С/К

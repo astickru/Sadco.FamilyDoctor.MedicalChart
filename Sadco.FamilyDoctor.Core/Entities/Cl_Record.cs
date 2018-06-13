@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
 namespace Sadco.FamilyDoctor.Core.Entities
 {
@@ -374,6 +375,35 @@ namespace Sadco.FamilyDoctor.Core.Entities
             html += "</div>";
             html += "</body></html>";
             return html;
+        }
+
+        /// <summary>Получение конечного текста записи</summary>
+        public string f_GetDocumentText(string a_AppStartupPath)
+        {
+            if (p_HTMLUser != null)
+            {
+                return p_HTMLUser.Replace("src=\"", "src=\"file:///" + a_AppStartupPath + "/");
+            }
+            else
+            {
+                if (p_Type == Cl_Record.E_RecordType.FinishedFile)
+                {
+                    if (p_FileType == Cl_Record.E_RecordFileType.HTML)
+                    {
+                        return Encoding.UTF8.GetString(p_FileBytes).Replace(@"\\family-doctor.local\fd$\FD.med\Images\Logo.jpg", "file:///" + a_AppStartupPath + "/Images/title.jpg");
+                    }
+                    else if (p_FileType == Cl_Record.E_RecordFileType.JFIF || p_FileType == Cl_Record.E_RecordFileType.JIF || p_FileType == Cl_Record.E_RecordFileType.JPE ||
+                        p_FileType == Cl_Record.E_RecordFileType.JPEG || p_FileType == Cl_Record.E_RecordFileType.JPG || p_FileType == Cl_Record.E_RecordFileType.PNG)
+                    {
+                        return string.Format(@"<img src=""data:image/{0};base64,{1}"" />", Enum.GetName(typeof(Cl_Record.E_RecordFileType), p_FileType).ToLower(), Convert.ToBase64String(p_FileBytes));
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            return null;
         }
     }
 }

@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -26,7 +27,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     (System.Drawing.FontStyle)int.Parse(ConfigurationManager.AppSettings["FontStyle"]),
                     System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             InitializeComponent();
-
+            
             this.Load += Dlg_Record_Load;
         }
 
@@ -145,6 +146,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             record.p_ClinikName = Cl_SessionFacade.f_GetInstance().p_User.p_ClinikName;
                             Cl_App.m_DataContext.p_Records.Add(record);
                             Cl_App.m_DataContext.SaveChanges();
+                            record.p_FileType = Cl_Record.E_RecordFileType.HTML;
                             record.p_HTMLUser = record.f_GetHTMLUser();
                             record.p_HTMLPatient = record.f_GetHTMLPatient();
                             if (record.p_Version == 1)
@@ -209,5 +211,10 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
         }
         #endregion
+
+        private void ctrlBArhive_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -33,24 +33,29 @@ namespace Sadco.FamilyDoctor.Core.Permision
 		/// </summary>
 		ReadSelectedRecords = 0x10,
 
-		/// <summary>
-		/// Доступ к системе оценок (Основное окно и доступно всем)
+        /// <summary>
+		/// Доступ архивирования
 		/// </summary>
-		EditAllRatings = 0x20,
+        EditArchive = 0x20,
+
+        /// <summary>
+        /// Доступ к системе оценок (Основное окно и доступно всем)
+        /// </summary>
+        EditAllRatings = 0x40,
 
 		/// <summary>
 		/// Доступ к редактору шаблона (графическая часть) (Окно шаблонов)
 		/// </summary>
-		EditTemplates = 0x40,
+		EditTemplates = 0x80,
 
 		/// <summary>
 		/// Доступ к мегашаблону (Окно элементов)
 		/// </summary>
-		EditMegaTemplates = 0x80,
+		EditMegaTemplates = 0x100,
 
         /// <summary>
 		/// Доступ к удаленным элементам
 		/// </summary>
-		IsShowDeleted = 0x100,
+		IsShowDeleted = 0x200,
     }
 }

@@ -23,6 +23,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             Tag = string.Format("Записи клиента v{0}", ConfigurationManager.AppSettings["Version"]);
             InitializeComponent();
             ctrlLPatientName.Text = Cl_SessionFacade.f_GetInstance().p_Patient.p_FIO;
+            m_WebBrowserPrint.DocumentCompleted += M_WebBrowserPrint_DocumentCompleted;
             f_UpdateRecords();
         }
 
@@ -30,6 +31,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         public bool p_IsShowDeleted { get; set; }
 
         private Cl_Record[] m_Records = null;
+        private Cl_Record m_SelectedRecord = null;
+        private WebBrowser m_WebBrowserPrint = new WebBrowser();
 
         private void f_UpdateRecords()
         {
@@ -39,23 +42,23 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     .Select(grp => grp
                         .OrderByDescending(v => v.p_Version).FirstOrDefault())
                         .Include(r => r.p_CategoryTotal).Include(r => r.p_CategoryClinik).Include(r => r.p_Values).Include(r => r.p_Template).Include(r => r.p_Values.Select(v => v.p_Params)).ToArray();
-            
-            ctrl_TPartNormRangeValues.BindData(null, null);
-            ctrl_TPartNormRangeValues.Columns.AddRange(p_MedicalCardID, p_ClinikName, p_DateForming, p_CategoryTotal, p_Title, p_UserFIO);
+
+            ctrl_TRecords.BindData(null, null);
+            ctrl_TRecords.Columns.AddRange(p_MedicalCardID, p_ClinikName, p_DateForming, p_CategoryTotal, p_Title, p_UserFIO);
             foreach (var record in m_Records)
             {
                 OutlookGridRow row = new OutlookGridRow();
-                row.CreateCells(ctrl_TPartNormRangeValues,
+                row.CreateCells(ctrl_TRecords,
                     record.p_MedicalCardID,
                     record.p_ClinikName,
                     record.p_DateForming,
                     record.p_CategoryTotal != null ? record.p_CategoryTotal.p_Name : "",
                     record.p_Title,
                     record.p_UserFIO);
-                ctrl_TPartNormRangeValues.Rows.Add(row);
+                ctrl_TRecords.Rows.Add(row);
             }
-            ctrl_TPartNormRangeValues.GroupTemplate.Column = ctrl_TPartNormRangeValues.Columns[0];
-            ctrl_TPartNormRangeValues.Sort(ctrl_TPartNormRangeValues.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+            ctrl_TRecords.GroupTemplate.Column = ctrl_TRecords.Columns[0];
+            ctrl_TRecords.Sort(ctrl_TRecords.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
         }
 
         private void ctrlBReportAdd_Click(object sender, System.EventArgs e)
@@ -79,15 +82,22 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
         }
 
-        private void ctrl_TPartNormRangeValues_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void f_Open(Cl_Record a_Record)
+        {
+            if (a_Record != null && !a_Record.p_IsAutimatic)
+            {
+                var dlgRecord = new Dlg_Record();
+                dlgRecord.e_Save += DlgRecord_e_Save;
+                dlgRecord.p_Record = a_Record;
+                dlgRecord.ShowDialog(this);
+            }
+        }
+
+        private void ctrl_TRecords_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (m_Records.Length > e.RowIndex)
             {
-                var record = m_Records[e.RowIndex];
-                var dlgRecord = new Dlg_Record();
-                dlgRecord.e_Save += DlgRecord_e_Save;
-                dlgRecord.p_Record = record;
-                dlgRecord.ShowDialog(this);
+                f_Open(m_Records[e.RowIndex]);
             }
         }
 
@@ -96,14 +106,17 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             f_UpdateRecords();
         }
 
-        private void ctrl_TPartNormRangeValues_CellClick(object sender, DataGridViewCellEventArgs e)
+
+        private void ctrl_TRecords_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && m_Records.Length > e.RowIndex)
             {
-                var record = m_Records[e.RowIndex];
+                var record = m_SelectedRecord = m_Records[e.RowIndex];
+                ctrlCMViewer.Enabled = true;
+                ctrlMIArchive.Visible = !record.p_IsArchive && Cl_SessionFacade.f_GetInstance().p_User.p_Permission.p_IsEditArchive;
                 if (record.p_HTMLUser != null)
                 {
-                    ctrlHTMLViewer.DocumentText = record.p_HTMLUser.Replace("src=\"", "src=\"file:///" + Application.StartupPath + "/");
+                    ctrlHTMLViewer.DocumentText = record.f_GetDocumentText(Application.StartupPath);
                     ctrlHTMLViewer.Visible = true;
                     ctrlPDFViewer.Visible = false;
                 }
@@ -113,7 +126,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     {
                         if (record.p_FileType == Cl_Record.E_RecordFileType.HTML)
                         {
-                            ctrlHTMLViewer.DocumentText = Encoding.UTF8.GetString(record.p_FileBytes).Replace(@"\\family-doctor.local\fd$\FD.med\Images\Logo.jpg", "file:///" + Application.StartupPath + "/Images/title.jpg");
+                            ctrlHTMLViewer.DocumentText = record.f_GetDocumentText(Application.StartupPath);
                             ctrlHTMLViewer.Visible = true;
                             ctrlPDFViewer.Visible = false;
                         }
@@ -128,7 +141,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         else if (record.p_FileType == Cl_Record.E_RecordFileType.JFIF || record.p_FileType == Cl_Record.E_RecordFileType.JIF || record.p_FileType == Cl_Record.E_RecordFileType.JPE ||
                             record.p_FileType == Cl_Record.E_RecordFileType.JPEG || record.p_FileType == Cl_Record.E_RecordFileType.JPG || record.p_FileType == Cl_Record.E_RecordFileType.PNG)
                         {
-                            ctrlHTMLViewer.DocumentText = string.Format(@"<img src=""data:image/{0};base64,{1}"" />", Enum.GetName(typeof(Cl_Record.E_RecordFileType), record.p_FileType).ToLower(), Convert.ToBase64String(record.p_FileBytes));
+                            ctrlHTMLViewer.DocumentText = record.f_GetDocumentText(Application.StartupPath);
                             ctrlHTMLViewer.Visible = true;
                             ctrlPDFViewer.Visible = false;
                         }
@@ -138,6 +151,54 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         ctrlHTMLViewer.Visible = false;
                         ctrlPDFViewer.Visible = false;
                     }
+                }
+            }
+            else
+            {
+                m_SelectedRecord = null;
+                ctrlCMViewer.Enabled = false;
+                ctrlMIArchive.Visible = false;
+            }
+        }
+
+        private void ctrlMIOpen_Click(object sender, EventArgs e)
+        {
+            f_Open(m_SelectedRecord);
+        }
+
+        private void ctrlMIArhive_Click(object sender, EventArgs e)
+        {
+            if (m_SelectedRecord != null)
+            {
+                if (!m_SelectedRecord.p_IsArchive)
+                {
+                    m_SelectedRecord.p_IsArchive = true;
+                    Cl_App.m_DataContext.SaveChanges();
+                }
+                ctrlMIArchive.Visible = false;
+            }
+        }
+
+        private void ctrlMIPrint_Click(object sender, EventArgs e)
+        {
+            if (m_SelectedRecord != null)
+            {
+                if (m_SelectedRecord.p_FileType == Cl_Record.E_RecordFileType.HTML)
+                {
+                    m_WebBrowserPrint.DocumentText = m_SelectedRecord.f_GetDocumentText(Application.StartupPath);
+                }
+            }
+        }
+
+        private void M_WebBrowserPrint_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            if (m_SelectedRecord != null)
+            {
+                m_WebBrowserPrint.Print();
+                if (!m_SelectedRecord.p_IsPrint)
+                {
+                    m_SelectedRecord.p_IsPrint = true;
+                    Cl_App.m_DataContext.SaveChanges();
                 }
             }
         }
