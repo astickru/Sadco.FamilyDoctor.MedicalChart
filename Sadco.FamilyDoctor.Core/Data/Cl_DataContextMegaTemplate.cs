@@ -18,8 +18,9 @@ namespace Sadco.FamilyDoctor.Core.Data
 		}
 
 		public DbSet<Cl_Log> p_Logs { get; set; }
+        public DbSet<Cl_Rating> p_Ratings { get; set; }
 
-		public DbSet<Cl_Group> p_Groups { get; set; }
+        public DbSet<Cl_Group> p_Groups { get; set; }
 		public DbSet<Cl_Template> p_Templates { get; set; }
 		public DbSet<Cl_TemplateElement> p_TemplatesElements { get; set; }
 

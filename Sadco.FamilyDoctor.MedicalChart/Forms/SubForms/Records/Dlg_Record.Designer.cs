@@ -35,6 +35,8 @@
             this.ctrl_MITemplateDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlPContent = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.ctrlTitle = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.ctrl_Version = new System.Windows.Forms.Label();
             this.ctrlPatientFIO = new System.Windows.Forms.Label();
@@ -42,10 +44,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.ctrlBRating = new System.Windows.Forms.Button();
             this.ctrlBHistory = new System.Windows.Forms.Button();
             this.ctrlBSave = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.ctrlTitle = new System.Windows.Forms.TextBox();
             this.ctrl_CMTemplate.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -131,6 +132,22 @@
             this.panel1.Size = new System.Drawing.Size(1199, 74);
             this.panel1.TabIndex = 2;
             // 
+            // ctrlTitle
+            // 
+            this.ctrlTitle.Location = new System.Drawing.Point(121, 48);
+            this.ctrlTitle.Name = "ctrlTitle";
+            this.ctrlTitle.Size = new System.Drawing.Size(848, 21);
+            this.ctrlTitle.TabIndex = 68;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 51);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(81, 13);
+            this.label5.TabIndex = 66;
+            this.label5.Text = "Заголовок:";
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -194,6 +211,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.ctrlBRating);
             this.panel2.Controls.Add(this.ctrlBHistory);
             this.panel2.Controls.Add(this.ctrlBSave);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -201,6 +219,17 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1199, 25);
             this.panel2.TabIndex = 0;
+            // 
+            // ctrlBRating
+            // 
+            this.ctrlBRating.Dock = System.Windows.Forms.DockStyle.Left;
+            this.ctrlBRating.Location = new System.Drawing.Point(0, 0);
+            this.ctrlBRating.Name = "ctrlBRating";
+            this.ctrlBRating.Size = new System.Drawing.Size(99, 25);
+            this.ctrlBRating.TabIndex = 2;
+            this.ctrlBRating.Text = "оценка";
+            this.ctrlBRating.UseVisualStyleBackColor = true;
+            this.ctrlBRating.Click += new System.EventHandler(this.ctrlBRating_Click);
             // 
             // ctrlBHistory
             // 
@@ -223,22 +252,6 @@
             this.ctrlBSave.Text = "сохранить";
             this.ctrlBSave.UseVisualStyleBackColor = true;
             this.ctrlBSave.Click += new System.EventHandler(this.ctrlBSave_Click);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 51);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(81, 13);
-            this.label5.TabIndex = 66;
-            this.label5.Text = "Заголовок:";
-            // 
-            // ctrlTitle
-            // 
-            this.ctrlTitle.Location = new System.Drawing.Point(121, 48);
-            this.ctrlTitle.Name = "ctrlTitle";
-            this.ctrlTitle.Size = new System.Drawing.Size(848, 21);
-            this.ctrlTitle.TabIndex = 68;
             // 
             // Dlg_Record
             // 
@@ -284,5 +297,6 @@
         private System.Windows.Forms.Button ctrlBHistory;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox ctrlTitle;
+        private System.Windows.Forms.Button ctrlBRating;
     }
 }
