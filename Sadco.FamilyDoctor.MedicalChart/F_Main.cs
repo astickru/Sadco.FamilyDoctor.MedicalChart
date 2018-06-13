@@ -58,15 +58,17 @@ namespace Sadco.FamilyDoctor.MedicalChart
             user.p_Permission = new Cl_UserPermission(args[5]);
             Cl_User patient = new Cl_User();
             patient.p_UserID = int.Parse(args[6]);
-            patient.p_UserSurName = args[7];
-            patient.p_UserName = args[8];
-            patient.p_UserLastName = args[9];
-            patient.p_Sex = (Cl_User.E_Sex)Enum.Parse(typeof(Cl_User.E_Sex), args[11]);
-            patient.p_DateBirth = DateTime.Parse(args[12]);
-            if (args.Length == 15)
-                Cl_SessionFacade.f_GetInstance().f_Init(user, patient, int.Parse(args[10]), DateTime.Parse(args[13]), DateTime.Parse(args[14]));
+            if (!string.IsNullOrWhiteSpace(args[7]))
+                patient.p_UserUID = Guid.Parse(args[7]);
+            patient.p_UserSurName = args[8];
+            patient.p_UserName = args[9];
+            patient.p_UserLastName = args[10];
+            patient.p_Sex = (Cl_User.E_Sex)Enum.Parse(typeof(Cl_User.E_Sex), args[12]);
+            patient.p_DateBirth = DateTime.Parse(args[13]);
+            if (args.Length == 16)
+                Cl_SessionFacade.f_GetInstance().f_Init(user, patient, int.Parse(args[11]), DateTime.Parse(args[14]), DateTime.Parse(args[15]));
             else
-                Cl_SessionFacade.f_GetInstance().f_Init(user, patient, int.Parse(args[10]));
+                Cl_SessionFacade.f_GetInstance().f_Init(user, patient, int.Parse(args[11]));
         }
 
         private void ctrlMIRecord_Click(object sender, EventArgs e)

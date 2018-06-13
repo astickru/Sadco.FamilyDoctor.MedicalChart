@@ -10,20 +10,20 @@ namespace Sadco.FamilyDoctor.Core.Migrations
             AddColumn("dbo.T_RECORDS", "F_CLINIKNAME", c => c.String());
             AddColumn("dbo.T_RECORDS", "F_TITLE", c => c.String());
             AddColumn("dbo.T_RECORDS", "F_CATEGORYTOTAL_ID", c => c.Int());
-            AddColumn("dbo.T_RECORDS", "F_CATEGORYCLINIK_ID", c => c.Int());
+            AddColumn("dbo.T_RECORDS", "F_CATEGORYKLINIK_ID", c => c.Int());
             CreateIndex("dbo.T_RECORDS", "F_CATEGORYTOTAL_ID");
-            CreateIndex("dbo.T_RECORDS", "F_CATEGORYCLINIK_ID");
-            AddForeignKey("dbo.T_RECORDS", "F_CATEGORYCLINIK_ID", "dbo.T_CATEGORIES", "F_ID");
+            CreateIndex("dbo.T_RECORDS", "F_CATEGORYKLINIK_ID");
+            AddForeignKey("dbo.T_RECORDS", "F_CATEGORYKLINIK_ID", "dbo.T_CATEGORIES", "F_ID");
             AddForeignKey("dbo.T_RECORDS", "F_CATEGORYTOTAL_ID", "dbo.T_CATEGORIES", "F_ID");
         }
         
         public override void Down()
         {
             DropForeignKey("dbo.T_RECORDS", "F_CATEGORYTOTAL_ID", "dbo.T_CATEGORIES");
-            DropForeignKey("dbo.T_RECORDS", "F_CATEGORYCLINIK_ID", "dbo.T_CATEGORIES");
-            DropIndex("dbo.T_RECORDS", new[] { "F_CATEGORYCLINIK_ID" });
+            DropForeignKey("dbo.T_RECORDS", "F_CATEGORYKLINIK_ID", "dbo.T_CATEGORIES");
+            DropIndex("dbo.T_RECORDS", new[] { "F_CATEGORYKLINIK_ID" });
             DropIndex("dbo.T_RECORDS", new[] { "F_CATEGORYTOTAL_ID" });
-            DropColumn("dbo.T_RECORDS", "F_CATEGORYCLINIK_ID");
+            DropColumn("dbo.T_RECORDS", "F_CATEGORYKLINIK_ID");
             DropColumn("dbo.T_RECORDS", "F_CATEGORYTOTAL_ID");
             DropColumn("dbo.T_RECORDS", "F_TITLE");
             DropColumn("dbo.T_RECORDS", "F_CLINIKNAME");

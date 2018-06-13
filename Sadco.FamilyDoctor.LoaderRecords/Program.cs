@@ -154,13 +154,15 @@ namespace Sadco.FamilyDoctor.LoaderRecords
                                     {
                                         var patientDateBirth = dtVal;
                                         bool validID = false; //ID пациента
+                                        int patientID = 0;
+                                        Guid patientUID = Guid.Empty;
                                         if (vals.Length == 6)
                                         {
-                                            validID = int.TryParse(vals[5].Substring(1), out iVal);
+                                            validID = int.TryParse(vals[5].Substring(1), out patientID);
                                         }
                                         else if (vals.Length == 7)
                                         {
-                                            validID = Guid.TryParse(vals[6], out gVal);
+                                            validID = Guid.TryParse(vals[6], out patientUID);
                                         }
                                         if (validID)
                                         {
@@ -188,11 +190,14 @@ namespace Sadco.FamilyDoctor.LoaderRecords
                                                             if (DateTime.TryParse(valsRecord.Substring(0, 8), out dtVal))
                                                             {
                                                                 var record = new Cl_Record();
-                                                                record.p_Version = 0;
+                                                                record.p_Version = 1;
                                                                 record.p_Type = Cl_Record.E_RecordType.FinishedFile;
                                                                 record.p_IsAutimatic = true;
                                                                 record.p_DateCreate = record.p_DateForming = record.p_DateLastChange = dtVal;
                                                                 record.p_MedicalCardID = medicalCardID;
+                                                                record.p_PatientID = patientID;
+                                                                if (patientUID != Guid.Empty)
+                                                                    record.p_PatientUID = patientUID;
                                                                 record.p_PatientSurName = patientSurName;
                                                                 record.p_PatientName = patientName;
                                                                 record.p_PatientLastName = patientLastName;

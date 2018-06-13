@@ -26,21 +26,21 @@
 		/// </summary>
 		private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UC_Records));
-            this.ctrl_TPartNormRangeValues = new System.Windows.Forms.DataGridView();
-            this.p_ClinikName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.p_DateForming = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.p_CategoryTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.p_Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.p_UserFIO = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.ctrlLPatientName = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.ctrlBReportAdd = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.ctrlHTMLViewer = new System.Windows.Forms.WebBrowser();
             this.ctrlPDFViewer = new AxAcroPDFLib.AxAcroPDF();
-            ((System.ComponentModel.ISupportInitialize)(this.ctrl_TPartNormRangeValues)).BeginInit();
+            this.ctrlHTMLViewer = new System.Windows.Forms.WebBrowser();
+            this.p_MedicalCardID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p_UserFIO = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p_Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p_CategoryTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p_DateForming = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p_ClinikName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ctrl_TPartNormRangeValues = new OutlookStyleControls.OutlookGrid();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -48,68 +48,8 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ctrlPDFViewer)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ctrl_TPartNormRangeValues)).BeginInit();
             this.SuspendLayout();
-            // 
-            // ctrl_TPartNormRangeValues
-            // 
-            this.ctrl_TPartNormRangeValues.AllowUserToAddRows = false;
-            this.ctrl_TPartNormRangeValues.AllowUserToResizeRows = false;
-            this.ctrl_TPartNormRangeValues.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.ctrl_TPartNormRangeValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ctrl_TPartNormRangeValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.p_ClinikName,
-            this.p_DateForming,
-            this.p_CategoryTotal,
-            this.p_Title,
-            this.p_UserFIO});
-            this.ctrl_TPartNormRangeValues.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ctrl_TPartNormRangeValues.Location = new System.Drawing.Point(0, 0);
-            this.ctrl_TPartNormRangeValues.Name = "ctrl_TPartNormRangeValues";
-            this.ctrl_TPartNormRangeValues.ReadOnly = true;
-            this.ctrl_TPartNormRangeValues.RowHeadersVisible = false;
-            this.ctrl_TPartNormRangeValues.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ctrl_TPartNormRangeValues.ShowCellErrors = false;
-            this.ctrl_TPartNormRangeValues.ShowCellToolTips = false;
-            this.ctrl_TPartNormRangeValues.ShowEditingIcon = false;
-            this.ctrl_TPartNormRangeValues.ShowRowErrors = false;
-            this.ctrl_TPartNormRangeValues.Size = new System.Drawing.Size(480, 267);
-            this.ctrl_TPartNormRangeValues.TabIndex = 88;
-            this.ctrl_TPartNormRangeValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ctrl_TPartNormRangeValues_CellClick);
-            this.ctrl_TPartNormRangeValues.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ctrl_TPartNormRangeValues_CellDoubleClick);
-            // 
-            // p_ClinikName
-            // 
-            this.p_ClinikName.HeaderText = "Клиника";
-            this.p_ClinikName.Name = "p_ClinikName";
-            this.p_ClinikName.ReadOnly = true;
-            // 
-            // p_DateForming
-            // 
-            this.p_DateForming.HeaderText = "Дата";
-            this.p_DateForming.Name = "p_DateForming";
-            this.p_DateForming.ReadOnly = true;
-            this.p_DateForming.Width = 150;
-            // 
-            // p_CategoryTotal
-            // 
-            this.p_CategoryTotal.HeaderText = "Общая категория";
-            this.p_CategoryTotal.Name = "p_CategoryTotal";
-            this.p_CategoryTotal.ReadOnly = true;
-            this.p_CategoryTotal.Width = 170;
-            // 
-            // p_Title
-            // 
-            this.p_Title.HeaderText = "Запись";
-            this.p_Title.Name = "p_Title";
-            this.p_Title.ReadOnly = true;
-            this.p_Title.Width = 250;
-            // 
-            // p_UserFIO
-            // 
-            this.p_UserFIO.HeaderText = "Специалист";
-            this.p_UserFIO.Name = "p_UserFIO";
-            this.p_UserFIO.ReadOnly = true;
-            this.p_UserFIO.Width = 150;
             // 
             // panel1
             // 
@@ -127,14 +67,14 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(1, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(122, 13);
+            this.label1.Size = new System.Drawing.Size(145, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Записи пациента:";
+            this.label1.Text = "Медкарты пациента:";
             // 
             // ctrlLPatientName
             // 
             this.ctrlLPatientName.AutoSize = true;
-            this.ctrlLPatientName.Location = new System.Drawing.Point(129, 13);
+            this.ctrlLPatientName.Location = new System.Drawing.Point(152, 13);
             this.ctrlLPatientName.Name = "ctrlLPatientName";
             this.ctrlLPatientName.Size = new System.Drawing.Size(94, 13);
             this.ctrlLPatientName.TabIndex = 0;
@@ -178,17 +118,6 @@
             this.splitContainer1.SplitterDistance = 480;
             this.splitContainer1.TabIndex = 91;
             // 
-            // ctrlViewer
-            // 
-            this.ctrlHTMLViewer.AllowNavigation = true;
-            this.ctrlHTMLViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ctrlHTMLViewer.IsWebBrowserContextMenuEnabled = false;
-            this.ctrlHTMLViewer.Location = new System.Drawing.Point(0, 0);
-            this.ctrlHTMLViewer.MinimumSize = new System.Drawing.Size(20, 20);
-            this.ctrlHTMLViewer.Name = "ctrlViewer";
-            this.ctrlHTMLViewer.Size = new System.Drawing.Size(305, 267);
-            this.ctrlHTMLViewer.TabIndex = 0;
-            // 
             // ctrlPDFViewer
             // 
             this.ctrlPDFViewer.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -198,6 +127,86 @@
             this.ctrlPDFViewer.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("ctrlPDFViewer.OcxState")));
             this.ctrlPDFViewer.Size = new System.Drawing.Size(305, 267);
             this.ctrlPDFViewer.TabIndex = 1;
+            // 
+            // ctrlHTMLViewer
+            // 
+            this.ctrlHTMLViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ctrlHTMLViewer.IsWebBrowserContextMenuEnabled = false;
+            this.ctrlHTMLViewer.Location = new System.Drawing.Point(0, 0);
+            this.ctrlHTMLViewer.MinimumSize = new System.Drawing.Size(20, 20);
+            this.ctrlHTMLViewer.Name = "ctrlHTMLViewer";
+            this.ctrlHTMLViewer.Size = new System.Drawing.Size(305, 267);
+            this.ctrlHTMLViewer.TabIndex = 0;
+            // 
+            // p_MedicalCardID
+            // 
+            this.p_MedicalCardID.HeaderText = "Медкарта";
+            this.p_MedicalCardID.Name = "p_MedicalCardID";
+            this.p_MedicalCardID.ReadOnly = true;
+            this.p_MedicalCardID.Visible = true;
+            this.p_MedicalCardID.Width = 150;
+            // 
+            // p_UserFIO
+            // 
+            this.p_UserFIO.HeaderText = "Специалист";
+            this.p_UserFIO.Name = "p_UserFIO";
+            this.p_UserFIO.ReadOnly = true;
+            this.p_UserFIO.Width = 150;
+            // 
+            // p_Title
+            // 
+            this.p_Title.HeaderText = "Запись";
+            this.p_Title.Name = "p_Title";
+            this.p_Title.ReadOnly = true;
+            this.p_Title.Width = 250;
+            // 
+            // p_CategoryTotal
+            // 
+            this.p_CategoryTotal.HeaderText = "Общая категория";
+            this.p_CategoryTotal.Name = "p_CategoryTotal";
+            this.p_CategoryTotal.ReadOnly = true;
+            this.p_CategoryTotal.Width = 170;
+            // 
+            // p_DateForming
+            // 
+            this.p_DateForming.HeaderText = "Дата";
+            this.p_DateForming.Name = "p_DateForming";
+            this.p_DateForming.ReadOnly = true;
+            this.p_DateForming.Width = 150;
+            // 
+            // p_ClinikName
+            // 
+            this.p_ClinikName.HeaderText = "Клиника";
+            this.p_ClinikName.Name = "p_ClinikName";
+            this.p_ClinikName.ReadOnly = true;
+            // 
+            // ctrl_TPartNormRangeValues
+            // 
+            this.ctrl_TPartNormRangeValues.AllowUserToAddRows = false;
+            this.ctrl_TPartNormRangeValues.AllowUserToResizeRows = false;
+            this.ctrl_TPartNormRangeValues.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.ctrl_TPartNormRangeValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ctrl_TPartNormRangeValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.p_MedicalCardID,
+            this.p_ClinikName,
+            this.p_DateForming,
+            this.p_CategoryTotal,
+            this.p_Title,
+            this.p_UserFIO});
+            this.ctrl_TPartNormRangeValues.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ctrl_TPartNormRangeValues.Location = new System.Drawing.Point(0, 0);
+            this.ctrl_TPartNormRangeValues.Name = "ctrl_TPartNormRangeValues";
+            this.ctrl_TPartNormRangeValues.ReadOnly = true;
+            this.ctrl_TPartNormRangeValues.RowHeadersVisible = false;
+            this.ctrl_TPartNormRangeValues.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.ctrl_TPartNormRangeValues.ShowCellErrors = false;
+            this.ctrl_TPartNormRangeValues.ShowCellToolTips = false;
+            this.ctrl_TPartNormRangeValues.ShowEditingIcon = false;
+            this.ctrl_TPartNormRangeValues.ShowRowErrors = false;
+            this.ctrl_TPartNormRangeValues.Size = new System.Drawing.Size(480, 267);
+            this.ctrl_TPartNormRangeValues.TabIndex = 88;
+            this.ctrl_TPartNormRangeValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ctrl_TPartNormRangeValues_CellClick);
+            this.ctrl_TPartNormRangeValues.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ctrl_TPartNormRangeValues_CellDoubleClick);
             // 
             // UC_Records
             // 
@@ -211,7 +220,6 @@
             this.MaximumSize = new System.Drawing.Size(1600, 1000);
             this.Name = "UC_Records";
             this.Size = new System.Drawing.Size(789, 344);
-            ((System.ComponentModel.ISupportInitialize)(this.ctrl_TPartNormRangeValues)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -220,12 +228,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ctrlPDFViewer)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ctrl_TPartNormRangeValues)).EndInit();
             this.ResumeLayout(false);
 
 		}
 
 		#endregion
-		private System.Windows.Forms.DataGridView ctrl_TPartNormRangeValues;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label ctrlLPatientName;
@@ -234,12 +242,14 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn p_AgeFrom;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_AgeTo;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.WebBrowser ctrlHTMLViewer;
+        private AxAcroPDFLib.AxAcroPDF ctrlPDFViewer;
+        private OutlookStyleControls.OutlookGrid ctrl_TPartNormRangeValues;
+        private System.Windows.Forms.DataGridViewTextBoxColumn p_MedicalCardID;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_ClinikName;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_DateForming;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_CategoryTotal;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_Title;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_UserFIO;
-        private System.Windows.Forms.WebBrowser ctrlHTMLViewer;
-        private AxAcroPDFLib.AxAcroPDF ctrlPDFViewer;
     }
 }

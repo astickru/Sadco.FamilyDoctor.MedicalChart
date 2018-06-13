@@ -104,6 +104,15 @@
       <DependentUpon>Ctrl_Element.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\DesignerPanel\I_Element.cs" />
+    <Compile Include="Controls\OutlookGrid\DataSourceManager.cs" />
+    <Compile Include="Controls\OutlookGrid\OutlookGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\OutlookGrid\OutlookGrid.Designer.cs">
+      <DependentUpon>OutlookGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OutlookGrid\OutlookGridGroup.cs" />
+    <Compile Include="Controls\OutlookGrid\OutlookGridRow.cs" />
     <Compile Include="Controls\TreeView\Ctrl_TreeNodeTemplate.cs" />
     <Compile Include="Controls\TreeView\Ctrl_TreeElements.cs">
       <SubType>Component</SubType>
@@ -230,6 +239,10 @@
     <Compile Include="Migrations\201806040935151_appRecordDateBith.Designer.cs">
       <DependentUpon>201806040935151_appRecordDateBith.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806130747026_appRecordPatientUID.cs" />
+    <Compile Include="Migrations\201806130747026_appRecordPatientUID.Designer.cs">
+      <DependentUpon>201806130747026_appRecordPatientUID.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\Cl_AccessLevelAttribute.cs" />
     <Compile Include="Permision\Cl_User.cs" />
@@ -332,6 +345,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806040935151_appRecordDateBith.resx">
       <DependentUpon>201806040935151_appRecordDateBith.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806130747026_appRecordPatientUID.resx">
+      <DependentUpon>201806130747026_appRecordPatientUID.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

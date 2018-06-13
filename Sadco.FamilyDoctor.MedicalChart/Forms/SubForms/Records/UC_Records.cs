@@ -1,4 +1,5 @@
-﻿using Sadco.FamilyDoctor.Core;
+﻿using OutlookStyleControls;
+using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Controls;
 using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.Facades;
@@ -32,29 +33,29 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         private void f_UpdateRecords()
         {
-            m_Records = Cl_App.m_DataContext.p_Records.Where(r => p_IsShowDeleted ? true : !r.p_IsDelete).GroupBy(e => e.p_RecordID)
+            var patientID = Cl_SessionFacade.f_GetInstance().p_Patient.p_UserID;
+            var patientUID = Cl_SessionFacade.f_GetInstance().p_Patient.p_UserUID;
+            m_Records = Cl_App.m_DataContext.p_Records.Where(r => p_IsShowDeleted ? true : !r.p_IsDelete && ((r.p_PatientUID != null && r.p_PatientUID == patientUID) || r.p_PatientID == patientID)).GroupBy(e => e.p_RecordID)
                     .Select(grp => grp
                         .OrderByDescending(v => v.p_Version).FirstOrDefault())
                         .Include(r => r.p_CategoryTotal).Include(r => r.p_CategoryClinik).Include(r => r.p_Values).Include(r => r.p_Template).Include(r => r.p_Values.Select(v => v.p_Params)).ToArray();
-
-
-            DataTable dt = new DataTable();
-            foreach (DataGridViewColumn col in ctrl_TPartNormRangeValues.Columns)
+            
+            ctrl_TPartNormRangeValues.BindData(null, null);
+            ctrl_TPartNormRangeValues.Columns.AddRange(p_MedicalCardID, p_ClinikName, p_DateForming, p_CategoryTotal, p_Title, p_UserFIO);
+            foreach (var record in m_Records)
             {
-                dt.Columns.Add(col.Name);
-                col.DataPropertyName = col.Name;
-            };
-            foreach (var norm in m_Records)
-            {
-                var row = dt.NewRow();
-                row["p_ClinikName"] = norm.p_ClinikName;
-                row["p_DateForming"] = norm.p_DateForming;
-                row["p_CategoryTotal"] = norm.p_CategoryTotal != null ? norm.p_CategoryTotal.p_Name : "";
-                row["p_Title"] = norm.p_Title;
-                row["p_UserFIO"] = norm.p_UserFIO;
-                dt.Rows.Add(row);
+                OutlookGridRow row = new OutlookGridRow();
+                row.CreateCells(ctrl_TPartNormRangeValues,
+                    record.p_MedicalCardID,
+                    record.p_ClinikName,
+                    record.p_DateForming,
+                    record.p_CategoryTotal != null ? record.p_CategoryTotal.p_Name : "",
+                    record.p_Title,
+                    record.p_UserFIO);
+                ctrl_TPartNormRangeValues.Rows.Add(row);
             }
-            ctrl_TPartNormRangeValues.DataSource = dt;
+            ctrl_TPartNormRangeValues.GroupTemplate.Column = ctrl_TPartNormRangeValues.Columns[0];
+            ctrl_TPartNormRangeValues.Sort(ctrl_TPartNormRangeValues.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
         }
 
         private void ctrlBReportAdd_Click(object sender, System.EventArgs e)

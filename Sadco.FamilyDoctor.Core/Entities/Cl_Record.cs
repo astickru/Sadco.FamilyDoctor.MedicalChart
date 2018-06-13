@@ -115,6 +115,10 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Column("F_PATIENT_ID")]
         public int p_PatientID { get; set; }
 
+        /// <summary>ID пациента</summary>
+        [Column("F_PATIENT_UID")]
+        public Guid? p_PatientUID { get; set; }
+
         /// <summary>Пол пациента</summary>
         [Column("F_GENDER")]
         public Cl_User.E_Sex p_PatientSex { get; set; }

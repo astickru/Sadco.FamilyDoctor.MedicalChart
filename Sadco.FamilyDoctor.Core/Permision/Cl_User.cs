@@ -27,6 +27,9 @@ namespace Sadco.FamilyDoctor.Core.Permision
         /// <summary>ID пользователя</summary>
         public int p_UserID { get; set; }
 
+        /// <summary>UID пользователя</summary>
+        public Guid? p_UserUID { get; set; }
+
         /// <summary>Имя пользователя</summary>
         public string p_UserName { get; set; }
 

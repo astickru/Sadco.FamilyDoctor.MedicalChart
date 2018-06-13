@@ -87,7 +87,7 @@ namespace Sadco.FamilyDoctor.MedicalChart
 
             if (isNotValid) return;
 
-            string[] startParams = new string[15];
+            string[] startParams = new string[16];
             startParams[0] = ctrlClinikName.Text;
             startParams[1] = ctrlUserID.Text;
             startParams[2] = ctrlUserSurName.Text;
@@ -95,17 +95,20 @@ namespace Sadco.FamilyDoctor.MedicalChart
             startParams[4] = ctrlUserLastName.Text;
             startParams[5] = f_GetSelectedItem<E_Roles>().ToString();
             startParams[6] = ctrlPatientID.Text;
-            startParams[7] = ctrlPatientSurName.Text;
-            startParams[8] = ctrlPatientName.Text;
-            startParams[9] = ctrlPatientLastName.Text;
-            startParams[10] = ctrlMedCardNumber.Text;
-            startParams[11] = ((Cl_User.E_Sex)ctrlPatientSex.f_GetSelectedItem()).GetHashCode().ToString();
-            startParams[12] = ctrlPatientDateBirth.Value.ToString("dd.MM.yyyy");
+            Guid gVal = Guid.Empty;
+            if (Guid.TryParse(ctrlPatientUID.Text, out gVal))
+                startParams[7] = ctrlPatientUID.Text;
+            startParams[8] = ctrlPatientSurName.Text;
+            startParams[9] = ctrlPatientName.Text;
+            startParams[10] = ctrlPatientLastName.Text;
+            startParams[11] = ctrlMedCardNumber.Text;
+            startParams[12] = ((Cl_User.E_Sex)ctrlPatientSex.f_GetSelectedItem()).GetHashCode().ToString();
+            startParams[13] = ctrlPatientDateBirth.Value.ToString("dd.MM.yyyy");
 
             if (ctrlDateStart.Value != null)
-                startParams[13] = ctrlDateStart.Value.ToString("dd.MM.yyyy");
+                startParams[14] = ctrlDateStart.Value.ToString("dd.MM.yyyy");
             if (ctrlDateEnd.Value != null)
-                startParams[14] = ctrlDateEnd.Value.ToString("dd.MM.yyyy");
+                startParams[15] = ctrlDateEnd.Value.ToString("dd.MM.yyyy");
 
             if (ctrlIsDebug.Checked)
             {
