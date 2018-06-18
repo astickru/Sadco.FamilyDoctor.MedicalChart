@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Sadco.FamilyDoctor.Core.Entities
 {
@@ -84,13 +85,42 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Column("F_ISARCHIVE")]
         public bool p_IsArchive { get; set; }
 
-        /// <summary>Флаг печати</summary>
-        [Column("F_ISPRINT")]
-        public bool p_IsPrint { get; set; }
+        /// <summary>Дата первой печати для доктора</summary>
+        [Column("F_DATEPRINTDOCTOR")]
+        public DateTime? p_DatePrintDoctor { get; set; }
+
+        /// <summary>Дата первой печати для пациента</summary>
+        [Column("F_DATEPRINTPATIENT")]
+        public DateTime? p_DatePrintPatient { get; set; }
+
+        /// <summary>Флаг печати для доктора</summary>
+        public bool p_IsPrintDoctor {
+            get {
+                return p_DatePrintDoctor != null;
+            }
+        }
+
+        /// <summary>Флаг печати для пациента</summary>
+        public bool p_IsPrintPatient {
+            get {
+                return p_DatePrintPatient != null;
+            }
+        }
 
         /// <summary>Флаг автомата</summary>
         [Column("F_ISAUTIMATIC")]
         public bool p_IsAutimatic { get; set; }
+
+        /// <summary>Дата синхронизации с БМК</summary>
+        [Column("F_DATESYNCBMK")]
+        public DateTime? p_DateSyncBMK { get; set; }
+
+        /// <summary>Флаг синхронизации с БМК</summary>
+        public bool p_IsSyncBMK {
+            get {
+                return p_DateSyncBMK != null;
+            }
+        }
 
         /// <summary>Тип записи</summary>
         [Column("F_TYPE")]
@@ -98,19 +128,19 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
         /// <summary>ID пользователя</summary>
         [Column("F_USER_ID")]
-        public int p_UserID { get; set; }
+        public int p_DoctorID { get; set; }
 
         /// <summary>Имя пользователя</summary>
         [Column("F_USER_NAME")]
-        public string p_UserName { get; set; }
+        public string p_DoctorName { get; set; }
 
         /// <summary>Фамиля пользователя</summary>
         [Column("F_USER_SURNAME")]
-        public string p_UserSurName { get; set; }
+        public string p_DoctorSurName { get; set; }
 
         /// <summary>Отчество пользователя</summary>
         [Column("F_USER_LASTNAME")]
-        public string p_UserLastName { get; set; }
+        public string p_DoctorLastName { get; set; }
 
         /// <summary>ID пациента</summary>
         [Column("F_PATIENT_ID")]
@@ -154,7 +184,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
         /// <summary>HTML текст записи для пользователя</summary>
         [Column("F_HTMLUSER")]
-        public string p_HTMLUser { get; set; }
+        public string p_HTMLDoctor { get; set; }
 
         /// <summary>Тип файла</summary>
         [Column("F_FILETYPE")]
@@ -212,11 +242,11 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
         /// <summary>Инициалы пользователя</summary>
         [NotMapped]
-        public string p_UserFIO { get { return f_GetUserInitials(); } }
+        public string p_DoctorFIO { get { return f_GetDoctorInitials(); } }
         /// <summary>Возвращает инициалы пользователя</summary>
-        public string f_GetUserInitials()
+        public string f_GetDoctorInitials()
         {
-            return string.Format("{0} {1} {2}", p_UserSurName, string.IsNullOrWhiteSpace(p_UserName) ? "" : p_UserName[0].ToString() + ".", string.IsNullOrWhiteSpace(p_UserLastName) ? "" : p_UserLastName[0].ToString() + ".");
+            return string.Format("{0} {1} {2}", p_DoctorSurName, string.IsNullOrWhiteSpace(p_DoctorName) ? "" : p_DoctorName[0].ToString() + ".", string.IsNullOrWhiteSpace(p_DoctorLastName) ? "" : p_DoctorLastName[0].ToString() + ".");
         }
 
         /// <summary>Инициалы пациента</summary>
@@ -244,13 +274,13 @@ namespace Sadco.FamilyDoctor.Core.Entities
         }
 
         /// <summary>Установка пользователя</summary>
-        public void f_SetUser(Cl_User a_User)
+        public void f_SetDoctor(Cl_User a_User)
         {
             p_ClinikName = a_User.p_ClinikName;
-            p_UserID = a_User.p_UserID;
-            p_UserSurName = a_User.p_UserSurName;
-            p_UserName = a_User.p_UserName;
-            p_UserLastName = a_User.p_UserLastName;
+            p_DoctorID = a_User.p_UserID;
+            p_DoctorSurName = a_User.p_UserSurName;
+            p_DoctorName = a_User.p_UserName;
+            p_DoctorLastName = a_User.p_UserLastName;
         }
 
         /// <summary>Установка пациента</summary>
@@ -282,107 +312,126 @@ namespace Sadco.FamilyDoctor.Core.Entities
         }
 
         /// <summary>Получение HTML текста записи для пользователя</summary>
-        public string f_GetHTMLUser()
+        public string f_GetHTMLDoctor()
         {
             return f_GetHTML(true);
         }
 
-        /// <summary>Получение HTML текста запис</summary>
-        private string f_GetHTML(bool a_IsUser)
+        /// <summary>Получение HTML текста записи</summary>
+        private string f_GetHTML(bool a_IsDoctor)
         {
-            string html = @"
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv=""X-UA-Compatible"" content=""IE=11"">
-         <style type=""text/css"">
-            body
+            var template = Properties.Resources.ResourceManager.GetObject("template_report").ToString();
+            template = Regex.Replace(template, "<fd\\.document\\.location>.*?<\\/fd\\.document\\.location>", string.Format("<fd.document.location>{0}</fd.document.location>", p_ClinikName));
+            template = Regex.Replace(template, "<fd\\.document\\.patient>.*?<\\/fd\\.document\\.patient>", string.Format("<fd.document.patient>{0} {1} {2} {3} {4} # {5}</fd.document.patient>",
+                p_RecordID, p_PatientSurName, p_PatientName, p_PatientLastName, p_PatientDateBirth.ToString("dd.MM.yyyy"), p_ID));
+            template = Regex.Replace(template, "<fd\\.document\\.date>.*?<\\/fd\\.document\\.date>", string.Format("<fd.document.date>{0}</fd.document.date>", p_DateCreate.ToString("dd.MM.yyyy")));
+            template = Regex.Replace(template, "<fd\\.document\\.time>.*?<\\/fd\\.document\\.time>", string.Format("<fd.document.time>{0}</fd.document.time>", p_DateCreate.ToString("hh:mm")));
+            template = Regex.Replace(template, "<fd\\.document\\.title>.*?<\\/fd\\.document\\.title>", string.Format("<fd.document.title>{0}</fd.document.title>", p_Title));
+            string htmlContent = "";
+            string htmlTabling = null;
+            string htmlFloating = null;
+            byte age = f_GetPatientAge();
+            
+            void f_EndTabling()
             {
-                padding: 10px 25px;
-            }
-
-            .record_title
-            {
-                text-align: center;
-                padding-bottom: 10px;
-                border-bottom: dashed 1px black;
-            }
-
-                .record_title img
+                if (htmlTabling != null)
                 {
-                    width: 450px;
+                    htmlTabling += "</tbody></table>";
+                    htmlContent += htmlTabling;
+                    htmlTabling = null;
                 }
-
-            .record_name
-            {
-                text-align: right;
-                font: bold 14px arial;
-                padding: 10px 0;
             }
 
-            .record_info
+            void f_EndFloating()
             {
-                font: bold 14px arial;
+                if (htmlFloating != null)
+                {
+                    if (htmlFloating.Length > 0)
+                    {
+                        if (htmlFloating[htmlFloating.Length - 1] != '.')
+                            htmlFloating += ".";
+                        htmlFloating += "</p>";
+                        htmlContent += htmlFloating;
+                    }
+                    htmlFloating = null;
+                }
             }
 
-            .record_date
-            {
-                font: bold 14px arial;
-                padding: 10px 0;
-            }
-
-            .record_values
-            {
-                display: inline-table;
-            }
-
-            .record_value
-            {
-                display: table-row;
-            }
-
-            .record_value_name, .record_value_val
-            {
-                display: table-cell;
-                padding: 5px 0;
-            }
-
-            .record_value_name
-            {
-                padding-right: 5px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class=""record_title"">
-            <img src=""Images/title.jpg"" />
-            <div>(495)775-75-66 | www.familydoctor.ru | company@familydoctor.ru</div>
-        </div>
-        <div class=""record_name"">";
-            html += p_ClinikName;
-            html += @"</div><div class=""record_info"">";
-            html += string.Format("№ {0} {1} {2} {3} {4} # {5}", p_RecordID, p_PatientSurName, p_PatientName, p_PatientLastName, p_PatientDateBirth.ToString("dd.MM.yyyy"), p_ID);
-            html += @"</div><div class=""record_date"">";
-            html += p_DateCreate.ToString("dd.MM.yyyy");
-            html += @"</div><div class=""record_values"">";
             foreach (var value in p_Values)
             {
-                if (a_IsUser)
-                    html += value.f_GetHTMLUser();
-                else
-                    html += value.f_GetHTMLPatient();
+                var te = value.f_GetTemplateElement();
+                if (te != null && te.p_Template != null)
+                {
+                    decimal? min = 0;
+                    decimal? max = 0;
+                    var partNorm = value.p_Element.f_GetPartNormValue(p_PatientSex, age, out min, out max);
+                    string htmlBlock = "";
+                    if (a_IsDoctor)
+                        htmlBlock = value.f_GetHTMLDoctor(this, te.p_Template.p_Type == Cl_Template.E_TemplateType.Table, min, max);
+                    else
+                        htmlBlock = value.f_GetHTMLPatient(this, te.p_Template.p_Type == Cl_Template.E_TemplateType.Table, min, max);
+                    if (!string.IsNullOrWhiteSpace(htmlBlock))
+                    {
+                        if (te.p_Template.p_Type == Cl_Template.E_TemplateType.Table)
+                        {
+                            f_EndFloating();
+                            if (htmlTabling == null)
+                                htmlTabling = "<table border=\"1\" cellpadding=\"4\" bordercolor=\"black\" width=\"100%\" style=\"border-collapse:collapse;font-family:Verdana;font-size:11px;\"><thead><tr><td>Показатель</td><td>Значение</td><td>Ед. изм.</td><td>Нормa</td></tr></thead><tbody>";
+                            htmlTabling += htmlBlock;
+                        }
+                        else if (value.p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Float)
+                        {
+                            f_EndTabling();
+                            if (htmlFloating == null)
+                                htmlFloating = "<p>" + htmlBlock;
+                            else
+                                htmlFloating += " " + htmlBlock;
+                        }
+                        else
+                        {
+                            f_EndTabling();
+                            f_EndFloating();
+                            if (a_IsDoctor)
+                                htmlContent += htmlBlock;
+                            else
+                                htmlContent += htmlBlock;
+                        }
+                    }
+                }
             }
-            html += "</div>";
-            html += "</body></html>";
-            return html;
+            f_EndTabling();
+            f_EndFloating();
+            template = Regex.Replace(template, "<fd\\.document\\.content>.*?<\\/fd\\.document\\.content>", string.Format("<fd.document.content>{0}</fd.document.content>", htmlContent));
+            template = Regex.Replace(template, "<fd\\.document\\.doctor>.*?<\\/fd\\.document\\.doctor>", string.Format("<fd.document.doctor>{0}</fd.document.doctor>", p_DoctorFIO));
+            return template;
+        }
+
+        /// <summary>Получение конечного текста записи для специалиста</summary>
+        public string f_GetDocumentTextDoctor(string a_AppStartupPath)
+        {
+            return f_GetDocumentText(a_AppStartupPath, true);
+        }
+
+        /// <summary>Получение конечного текста записи для пациента</summary>
+        public string f_GetDocumentTextPatient(string a_AppStartupPath)
+        {
+            return f_GetDocumentText(a_AppStartupPath, false);
         }
 
         /// <summary>Получение конечного текста записи</summary>
-        public string f_GetDocumentText(string a_AppStartupPath)
+        private string f_GetDocumentText(string a_AppStartupPath, bool a_IsDoctor)
         {
-            if (p_HTMLUser != null)
+            if (a_IsDoctor && p_HTMLDoctor != null)
             {
-                return p_HTMLUser.Replace("src=\"", "src=\"file:///" + a_AppStartupPath + "/");
+                var res = p_HTMLDoctor.Replace("class=\"record_title_img\" src=\"", "class=\"record_title_img\" src=\"file:///" + a_AppStartupPath + "/");
+                res = p_HTMLDoctor.Replace("class=record_title_img src=", "class=record_title_img src=file:///" + a_AppStartupPath + "/");
+                return res;
+            }
+            else if (!a_IsDoctor && p_HTMLPatient != null)
+            {
+                var res = p_HTMLPatient.Replace("class=\"record_title_img\" src=\"", "class=\"record_title_img\" src=\"file:///" + a_AppStartupPath + "/");
+                res = p_HTMLPatient.Replace("class=record_title_img src=", "class=record_title_img src=file:///" + a_AppStartupPath + "/");
+                return res;
             }
             else
             {
@@ -390,7 +439,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
                 {
                     if (p_FileType == Cl_Record.E_RecordFileType.HTML)
                     {
-                        return Encoding.UTF8.GetString(p_FileBytes).Replace(@"\\family-doctor.local\fd$\FD.med\Images\Logo.jpg", "file:///" + a_AppStartupPath + "/Images/title.jpg");
+                        return Encoding.UTF8.GetString(p_FileBytes).Replace("src=\"", "src=\"file:///" + a_AppStartupPath + "/");
                     }
                     else if (p_FileType == Cl_Record.E_RecordFileType.JFIF || p_FileType == Cl_Record.E_RecordFileType.JIF || p_FileType == Cl_Record.E_RecordFileType.JPE ||
                         p_FileType == Cl_Record.E_RecordFileType.JPEG || p_FileType == Cl_Record.E_RecordFileType.JPG || p_FileType == Cl_Record.E_RecordFileType.PNG)

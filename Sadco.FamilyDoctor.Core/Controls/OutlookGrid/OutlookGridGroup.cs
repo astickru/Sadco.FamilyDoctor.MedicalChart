@@ -25,6 +25,9 @@ namespace OutlookStyleControls
     /// </summary>
     public interface IOutlookGridGroup : IComparable, ICloneable
     {
+        string ItemName { get; set; }
+        string ItemsName { get; set; }
+
         /// <summary>
         /// the text to be displayed in the group row
         /// </summary>
@@ -90,13 +93,25 @@ namespace OutlookStyleControls
 
         #region IOutlookGridGroup Members
 
+        private string _ItemName = "штука";
+        public virtual string ItemName {
+            get { return _ItemName; }
+            set { _ItemName = value; }
+        }
+
+        private string _ItemsName = "штук";
+        public virtual string ItemsName {
+            get { return _ItemsName; }
+            set { _ItemsName = value; }
+        }
+
         public virtual string Text
         {
             get {
                 if (column == null)
-                    return string.Format("Unbound group: {0} ({1})", Value.ToString(), itemCount == 1 ? "1 item" : itemCount.ToString() + " items");
+                    return string.Format("Несвязанная группа: {0} ({1})", Value.ToString(), itemCount == 1 ? "1 " + ItemName : itemCount.ToString() + " " + ItemsName);
                 else
-                    return string.Format("{0}: {1} ({2})", column.HeaderText, Value.ToString(), itemCount == 1 ? "1 item" : itemCount.ToString() + " items"); 
+                    return string.Format("{0}: {1} ({2})", column.HeaderText, Value.ToString(), itemCount == 1 ? "1 " + ItemName : itemCount.ToString() + " " + ItemsName); 
                 }
             set { text = value; }
         }
@@ -143,6 +158,8 @@ namespace OutlookStyleControls
             gr.collapsed = this.collapsed;
             gr.text = this.text;
             gr.height = this.height;
+            gr.ItemName = this.ItemName;
+            gr.ItemsName = this.ItemsName;
             return gr;
         }
 
@@ -187,7 +204,7 @@ namespace OutlookStyleControls
         {
             get
             {
-                return string.Format("Alphabetic: {1} ({2})", column.HeaderText, Value.ToString(), itemCount == 1 ? "1 item" : itemCount.ToString() + " items");
+                return string.Format("Буквенный: {1} ({2})", column.HeaderText, Value.ToString(), itemCount == 1 ? "1 " + ItemName : itemCount.ToString() + " " + ItemsName);
             }
             set { text = value; }
         }

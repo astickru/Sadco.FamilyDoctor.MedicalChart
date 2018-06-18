@@ -272,6 +272,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 m_Separators = new ArrayList();
                 this.ShowInTaskbar = false;
                 // Add a handler to notify our parent of ItemCheck events.
+
                 this.cclb.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.cclb_ItemCheck);
             }
 
@@ -437,11 +438,18 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 }
             }
 
+            private bool m_BlockChangeChecked = false;
             private void cclb_ItemCheck(object sender, ItemCheckEventArgs e)
             {
                 if (ccbParent.ItemCheck != null)
                 {
-                    ccbParent.ItemCheck(sender, e);
+                    if (!m_BlockChangeChecked)
+                    {
+                        m_BlockChangeChecked = true;
+                        ccbParent.SetItemCheckState(e.Index, e.NewValue);
+                        m_BlockChangeChecked = false;
+                        ccbParent.ItemCheck(ccbParent, e);
+                    }
                 }
             }
 

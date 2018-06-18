@@ -1,4 +1,5 @@
 ﻿using Sadco.FamilyDoctor.Core.EntityLogs;
+using Sadco.FamilyDoctor.Core.Permision;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -289,6 +290,35 @@ namespace Sadco.FamilyDoctor.Core.Entities
             get { return m_PartAgeNorms; }
             set { m_PartAgeNorms = value; }
         }
+        /// <summary>Часть. Получение нормы по возрасту</summary>
+        public string f_GetPartNormValue(Cl_User.E_Sex a_Sex, byte a_Age)
+        {
+            decimal? min = null;
+            decimal? max = null;
+            return f_GetPartNormValue(a_Sex, a_Age, out min, out max);
+        }
+        /// <summary>Часть. Получение нормы по возрасту</summary>
+        public string f_GetPartNormValue(Cl_User.E_Sex a_Sex, byte a_Age, out decimal? a_Min, out decimal? a_Max)
+        {
+            a_Min = null;
+            a_Max = null;
+            if (p_IsPartNorm)
+            {
+                a_Max = p_PartNorm;
+                return p_PartNorm.ToString();
+            }
+            else if (p_IsPartNormRange && p_PartAgeNorms != null && p_PartAgeNorms.Count > 0)
+            {
+                Cl_AgeNorm ageNorm = p_PartAgeNorms.FirstOrDefault(a => a.p_AgeFrom <= a_Age && a.p_AgeTo >= a_Age);
+                if (ageNorm != null)
+                {
+                    a_Min = ageNorm.f_GetMin(a_Sex, p_NumberRound);
+                    a_Max = ageNorm.f_GetMax(a_Sex, p_NumberRound);
+                    return string.Format("{0} - {1}", a_Min, a_Max);
+                }
+            }
+            return "";
+        }
         #endregion
 
         /// <summary>Возможность ввода не стандартных значений</summary>
@@ -415,7 +445,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
             }
         }
 
-        /// <summary>Является ли значение элемента текстом</summary>
+        /// <summary>Является ли значение элемента рисунком</summary>
         public bool p_IsImage {
             get {
                 return p_ElementType == E_ElementsTypes.Image;

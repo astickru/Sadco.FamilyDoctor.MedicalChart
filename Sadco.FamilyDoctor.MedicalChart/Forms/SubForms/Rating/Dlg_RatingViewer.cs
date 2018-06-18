@@ -44,11 +44,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         internal void LoadRating(int p_RecordID)
         {
-            int userID = Cl_SessionFacade.f_GetInstance().p_User.p_UserID;
+            int userID = Cl_SessionFacade.f_GetInstance().p_Doctor.p_UserID;
             recordID = p_RecordID;
             curRating = Cl_App.m_DataContext.p_Ratings.Where(l => l.p_RecordID == p_RecordID && l.p_UserID == userID).FirstOrDefault();
 
-            ctrlLAuthor.Text = Cl_SessionFacade.f_GetInstance().p_User.f_GetInitials();
+            ctrlLAuthor.Text = Cl_SessionFacade.f_GetInstance().p_Doctor.f_GetInitials();
             ctrlLDate.Text = DateTime.Now.ToString();
 
             if (curRating == null) return;
@@ -75,8 +75,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             rating.p_RecordID = recordID;
             rating.p_Time = DateTime.Now;
             rating.p_Comment = ctrlTBComment.Text;
-            rating.p_UserID = Cl_SessionFacade.f_GetInstance().p_User.p_UserID;
-            rating.p_UserName = Cl_SessionFacade.f_GetInstance().p_User.f_GetInitials();
+            rating.p_UserID = Cl_SessionFacade.f_GetInstance().p_Doctor.p_UserID;
+            rating.p_UserName = Cl_SessionFacade.f_GetInstance().p_Doctor.f_GetInitials();
 
             if (ctrlRBValue_1.Checked) rating.p_Value = 1;
             if (ctrlRBValue_2.Checked) rating.p_Value = 2;

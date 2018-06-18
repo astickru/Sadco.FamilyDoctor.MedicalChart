@@ -104,7 +104,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             if (m_Record != null && m_Record.p_Template != null)
             {
                 m_Record.p_Template.f_LoadTemplatesElements();
-                ctrlUserFIO.Text = m_Record.p_UserFIO;
+                ctrlDoctorFIO.Text = m_Record.p_DoctorFIO;
                 ctrlPatientFIO.Text = string.Format("{0} ({1}, {2})", m_Record.p_PatientFIO,
                     m_Record.p_PatientSex == Core.Permision.Cl_User.E_Sex.Man ? "Мужчина" : m_Record.p_PatientSex == Core.Permision.Cl_User.E_Sex.Female ? "Женьщина" : "Нет данных",
                     m_Record.p_PatientDateBirth.ToShortDateString());
@@ -143,11 +143,10 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             }
 
                             record.p_Title = ctrlTitle.Text;
-                            record.p_ClinikName = Cl_SessionFacade.f_GetInstance().p_User.p_ClinikName;
                             Cl_App.m_DataContext.p_Records.Add(record);
                             Cl_App.m_DataContext.SaveChanges();
                             record.p_FileType = Cl_Record.E_RecordFileType.HTML;
-                            record.p_HTMLUser = record.f_GetHTMLUser();
+                            record.p_HTMLDoctor = record.f_GetHTMLDoctor();
                             record.p_HTMLPatient = record.f_GetHTMLPatient();
                             if (record.p_Version == 1)
                             {
@@ -196,7 +195,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             int total = 0;
             if (p_Record == null) return;
 
-            ctrlBRating.Visible = Cl_SessionFacade.f_GetInstance().p_User.p_Permission.p_IsEditAllRatings;
+            ctrlBRating.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditAllRatings;
 
             IQueryable<Cl_Rating> ratings = Cl_App.m_DataContext.p_Ratings.Where(l => l.p_RecordID == p_Record.p_RecordID);
             foreach (Cl_Rating item in ratings)

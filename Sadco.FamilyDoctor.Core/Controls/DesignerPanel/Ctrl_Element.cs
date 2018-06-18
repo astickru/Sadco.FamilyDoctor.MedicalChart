@@ -110,6 +110,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
 
         public event EventHandler e_ValueChanged;
 
+        private string m_SeparatorMulti = ", ";
         private Cl_Record m_Record = null;
         private ComboBox ctrl_PartLocations;
         private Ctrl_CheckedComboBox ctrl_PartLocationsMulti;
@@ -122,6 +123,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         private TextBox ctrl_DopValue;
         private Ctrl_TextBoxAutoHeight ctrl_DopValueBox;
         private Ctrl_Paint ctrl_Image;
+        private decimal? m_Min = null;
+        private decimal? m_Max = null;
 
         private Panel f_GetSymmetricalPanel(Control a_LeftControl, Control a_RightControl, string a_LeftText, string a_RightText)
         {
@@ -179,6 +182,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             Label l = null;
             if (p_Element.p_IsText)
             {
+                byte age = a_RecordValue.p_Record.f_GetPatientAge();
+                var partNorm = p_Element.f_GetPartNormValue(a_RecordValue.p_Record.p_PatientSex, age, out m_Min, out m_Max);
                 if (p_Element.p_IsPartPre)
                 {
                     l = new Label() { Text = p_Element.p_PartPre };
@@ -199,7 +204,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         ctrl_PartLocationsMulti.ValueMember = "p_ID";
                         ctrl_PartLocationsMulti.Width = 300;
                         ctrl_PartLocationsMulti.MaxDropDownItems = 10;
-                        ctrl_PartLocationsMulti.ValueSeparator = ", ";
+                        ctrl_PartLocationsMulti.ValueSeparator = m_SeparatorMulti;
                         for (int i = 0; i < p_Element.p_PartLocations.Length; i++)
                         {
                             ctrl_PartLocationsMulti.Items.Add(p_Element.p_PartLocations[i]);
@@ -210,11 +215,6 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                     ctrl_PartLocationsMulti.SetItemChecked(i, true);
                             }
                         }
-                        //if (a_Table != null)
-                        //    a_Table.Controls.Add(ctrl_PartLocationsMulti, 1, a_RowIndex);
-                        //else
-                        //    panel.Controls.Add(ctrl_PartLocationsMulti);
-
                         panel.Controls.Add(ctrl_PartLocationsMulti);
                     }
                     else
@@ -234,10 +234,6 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         var lParam = a_RecordValue.p_PartLocations.FirstOrDefault();
                         if (lParam != null)
                             ctrl_PartLocations.SelectedItem = p_Element.p_PartLocations.FirstOrDefault(pl => pl.p_ID == lParam.p_ElementParamID);
-                        //if (a_Table != null)
-                        //    a_Table.Controls.Add(ctrl_PartLocations, 1, a_RowIndex);
-                        //else
-                        //    panel.Controls.Add(ctrl_PartLocations);
                         panel.Controls.Add(ctrl_PartLocations);
                     }
                 }
@@ -250,7 +246,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         ctrl_ValuesMulti = new Ctrl_CheckedComboBox();
                         ctrl_ValuesMulti.Enabled = p_Element.p_Editing;
                         ctrl_ValuesMulti.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-                        ctrl_ValuesMulti.ValueSeparator = ", ";
+                        ctrl_ValuesMulti.ValueSeparator = m_SeparatorMulti;
                         ctrl_ValuesMulti.DisplayMember = "p_Value";
                         ctrl_ValuesMulti.ValueMember = "p_ID";
                         ctrl_ValuesMulti.Width = 300;
@@ -260,7 +256,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             ctrl_DopValuesMulti = new Ctrl_CheckedComboBox();
                             ctrl_DopValuesMulti.Enabled = p_Element.p_Editing;
                             ctrl_DopValuesMulti.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-                            ctrl_DopValuesMulti.ValueSeparator = ", ";
+                            ctrl_DopValuesMulti.ValueSeparator = m_SeparatorMulti;
                             ctrl_DopValuesMulti.DisplayMember = "p_Value";
                             ctrl_DopValuesMulti.ValueMember = "p_ID";
                             ctrl_DopValuesMulti.Width = 300;
@@ -322,7 +318,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 }
                             }
                         }
-
+                        f_UpdateColor(ctrl_ValuesMulti);
+                        f_UpdateColor(ctrl_DopValuesMulti);
                         if (p_Element.p_Symmetrical)
                         {
                             var cellPanel = f_GetSymmetricalPanel(ctrl_ValuesMulti, ctrl_DopValuesMulti, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
@@ -402,7 +399,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             if (p_Element.p_Symmetrical)
                                 ctrl_DopValues.SelectedItem = p_Element.p_Default;
                         }
-
+                        f_UpdateColor(ctrl_Values);
+                        f_UpdateColor(ctrl_DopValues);
                         if (p_Element.p_Symmetrical)
                         {
                             var cellPanel = f_GetSymmetricalPanel(ctrl_Values, ctrl_DopValues, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
@@ -428,6 +426,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         ctrl_Value.Enabled = p_Element.p_Editing;
                         ctrl_Value.Width = 400;
                         ctrl_Value.Text = a_RecordValue.p_ValueUser;
+                        f_UpdateColor(ctrl_Value);
                         ctrl_Value.TextChanged += Ctrl_ValueChanged;
                         if (p_Element.p_IsNumber) ctrl_Value.KeyPress += ctrl_ValidNumber_KeyPress;
                         if (p_Element.p_Symmetrical)
@@ -436,6 +435,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             ctrl_DopValue.Enabled = p_Element.p_Editing;
                             ctrl_DopValue.Width = ctrl_Value.Width;
                             ctrl_DopValue.Text = a_RecordValue.p_ValueDopUser;
+                            f_UpdateColor(ctrl_DopValue);
                             ctrl_DopValue.TextChanged += Ctrl_ValueChanged;
                             if (p_Element.p_IsNumber) ctrl_DopValue.KeyPress += ctrl_ValidNumber_KeyPress;
                             var cellPanel = f_GetSymmetricalPanel(ctrl_Value, ctrl_DopValue, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
@@ -458,6 +458,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         ctrl_ValueBox.Enabled = p_Element.p_Editing;
                         ctrl_ValueBox.Width = 400;
                         ctrl_ValueBox.Text = a_RecordValue.p_ValueUser;
+                        f_UpdateColor(ctrl_ValueBox);
                         ctrl_ValueBox.TextChanged += Ctrl_ValueChanged;
                         if (p_Element.p_IsNumber) ctrl_ValueBox.KeyPress += ctrl_ValidNumber_KeyPress;
                         if (p_Element.p_Symmetrical)
@@ -465,6 +466,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             ctrl_DopValueBox = new Ctrl_TextBoxAutoHeight() { p_MinLines = 3 };
                             ctrl_DopValueBox.Width = ctrl_ValueBox.Width;
                             ctrl_DopValueBox.Text = a_RecordValue.p_ValueDopUser;
+                            f_UpdateColor(ctrl_DopValueBox);
                             ctrl_DopValueBox.TextChanged += Ctrl_ValueChanged;
                             if (p_Element.p_IsNumber) ctrl_DopValueBox.KeyPress += ctrl_ValidNumber_KeyPress;
                             var cellPanel = f_GetSymmetricalPanel(ctrl_ValueBox, ctrl_DopValueBox, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
@@ -492,30 +494,15 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     else
                         panel.Controls.Add(l);
                 }
-                byte age = a_RecordValue.p_Record.f_GetPatientAge();
-                if (p_Element.p_IsPartNorm)
+                if (!string.IsNullOrWhiteSpace(partNorm))
                 {
-                    l = new Label() { Text = p_Element.p_PartNorm.ToString() };
+                    l = new Label() { Text = partNorm };
                     l.AutoSize = true;
                     l.Margin = new Padding(0, 6, 0, 0);
                     if (a_Table != null)
                         a_Table.Controls.Add(l, 3, a_RowIndex);
                     else
                         panel.Controls.Add(l);
-                }
-                else if (p_Element.p_IsPartNormRange && p_Element.p_PartAgeNorms != null && p_Element.p_PartAgeNorms.Count > 0)
-                {
-                    Cl_AgeNorm ageNorm = p_Element.p_PartAgeNorms.FirstOrDefault(a => a.p_AgeFrom <= age && a.p_AgeTo >= age);
-                    if (ageNorm != null)
-                    {
-                        l = new Label() { Text = string.Format("{0} - {1}", ageNorm.f_GetMin(a_RecordValue.p_Record.p_PatientSex, p_Element.p_NumberRound), ageNorm.f_GetMax(a_RecordValue.p_Record.p_PatientSex, p_Element.p_NumberRound)) };
-                        l.AutoSize = true;
-                        l.Margin = new Padding(0, 6, 0, 0);
-                        if (a_Table != null)
-                            a_Table.Controls.Add(l, 3, a_RowIndex);
-                        else
-                            panel.Controls.Add(l);
-                    }
                 }
             }
             else if (p_Element.p_IsImage)
@@ -630,9 +617,62 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
         }
 
+        private void f_UpdateColor(Control a_Control)
+        {
+            if (p_Element.p_IsNumber && a_Control != null)
+            {
+                string[] texts = null;
+                var chcb = a_Control as Ctrl_CheckedComboBox;
+                if (chcb != null)
+                    texts = chcb.Text.Split(new string[] { m_SeparatorMulti }, StringSplitOptions.RemoveEmptyEntries);
+                else
+                {
+                    var tb = a_Control as TextBox;
+                    if (tb != null)
+                        texts = new string[] { tb.Text };
+                    else
+                    {
+                        var cb = a_Control as ComboBox;
+                        if (cb != null)
+                            texts = new string[] { cb.Text };
+                    }
+                }
+                decimal dVal = 0;
+                bool isBeyondNorm = false;
+                foreach (var text in texts)
+                {
+                    if (decimal.TryParse(text, out dVal))
+                    {
+                        if (m_Min != null && m_Min > dVal)
+                            isBeyondNorm = true;
+                        else if (m_Max != null && m_Max < dVal)
+                            isBeyondNorm = true;
+                    }
+                    else
+                    {
+                        isBeyondNorm = true;
+                    }
+                    if (isBeyondNorm)
+                        break;
+                }
+                if (isBeyondNorm)
+                {
+                    a_Control.ForeColor = Color.Red;
+                }
+                else
+                {
+                    a_Control.ForeColor = Color.Black;
+                }
+            }
+        }
+
         private void Ctrl_ValueChanged(object sender, EventArgs e)
         {
-            e_ValueChanged?.Invoke(this, e);
+            if (p_Element != null)
+            {
+                f_UpdateColor((Control)sender);
+                e_ValueChanged?.Invoke(this, e);
+            }
         }
 
         /// <summary>Получение значения элемента записи</summary>

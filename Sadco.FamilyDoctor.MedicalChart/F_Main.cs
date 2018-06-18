@@ -29,19 +29,19 @@ namespace Sadco.FamilyDoctor.MedicalChart
             menuMegaTemplate.Visible = false;
             menuTemplate.Visible = false;
 
-            if (Cl_SessionFacade.f_GetInstance().p_User.p_Permission.p_IsEditMegaTemplates)
+            if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditMegaTemplates)
             {
-                menuMegaTemplate.Visible = Cl_SessionFacade.f_GetInstance().p_User.p_Permission.p_IsEditMegaTemplates;
+                menuMegaTemplate.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditMegaTemplates;
             }
 
-            if (Cl_SessionFacade.f_GetInstance().p_User.p_Permission.p_IsEditTemplates)
+            if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditTemplates)
             {
-                menuTemplate.Visible = Cl_SessionFacade.f_GetInstance().p_User.p_Permission.p_IsEditTemplates;
+                menuTemplate.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditTemplates;
             }
 
-            if (Cl_SessionFacade.f_GetInstance().p_User.p_Permission.p_IsShowDeleted)
+            if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsShowDeleted)
             {
-                menuMegaTemplateDeleted.Visible = Cl_SessionFacade.f_GetInstance().p_User.p_Permission.p_IsShowDeleted;
+                menuMegaTemplateDeleted.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsShowDeleted;
             }
 
             f_SetControl<UC_Records>();

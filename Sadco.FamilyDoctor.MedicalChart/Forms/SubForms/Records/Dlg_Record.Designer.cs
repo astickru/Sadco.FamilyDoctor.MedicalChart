@@ -40,7 +40,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.ctrl_Version = new System.Windows.Forms.Label();
             this.ctrlPatientFIO = new System.Windows.Forms.Label();
-            this.ctrlUserFIO = new System.Windows.Forms.Label();
+            this.ctrlDoctorFIO = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -123,7 +123,7 @@
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.ctrl_Version);
             this.panel1.Controls.Add(this.ctrlPatientFIO);
-            this.panel1.Controls.Add(this.ctrlUserFIO);
+            this.panel1.Controls.Add(this.ctrlDoctorFIO);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -182,14 +182,14 @@
             this.ctrlPatientFIO.TabIndex = 3;
             this.ctrlPatientFIO.Text = "ctrlPatientFIO";
             // 
-            // ctrlUserFIO
+            // ctrlDoctorFIO
             // 
-            this.ctrlUserFIO.AutoSize = true;
-            this.ctrlUserFIO.Location = new System.Drawing.Point(118, 7);
-            this.ctrlUserFIO.Name = "ctrlUserFIO";
-            this.ctrlUserFIO.Size = new System.Drawing.Size(82, 13);
-            this.ctrlUserFIO.TabIndex = 2;
-            this.ctrlUserFIO.Text = "ctrlUserFIO";
+            this.ctrlDoctorFIO.AutoSize = true;
+            this.ctrlDoctorFIO.Location = new System.Drawing.Point(118, 7);
+            this.ctrlDoctorFIO.Name = "ctrlDoctorFIO";
+            this.ctrlDoctorFIO.Size = new System.Drawing.Size(82, 13);
+            this.ctrlDoctorFIO.TabIndex = 2;
+            this.ctrlDoctorFIO.Text = "ctrlUserFIO";
             // 
             // label2
             // 
@@ -291,7 +291,7 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button ctrlBSave;
         private System.Windows.Forms.Label ctrlPatientFIO;
-        private System.Windows.Forms.Label ctrlUserFIO;
+        private System.Windows.Forms.Label ctrlDoctorFIO;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label ctrl_Version;
         private System.Windows.Forms.Button ctrlBHistory;

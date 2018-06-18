@@ -229,5 +229,22 @@ namespace Sadco.FamilyDoctor.Core.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на &lt;html&gt;
+        ///&lt;head&gt;
+        ///    &lt;meta charset=utf-8&gt;
+        ///&lt;/head&gt;
+        ///&lt;body style=font-family:Tahoma;font-size:9px;&gt;
+        ///    &lt;fd.document&gt;
+        ///        &lt;table border=0 bordercolordark=black bordercolorlight=black cellpadding=2 style=border-collapse:collapse;width:16cm;font-family:Verdana;font-size:11px;&gt;
+        ///            &lt;tr&gt;&lt;td align=left style=font-family:Tahoma;font-size:7px;&gt; МИС II | Вер. &lt;fd.document.version&gt;FDTS_v0.9.6.2&lt;/fd.document.version&gt; | Напр.: &lt;fd.document.prescription&gt;0&lt;/fd.document.prescription&gt;&lt;/td&gt;&lt;/tr&gt;
+        ///            &lt; [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string template_report {
+            get {
+                return ResourceManager.GetString("template_report", resourceCulture);
+            }
+        }
     }
 }

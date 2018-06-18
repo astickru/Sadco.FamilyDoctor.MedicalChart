@@ -248,6 +248,14 @@
     <Compile Include="Migrations\201806130958158_appRecordPatientUID.Designer.cs">
       <DependentUpon>201806130958158_appRecordPatientUID.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806151237110_appRecordPrint.cs" />
+    <Compile Include="Migrations\201806151237110_appRecordPrint.Designer.cs">
+      <DependentUpon>201806151237110_appRecordPrint.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806151428184_appRecordDateNull.cs" />
+    <Compile Include="Migrations\201806151428184_appRecordDateNull.Designer.cs">
+      <DependentUpon>201806151428184_appRecordDateNull.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\Cl_AccessLevelAttribute.cs" />
     <Compile Include="Permision\Cl_User.cs" />
@@ -357,6 +365,12 @@
     <EmbeddedResource Include="Migrations\201806130958158_appRecordPatientUID.resx">
       <DependentUpon>201806130958158_appRecordPatientUID.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806151237110_appRecordPrint.resx">
+      <DependentUpon>201806151237110_appRecordPrint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806151428184_appRecordDateNull.resx">
+      <DependentUpon>201806151428184_appRecordDateNull.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
@@ -376,6 +390,7 @@
   <ItemGroup>
     <Content Include="Data\manual.txt" />
     <Content Include="Libs\FD.dat.mon.stb.lib_v1.0.0.dll" />
+    <None Include="Resources\template_report.htm" />
     <None Include="Resources\Image_16x16.png" />
     <None Include="Resources\Table_16x16.png" />
     <None Include="Resources\Block_16x16.png" />

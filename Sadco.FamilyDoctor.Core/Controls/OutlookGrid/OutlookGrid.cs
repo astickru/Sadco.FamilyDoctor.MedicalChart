@@ -8,6 +8,7 @@
 // LIABILITY FOR ANY DATA DAMAGE/LOSS THAT THIS PRODUCT MAY CAUSE.
 //-----------------------------------------------------------------------
 using System;
+using System.Linq;
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
@@ -24,12 +25,16 @@ namespace OutlookStyleControls
         #region OutlookGrid constructor
         public OutlookGrid()
         {
+            this.groupTemplate = new OutlookgGridDefaultGroup();
+            this.groupTemplate.ItemName = ItemName;
+            this.groupTemplate.ItemsName = ItemsName;
+
             InitializeComponent();
 
             // very important, this indicates that a new default row class is going to be used to fill the grid
             // in this case our custom OutlookGridRow class
             base.RowTemplate = new OutlookGridRow();
-            this.groupTemplate = new OutlookgGridDefaultGroup();
+            
 
         }
         #endregion OutlookGrid constructor
@@ -55,6 +60,20 @@ namespace OutlookStyleControls
             {
                 groupTemplate = value;
             }
+        }
+
+        private string _ItemName = "штука";
+        [Category("Appearance")]
+        public virtual string ItemName {
+            get { return _ItemName; }
+            set { _ItemName = value; groupTemplate.ItemName = value; }
+        }
+
+        private string _ItemsName = "штук";
+        [Category("Appearance")]
+        public virtual string ItemsName {
+            get { return _ItemsName; }
+            set { _ItemsName = value; groupTemplate.ItemsName = value; }
         }
 
         private Image iconCollapse;
@@ -125,22 +144,29 @@ namespace OutlookStyleControls
         }
         public override void Sort(System.Collections.IComparer comparer)
         {
-            if (dataSource == null) // if no datasource is set, then bind to the grid itself
+            base.Sort(comparer);
+            if (dataSource == null)
                 dataSource = new DataSourceManager(this, null);
-
             dataSource.Sort(comparer);
             FillGrid(groupTemplate);
         }
 
-        
         public override void Sort(DataGridViewColumn dataGridViewColumn, ListSortDirection direction)
         {
-            if (dataSource == null) // if no datasource is set, then bind to the grid itself
+            var comp = new OutlookGridRowComparer(dataGridViewColumn.Index, direction);
+            var rows = new DataGridViewRow[this.Rows.Count];
+            Rows.CopyTo(rows, 0);
+            Rows.Clear();
+            base.Sort(dataGridViewColumn, direction);
+            Rows.AddRange(rows);
+            if (dataSource == null)
                 dataSource = new DataSourceManager(this, null);
-
-            dataSource.Sort(new OutlookGridRowComparer(dataGridViewColumn.Index, direction));
+            dataSource.Sort(comp);
             FillGrid(groupTemplate);
         }
+
+       
+
         #endregion OutlookGrid new methods
 
         #region OutlookGrid event handlers
@@ -271,7 +297,10 @@ namespace OutlookStyleControls
             {
                 foreach (DataSourceRow r in list)
                 {
-                    row = (OutlookGridRow) this.RowTemplate.Clone(); 
+                    row = (OutlookGridRow) this.RowTemplate.Clone();
+                    var gvRow = r.BoundItem as DataGridViewRow;
+                    if (gvRow != null)
+                        row.Tag = gvRow.Tag;
                     foreach (object val in r)
                     {
                         DataGridViewCell cell = new DataGridViewTextBoxCell();
@@ -293,6 +322,9 @@ namespace OutlookStyleControls
                 foreach (DataSourceRow r in list)
                 {
                     row = (OutlookGridRow)this.RowTemplate.Clone();
+                    var gvRow = r.BoundItem as DataGridViewRow;
+                    if (gvRow != null)
+                        row.Tag = gvRow.Tag;
                     result = r[groupingStyle.Column.Index];
                     if (groupCur != null && groupCur.CompareTo(result) == 0) // item is part of the group
                     {
@@ -314,6 +346,8 @@ namespace OutlookStyleControls
 
                         // add content row after this
                         row = (OutlookGridRow)this.RowTemplate.Clone();
+                        if (gvRow != null)
+                            row.Tag = gvRow.Tag;
                         row.Group = groupCur;
                         counter = 1; // reset counter for next group
                     }

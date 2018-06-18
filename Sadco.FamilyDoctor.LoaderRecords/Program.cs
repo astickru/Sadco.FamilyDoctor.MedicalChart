@@ -226,9 +226,9 @@ namespace Sadco.FamilyDoctor.LoaderRecords
                                                                             var valsAuthorName = authorName.Split(' ');
                                                                             if (valsAuthorName.Length == 4)
                                                                             {
-                                                                                record.p_UserSurName = valsAuthorName[1];
-                                                                                record.p_UserName = valsAuthorName[2];
-                                                                                record.p_UserLastName = valsAuthorName[3];
+                                                                                record.p_DoctorSurName = valsAuthorName[1];
+                                                                                record.p_DoctorName = valsAuthorName[2];
+                                                                                record.p_DoctorLastName = valsAuthorName[3];
                                                                                 isAuthorValid = true;
                                                                             }
                                                                             else
@@ -289,7 +289,12 @@ namespace Sadco.FamilyDoctor.LoaderRecords
                                                                 if (isAuthorValid)
                                                                 {
                                                                     var attrs = File.GetAttributes(fileRecord);
-                                                                    record.p_IsPrint = attrs.HasFlag(FileAttributes.ReadOnly);
+                                                                    var isPrint = attrs.HasFlag(FileAttributes.ReadOnly);
+                                                                    if (isPrint)
+                                                                    {
+                                                                        record.p_DatePrintDoctor = record.p_DatePrintPatient = DateTime.Now;
+                                                                    }
+
                                                                     var fileStream = File.OpenRead(fileRecord);
 
                                                                     var fileName = "";
@@ -318,7 +323,19 @@ namespace Sadco.FamilyDoctor.LoaderRecords
                                                                     }
                                                                     MemoryStream ms = new MemoryStream();
                                                                     fileStream.CopyTo(ms);
-                                                                    record.p_FileBytes = ms.ToArray();
+                                                                    if (record.p_FileType == E_RecordFileType.HTML)
+                                                                    {
+                                                                        ms.Position = 0;
+                                                                        var sr = new StreamReader(ms);
+                                                                        var htmlText = sr.ReadToEnd();
+                                                                        sr.Dispose();
+                                                                        htmlText = htmlText.Replace(@"img src=\\family-doctor.local\fd$\FD.med\Images\Logo.jpg", @"img class=""record_title_img"" src=""Images/title.jpg""");
+                                                                        record.p_FileBytes = Encoding.UTF8.GetBytes(htmlText);
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        record.p_FileBytes = ms.ToArray();
+                                                                    }
                                                                     ms.Dispose();
                                                                     f_WriteLog(string.Format("Сформирована новая запись {0}", fileRecord), E_MessageType.Info);
                                                                     curRecords.Add(valsRecord, record);

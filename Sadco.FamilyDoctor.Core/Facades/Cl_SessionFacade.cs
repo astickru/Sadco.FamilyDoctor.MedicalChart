@@ -17,16 +17,16 @@ namespace Sadco.FamilyDoctor.Core.Facades
         private bool m_IsInit = false;
 
         /// <summary>Инициализация фасада</summary>
-        public bool f_Init(Cl_User a_User, Cl_User a_Patient, int a_MedCardNumber, DateTime? a_DateStart = null, DateTime? a_DateEnd = null)
+        public bool f_Init(Cl_User a_Doctor, Cl_User a_Patient, int a_MedCardNumber, DateTime? a_DateStart = null, DateTime? a_DateEnd = null)
         {
-            m_IsInit = f_Update(a_User, a_Patient, a_MedCardNumber, a_DateStart, a_DateEnd);
+            m_IsInit = f_Update(a_Doctor, a_Patient, a_MedCardNumber, a_DateStart, a_DateEnd);
             return m_IsInit;
         }
 
         /// <summary>Обновление фасада</summary>
-        public bool f_Update(Cl_User a_User, Cl_User a_Patient, int a_MedCardNumber, DateTime? a_DateStart = null, DateTime? a_DateEnd = null)
+        public bool f_Update(Cl_User a_Doctor, Cl_User a_Patient, int a_MedCardNumber, DateTime? a_DateStart = null, DateTime? a_DateEnd = null)
         {
-            p_User = a_User;
+            p_Doctor = a_Doctor;
             p_Patient = a_Patient;
             p_DateStart = a_DateStart;
             p_DateEnd = a_DateEnd;
@@ -36,7 +36,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
 
 
         /// <summary>Текущий пользователь в сессии</summary>
-        public Cl_User p_User { get; private set; }
+        public Cl_User p_Doctor { get; private set; }
 
         /// <summary>Текущий пациент в сессии</summary>
         public Cl_User p_Patient { get; private set; }

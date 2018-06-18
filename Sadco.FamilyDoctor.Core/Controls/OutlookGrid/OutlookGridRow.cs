@@ -34,15 +34,13 @@ namespace OutlookStyleControls
         private IOutlookGridGroup group;
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public IOutlookGridGroup Group
-        {
+        public IOutlookGridGroup Group {
             get { return group; }
             set { group = value; }
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool IsGroupRow
-        {
+        public bool IsGroupRow {
             get { return isGroupRow; }
             set { isGroupRow = value; }
         }
@@ -66,7 +64,7 @@ namespace OutlookStyleControls
         {
             if (!IsGroupRow && group != null && group.Collapsed)
             {
-                return base.GetState(rowIndex) & DataGridViewElementStates.Selected;   
+                return base.GetState(rowIndex) & DataGridViewElementStates.Selected;
             }
 
             return base.GetState(rowIndex);
@@ -101,13 +99,13 @@ namespace OutlookStyleControls
 
                 // draw the background
                 graphics.FillRectangle(brush, rowBounds.Left + rowHeadersWidth - grid.HorizontalScrollingOffset, rowBounds.Top, gridwidth, rowBounds.Height - 1);
-                
+
                 // draw text, using the current grid font
                 graphics.DrawString(group.Text, grid.Font, Brushes.Black, rowHeadersWidth - grid.HorizontalScrollingOffset + 23, rowBounds.Bottom - 18);
-                
+
                 //draw bottom line
                 graphics.FillRectangle(brush2, rowBounds.Left + rowHeadersWidth - grid.HorizontalScrollingOffset, rowBounds.Bottom - 2, gridwidth - 1, 2);
-                
+
                 // draw right vertical bar
                 if (grid.CellBorderStyle == DataGridViewCellBorderStyle.SingleVertical || grid.CellBorderStyle == DataGridViewCellBorderStyle.Single)
                     graphics.FillRectangle(brush2, rowBounds.Left + rowHeadersWidth - grid.HorizontalScrollingOffset + gridwidth - 1, rowBounds.Top, 1, rowBounds.Height);
@@ -193,7 +191,21 @@ namespace OutlookStyleControls
             OutlookGridRow obj2 = (OutlookGridRow)y;
             if (obj1.Cells[this.columnIndex].Value != null && obj2.Cells[this.columnIndex].Value != null)
             {
-                return string.Compare(obj1.Cells[this.columnIndex].Value.ToString(), obj2.Cells[this.columnIndex].Value.ToString()) * (direction == ListSortDirection.Ascending ? 1 : -1);
+                if (obj1.Cells[this.columnIndex].ValueType == typeof(DateTime) && obj2.Cells[this.columnIndex].ValueType == typeof(DateTime) && obj1.Cells[this.columnIndex].Value != null && obj2.Cells[this.columnIndex].Value != null)
+                {
+                    DateTime dt1 = DateTime.Now;
+                    DateTime dt2 = DateTime.Now;
+                    if (DateTime.TryParse(obj1.Cells[this.columnIndex].Value.ToString(), out dt1) && DateTime.TryParse(obj2.Cells[this.columnIndex].Value.ToString(), out dt2))
+                    {
+                        return DateTime.Compare(dt1, dt2) * (direction == ListSortDirection.Ascending ? 1 : -1);
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+                else
+                    return string.Compare(obj1.Cells[this.columnIndex].Value.ToString(), obj2.Cells[this.columnIndex].Value.ToString()) * (direction == ListSortDirection.Ascending ? 1 : -1);
             }
             else
             {

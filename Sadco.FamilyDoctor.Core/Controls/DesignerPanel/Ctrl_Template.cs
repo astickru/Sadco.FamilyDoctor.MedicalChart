@@ -310,6 +310,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             if (m_Template == null || m_Record == null) return null;
             var record = new Cl_Record();
             record.p_RecordID = m_Record.p_RecordID;
+            record.p_MedicalCardID = m_Record.p_MedicalCardID;
+            record.p_ClinikName = m_Record.p_ClinikName;
             record.p_DateLastChange = DateTime.Now;
             record.p_Template = m_Template;
             record.p_ClinikName = m_Record.p_ClinikName;
@@ -318,10 +320,10 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             record.p_CategoryTotal = m_Record.p_CategoryTotal;
             record.p_CategoryClinikID = m_Record.p_CategoryClinikID;
             record.p_CategoryClinik = m_Record.p_CategoryClinik;
-            record.p_UserID = m_Record.p_UserID;
-            record.p_UserSurName = m_Record.p_UserSurName;
-            record.p_UserName = m_Record.p_UserName;
-            record.p_UserLastName = m_Record.p_UserLastName;
+            record.p_DoctorID = m_Record.p_DoctorID;
+            record.p_DoctorSurName = m_Record.p_DoctorSurName;
+            record.p_DoctorName = m_Record.p_DoctorName;
+            record.p_DoctorLastName = m_Record.p_DoctorLastName;
             record.p_PatientID = m_Record.p_PatientID;
             record.p_PatientSurName = m_Record.p_PatientSurName;
             record.p_PatientName = m_Record.p_PatientName;
