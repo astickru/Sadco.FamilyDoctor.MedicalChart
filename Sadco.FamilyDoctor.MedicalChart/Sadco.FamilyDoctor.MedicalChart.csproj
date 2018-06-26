@@ -120,17 +120,35 @@
     <Compile Include="Forms\SubForms\Rating\Dlg_RatingViewer.Designer.cs">
       <DependentUpon>Dlg_RatingViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SubForms\Records\Dlg_RecordPattern.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SubForms\Records\Dlg_RecordPattern.Designer.cs">
+      <DependentUpon>Dlg_RecordPattern.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SubForms\Records\Dlg_Record.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\SubForms\Records\Dlg_Record.Designer.cs">
       <DependentUpon>Dlg_Record.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SubForms\Records\Dlg_SelectTemplate.cs">
+    <Compile Include="Forms\SubForms\Records\Dlg_RecordPatternSelectSource.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\SubForms\Records\Dlg_SelectTemplate.Designer.cs">
-      <DependentUpon>Dlg_SelectTemplate.cs</DependentUpon>
+    <Compile Include="Forms\SubForms\Records\Dlg_RecordPatternSelectSource.Designer.cs">
+      <DependentUpon>Dlg_RecordPatternSelectSource.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SubForms\Records\Dlg_RecordSelectSource.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SubForms\Records\Dlg_RecordSelectSource.Designer.cs">
+      <DependentUpon>Dlg_RecordSelectSource.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SubForms\Records\F_RecordsPatterns.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SubForms\Records\F_RecordsPatterns.Designer.cs">
+      <DependentUpon>F_RecordsPatterns.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SubForms\Records\UC_Records.cs">
       <SubType>UserControl</SubType>
@@ -219,11 +237,20 @@
     <EmbeddedResource Include="Forms\SubForms\Rating\Dlg_RatingViewer.resx">
       <DependentUpon>Dlg_RatingViewer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SubForms\Records\Dlg_RecordPattern.resx">
+      <DependentUpon>Dlg_RecordPattern.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SubForms\Records\Dlg_Record.resx">
       <DependentUpon>Dlg_Record.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SubForms\Records\Dlg_SelectTemplate.resx">
-      <DependentUpon>Dlg_SelectTemplate.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\SubForms\Records\Dlg_RecordPatternSelectSource.resx">
+      <DependentUpon>Dlg_RecordPatternSelectSource.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SubForms\Records\Dlg_RecordSelectSource.resx">
+      <DependentUpon>Dlg_RecordSelectSource.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SubForms\Records\F_RecordsPatterns.resx">
+      <DependentUpon>F_RecordsPatterns.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SubForms\Records\UC_Records.resx">
       <DependentUpon>UC_Records.cs</DependentUpon>

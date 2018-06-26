@@ -210,10 +210,5 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
         }
         #endregion
-
-        private void ctrlBArhive_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

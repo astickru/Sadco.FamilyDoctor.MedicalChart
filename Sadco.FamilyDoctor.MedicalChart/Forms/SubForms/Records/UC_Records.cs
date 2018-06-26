@@ -67,6 +67,20 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             ctrl_TRecords.Sort(ctrl_TRecords.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
         }
 
+        private void f_FormatPattern(Cl_Record a_Record)
+        {
+            if (a_Record != null && !a_Record.p_IsAutimatic && a_Record.p_Template != null)
+            {
+                a_Record.p_Template.f_LoadTemplatesElements();
+                Cl_RecordPattern pattern = Cl_RecordsFacade.f_GetInstance().f_GetNewRecordPattern(a_Record);
+                pattern.p_ClinikName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinikName;
+                pattern.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
+                var dlgPattern = new Dlg_RecordPattern();
+                dlgPattern.p_RecordPattern = pattern;
+                dlgPattern.ShowDialog(this);
+            }
+        }
+
         private void f_Edit(Cl_Record a_Record)
         {
             if (a_Record != null && !a_Record.p_IsAutimatic)
@@ -139,9 +153,9 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
         }
 
-        private void ctrlBReportAdd_Click(object sender, System.EventArgs e)
+        private void ctrlBReportAddRecord_Click(object sender, System.EventArgs e)
         {
-            var dlg = new Dlg_SelectTemplate();
+            var dlg = new Dlg_RecordSelectSource();
             if (dlg.ShowDialog(this) == DialogResult.OK)
             {
                 if (dlg.p_SelectedTemplate != null)
@@ -159,7 +173,50 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     dlgRecord.p_Record = record;
                     dlgRecord.ShowDialog(this);
                 }
+                else if (dlg.p_SelectedRecordPattern != null)
+                {
+                    if (dlg.p_SelectedRecordPattern.p_Template != null)
+                    {
+                        dlg.p_SelectedRecordPattern.p_Template.f_LoadTemplatesElements();
+                        Cl_Record record = Cl_RecordsFacade.f_GetInstance().f_GetNewRecord(dlg.p_SelectedRecordPattern);
+                        if (record != null)
+                        {
+                            var dlgRecord = new Dlg_Record();
+                            dlgRecord.e_Save += DlgRecord_e_Save;
+                            dlgRecord.p_Record = record;
+                            dlgRecord.ShowDialog(this);
+                        }
+                    }
+                }
             }
+        }
+
+        private void ctrlBReportAddPattern_Click(object sender, EventArgs e)
+        {
+            var dlg = new Dlg_RecordPatternSelectSource();
+            if (dlg.ShowDialog(this) == DialogResult.OK)
+            {
+                if (dlg.p_SelectedTemplate != null)
+                {
+                    Cl_RecordPattern pattern = new Cl_RecordPattern();
+                    pattern.p_ClinikName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinikName;
+                    pattern.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
+                    pattern.f_SetTemplate(dlg.p_SelectedTemplate);
+                    var dlgPattern = new Dlg_RecordPattern();
+                    dlgPattern.p_RecordPattern = pattern;
+                    dlgPattern.ShowDialog(this);
+                }
+            }
+        }
+
+        private void ctrlBReportFormatPattern_Click(object sender, EventArgs e)
+        {
+            f_FormatPattern(m_SelectedRecord);
+        }
+
+        private void DlgRecord_e_Save(object sender, EventArgs e)
+        {
+            f_UpdateRecords();
         }
 
         private void ctrlBReportEdit_Click(object sender, EventArgs e)
@@ -200,12 +257,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
         }
 
-        private void DlgRecord_e_Save(object sender, EventArgs e)
-        {
-            f_UpdateRecords();
-        }
-
-
         private void ctrl_TRecords_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             m_SelectedRecord = null;
@@ -215,7 +266,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 if (record != null)
                 {
                     ctrlCMViewer.Enabled = true;
-                    ctrlBReportEdit.Visible = ctrlMIEdit.Visible = true;
+                    ctrlBReportFormatPattern.Visible = !record.p_IsAutimatic;
+                    ctrlBReportEdit.Visible = ctrlMIEdit.Visible = !record.p_IsAutimatic;
                     ctrlBReportArchive.Visible = ctrlMIArchive.Visible = !record.p_IsArchive && m_Permission.p_IsEditArchive;
                     ctrlBReportRating.Visible = ctrlMIRating.Visible = m_Permission.p_IsEditAllRatings;
                     ctrlBReportSyncBMK.Visible = ctrlMISyncBMK.Visible = !record.p_IsSyncBMK && record.p_IsPrintDoctor && m_Permission.p_IsEditArchive;
@@ -264,6 +316,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             if (m_SelectedRecord == null)
             {
                 ctrlCMViewer.Enabled = false;
+                ctrlBReportFormatPattern.Visible = false;
                 ctrlBReportEdit.Visible = false;
                 ctrlBReportArchive.Visible = false;
                 ctrlBReportRating.Visible = false;

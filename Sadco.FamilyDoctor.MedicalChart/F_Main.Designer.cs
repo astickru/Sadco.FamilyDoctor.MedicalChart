@@ -39,6 +39,7 @@
             this.ctrlMIInfo = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel = new System.Windows.Forms.Panel();
             this.ctrl_CustomControls = new System.Windows.Forms.Panel();
+            this.menuPatterns = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlMIMenu.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.SuspendLayout();
@@ -92,6 +93,7 @@
             this.menuCatalogs,
             this.menuTemplate,
             this.menuMegaTemplate,
+            this.menuPatterns,
             this.menuMegaTemplateDeleted});
             this.ctrlMIEditor.Name = "ctrlMIEditor";
             this.ctrlMIEditor.Size = new System.Drawing.Size(69, 20);
@@ -108,7 +110,7 @@
             // menuCategories
             // 
             this.menuCategories.Name = "menuCategories";
-            this.menuCategories.Size = new System.Drawing.Size(152, 22);
+            this.menuCategories.Size = new System.Drawing.Size(131, 22);
             this.menuCategories.Text = "Категории";
             this.menuCategories.Click += new System.EventHandler(this.menuCategories_Click);
             // 
@@ -165,6 +167,13 @@
             this.ctrl_CustomControls.Size = new System.Drawing.Size(974, 852);
             this.ctrl_CustomControls.TabIndex = 0;
             // 
+            // menuPatterns
+            // 
+            this.menuPatterns.Name = "menuPatterns";
+            this.menuPatterns.Size = new System.Drawing.Size(231, 22);
+            this.menuPatterns.Text = "Паттерны";
+            this.menuPatterns.Click += new System.EventHandler(this.menuPatterns_Click);
+            // 
             // F_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -204,5 +213,6 @@
         private System.Windows.Forms.ToolStripMenuItem menuMegaTemplateDeleted;
         private System.Windows.Forms.ToolStripMenuItem menuCatalogs;
         private System.Windows.Forms.ToolStripMenuItem menuCategories;
+        private System.Windows.Forms.ToolStripMenuItem menuPatterns;
     }
 }

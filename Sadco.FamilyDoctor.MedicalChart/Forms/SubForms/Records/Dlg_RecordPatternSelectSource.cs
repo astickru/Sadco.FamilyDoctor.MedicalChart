@@ -9,10 +9,10 @@ using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
-    public partial class Dlg_SelectTemplate : Form
+    public partial class Dlg_RecordPatternSelectSource : Form
     {
-        public Dlg_SelectTemplate() {
-            Text = string.Format("Выбор шаблона для новой записи v{0}", ConfigurationManager.AppSettings["Version"]);
+        public Dlg_RecordPatternSelectSource() {
+            Text = string.Format("Выбор шаблона для нового паттерна записей v{0}", ConfigurationManager.AppSettings["Version"]);
             InitializeComponent();
             f_InitTreeView();
         }

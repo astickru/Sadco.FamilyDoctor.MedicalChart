@@ -267,7 +267,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         if (el.p_Element != null && el != curEl)
                         {
                             el.Visible = Cl_RecordsFacade.f_GetInstance().f_GetElementVisible(record, el.p_Element.p_VisibilityFormula);
-                            if (el.p_Element.p_IsNumber)
+                            if (el.p_Element.p_IsNumber && !string.IsNullOrWhiteSpace(el.p_Element.p_NumberFormula))
                             {
                                 var val = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, el.p_Element.p_NumberFormula);
                                 if (val != null)

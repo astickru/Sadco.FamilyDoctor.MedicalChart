@@ -1,6 +1,6 @@
 ﻿namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
-	partial class Dlg_SelectTemplate
+	partial class Dlg_RecordPatternSelectSource
     {
 		/// <summary> 
 		/// Обязательная переменная конструктора.
@@ -33,10 +33,10 @@
             this.ctrl_MITemplateNew = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_MITemplateEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_MITemplateDelete = new System.Windows.Forms.ToolStripMenuItem();
-            this.ctrl_TreeTemplates = new Sadco.FamilyDoctor.Core.Controls.Ctrl_TreeTemplates();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.ctrl_TreeTemplates = new Sadco.FamilyDoctor.Core.Controls.Ctrl_TreeTemplates();
             this.ctrl_CMTemplate.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -95,19 +95,6 @@
             this.ctrl_MITemplateDelete.Tag = "MI_TemplateDelete";
             this.ctrl_MITemplateDelete.Text = "Удалить шаблон";
             // 
-            // ctrl_TreeTemplates
-            // 
-            this.ctrl_TreeTemplates.AllowDrop = true;
-            this.ctrl_TreeTemplates.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ctrl_TreeTemplates.ImageKey = "FOLDER_16";
-            this.ctrl_TreeTemplates.Location = new System.Drawing.Point(0, 0);
-            this.ctrl_TreeTemplates.Name = "ctrl_TreeTemplates";
-            this.ctrl_TreeTemplates.p_ReadOnly = true;
-            this.ctrl_TreeTemplates.SelectedImageKey = "FOLDER_16";
-            this.ctrl_TreeTemplates.Size = new System.Drawing.Size(550, 507);
-            this.ctrl_TreeTemplates.TabIndex = 1;
-            this.ctrl_TreeTemplates.DoubleClick += new System.EventHandler(this.ctrl_TreeTemplates_DoubleClick);
-            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.button1);
@@ -140,16 +127,30 @@
             this.button2.Text = "отменить";
             this.button2.UseVisualStyleBackColor = true;
             // 
-            // Dlg_SelectTemplate
+            // ctrl_TreeTemplates
+            // 
+            this.ctrl_TreeTemplates.AllowDrop = true;
+            this.ctrl_TreeTemplates.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ctrl_TreeTemplates.ImageKey = "FOLDER_16";
+            this.ctrl_TreeTemplates.Location = new System.Drawing.Point(0, 0);
+            this.ctrl_TreeTemplates.Name = "ctrl_TreeTemplates";
+            this.ctrl_TreeTemplates.p_IsShowDeleted = false;
+            this.ctrl_TreeTemplates.p_ReadOnly = true;
+            this.ctrl_TreeTemplates.SelectedImageKey = "FOLDER_16";
+            this.ctrl_TreeTemplates.Size = new System.Drawing.Size(550, 482);
+            this.ctrl_TreeTemplates.TabIndex = 3;
+            this.ctrl_TreeTemplates.DoubleClick += new System.EventHandler(this.ctrl_TreeTemplates_DoubleClick);
+            // 
+            // Dlg_RecordPatternSelectSource
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(550, 507);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.ctrl_TreeTemplates);
+            this.Controls.Add(this.panel1);
             this.MaximumSize = new System.Drawing.Size(1600, 1000);
-            this.Name = "Dlg_SelectTemplate";
+            this.Name = "Dlg_RecordPatternSelectSource";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.ctrl_CMTemplate.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
@@ -165,9 +166,9 @@
 		private System.Windows.Forms.ToolStripMenuItem ctrl_MITemplateDelete;
 		private System.Windows.Forms.ToolStripMenuItem ctrl_MIGroupEdit;
 		private System.Windows.Forms.ToolStripMenuItem ctrl_MITemplateEdit;
-        private Core.Controls.Ctrl_TreeTemplates ctrl_TreeTemplates;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
+        private Core.Controls.Ctrl_TreeTemplates ctrl_TreeTemplates;
     }
 }

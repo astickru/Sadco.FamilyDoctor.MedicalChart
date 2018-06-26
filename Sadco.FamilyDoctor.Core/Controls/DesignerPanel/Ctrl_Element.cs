@@ -279,28 +279,24 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             if (p_Element.p_Symmetrical)
                                 ctrl_DopValuesMulti.Items.Add(val);
                         }
-
-                        if (m_Record.p_Version > 0)
+                        for (int i = 0; i < ctrl_ValuesMulti.Items.Count; i++)
                         {
-                            for (int i = 0; i < ctrl_ValuesMulti.Items.Count; i++)
+                            var val = (Cl_ElementParam)ctrl_ValuesMulti.Items[i];
+                            var rValue = a_RecordValue.p_ValuesCatalog.FirstOrDefault(rv => rv.p_ElementParamID == val.p_ID);
+                            if (rValue != null)
+                                ctrl_ValuesMulti.SetItemChecked(i, true);
+                        }
+                        if (p_Element.p_Symmetrical)
+                        {
+                            for (int i = 0; i < ctrl_DopValuesMulti.Items.Count; i++)
                             {
-                                var val = (Cl_ElementParam)ctrl_ValuesMulti.Items[i];
-                                var rValue = a_RecordValue.p_ValuesCatalog.FirstOrDefault(rv => rv.p_ElementParamID == val.p_ID);
+                                var val = (Cl_ElementParam)ctrl_DopValuesMulti.Items[i];
+                                var rValue = a_RecordValue.p_ValuesDopCatalog.FirstOrDefault(rv => rv.p_ElementParamID == val.p_ID);
                                 if (rValue != null)
-                                    ctrl_ValuesMulti.SetItemChecked(i, true);
-                            }
-                            if (p_Element.p_Symmetrical)
-                            {
-                                for (int i = 0; i < ctrl_DopValuesMulti.Items.Count; i++)
-                                {
-                                    var val = (Cl_ElementParam)ctrl_DopValuesMulti.Items[i];
-                                    var rValue = a_RecordValue.p_ValuesDopCatalog.FirstOrDefault(rv => rv.p_ElementParamID == val.p_ID);
-                                    if (rValue != null)
-                                        ctrl_DopValuesMulti.SetItemChecked(i, true);
-                                }
+                                    ctrl_DopValuesMulti.SetItemChecked(i, true);
                             }
                         }
-                        else if (p_Element.p_Default != null)
+                        if (m_Record.p_Version == 0 && p_Element.p_Default != null)
                         {
                             for (int i = 0; i < ctrl_ValuesMulti.Items.Count; i++)
                             {
@@ -376,24 +372,20 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             if (p_Element.p_Symmetrical)
                                 ctrl_DopValues.f_AddObject(val);
                         }
-
-                        if (m_Record.p_Version > 0)
+                        var rValue = a_RecordValue.p_ValuesCatalog.FirstOrDefault();
+                        if (rValue != null)
                         {
-                            var rValue = a_RecordValue.p_ValuesCatalog.FirstOrDefault();
+                            ctrl_Values.SelectedItem = rValue.p_ElementParam;
+                        }
+                        if (p_Element.p_Symmetrical)
+                        {
+                            rValue = a_RecordValue.p_ValuesDopCatalog.FirstOrDefault();
                             if (rValue != null)
                             {
-                                ctrl_Values.SelectedItem = rValue.p_ElementParam;
-                            }
-                            if (p_Element.p_Symmetrical)
-                            {
-                                rValue = a_RecordValue.p_ValuesDopCatalog.FirstOrDefault();
-                                if (rValue != null)
-                                {
-                                    ctrl_DopValues.SelectedItem = rValue.p_ElementParam;
-                                }
+                                ctrl_DopValues.SelectedItem = rValue.p_ElementParam;
                             }
                         }
-                        else if (p_Element.p_Default != null)
+                        if (m_Record.p_Version == 0 && p_Element.p_Default != null)
                         {
                             ctrl_Values.SelectedItem = p_Element.p_Default;
                             if (p_Element.p_Symmetrical)

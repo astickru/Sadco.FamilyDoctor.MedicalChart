@@ -34,6 +34,10 @@ namespace Sadco.FamilyDoctor.Core.Data
         public DbSet<Cl_RecordValue> p_RecordsValues { get; set; }
         public DbSet<Cl_RecordParam> p_RecordsParams { get; set; }
 
+        public DbSet<Cl_RecordPattern> p_RecordsPatterns { get; set; }
+        public DbSet<Cl_RecordPatternValue> p_RecordsPatternsValues { get; set; }
+        public DbSet<Cl_RecordPatternParam> p_RecordsPatternsParams { get; set; }
+
         public void f_Init() {
 			p_Groups.Load();
 			if (!p_Groups.Any(g => g.p_Type == Cl_Group.E_Type.Templates)) p_Groups.Add(new Cl_Group() { p_Type = Cl_Group.E_Type.Templates, p_Name = "Главная" });
@@ -80,6 +84,8 @@ namespace Sadco.FamilyDoctor.Core.Data
 
             modelBuilder.Entity<Cl_RecordValue>().HasRequired(rv => rv.p_Record).WithMany(r => r.p_Values).WillCascadeOnDelete(false);
             modelBuilder.Entity<Cl_RecordParam>().HasRequired(rv => rv.p_RecordValue).WithMany(r => r.p_Params).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Cl_RecordPatternValue>().HasRequired(rv => rv.p_RecordPattern).WithMany(r => r.p_Values).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Cl_RecordPatternParam>().HasRequired(rv => rv.p_RecordPatternValue).WithMany(r => r.p_Params).WillCascadeOnDelete(false);
         }
 	}
 }

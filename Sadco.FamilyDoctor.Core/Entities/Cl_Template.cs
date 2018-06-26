@@ -229,5 +229,10 @@ namespace Sadco.FamilyDoctor.Core.Entities
                 }
             }
         }
+
+        public override string ToString()
+        {
+            return p_Name;
+        }
     }
 }

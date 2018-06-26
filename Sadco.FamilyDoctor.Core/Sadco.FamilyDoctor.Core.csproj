@@ -161,7 +161,13 @@
     <Compile Include="Controls\TreeView\I_TreeNode.cs" />
     <Compile Include="Entities\Cl_Category.cs" />
     <Compile Include="Entities\Cl_Rating.cs" />
+    <Compile Include="Entities\Cl_RecordPatternParam.cs" />
+    <Compile Include="Entities\Cl_RecordParamBase.cs" />
+    <Compile Include="Entities\Cl_RecordPattern.cs" />
+    <Compile Include="Entities\Cl_RecordBase.cs" />
     <Compile Include="Entities\Cl_RecordParam.cs" />
+    <Compile Include="Entities\Cl_RecordPatternValue.cs" />
+    <Compile Include="Entities\Cl_RecordValueBase.cs" />
     <Compile Include="Entities\Cl_RecordValue.cs" />
     <Compile Include="Entities\Cl_Record.cs" />
     <Compile Include="Entities\Cl_AgeNorms.cs" />
@@ -255,6 +261,18 @@
     <Compile Include="Migrations\201806151428184_appRecordDateNull.cs" />
     <Compile Include="Migrations\201806151428184_appRecordDateNull.Designer.cs">
       <DependentUpon>201806151428184_appRecordDateNull.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806201643482_appPattern.cs" />
+    <Compile Include="Migrations\201806201643482_appPattern.Designer.cs">
+      <DependentUpon>201806201643482_appPattern.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806221136181_appRecordPatternUser.cs" />
+    <Compile Include="Migrations\201806221136181_appRecordPatternUser.Designer.cs">
+      <DependentUpon>201806221136181_appRecordPatternUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806221356526_appRecordPatternName.cs" />
+    <Compile Include="Migrations\201806221356526_appRecordPatternName.Designer.cs">
+      <DependentUpon>201806221356526_appRecordPatternName.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\Cl_AccessLevelAttribute.cs" />
@@ -370,6 +388,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806151428184_appRecordDateNull.resx">
       <DependentUpon>201806151428184_appRecordDateNull.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806201643482_appPattern.resx">
+      <DependentUpon>201806201643482_appPattern.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806221136181_appRecordPatternUser.resx">
+      <DependentUpon>201806221136181_appRecordPatternUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806221356526_appRecordPatternName.resx">
+      <DependentUpon>201806221356526_appRecordPatternName.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -319,5 +319,138 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 }
             }
         }
+
+        private Cl_RecordPatternParam f_GetRecordPatternParam(Cl_RecordPatternValue a_RecordPatternValue, Cl_RecordParam a_RecordParam)
+        {
+            Cl_RecordPatternParam param = null;
+            if (a_RecordPatternValue != null && a_RecordParam != null)
+            {
+                param = new Cl_RecordPatternParam();
+                param.p_RecordPatternValueID = a_RecordPatternValue.p_ID;
+                param.p_RecordPatternValue = a_RecordPatternValue;
+                param.p_ElementParamID = a_RecordParam.p_ElementParamID;
+                param.p_ElementParam = a_RecordParam.p_ElementParam;
+                param.p_IsDop = a_RecordParam.p_IsDop;
+
+            }
+            return param;
+        }
+
+        private Cl_RecordParam f_GetRecordParam(Cl_RecordValue a_RecordValue, Cl_RecordPatternParam a_RecordPatternParam)
+        {
+            Cl_RecordParam param = null;
+            if (a_RecordValue != null && a_RecordPatternParam != null)
+            {
+                param = new Cl_RecordParam();
+                param.p_RecordValueID = a_RecordValue.p_ID;
+                param.p_RecordValue = a_RecordValue;
+                param.p_ElementParamID = a_RecordPatternParam.p_ElementParamID;
+                param.p_ElementParam = a_RecordPatternParam.p_ElementParam;
+                param.p_IsDop = a_RecordPatternParam.p_IsDop;
+
+            }
+            return param;
+        }
+
+        private Cl_RecordPatternValue f_GetRecordPatternValue(Cl_RecordPattern a_RecordPattern, Cl_RecordValue a_RecordValue)
+        {
+            Cl_RecordPatternValue val = null;
+            if (a_RecordPattern != null && a_RecordValue != null)
+            {
+                val = new Cl_RecordPatternValue();
+                val.p_RecordPatternID = a_RecordPattern.p_ID;
+                val.p_RecordPattern = a_RecordPattern;
+                val.p_ElementID = a_RecordValue.p_ElementID;
+                val.p_Element = a_RecordValue.p_Element;
+                val.p_ImageBytes = a_RecordValue.p_ImageBytes;
+                val.p_Image = a_RecordValue.p_Image;
+                val.p_ValueUser = a_RecordValue.p_ValueUser;
+                val.p_ValueDopUser = a_RecordValue.p_ValueDopUser;
+                val.p_Params = a_RecordValue.p_Params.Select(p => f_GetRecordPatternParam(val, p)).ToList();
+
+            }
+            return val;
+        }
+
+        private Cl_RecordValue f_GetRecordValue(Cl_Record a_Record, Cl_RecordPatternValue a_RecordPatternValue)
+        {
+            Cl_RecordValue val = null;
+            if (a_Record != null && a_RecordPatternValue != null)
+            {
+                val = new Cl_RecordValue();
+                val.p_RecordID = a_Record.p_ID;
+                val.p_Record = a_Record;
+                val.p_ElementID = a_RecordPatternValue.p_ElementID;
+                val.p_Element = a_RecordPatternValue.p_Element;
+                val.p_ImageBytes = a_RecordPatternValue.p_ImageBytes;
+                val.p_Image = a_RecordPatternValue.p_Image;
+                val.p_ValueUser = a_RecordPatternValue.p_ValueUser;
+                val.p_ValueDopUser = a_RecordPatternValue.p_ValueDopUser;
+                val.p_Params = a_RecordPatternValue.p_Params.Select(p => f_GetRecordParam(val, p)).ToList();
+
+            }
+            return val;
+        }
+
+        /// <summary>Получение нового паттерна записей</summary>
+        /// <param name="a_Record">Запись</param>
+        /// <returns>Новый паттерн записей</returns>
+        public Cl_RecordPattern f_GetNewRecordPattern(Cl_Record a_Record)
+        {
+            return f_GetNewRecordPattern("Новый паттерн", a_Record);
+        }
+
+        /// <summary>Получение нового паттерна записей</summary>
+        /// <param name="a_Record">Запись</param>
+        /// <param name="a_PatternName">Название паттерна</param>
+        /// <returns>Новый паттерн записей</returns>
+        public Cl_RecordPattern f_GetNewRecordPattern(string a_PatternName, Cl_Record a_Record)
+        {
+            Cl_RecordPattern pattern = null;
+            if (!string.IsNullOrEmpty(a_PatternName) && a_Record != null)
+            {
+                pattern = new Cl_RecordPattern();
+                pattern.p_Name = a_PatternName;
+                pattern.p_ClinikName = a_Record.p_ClinikName;
+                pattern.p_DoctorID = a_Record.p_DoctorID;
+                pattern.p_DoctorSurName = a_Record.p_DoctorSurName;
+                pattern.p_DoctorName = a_Record.p_DoctorName;
+                pattern.p_DoctorLastName = a_Record.p_DoctorLastName;
+                pattern.p_CategoryClinikID = a_Record.p_CategoryClinikID;
+                pattern.p_CategoryClinik = a_Record.p_CategoryClinik;
+                pattern.p_CategoryTotalID = a_Record.p_CategoryTotalID;
+                pattern.p_CategoryTotal = a_Record.p_CategoryTotal;
+                pattern.f_SetTemplate(a_Record.p_Template);
+                pattern.p_Title = a_Record.p_Title;
+                pattern.p_Values = a_Record.p_Values.Select(v => f_GetRecordPatternValue(pattern, v)).ToList();
+            }
+            return pattern;
+        }
+
+        /// <summary>Получение паттерна записей</summary>
+        /// <param name="a_Record">Запись</param>
+        /// <returns>Паттерн записей</returns>
+        public Cl_Record f_GetNewRecord(Cl_RecordPattern a_RecordPattern)
+        {
+            Cl_Record record = null;
+            if (a_RecordPattern != null)
+            {
+                record = new Cl_Record();
+                record.p_DateCreate = DateTime.Now;
+                record.p_DateLastChange = record.p_DateForming = record.p_DateCreate;
+                record.p_MedicalCardID = Cl_SessionFacade.f_GetInstance().p_MedCardNumber;
+                record.p_ClinikName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinikName;
+                record.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
+                record.f_SetPatient(Cl_SessionFacade.f_GetInstance().p_Patient);
+                record.p_CategoryClinikID = a_RecordPattern.p_CategoryClinikID;
+                record.p_CategoryClinik = a_RecordPattern.p_CategoryClinik;
+                record.p_CategoryTotalID = a_RecordPattern.p_CategoryTotalID;
+                record.p_CategoryTotal = a_RecordPattern.p_CategoryTotal;
+                record.f_SetTemplate(a_RecordPattern.p_Template);
+                record.p_Title = a_RecordPattern.p_Title;
+                record.p_Values = a_RecordPattern.p_Values.Select(v => f_GetRecordValue(record, v)).ToList();
+            }
+            return record;
+        }
     }
 }

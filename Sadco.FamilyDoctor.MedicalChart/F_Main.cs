@@ -36,7 +36,7 @@ namespace Sadco.FamilyDoctor.MedicalChart
 
             if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditTemplates)
             {
-                menuTemplate.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditTemplates;
+                menuTemplate.Visible = menuPatterns.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditTemplates;
             }
 
             if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsShowDeleted)
@@ -123,6 +123,12 @@ namespace Sadco.FamilyDoctor.MedicalChart
         {
             var wCategories = new F_Categories();
             wCategories.ShowDialog();
+        }
+
+        private void menuPatterns_Click(object sender, EventArgs e)
+        {
+            var wPatterns = new F_RecordsPatterns();
+            wPatterns.ShowDialog();
         }
     }
 }

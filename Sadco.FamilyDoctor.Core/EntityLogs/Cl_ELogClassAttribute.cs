@@ -19,7 +19,11 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
         /// <summary>
         /// Записи врача
         /// </summary>
-        Records
+        Records,
+        /// <summary>
+        /// Паттерны записей врача
+        /// </summary>
+        RecordsPatterns
     }
 
     [AttributeUsage(AttributeTargets.Class)]
