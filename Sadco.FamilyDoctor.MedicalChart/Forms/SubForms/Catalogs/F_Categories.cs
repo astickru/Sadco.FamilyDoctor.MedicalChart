@@ -48,7 +48,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
         private void f_RefreshClinik()
         {
             BindingSource bs = new BindingSource();
-            bs.DataSource = Cl_App.m_DataContext.p_Categories.Local.ToBindingList().Where(c => c.p_Type == Cl_Category.E_CategoriesTypes.Clinik);
+            bs.DataSource = Cl_App.m_DataContext.p_Categories.Local.ToBindingList().Where(c => c.p_Type == Cl_Category.E_CategoriesTypes.Clinic);
             ctrlCategoriesClinik.DataSource = bs;
         }
 
@@ -75,7 +75,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
                 if (wEdit.ShowDialog() == DialogResult.OK)
                 {
                     var cat = new Cl_Category();
-                    cat.p_Type = Cl_Category.E_CategoriesTypes.Clinik;
+                    cat.p_Type = Cl_Category.E_CategoriesTypes.Clinic;
                     cat.p_Name = wEdit.ctrlCategotyName.Text;
                     Cl_App.m_DataContext.p_Categories.Add(cat);
                     Cl_App.m_DataContext.SaveChanges();

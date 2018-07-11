@@ -150,8 +150,8 @@ namespace Sadco.FamilyDoctor.Core.Facades
                         newTemplate.p_Title = curTemplate.p_Title;
                         newTemplate.p_CategoryTotalID = curTemplate.p_CategoryTotalID;
                         newTemplate.p_CategoryTotal = curTemplate.p_CategoryTotal;
-                        newTemplate.p_CategoryClinikID = curTemplate.p_CategoryClinikID;
-                        newTemplate.p_CategoryClinik = curTemplate.p_CategoryClinik;
+                        newTemplate.p_CategoryClinicID = curTemplate.p_CategoryClinicID;
+                        newTemplate.p_CategoryClinic = curTemplate.p_CategoryClinic;
                         newTemplate.p_Type = curTemplate.p_Type;
                         newTemplate.p_Name = curTemplate.p_Name;
                         newTemplate.p_Version = curTemplate.p_Version + 1;
@@ -257,8 +257,8 @@ namespace Sadco.FamilyDoctor.Core.Facades
             newTemplate.p_Title = template.p_Title;
             newTemplate.p_CategoryTotalID = template.p_CategoryTotalID;
             newTemplate.p_CategoryTotal = template.p_CategoryTotal;
-            newTemplate.p_CategoryClinikID = template.p_CategoryClinikID;
-            newTemplate.p_CategoryClinik = template.p_CategoryClinik;
+            newTemplate.p_CategoryClinicID = template.p_CategoryClinicID;
+            newTemplate.p_CategoryClinic = template.p_CategoryClinic;
             newTemplate.p_Type = template.p_Type;
             newTemplate.p_Name = template.p_Name;
             newTemplate.p_Version = template.p_Version + 1;

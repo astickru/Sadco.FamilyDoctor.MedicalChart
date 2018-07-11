@@ -31,7 +31,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
 
         private void f_Refresh()
         {
-            m_Patterns = Cl_App.m_DataContext.p_RecordsPatterns.Include(p => p.p_Template).Include(p => p.p_CategoryClinik).Include(p => p.p_CategoryTotal)
+            m_Patterns = Cl_App.m_DataContext.p_RecordsPatterns.Include(p => p.p_Template).Include(p => p.p_CategoryClinic).Include(p => p.p_CategoryTotal)
                         .Include(p => p.p_Values).Include(r => r.p_Values.Select(v => v.p_Params)).Where(p => p.p_DoctorID == m_UserId).ToList();
             ctrlTablePatterns.DataSource = m_Patterns;
             foreach (DataGridViewColumn col in ctrlTablePatterns.Columns)
@@ -71,7 +71,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
                 if (dlg.p_SelectedTemplate != null)
                 {
                     Cl_RecordPattern pattern = new Cl_RecordPattern();
-                    pattern.p_ClinikName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinikName;
+                    pattern.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
                     pattern.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
                     pattern.f_SetTemplate(dlg.p_SelectedTemplate);
                     var dlgPattern = new Dlg_RecordPattern();

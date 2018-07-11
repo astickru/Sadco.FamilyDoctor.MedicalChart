@@ -48,9 +48,7 @@ namespace Sadco.FamilyDoctor.Core.Controls {
             // 
             this.AllowDrop = true;
             this.ContextMenuStrip = this.ctrlMenu;
-            this.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
             this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.ItemHeight = 24;
             this.ctrlMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 

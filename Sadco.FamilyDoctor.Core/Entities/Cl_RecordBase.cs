@@ -21,8 +21,8 @@ namespace Sadco.FamilyDoctor.Core.Entities
         public string p_Title { get; set; }
 
         /// <summary>Название клиники</summary>
-        [Column("F_CLINIKNAME")]
-        public string p_ClinikName { get; set; }
+        [Column("F_CLINICNAME")]
+        public string p_ClinicName { get; set; }
 
         /// <summary>ID пользователя</summary>
         [Column("F_USER_ID")]
@@ -52,7 +52,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Установка пользователя</summary>
         public void f_SetDoctor(Cl_User a_User)
         {
-            p_ClinikName = a_User.p_ClinikName;
+            p_ClinicName = a_User.p_ClinicName;
             p_DoctorID = a_User.p_UserID;
             p_DoctorSurName = a_User.p_UserSurName;
             p_DoctorName = a_User.p_UserName;
@@ -75,17 +75,17 @@ namespace Sadco.FamilyDoctor.Core.Entities
         }
 
         /// <summary>ID клинической категории</summary>
-        [Column("F_CATEGORYCLINIK_ID")]
-        [ForeignKey("p_CategoryClinik")]
-        public int? p_CategoryClinikID { get; set; }
-        private Cl_Category m_CategoryClinik = null;
+        [Column("F_CATEGORYCLINIC_ID")]
+        [ForeignKey("p_CategoryClinic")]
+        public int? p_CategoryClinicID { get; set; }
+        private Cl_Category m_CategoryClinic = null;
         /// <summary>Клиническая категория шаблонов</summary>
-        public Cl_Category p_CategoryClinik {
-            get { return m_CategoryClinik; }
+        public Cl_Category p_CategoryClinic {
+            get { return m_CategoryClinic; }
             set {
-                m_CategoryClinik = value;
-                if (m_CategoryClinik != null)
-                    m_CategoryClinik.p_Type = Cl_Category.E_CategoriesTypes.Clinik;
+                m_CategoryClinic = value;
+                if (m_CategoryClinic != null)
+                    m_CategoryClinic.p_Type = Cl_Category.E_CategoriesTypes.Clinic;
             }
         }
 
@@ -105,8 +105,8 @@ namespace Sadco.FamilyDoctor.Core.Entities
                 p_Title = a_Template.p_Title;
                 p_CategoryTotalID = a_Template.p_CategoryTotalID;
                 p_CategoryTotal = a_Template.p_CategoryTotal;
-                p_CategoryClinikID = a_Template.p_CategoryClinikID;
-                p_CategoryClinik = a_Template.p_CategoryClinik;
+                p_CategoryClinicID = a_Template.p_CategoryClinicID;
+                p_CategoryClinic = a_Template.p_CategoryClinic;
             }
         }
     }

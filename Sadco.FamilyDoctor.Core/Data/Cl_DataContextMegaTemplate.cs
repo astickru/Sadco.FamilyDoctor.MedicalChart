@@ -42,14 +42,6 @@ namespace Sadco.FamilyDoctor.Core.Data
 			p_Groups.Load();
 			if (!p_Groups.Any(g => g.p_Type == Cl_Group.E_Type.Templates)) p_Groups.Add(new Cl_Group() { p_Type = Cl_Group.E_Type.Templates, p_Name = "Главная" });
 			if (!p_Groups.Any(g => g.p_Type == Cl_Group.E_Type.Elements)) p_Groups.Add(new Cl_Group() { p_Type = Cl_Group.E_Type.Elements, p_Name = "Главная" });
-            if (!p_Categories.Any())
-            {
-                p_Categories.AddRange(new Cl_Category[] { new Cl_Category() { p_Type = Cl_Category.E_CategoriesTypes.Total, p_Name = "Анализ" },
-                    new Cl_Category() { p_Type = Cl_Category.E_CategoriesTypes.Total, p_Name = "Осмотр" },
-                    new Cl_Category() { p_Type = Cl_Category.E_CategoriesTypes.Total, p_Name = "Ренген" } });
-                p_Categories.AddRange(new Cl_Category[] { new Cl_Category() { p_Type = Cl_Category.E_CategoriesTypes.Clinik, p_Name = "Клиническая 1" },
-                    new Cl_Category() { p_Type = Cl_Category.E_CategoriesTypes.Clinik, p_Name = "Клиническая 2" } });
-            }
             base.SaveChanges();
 		}
 

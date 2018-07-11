@@ -30,10 +30,10 @@
         {
             this.panel2 = new System.Windows.Forms.Panel();
             this.ctrlPCategories = new System.Windows.Forms.Panel();
-            this.ctrlCategoriesClinik = new System.Windows.Forms.ComboBox();
+            this.ctrlCategoriesClinic = new System.Windows.Forms.ComboBox();
             this.ctrlCategoriesTotal = new System.Windows.Forms.ComboBox();
             this.ctrlLCategoriesTotal = new System.Windows.Forms.Label();
-            this.ctrlLCategoriesClinik = new System.Windows.Forms.Label();
+            this.ctrlLCategoriesClinic = new System.Windows.Forms.Label();
             this.ctrlTitle = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.ctrl_LGroupValue = new System.Windows.Forms.Label();
@@ -65,22 +65,22 @@
             // 
             // ctrlPCategories
             // 
-            this.ctrlPCategories.Controls.Add(this.ctrlCategoriesClinik);
+            this.ctrlPCategories.Controls.Add(this.ctrlCategoriesClinic);
             this.ctrlPCategories.Controls.Add(this.ctrlCategoriesTotal);
             this.ctrlPCategories.Controls.Add(this.ctrlLCategoriesTotal);
-            this.ctrlPCategories.Controls.Add(this.ctrlLCategoriesClinik);
+            this.ctrlPCategories.Controls.Add(this.ctrlLCategoriesClinic);
             this.ctrlPCategories.Location = new System.Drawing.Point(0, 88);
             this.ctrlPCategories.Name = "ctrlPCategories";
             this.ctrlPCategories.Size = new System.Drawing.Size(432, 57);
             this.ctrlPCategories.TabIndex = 78;
             // 
-            // ctrlCategoriesClinik
+            // ctrlCategoriesClinic
             // 
-            this.ctrlCategoriesClinik.FormattingEnabled = true;
-            this.ctrlCategoriesClinik.Location = new System.Drawing.Point(191, 27);
-            this.ctrlCategoriesClinik.Name = "ctrlCategoriesClinik";
-            this.ctrlCategoriesClinik.Size = new System.Drawing.Size(223, 21);
-            this.ctrlCategoriesClinik.TabIndex = 3;
+            this.ctrlCategoriesClinic.FormattingEnabled = true;
+            this.ctrlCategoriesClinic.Location = new System.Drawing.Point(191, 27);
+            this.ctrlCategoriesClinic.Name = "ctrlCategoriesClinic";
+            this.ctrlCategoriesClinic.Size = new System.Drawing.Size(223, 21);
+            this.ctrlCategoriesClinic.TabIndex = 3;
             // 
             // ctrlCategoriesTotal
             // 
@@ -99,14 +99,14 @@
             this.ctrlLCategoriesTotal.TabIndex = 77;
             this.ctrlLCategoriesTotal.Text = "Общая группа";
             // 
-            // ctrlLCategoriesClinik
+            // ctrlLCategoriesClinic
             // 
-            this.ctrlLCategoriesClinik.AutoSize = true;
-            this.ctrlLCategoriesClinik.Location = new System.Drawing.Point(16, 30);
-            this.ctrlLCategoriesClinik.Name = "ctrlLCategoriesClinik";
-            this.ctrlLCategoriesClinik.Size = new System.Drawing.Size(128, 13);
-            this.ctrlLCategoriesClinik.TabIndex = 76;
-            this.ctrlLCategoriesClinik.Text = "Клиническая группа";
+            this.ctrlLCategoriesClinic.AutoSize = true;
+            this.ctrlLCategoriesClinic.Location = new System.Drawing.Point(16, 30);
+            this.ctrlLCategoriesClinic.Name = "ctrlLCategoriesClinic";
+            this.ctrlLCategoriesClinic.Size = new System.Drawing.Size(128, 13);
+            this.ctrlLCategoriesClinic.TabIndex = 76;
+            this.ctrlLCategoriesClinic.Text = "Клиническая группа";
             // 
             // ctrlTitle
             // 
@@ -208,10 +208,10 @@
         private System.Windows.Forms.Label ctrl_LTitleName;
         public System.Windows.Forms.TextBox ctrlTitle;
         private System.Windows.Forms.Label label3;
-        public System.Windows.Forms.ComboBox ctrlCategoriesClinik;
+        public System.Windows.Forms.ComboBox ctrlCategoriesClinic;
         public System.Windows.Forms.ComboBox ctrlCategoriesTotal;
         private System.Windows.Forms.Label ctrlLCategoriesTotal;
-        private System.Windows.Forms.Label ctrlLCategoriesClinik;
+        private System.Windows.Forms.Label ctrlLCategoriesClinic;
         public System.Windows.Forms.Panel ctrlPCategories;
     }
 }

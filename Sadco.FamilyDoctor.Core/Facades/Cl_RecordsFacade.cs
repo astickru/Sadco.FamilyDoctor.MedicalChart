@@ -411,13 +411,13 @@ namespace Sadco.FamilyDoctor.Core.Facades
             {
                 pattern = new Cl_RecordPattern();
                 pattern.p_Name = a_PatternName;
-                pattern.p_ClinikName = a_Record.p_ClinikName;
+                pattern.p_ClinicName = a_Record.p_ClinicName;
                 pattern.p_DoctorID = a_Record.p_DoctorID;
                 pattern.p_DoctorSurName = a_Record.p_DoctorSurName;
                 pattern.p_DoctorName = a_Record.p_DoctorName;
                 pattern.p_DoctorLastName = a_Record.p_DoctorLastName;
-                pattern.p_CategoryClinikID = a_Record.p_CategoryClinikID;
-                pattern.p_CategoryClinik = a_Record.p_CategoryClinik;
+                pattern.p_CategoryClinicID = a_Record.p_CategoryClinicID;
+                pattern.p_CategoryClinic = a_Record.p_CategoryClinic;
                 pattern.p_CategoryTotalID = a_Record.p_CategoryTotalID;
                 pattern.p_CategoryTotal = a_Record.p_CategoryTotal;
                 pattern.f_SetTemplate(a_Record.p_Template);
@@ -439,11 +439,11 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 record.p_DateCreate = DateTime.Now;
                 record.p_DateLastChange = record.p_DateForming = record.p_DateCreate;
                 record.p_MedicalCardID = Cl_SessionFacade.f_GetInstance().p_MedCardNumber;
-                record.p_ClinikName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinikName;
+                record.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
                 record.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
                 record.f_SetPatient(Cl_SessionFacade.f_GetInstance().p_Patient);
-                record.p_CategoryClinikID = a_RecordPattern.p_CategoryClinikID;
-                record.p_CategoryClinik = a_RecordPattern.p_CategoryClinik;
+                record.p_CategoryClinicID = a_RecordPattern.p_CategoryClinicID;
+                record.p_CategoryClinic = a_RecordPattern.p_CategoryClinic;
                 record.p_CategoryTotalID = a_RecordPattern.p_CategoryTotalID;
                 record.p_CategoryTotal = a_RecordPattern.p_CategoryTotal;
                 record.f_SetTemplate(a_RecordPattern.p_Template);
