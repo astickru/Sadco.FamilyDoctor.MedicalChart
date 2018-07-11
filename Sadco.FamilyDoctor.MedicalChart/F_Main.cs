@@ -50,7 +50,7 @@ namespace Sadco.FamilyDoctor.MedicalChart
         private void f_InitSession(string[] args)
         {
             Cl_User user = new Cl_User();
-            user.p_ClinikName = args[0];
+            user.p_ClinicName = args[0];
             user.p_UserID = int.Parse(args[1]);
             user.p_UserSurName = args[2];
             user.p_UserName = args[3];

@@ -2,6 +2,7 @@
 using Sadco.FamilyDoctor.Core.Permision;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
@@ -46,14 +47,17 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
         /// <summary>ID записи для всех версий</summary>
         [Column("F_RECORD_ID")]
+        [Description("ID записи для всех версий")]
         public int p_RecordID { get; set; }
 
         /// <summary>Версия записи</summary>
         [Column("F_VERSION")]
+        [Description("Версия записи")]
         public int p_Version { get; set; }
 
         /// <summary>Флаг нахождения записи в удалении</summary>
         [Column("F_ISDEL")]
+        [Description("Флаг нахождения записи в удалении")]
         [Cl_ELogProperty("Запись удалена", p_IsCustomDescription = true, p_IgnoreValue = true)]
         public bool p_IsDelete { get; set; }
 
@@ -62,30 +66,37 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
         /// <summary>Время формирования записи</summary>
         [Column("F_DATEFORMING")]
+        [Description("Время формирования записи")]
         public DateTime p_DateForming { get; set; }
 
         /// <summary>Время создания записи</summary>
         [Column("F_DATECREATE")]
+        [Description("Время создания записи")]
         public DateTime p_DateCreate { get; set; }
 
         /// <summary>Время последнего изменения записи</summary>
         [Column("F_DATELASTCHANGE")]
+        [Description("Время последнего изменения записи")]
         public DateTime p_DateLastChange { get; set; }
 
         /// <summary>ID медицинской карты</summary>
         [Column("F_CARD_ID")]
+        [Description("ID медицинской карты")]
         public int p_MedicalCardID { get; set; }
 
         /// <summary>Флаг архив</summary>
         [Column("F_ISARCHIVE")]
+        [Description("Флаг архив")]
         public bool p_IsArchive { get; set; }
 
         /// <summary>Дата первой печати для доктора</summary>
         [Column("F_DATEPRINTDOCTOR")]
+        [Description("Дата первой печати для доктора")]
         public DateTime? p_DatePrintDoctor { get; set; }
 
         /// <summary>Дата первой печати для пациента</summary>
         [Column("F_DATEPRINTPATIENT")]
+        [Description("Дата первой печати для пациента")]
         public DateTime? p_DatePrintPatient { get; set; }
 
         /// <summary>Флаг печати для доктора</summary>
@@ -103,11 +114,13 @@ namespace Sadco.FamilyDoctor.Core.Entities
         }
 
         /// <summary>Флаг автомата</summary>
-        [Column("F_ISAUTIMATIC")]
-        public bool p_IsAutimatic { get; set; }
+        [Column("F_ISAUTOMATIC")]
+        [Description("Флаг автомата")]
+        public bool p_IsAutomatic { get; set; }
 
         /// <summary>Дата синхронизации с БМК</summary>
         [Column("F_DATESYNCBMK")]
+        [Description("Дата синхронизации с БМК")]
         public DateTime? p_DateSyncBMK { get; set; }
 
         /// <summary>Флаг синхронизации с БМК</summary>
@@ -119,55 +132,68 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
         /// <summary>Тип записи</summary>
         [Column("F_TYPE")]
+        [Description("Тип записи")]
         public E_RecordType p_Type { get; set; }
 
         /// <summary>ID пациента</summary>
         [Column("F_PATIENT_ID")]
+        [Description("ID пациента")]
         public int p_PatientID { get; set; }
 
-        /// <summary>ID пациента</summary>
+        /// <summary>GUID пациента</summary>
         [Column("F_PATIENT_UID")]
+        [Description("GUID пациента")]
         public Guid? p_PatientUID { get; set; }
 
         /// <summary>Пол пациента</summary>
         [Column("F_GENDER")]
+        [Description("Пол пациента")]
         public Cl_User.E_Sex p_PatientSex { get; set; }
 
         /// <summary>Имя пациента</summary>
         [Column("F_PATIENT_NAME")]
+        [Description("Имя пациента")]
         public string p_PatientName { get; set; }
 
         /// <summary>Фамиля пациента</summary>
         [Column("F_PATIENT_SURNAME")]
+        [Description("Фамиля пациента")]
         public string p_PatientSurName { get; set; }
 
         /// <summary>Отчество пациента</summary>
         [Column("F_PATIENT_LASTNAME")]
+        [Description("Отчество пациента")]
         public string p_PatientLastName { get; set; }
 
         /// <summary>Дата рождения пациента</summary>
         [Column("F_PATIENT_DATEBIRTH")]
+        [Description("Дата рождения пациента")]
         public DateTime p_PatientDateBirth { get; set; }
 
         /// <summary>HTML текст записи для клиента</summary>
         [Column("F_HTMLPATIENT")]
+        [Description("HTML текст записи для клиента")]
         public string p_HTMLPatient { get; set; }
 
         /// <summary>HTML текст записи для пользователя</summary>
         [Column("F_HTMLUSER")]
+        [Description("HTML текст записи для пользователя")]
         public string p_HTMLDoctor { get; set; }
 
         /// <summary>Тип файла</summary>
         [Column("F_FILETYPE")]
+        [Description("Тип файла")]
         public E_RecordFileType p_FileType { get; set; }
 
         /// <summary>Данные файла</summary>
         [Column("F_FILE")]
+        [Description("Данные файла")]
         public byte[] p_FileBytes { get; set; }
 
         private List<Cl_RecordValue> m_Values = new List<Cl_RecordValue>();
         /// <summary>Список значений элементов записи</summary>
         [ForeignKey("p_RecordID")]
+        [Description("Список значений элементов записи")]
         [Cl_ELogProperty(p_IsComputedLog = true)]
         public List<Cl_RecordValue> p_Values {
             get { return m_Values; }
@@ -225,7 +251,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         private string f_GetHTML(bool a_IsDoctor)
         {
             var template = Properties.Resources.ResourceManager.GetObject("template_report").ToString();
-            template = Regex.Replace(template, "<fd\\.document\\.location>.*?<\\/fd\\.document\\.location>", string.Format("<fd.document.location>{0}</fd.document.location>", p_ClinikName));
+            template = Regex.Replace(template, "<fd\\.document\\.location>.*?<\\/fd\\.document\\.location>", string.Format("<fd.document.location>{0}</fd.document.location>", p_ClinicName));
             template = Regex.Replace(template, "<fd\\.document\\.patient>.*?<\\/fd\\.document\\.patient>", string.Format("<fd.document.patient>{0} {1} {2} {3} {4} # {5}</fd.document.patient>",
                 p_RecordID, p_PatientSurName, p_PatientName, p_PatientLastName, p_PatientDateBirth.ToString("dd.MM.yyyy"), p_ID));
             template = Regex.Replace(template, "<fd\\.document\\.date>.*?<\\/fd\\.document\\.date>", string.Format("<fd.document.date>{0}</fd.document.date>", p_DateCreate.ToString("dd.MM.yyyy")));

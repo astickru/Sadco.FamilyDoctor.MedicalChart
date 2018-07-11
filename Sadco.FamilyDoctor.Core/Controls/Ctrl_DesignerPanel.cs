@@ -1,4 +1,5 @@
 ﻿using Sadco.FamilyDoctor.Core.Controls.DesignerPanel;
+using Sadco.FamilyDoctor.Core.Controls.ResizableListBox;
 using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.Facades;
 using System;
@@ -28,7 +29,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
         After
     }
 
-    public partial class Ctrl_DesignerPanel : ListBox
+    public partial class Ctrl_DesignerPanel : Cl_ResizableListBox
     {
         public Ctrl_DesignerPanel()
         {
@@ -253,7 +254,6 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
         protected override void OnDrawItem(DrawItemEventArgs e)
         {
-            base.OnDrawItem(e);
             e.DrawBackground();
             e.DrawFocusRectangle();
 
@@ -288,14 +288,13 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
         protected override void OnMeasureItem(MeasureItemEventArgs e)
         {
-            base.OnMeasureItem(e);
-
             if (e.Index != -1 && Items.Count > e.Index)
             {
                 if (Items[e.Index] is Control)
                 {
                     var el = (Control)Items[e.Index];
                     e.ItemHeight = el.Height;
+                    Items.Info(e.Index).Height = e.ItemHeight;
                 }
             }
         }
@@ -306,20 +305,21 @@ namespace Sadco.FamilyDoctor.Core.Controls
         /// <param name="index">The index of the item to invalidate.</param>
         protected void Invalidate(int index)
         {
-            if (index != InvalidIndex)
-            {
-                Rectangle bounds;
-                bounds = this.GetItemRectangle(index);
-                if (this.InsertionMode == I_InsertionMode.Before && index > 0)
-                {
-                    bounds = Rectangle.Union(bounds, this.GetItemRectangle(index - 1));
-                }
-                else if (this.InsertionMode == I_InsertionMode.After && index < this.Items.Count - 1)
-                {
-                    bounds = Rectangle.Union(bounds, this.GetItemRectangle(index + 1));
-                }
-                this.Invalidate(bounds);
-            }
+            //if (index != InvalidIndex)
+            //{
+            //    Rectangle bounds;
+            //    bounds = this.GetItemRectangle(index);
+            //    if (this.InsertionMode == I_InsertionMode.Before && index > 0)
+            //    {
+            //        bounds = Rectangle.Union(bounds, this.GetItemRectangle(index - 1));
+            //    }
+            //    else if (this.InsertionMode == I_InsertionMode.After && index < this.Items.Count - 1)
+            //    {
+            //        bounds = Rectangle.Union(bounds, this.GetItemRectangle(index + 1));
+            //    }
+            //    this.Invalidate(bounds);
+            //}
+            this.Invalidate();
         }
 
         protected override void OnDragOver(DragEventArgs drgevent)
@@ -331,8 +331,8 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 Point clientPoint;
 
                 clientPoint = this.PointToClient(new Point(drgevent.X, drgevent.Y));
-                insertionIndex = this.IndexFromPoint(clientPoint);
-
+                insertionIndex = this.IndexFromPoint(new Point(clientPoint.X, clientPoint.Y));
+                Debug.WriteLine(insertionIndex);
                 if (insertionIndex != InvalidIndex)
                 {
                     Rectangle bounds;
@@ -540,14 +540,14 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
                         if (dropIndex != dragIndex)
                         {
-                            Point clientPoint = this.PointToClient(new Point(drgevent.X, drgevent.Y));
+                            //Point clientPoint = this.PointToClient(new Point(drgevent.X, drgevent.Y));
                             //args = new ListBoxItemDragEventArgs(dragIndex, dropIndex, this.InsertionMode, clientPoint.X, clientPoint.Y);
                             //this.OnItemDrag(args);
                             //if (!args.Cancel)
                             {
                                 object dragItem;
                                 dragItem = this.Items[dragIndex];
-                                this.Items.Remove(dragItem);
+                                this.Items.Remove(dragIndex);
                                 this.Items.Insert(dropIndex, dragItem);
                                 this.SelectedItem = dragItem;
                             }
@@ -587,7 +587,10 @@ namespace Sadco.FamilyDoctor.Core.Controls
             Ctrl_Element ctrlEl = new Ctrl_Element();
             ctrlEl.p_Element = a_NodeElement.p_Element;
             ctrlEl.Name = f_CreateName(ctrlEl.p_Name);
+            this.InsertionIndex = Items.Count - 1;
             Items.Add(ctrlEl);
+            this.Invalidate(this.InsertionIndex);
+            this.InsertionIndex = InvalidIndex;
             ctrlMenuDel.Visible = Items.Count > 0;
         }
 

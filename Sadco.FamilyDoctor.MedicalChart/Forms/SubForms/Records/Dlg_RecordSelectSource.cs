@@ -21,7 +21,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
             var userId = Cl_SessionFacade.f_GetInstance().p_Doctor.p_UserID;
             ctrlTablePatterns.Columns.Clear();
-            m_Patterns = Cl_App.m_DataContext.p_RecordsPatterns.Include(p => p.p_Template).Include(p => p.p_CategoryClinik).Include(p => p.p_CategoryTotal)
+            m_Patterns = Cl_App.m_DataContext.p_RecordsPatterns.Include(p => p.p_Template).Include(p => p.p_CategoryClinic).Include(p => p.p_CategoryTotal)
                         .Include(p => p.p_Values).Include(r => r.p_Values.Select(v => v.p_Params)).Where(p => p.p_DoctorID == userId).ToList();
             var patterns = m_Patterns.Select(p => new { p.p_ID, p.p_Name, p_TemplateName = p.p_Template.p_Name }).ToList();
             ctrlTablePatterns.DataSource = patterns;

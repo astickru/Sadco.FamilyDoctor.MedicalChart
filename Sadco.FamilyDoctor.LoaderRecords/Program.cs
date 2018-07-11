@@ -192,7 +192,7 @@ namespace Sadco.FamilyDoctor.LoaderRecords
                                                                 var record = new Cl_Record();
                                                                 record.p_Version = 1;
                                                                 record.p_Type = Cl_Record.E_RecordType.FinishedFile;
-                                                                record.p_IsAutimatic = true;
+                                                                record.p_IsAutomatic = true;
                                                                 record.p_DateCreate = record.p_DateForming = record.p_DateLastChange = dtVal;
                                                                 record.p_MedicalCardID = medicalCardID;
                                                                 record.p_PatientID = patientID;
@@ -202,7 +202,7 @@ namespace Sadco.FamilyDoctor.LoaderRecords
                                                                 record.p_PatientName = patientName;
                                                                 record.p_PatientLastName = patientLastName;
                                                                 record.p_PatientDateBirth = patientDateBirth;
-                                                                record.p_ClinikName = clinik;
+                                                                record.p_ClinicName = clinik;
                                                                 record.p_CategoryTotalID = category.p_ID;
                                                                 record.p_CategoryTotal = category;
                                                                 bool isAuthorValid = false;

@@ -104,6 +104,11 @@
       <DependentUpon>Ctrl_Element.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\DesignerPanel\I_Element.cs" />
+    <Compile Include="Controls\ResizableListBox\ItemInfo.cs" />
+    <Compile Include="Controls\ResizableListBox\ListBoxList.cs" />
+    <Compile Include="Controls\ResizableListBox\Cl_ResizableListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\OutlookGrid\DataSourceManager.cs" />
     <Compile Include="Controls\OutlookGrid\OutlookGrid.cs">
       <SubType>Component</SubType>
@@ -274,6 +279,10 @@
     <Compile Include="Migrations\201806221356526_appRecordPatternName.Designer.cs">
       <DependentUpon>201806221356526_appRecordPatternName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807091641431_appClinic.cs" />
+    <Compile Include="Migrations\201807091641431_appClinic.Designer.cs">
+      <DependentUpon>201807091641431_appClinic.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\Cl_AccessLevelAttribute.cs" />
     <Compile Include="Permision\Cl_User.cs" />
@@ -322,6 +331,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\DesignerPanel\Ctrl_Element.resx">
       <DependentUpon>Ctrl_Element.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ResizableListBox\Cl_ResizableListBox.resx">
+      <DependentUpon>Cl_ResizableListBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\TreeView\Ctrl_TreeView.resx">
       <DependentUpon>Ctrl_TreeView.cs</DependentUpon>
@@ -397,6 +409,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806221356526_appRecordPatternName.resx">
       <DependentUpon>201806221356526_appRecordPatternName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807091641431_appClinic.resx">
+      <DependentUpon>201807091641431_appClinic.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

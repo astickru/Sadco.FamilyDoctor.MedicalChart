@@ -45,7 +45,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             m_Records = Cl_App.m_DataContext.p_Records.Where(r => p_IsShowDeleted ? true : !r.p_IsDelete && ((r.p_PatientUID != null && r.p_PatientUID == patientUID) || r.p_PatientID == patientID)).GroupBy(e => e.p_RecordID)
                     .Select(grp => grp
                         .OrderByDescending(v => v.p_Version).FirstOrDefault())
-                        .Include(r => r.p_CategoryTotal).Include(r => r.p_CategoryClinik).Include(r => r.p_Values).Include(r => r.p_Template).Include(r => r.p_Values.Select(v => v.p_Params)).ToArray();
+                        .Include(r => r.p_CategoryTotal).Include(r => r.p_CategoryClinic).Include(r => r.p_Values).Include(r => r.p_Template).Include(r => r.p_Values.Select(v => v.p_Params)).ToArray();
 
             ctrl_TRecords.BindData(null, null);
             ctrl_TRecords.Columns.AddRange(p_MedicalCardID, p_ClinikName, p_DateForming, p_CategoryTotal, p_Title, p_DoctorFIO);
@@ -55,7 +55,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 OutlookGridRow row = new OutlookGridRow();
                 row.CreateCells(ctrl_TRecords,
                     record.p_MedicalCardID,
-                    record.p_ClinikName,
+                    record.p_ClinicName,
                     record.p_DateForming,
                     record.p_CategoryTotal != null ? record.p_CategoryTotal.p_Name : "",
                     record.p_Title,
@@ -69,11 +69,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         private void f_FormatPattern(Cl_Record a_Record)
         {
-            if (a_Record != null && !a_Record.p_IsAutimatic && a_Record.p_Template != null)
+            if (a_Record != null && !a_Record.p_IsAutomatic && a_Record.p_Template != null)
             {
                 a_Record.p_Template.f_LoadTemplatesElements();
                 Cl_RecordPattern pattern = Cl_RecordsFacade.f_GetInstance().f_GetNewRecordPattern(a_Record);
-                pattern.p_ClinikName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinikName;
+                pattern.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
                 pattern.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
                 var dlgPattern = new Dlg_RecordPattern();
                 dlgPattern.p_RecordPattern = pattern;
@@ -83,7 +83,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         private void f_Edit(Cl_Record a_Record)
         {
-            if (a_Record != null && !a_Record.p_IsAutimatic)
+            if (a_Record != null && !a_Record.p_IsAutomatic)
             {
                 var dlgRecord = new Dlg_Record();
                 dlgRecord.e_Save += DlgRecord_e_Save;
@@ -165,7 +165,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     record.p_DateLastChange = record.p_DateForming = record.p_DateCreate;
                     record.f_SetTemplate(dlg.p_SelectedTemplate);
                     record.p_MedicalCardID = Cl_SessionFacade.f_GetInstance().p_MedCardNumber;
-                    record.p_ClinikName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinikName;
+                    record.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
                     record.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
                     record.f_SetPatient(Cl_SessionFacade.f_GetInstance().p_Patient);
                     var dlgRecord = new Dlg_Record();
@@ -199,7 +199,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 if (dlg.p_SelectedTemplate != null)
                 {
                     Cl_RecordPattern pattern = new Cl_RecordPattern();
-                    pattern.p_ClinikName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinikName;
+                    pattern.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
                     pattern.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
                     pattern.f_SetTemplate(dlg.p_SelectedTemplate);
                     var dlgPattern = new Dlg_RecordPattern();
@@ -266,8 +266,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 if (record != null)
                 {
                     ctrlCMViewer.Enabled = true;
-                    ctrlBReportFormatPattern.Visible = !record.p_IsAutimatic;
-                    ctrlBReportEdit.Visible = ctrlMIEdit.Visible = !record.p_IsAutimatic;
+                    ctrlBReportFormatPattern.Visible = !record.p_IsAutomatic;
+                    ctrlBReportEdit.Visible = ctrlMIEdit.Visible = !record.p_IsAutomatic;
                     ctrlBReportArchive.Visible = ctrlMIArchive.Visible = !record.p_IsArchive && m_Permission.p_IsEditArchive;
                     ctrlBReportRating.Visible = ctrlMIRating.Visible = m_Permission.p_IsEditAllRatings;
                     ctrlBReportSyncBMK.Visible = ctrlMISyncBMK.Visible = !record.p_IsSyncBMK && record.p_IsPrintDoctor && m_Permission.p_IsEditArchive;
