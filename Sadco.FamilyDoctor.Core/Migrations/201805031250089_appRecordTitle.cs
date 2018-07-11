@@ -7,7 +7,7 @@ namespace Sadco.FamilyDoctor.Core.Migrations
     {
         public override void Up()
         {
-            AddColumn("dbo.T_RECORDS", "F_CLINIKNAME", c => c.String());
+            AddColumn("dbo.T_RECORDS", "F_KLINIKNAME", c => c.String());
             AddColumn("dbo.T_RECORDS", "F_TITLE", c => c.String());
             AddColumn("dbo.T_RECORDS", "F_CATEGORYTOTAL_ID", c => c.Int());
             AddColumn("dbo.T_RECORDS", "F_CATEGORYKLINIK_ID", c => c.Int());
