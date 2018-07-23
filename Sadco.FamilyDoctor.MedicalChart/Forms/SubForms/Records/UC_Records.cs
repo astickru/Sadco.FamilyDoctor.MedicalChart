@@ -71,7 +71,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             if (a_Record != null && !a_Record.p_IsAutomatic && a_Record.p_Template != null)
             {
-                a_Record.p_Template.f_LoadTemplatesElements();
+                Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(a_Record.p_Template);
                 Cl_RecordPattern pattern = Cl_RecordsFacade.f_GetInstance().f_GetNewRecordPattern(a_Record);
                 pattern.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
                 pattern.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
@@ -177,7 +177,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 {
                     if (dlg.p_SelectedRecordPattern.p_Template != null)
                     {
-                        dlg.p_SelectedRecordPattern.p_Template.f_LoadTemplatesElements();
+                        Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(dlg.p_SelectedRecordPattern.p_Template);
                         Cl_Record record = Cl_RecordsFacade.f_GetInstance().f_GetNewRecord(dlg.p_SelectedRecordPattern);
                         if (record != null)
                         {

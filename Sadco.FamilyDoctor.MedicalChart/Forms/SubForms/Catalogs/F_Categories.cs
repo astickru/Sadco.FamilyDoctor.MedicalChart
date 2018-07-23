@@ -24,32 +24,46 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
 
             f_RefreshTotal();
             f_RefreshClinik();
-
-            ctrlCategoriesTotal.Columns["p_ID"].Visible = false;
-            ctrlCategoriesTotal.Columns["p_Type"].Visible = false;
-            var col = ctrlCategoriesTotal.Columns["p_Name"];
-            col.HeaderText = "Название категории";
-            col.Width = 300;
-
-            ctrlCategoriesClinik.Columns["p_ID"].Visible = false;
-            ctrlCategoriesClinik.Columns["p_Type"].Visible = false;
-            col = ctrlCategoriesClinik.Columns["p_Name"];
-            col.HeaderText = "Название категории";
-            col.Width = 300;
         }
 
         private void f_RefreshTotal()
         {
-            BindingSource bs = new BindingSource();
-            bs.DataSource = Cl_App.m_DataContext.p_Categories.Local.ToBindingList().Where(c => c.p_Type == Cl_Category.E_CategoriesTypes.Total);
-            ctrlCategoriesTotal.DataSource = bs;
+            var categories = Cl_App.m_DataContext.p_Categories.Local.ToBindingList().Where(c => c.p_Type == Cl_Category.E_CategoriesTypes.Total);
+            if (categories.Count() > 0)
+            {
+                BindingSource bs = new BindingSource();
+                bs.DataSource = categories;
+                ctrlCategoriesTotal.DataSource = bs;
+                var col = ctrlCategoriesTotal.Columns["p_Name"];
+                ctrlCategoriesTotal.Columns["p_ID"].Visible = false;
+                ctrlCategoriesTotal.Columns["p_Type"].Visible = false;
+                col.HeaderText = "Название категории";
+                col.Width = 300;
+            }
+            else
+            {
+                ctrlCategoriesTotal.DataSource = null;
+            }
         }
 
         private void f_RefreshClinik()
         {
-            BindingSource bs = new BindingSource();
-            bs.DataSource = Cl_App.m_DataContext.p_Categories.Local.ToBindingList().Where(c => c.p_Type == Cl_Category.E_CategoriesTypes.Clinic);
-            ctrlCategoriesClinik.DataSource = bs;
+            var categories = Cl_App.m_DataContext.p_Categories.Local.ToBindingList().Where(c => c.p_Type == Cl_Category.E_CategoriesTypes.Clinic);
+            if (categories.Count() > 0)
+            {
+                BindingSource bs = new BindingSource();
+                bs.DataSource = categories;
+                ctrlCategoriesClinik.DataSource = bs;
+                var col = ctrlCategoriesClinik.Columns["p_Name"];
+                ctrlCategoriesClinik.Columns["p_ID"].Visible = false;
+                ctrlCategoriesClinik.Columns["p_Type"].Visible = false;
+                col.HeaderText = "Название категории";
+                col.Width = 300;
+            }
+            else
+            {
+                ctrlCategoriesClinik.DataSource = null;
+            }
         }
 
         private void ctrlAdd_Click(object sender, EventArgs e)

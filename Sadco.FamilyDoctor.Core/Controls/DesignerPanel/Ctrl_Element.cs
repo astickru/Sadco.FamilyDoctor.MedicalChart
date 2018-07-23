@@ -668,7 +668,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         }
 
         /// <summary>Получение значения элемента записи</summary>
-        public Cl_RecordValue f_GetRecordElementValues(Cl_Record a_Record, bool a_IsRequired = true)
+        public Cl_RecordValue f_GetRecordElementValues(Cl_Record a_Record, bool a_IsRequired = false)
         {
             if (a_Record == null || p_Element == null) return null;
             var recordValue = new Cl_RecordValue();
@@ -691,7 +691,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue });
                             }
                         }
-                        else if (p_Element.p_Required)
+                        else if (a_IsRequired && p_Element.p_Required)
                         {
                             MonitoringStub.Message(string.Format("Локация с множественным выбором элемента {0} пустая", p_Element.p_Name));
                             return null;
@@ -704,7 +704,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             var ep = (Cl_ElementParam)ctrl_PartLocations.SelectedItem;
                             recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue });
                         }
-                        else if (p_Element.p_Required)
+                        else if (a_IsRequired && p_Element.p_Required)
                         {
                             MonitoringStub.Message(string.Format("Локация элемента {0} пустая", p_Element.p_Name));
                             return null;
@@ -730,14 +730,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                         recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue, p_IsDop = true });
                                     }
                                 }
-                                else if (p_Element.p_Required)
+                                else if (a_IsRequired && p_Element.p_Required)
                                 {
                                     MonitoringStub.Message(string.Format("Значения с множественным выбором из справочника для симметрического параметра элемента {0} пустые", p_Element.p_Name));
                                     return null;
                                 }
                             }
                         }
-                        else if (p_Element.p_Required)
+                        else if (a_IsRequired && p_Element.p_Required)
                         {
                             MonitoringStub.Message(string.Format("Значения с множественным выбором из справочника элемента {0} пустые", p_Element.p_Name));
                             return null;
@@ -756,14 +756,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                     ep = (Cl_ElementParam)ctrl_DopValues.SelectedItem;
                                     recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue, p_IsDop = true });
                                 }
-                                else if (p_Element.p_Required)
+                                else if (a_IsRequired && p_Element.p_Required)
                                 {
                                     MonitoringStub.Message(string.Format("Значение из справочника для симметрического параметра элемента {0} пустое", p_Element.p_Name));
                                     return null;
                                 }
                             }
                         }
-                        else if (p_Element.p_Required)
+                        else if (a_IsRequired && p_Element.p_Required)
                         {
                             MonitoringStub.Message(string.Format("Значение из справочника элемента {0} пустое", p_Element.p_Name));
                             return null;
@@ -783,14 +783,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 {
                                     recordValue.p_ValueDopUser = ctrl_DopValue.Text;
                                 }
-                                else if (p_Element.p_Required)
+                                else if (a_IsRequired && p_Element.p_Required)
                                 {
                                     MonitoringStub.Message(string.Format("Значение для симметрического параметра элемента {0} пустое", p_Element.p_Name));
                                     return null;
                                 }
                             }
                         }
-                        else if (p_Element.p_Required)
+                        else if (a_IsRequired && p_Element.p_Required)
                         {
                             MonitoringStub.Message(string.Format("Значение элемента {0} пустое", p_Element.p_Name));
                             return null;
@@ -807,14 +807,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 {
                                     recordValue.p_ValueDopUser = ctrl_DopValueBox.Text;
                                 }
-                                else if (p_Element.p_Required)
+                                else if (a_IsRequired && p_Element.p_Required)
                                 {
                                     MonitoringStub.Message(string.Format("Значение для симметрического параметра элемента {0} пустое", p_Element.p_Name));
                                     return null;
                                 }
                             }
                         }
-                        else if (p_Element.p_Required)
+                        else if (a_IsRequired && p_Element.p_Required)
                         {
                             MonitoringStub.Message(string.Format("Значение элемента {0} пустое", p_Element.p_Name));
                             return null;

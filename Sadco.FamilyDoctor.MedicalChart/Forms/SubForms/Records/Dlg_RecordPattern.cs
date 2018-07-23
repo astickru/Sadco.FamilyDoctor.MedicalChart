@@ -94,7 +94,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             m_RecordPattern = a_RecordPattern;
             if (m_RecordPattern != null && m_RecordPattern.p_Template != null)
             {
-                m_RecordPattern.p_Template.f_LoadTemplatesElements();
+                Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(m_RecordPattern.p_Template);
                 ctrlDoctorFIO.Text = m_RecordPattern.p_DoctorFIO;
                 ctrlTitle.Text = m_RecordPattern.p_Title;
                 ctrlName.Text = m_RecordPattern.p_Name;

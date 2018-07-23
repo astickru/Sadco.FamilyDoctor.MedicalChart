@@ -24,19 +24,19 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Column("F_CLINICNAME")]
         public string p_ClinicName { get; set; }
 
-        /// <summary>ID пользователя</summary>
+        /// <summary>ID доктора</summary>
         [Column("F_USER_ID")]
         public int p_DoctorID { get; set; }
 
-        /// <summary>Имя пользователя</summary>
+        /// <summary>Имя доктора</summary>
         [Column("F_USER_NAME")]
         public string p_DoctorName { get; set; }
 
-        /// <summary>Фамиля пользователя</summary>
+        /// <summary>Фамиля доктора</summary>
         [Column("F_USER_SURNAME")]
         public string p_DoctorSurName { get; set; }
 
-        /// <summary>Отчество пользователя</summary>
+        /// <summary>Отчество доктора</summary>
         [Column("F_USER_LASTNAME")]
         public string p_DoctorLastName { get; set; }
 
@@ -102,11 +102,15 @@ namespace Sadco.FamilyDoctor.Core.Entities
             p_Template = a_Template;
             if (a_Template != null)
             {
+                p_TemplateID = a_Template.p_ID;
                 p_Title = a_Template.p_Title;
                 p_CategoryTotalID = a_Template.p_CategoryTotalID;
                 p_CategoryTotal = a_Template.p_CategoryTotal;
                 p_CategoryClinicID = a_Template.p_CategoryClinicID;
                 p_CategoryClinic = a_Template.p_CategoryClinic;
+            } else
+            {
+                p_TemplateID = null;
             }
         }
     }

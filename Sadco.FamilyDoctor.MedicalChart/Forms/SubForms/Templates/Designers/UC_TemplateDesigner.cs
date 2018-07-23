@@ -39,7 +39,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 ctrl_Version.Text = "Черновик";
             else
                 ctrl_Version.Text = p_EditingTemplate.p_Version.ToString();
-            a_Template.f_LoadTemplatesElements();
+            Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(a_Template);
             m_Log.f_SetEntity(a_Template);
             if (a_Template.p_TemplateElements != null)
                 ctrl_EditorPanel.f_SetTemplatesElements(a_Template.p_TemplateElements.ToArray());

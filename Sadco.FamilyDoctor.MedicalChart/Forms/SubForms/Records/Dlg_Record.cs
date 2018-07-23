@@ -103,7 +103,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             m_Record = a_Record;
             if (m_Record != null && m_Record.p_Template != null)
             {
-                m_Record.p_Template.f_LoadTemplatesElements();
+                Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(m_Record.p_Template);
                 ctrlDoctorFIO.Text = m_Record.p_DoctorFIO;
                 ctrlPatientFIO.Text = string.Format("{0} ({1}, {2})", m_Record.p_PatientFIO,
                     m_Record.p_PatientSex == Core.Permision.Cl_User.E_Sex.Man ? "Мужчина" : m_Record.p_PatientSex == Core.Permision.Cl_User.E_Sex.Female ? "Женьщина" : "Нет данных",

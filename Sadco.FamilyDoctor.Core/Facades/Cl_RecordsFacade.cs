@@ -2,12 +2,14 @@
 using Sadco.FamilyDoctor.Core.Data;
 using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.Formula;
+using Sadco.FamilyDoctor.Core.Permision;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using static Sadco.FamilyDoctor.Core.Entities.Cl_Record;
 
 namespace Sadco.FamilyDoctor.Core.Facades
 {
@@ -451,6 +453,194 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 record.p_Values = a_RecordPattern.p_Values.Select(v => f_GetRecordValue(record, v)).ToList();
             }
             return record;
+        }
+
+        /// <summary>Полечение новой записи</summary>
+        /// <param name="a_CategoryTotal">Общая категория</param>
+        /// <param name="a_CategoryClinic">Клиническая категория</param>
+        /// <param name="a_Title">Заголовок записи</param>
+        /// <param name="a_ClinicName">Название клиники</param>
+        /// <param name="a_MedicalCardID">ID медицинской карты</param>
+        /// <param name="a_DoctorID">ID доктора</param>
+        /// <param name="a_DoctorSurName">Фамиля доктора</param>
+        /// <param name="a_DoctorName">Имя доктора</param>
+        /// <param name="a_DoctorLastName">Отчество доктора</param>
+        /// <param name="a_PatientID">ID пациента</param>
+        /// <param name="a_PatientSex">Пол пациента</param>
+        /// <param name="a_PatientSurName">Фамиля пациента</param>
+        /// <param name="a_PatientName">Имя пациента</param>
+        /// <param name="a_PatientLastName">Отчество пациента</param>
+        /// <param name="a_PatientDateBirth">Дата рождения пациента</param>
+        /// <returns>Флаг успешного создания записи</returns>
+        private Cl_Record f_GetRecord(Cl_Category a_CategoryTotal, Cl_Category a_CategoryClinic, string a_Title, string a_ClinicName, int a_MedicalCardID,
+            int a_DoctorID, string a_DoctorSurName, string a_DoctorName, string a_DoctorLastName,
+            int a_PatientID, Cl_User.E_Sex a_PatientSex, string a_PatientSurName, string a_PatientName, string a_PatientLastName, DateTime a_PatientDateBirth)
+        {
+            Cl_Record record = new Cl_Record();
+            record.p_Version = 1;
+            record.p_DateCreate = record.p_DateForming = record.p_DateLastChange = DateTime.Now;
+            if (a_CategoryTotal != null)
+            {
+                record.p_CategoryTotalID = a_CategoryTotal.p_ID;
+                record.p_CategoryTotal = a_CategoryTotal;
+            }
+            if (a_CategoryClinic != null)
+            {
+                record.p_CategoryClinicID = a_CategoryClinic.p_ID;
+                record.p_CategoryClinic = a_CategoryClinic;
+            }
+            record.p_Title = a_Title;
+            record.p_ClinicName = a_ClinicName;
+            record.p_MedicalCardID = a_MedicalCardID;
+            record.p_DoctorID = a_DoctorID;
+            record.p_DoctorSurName = a_DoctorSurName;
+            record.p_DoctorName = a_DoctorName;
+            record.p_DoctorLastName = a_DoctorLastName;
+            record.p_PatientID = a_PatientID;
+            record.p_PatientSex = a_PatientSex;
+            record.p_PatientSurName = a_PatientSurName;
+            record.p_PatientName = a_PatientName;
+            record.p_PatientLastName = a_PatientLastName;
+            record.p_PatientDateBirth = a_PatientDateBirth;
+            return record;
+        }
+
+        /// <summary>Создание новой записи</summary>
+        /// <param name="a_CategoryTotal">Общая категория</param>
+        /// <param name="a_CategoryClinic">Клиническая категория</param>
+        /// <param name="a_Title">Заголовок записи</param>
+        /// <param name="a_ClinicName">Название клиники</param>
+        /// <param name="a_MedicalCardID">ID медицинской карты</param>
+        /// <param name="a_Type">Тип записи</param>
+        /// <param name="a_DoctorID">ID доктора</param>
+        /// <param name="a_DoctorSurName">Фамиля доктора</param>
+        /// <param name="a_DoctorName">Имя доктора</param>
+        /// <param name="a_DoctorLastName">Отчество доктора</param>
+        /// <param name="a_PatientID">ID пациента</param>
+        /// <param name="a_PatientSex">Пол пациента</param>
+        /// <param name="a_PatientSurName">Фамиля пациента</param>
+        /// <param name="a_PatientName">Имя пациента</param>
+        /// <param name="a_PatientLastName">Отчество пациента</param>
+        /// <param name="a_PatientDateBirth">Дата рождения пациента</param>
+        /// <param name="a_Template">Шаблон</param>
+        /// <param name="a_Values">Значения записи</param>
+        /// <returns>Флаг успешного создания записи</returns>
+        public bool f_CreateRecord(Cl_Category a_CategoryTotal, Cl_Category a_CategoryClinic, string a_Title, string a_ClinicName, int a_MedicalCardID,
+            int a_DoctorID, string a_DoctorSurName, string a_DoctorName, string a_DoctorLastName,
+            int a_PatientID, Cl_User.E_Sex a_PatientSex, string a_PatientSurName, string a_PatientName, string a_PatientLastName, DateTime a_PatientDateBirth,
+            Cl_Template a_Template, IEnumerable<Cl_RecordValue> a_Values)
+        {
+            if (a_Template != null)
+            {
+                Cl_Record record = f_GetRecord(a_CategoryTotal, a_CategoryClinic, a_Title, a_ClinicName, a_MedicalCardID,
+                    a_DoctorID, a_DoctorSurName, a_DoctorName, a_DoctorLastName,
+                    a_PatientID, a_PatientSex, a_PatientSurName, a_PatientName, a_PatientLastName, a_PatientDateBirth);
+                if (record != null)
+                {
+                    record.p_TemplateID = a_Template.p_ID;
+                    return f_CreateRecord(record, a_Values);
+                }
+            }
+            return false;
+        }
+
+        /// <summary>Создание новой записи</summary>
+        /// <param name="a_CategoryTotal">Общая категория</param>
+        /// <param name="a_CategoryClinic">Клиническая категория</param>
+        /// <param name="a_Title">Заголовок записи</param>
+        /// <param name="a_ClinicName">Название клиники</param>
+        /// <param name="a_MedicalCardID">ID медицинской карты</param>
+        /// <param name="a_DoctorID">ID доктора</param>
+        /// <param name="a_DoctorSurName">Фамиля доктора</param>
+        /// <param name="a_DoctorName">Имя доктора</param>
+        /// <param name="a_DoctorLastName">Отчество доктора</param>
+        /// <param name="a_PatientID">ID пациента</param>
+        /// <param name="a_PatientSex">Пол пациента</param>
+        /// <param name="a_PatientSurName">Фамиля пациента</param>
+        /// <param name="a_PatientName">Имя пациента</param>
+        /// <param name="a_PatientLastName">Отчество пациента</param>
+        /// <param name="a_PatientDateBirth">Дата рождения пациента</param>
+        /// <param name="a_RecordFileType">Тип файла</param>
+        /// <param name="a_FileBytes">Данные файла записи</param>
+        /// <returns>Флаг успешного создания записи</returns>
+        public bool f_CreateRecord(Cl_Category a_CategoryTotal, Cl_Category a_CategoryClinic, string a_Title, string a_ClinicName, int a_MedicalCardID,
+            int a_DoctorID, string a_DoctorSurName, string a_DoctorName, string a_DoctorLastName,
+            int a_PatientID, Cl_User.E_Sex a_PatientSex, string a_PatientSurName, string a_PatientName, string a_PatientLastName, DateTime a_PatientDateBirth,
+            E_RecordFileType a_RecordFileType, byte[] a_FileBytes)
+        {
+            Cl_Record record = f_GetRecord(a_CategoryTotal, a_CategoryClinic, a_Title, a_ClinicName, a_MedicalCardID,
+                a_DoctorID, a_DoctorSurName, a_DoctorName, a_DoctorLastName,
+                a_PatientID, a_PatientSex, a_PatientSurName, a_PatientName, a_PatientLastName, a_PatientDateBirth);
+            return f_CreateRecord(record, a_RecordFileType, a_FileBytes);
+        }
+
+
+
+        /// <summary>Создание новой записи</summary>
+        /// <param name="a_Record">Новая запись</param>
+        /// <param name="a_Values">Значения записи</param>
+        /// <returns>Флаг успешного создания записи</returns>
+        public bool f_CreateRecord(Cl_Record a_Record, IEnumerable<Cl_RecordValue> a_Values)
+        {
+            if (m_DataContextMegaTemplate != null && a_Record != null && a_Record.p_TemplateID != null && a_Record.f_IsValid() && a_Values != null && a_Values.Count() > 0)
+            {
+                using (var transaction = m_DataContextMegaTemplate.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        a_Record.p_Version = 1;
+                        a_Record.p_Type = E_RecordType.ByTemplate;
+                        a_Record.p_Values.AddRange(a_Values);
+                        m_DataContextMegaTemplate.p_Records.Add(a_Record);
+                        m_DataContextMegaTemplate.SaveChanges();
+                        a_Record.p_FileType = E_RecordFileType.HTML;
+                        a_Record.p_HTMLDoctor = a_Record.f_GetHTMLDoctor();
+                        a_Record.p_HTMLPatient = a_Record.f_GetHTMLPatient();
+                        a_Record.p_RecordID = a_Record.p_ID;
+                        m_DataContextMegaTemplate.SaveChanges();
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>Создание новой записи</summary>
+        /// <param name="a_Record">Новая запись</param>
+        /// <param name="a_RecordFileType">Тип файла</param>
+        /// <param name="a_FileBytes">Данные файла записи</param>
+        /// <returns>Флаг успешного создания записи</returns>
+        public bool f_CreateRecord(Cl_Record a_Record, E_RecordFileType a_RecordFileType, byte[] a_FileBytes)
+        {
+            if (m_DataContextMegaTemplate != null && a_Record != null && a_Record.f_IsValid() && a_FileBytes != null)
+            {
+                using (var transaction = m_DataContextMegaTemplate.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        a_Record.p_Version = 1; a_Record.p_Type = E_RecordType.FinishedFile;
+                        a_Record.p_IsAutomatic = true;
+                        a_Record.p_FileType = a_RecordFileType;
+                        a_Record.p_FileBytes = a_FileBytes;
+                        m_DataContextMegaTemplate.p_Records.Add(a_Record);
+                        m_DataContextMegaTemplate.SaveChanges();
+                        a_Record.p_RecordID = a_Record.p_ID;
+                        m_DataContextMegaTemplate.SaveChanges();
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                    }
+                }
+            }
+            return false;
         }
     }
 }

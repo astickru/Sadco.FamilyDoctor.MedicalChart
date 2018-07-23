@@ -167,8 +167,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.ResizableListBox
             int _index = _alObjects.IndexOf(obj);
             if (_index > -1)
             {
-                _alObjects.Remove(obj);
-                _alObjectsInfo.Remove(obj);
+                _alObjects.RemoveAt(_index);
+                _alObjectsInfo.RemoveAt(_index);
                 OnRemove(_index);
             }
         }

@@ -602,10 +602,12 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 return;
 
             Ctrl_Template ctrlEl = new Ctrl_Template();
-            a_NodeTemplate.p_Template.f_LoadTemplatesElements();
+            Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(a_NodeTemplate.p_Template);
             ctrlEl.p_Template = a_NodeTemplate.p_Template;
             ctrlEl.Name = f_CreateName(ctrlEl.p_Name);
             Items.Add(ctrlEl);
+            this.Invalidate(this.InsertionIndex);
+            this.InsertionIndex = InvalidIndex;
             ctrlMenuDel.Visible = Items.Count > 0;
         }
 
@@ -618,6 +620,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 {
                     I_Element el = (I_Element)SelectedItem;
                     Items.Remove(el);
+                    this.Invalidate(this.InsertionIndex);
                     ctrlMenuDel.Visible = Items.Count > 0;
                 }
             }

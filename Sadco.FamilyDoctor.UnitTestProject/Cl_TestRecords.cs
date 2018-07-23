@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Sadco.FamilyDoctor.Core.Data;
 using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.Facades;
 
@@ -9,6 +11,11 @@ namespace Sadco.FamilyDoctor.UnitTestProject
     [TestClass]
     public class Cl_TestRecords
     {
+        private string f_GetConnectionString()
+        {
+            return @"Data Source=(localdb)\mssqllocaldb;Initial Catalog=MedicalChart;Integrated Security=True";
+        }
+
         [TestMethod]
         public void f_TestElementVisibleFromFormula()
         {
@@ -204,6 +211,42 @@ namespace Sadco.FamilyDoctor.UnitTestProject
             Assert.AreEqual(20, result);
             result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_one * tag_dva / tag_tri");
             Assert.AreEqual((decimal)30.8, result);
+        }
+
+        [TestMethod]
+        public void f_TestCreateRecord()
+        {
+            var dc = new Cl_DataContextMegaTemplate(f_GetConnectionString());
+            dc.f_Init();
+            var result = Cl_TemplatesFacade.f_GetInstance().f_Init(dc);
+            Assert.AreEqual(true, result);
+            result = Cl_RecordsFacade.f_GetInstance().f_Init(dc);
+            Assert.AreEqual(true, result);
+            result = Cl_CatalogsFacade.f_GetInstance().f_Init(dc);
+            Assert.AreEqual(true, result);
+
+            var catTotal = Cl_CatalogsFacade.f_GetInstance().f_GetCategory("Осмотр");
+            Assert.AreNotEqual(null, catTotal);
+            var catClinic = Cl_CatalogsFacade.f_GetInstance().f_GetCategory("Клиническая 1");
+            Assert.AreNotEqual(null, catClinic);
+            var tmpl = Cl_TemplatesFacade.f_GetInstance().f_GetTemplate(80);
+            Assert.AreNotEqual(null, tmpl);
+            var elts = Cl_TemplatesFacade.f_GetInstance().f_GetElements(tmpl);
+            Assert.AreNotEqual(null, elts);
+            var vals = new List<Cl_RecordValue>();
+            foreach (var el in elts)
+            {
+                vals.Add(new Cl_RecordValue() { p_ElementID = el.p_ID, p_Element = el, p_ValueUser = "5" });
+            }
+            result = Cl_RecordsFacade.f_GetInstance().f_CreateRecord(catTotal, catClinic, "Заголовок API тест - значения", "Клиника API тест значения", 56369, 10,
+                "Доктор_Фамилия", "Доктор_Имя", "Доктор_Отчество",
+                201, Core.Permision.Cl_User.E_Sex.Man, "Пациент_Фамилия", "Пациент_Имя", "Пациент_Отчество", new DateTime(1983, 3, 21), tmpl, vals);
+            Assert.AreEqual(true, result);
+            result = Cl_RecordsFacade.f_GetInstance().f_CreateRecord(catTotal, catClinic, "Заголовок API тест - файл", "Клиника API тест файл", 56369, 10,
+                "Доктор_Фамилия", "Доктор_Имя", "Доктор_Отчество",
+                201, Core.Permision.Cl_User.E_Sex.Man, "Пациент_Фамилия", "Пациент_Имя", "Пациент_Отчество", new DateTime(1983, 3, 21),
+                Cl_Record.E_RecordFileType.HTML, Encoding.UTF8.GetBytes("<h1>API тест файл<h1>"));
+            Assert.AreEqual(true, result);
         }
     }
 }

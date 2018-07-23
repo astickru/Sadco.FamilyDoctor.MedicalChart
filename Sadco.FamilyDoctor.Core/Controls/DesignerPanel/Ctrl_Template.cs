@@ -259,7 +259,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             if (!m_IsBlockChanging)
             {
                 m_IsBlockChanging = true;
-                var record = f_GetNewRecord();
+                var record = f_GetNewRecord(false);
                 if (record != null)
                 {
                     foreach (var el in m_Elements)
@@ -307,6 +307,12 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         /// <summary>Получение новой версии записи</summary>
         public Cl_Record f_GetNewRecord()
         {
+            return f_GetNewRecord(true);
+        }
+
+        /// <summary>Получение новой версии записи</summary>
+        private Cl_Record f_GetNewRecord(bool a_IsRequired)
+        {
             if (m_Template == null || m_Record == null) return null;
             var record = new Cl_Record();
             record.p_RecordID = m_Record.p_RecordID;
@@ -336,7 +342,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             record.p_Values = new List<Cl_RecordValue>();
             foreach (var el in m_Elements)
             {
-                var recEl = el.f_GetRecordElementValues(record);
+                var recEl = el.f_GetRecordElementValues(record, a_IsRequired);
                 if (recEl != null)
                 {
                     record.p_Values.Add(recEl);

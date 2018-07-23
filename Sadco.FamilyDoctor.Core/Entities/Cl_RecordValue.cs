@@ -210,7 +210,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
                             {
                                 val += ".";
                             }
-                            html = string.Format("<{0} title=\"{1}\">{2}</{0}>", tag, p_Element.p_Name, val);
+                            html = string.Format("<{0} title=\"{1}\">{1}: {2}</{0}>", tag, p_Element.p_Name, val);
                         }
                     }
                     else
@@ -222,9 +222,9 @@ namespace Sadco.FamilyDoctor.Core.Entities
                                 val += ".";
                             }
                             if (p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Bigbox)
-                                html = string.Format("<{0} title=\"{1}\"><pre>{2}</pre></{0}>", tag, p_Element.p_Name, val);
+                                html = string.Format("<{0} title=\"{1}\"><pre>{1}: {2}</pre></{0}>", tag, p_Element.p_Name, val);
                             else
-                                html = string.Format("<{0} title=\"{1}\">{2}</{0}>", tag, p_Element.p_Name, val);
+                                html = string.Format("<{0} title=\"{1}\">{1}: {2}</{0}>", tag, p_Element.p_Name, val);
                         }
                     }
                 }

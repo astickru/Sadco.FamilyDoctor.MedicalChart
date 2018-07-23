@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
-using System.Linq;
 
 namespace Sadco.FamilyDoctor.Core.Entities
 {
@@ -196,38 +194,6 @@ namespace Sadco.FamilyDoctor.Core.Entities
         public bool f_HasElement(Cl_Template a_Template)
         {
             return f_HasElement(p_TemplateElements, a_Template);
-        }
-
-        /// <summary>Рекурсивная загрузка списка элементов шаблона</summary>
-        private void f_RecursiveLoadTE(Cl_Template a_Template)
-        {
-            if (a_Template != null)
-            {
-                var tes = Cl_App.m_DataContext.Entry(a_Template).Collection(d => d.p_TemplateElements);
-                if (!tes.IsLoaded) tes.Load();
-                if (a_Template.p_TemplateElements != null)
-                {
-                    foreach (var te in a_Template.p_TemplateElements)
-                    {
-                        Cl_App.m_DataContext.Entry(te).Reference(d => d.p_ChildTemplate).Load();
-                        f_RecursiveLoadTE(te.p_ChildTemplate);
-                        Cl_App.m_DataContext.Entry(te).Reference(d => d.p_ChildElement).Query().Include(p => p.p_ParamsValues).Include(p => p.p_PartAgeNorms).Load();
-                    }
-                }
-            }
-        }
-        /// <summary>Загрузка полного списка элементов шаблона</summary>
-        public void f_LoadTemplatesElements()
-        {
-            if (p_TemplateElements == null)
-            {
-                var elements = Cl_App.m_DataContext.p_TemplatesElements.Include(te => te.p_ChildElement).Include(te => te.p_ChildElement.p_ParamsValues).Include(te => te.p_ChildElement.p_PartAgeNorms).Include(te => te.p_ChildTemplate)
-                   .Where(t => t.p_TemplateID == p_ID).OrderBy(t => t.p_Index).ToArray();
-                foreach (var el in elements)
-                {
-                    f_RecursiveLoadTE(el.p_ChildTemplate);
-                }
-            }
         }
 
         public override string ToString()

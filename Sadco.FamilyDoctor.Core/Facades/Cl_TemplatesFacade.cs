@@ -5,9 +5,8 @@ using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.EntityLogs;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.Core.Facades
 {
@@ -33,6 +32,41 @@ namespace Sadco.FamilyDoctor.Core.Facades
             return m_IsInit;
         }
 
+        /// <summary>Рекурсивная загрузка списка элементов шаблона</summary>
+        private void f_RecursiveLoadTE(Cl_Template a_Template)
+        {
+            if (a_Template != null)
+            {
+                var tes = m_DataContextMegaTemplate.Entry(a_Template).Collection(d => d.p_TemplateElements);
+                if (!tes.IsLoaded) tes.Load();
+                if (a_Template.p_TemplateElements != null)
+                {
+                    foreach (var te in a_Template.p_TemplateElements)
+                    {
+                        m_DataContextMegaTemplate.Entry(te).Reference(d => d.p_ChildTemplate).Load();
+                        f_RecursiveLoadTE(te.p_ChildTemplate);
+                        m_DataContextMegaTemplate.Entry(te).Reference(d => d.p_ChildElement).Query().Include(p => p.p_ParamsValues).Include(p => p.p_PartAgeNorms).Load();
+                    }
+                }
+            }
+        }
+        /// <summary>Загрузка полного списка элементов шаблона</summary>
+        public void f_LoadTemplatesElements(Cl_Template a_Template)
+        {
+            if (a_Template != null)
+            {
+                if (a_Template.p_TemplateElements == null)
+                {
+                    var elements = m_DataContextMegaTemplate.p_TemplatesElements.Include(te => te.p_ChildElement).Include(te => te.p_ChildElement.p_ParamsValues).Include(te => te.p_ChildElement.p_PartAgeNorms).Include(te => te.p_ChildTemplate)
+                       .Where(t => t.p_TemplateID == a_Template.p_ID).OrderBy(t => t.p_Index).ToArray();
+                    foreach (var el in elements)
+                    {
+                        f_RecursiveLoadTE(el.p_ChildTemplate);
+                    }
+                }
+            }
+        }
+
         /// <summary>Получение полного списка элемента в шаблоне</summary>
         public Cl_Element[] f_GetElements(Cl_Template a_Template)
         {
@@ -40,7 +74,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
             if (a_Template == null) return elements.ToArray();
             if (a_Template.p_TemplateElements == null)
             {
-                a_Template.f_LoadTemplatesElements();
+                f_LoadTemplatesElements(a_Template);
             }
             foreach (var te in a_Template.p_TemplateElements)
             {
@@ -59,7 +93,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
         {
             if (p_ChildElement == null) return null;
 
-            Cl_Element els = Cl_App.m_DataContext.p_Elements
+            Cl_Element els = m_DataContextMegaTemplate.p_Elements
             .Where(e => e.p_ElementID == p_ChildElement.p_ElementID).OrderByDescending(d => d.p_Version).FirstOrDefault();
 
             if (p_ChildElement.p_ID != els.p_ID)
@@ -83,15 +117,24 @@ namespace Sadco.FamilyDoctor.Core.Facades
         internal Cl_Template f_GetActualTemplate(Cl_Template p_ChildTemplate)
         {
             if (p_ChildTemplate == null) return null;
-
-            Cl_Template tmpl = Cl_App.m_DataContext.p_Templates
-            .Where(e => e.p_TemplateID == p_ChildTemplate.p_TemplateID).OrderByDescending(d => d.p_Version).FirstOrDefault();
-
-            if (p_ChildTemplate.p_ID != tmpl.p_ID)
+            Cl_Template tmpl = m_DataContextMegaTemplate.p_Templates.Where(e => e.p_TemplateID == p_ChildTemplate.p_TemplateID).OrderByDescending(d => d.p_Version).FirstOrDefault();
+            if (tmpl != null && p_ChildTemplate.p_ID != tmpl.p_ID)
                 return tmpl;
-
             return p_ChildTemplate;
         }
+
+        /// <summary>
+        /// Возвращает шаблон
+        /// </summary>
+        /// <param name="a_TemplateID">ID шаблона</param>
+        /// <returns></returns>
+        public Cl_Template f_GetTemplate(int a_TemplateID)
+        {
+            Cl_Template tmpl = m_DataContextMegaTemplate.p_Templates.FirstOrDefault(t => t.p_ID == a_TemplateID);
+            if (tmpl != null) f_LoadTemplatesElements(tmpl);
+            return tmpl;
+        }
+
         internal bool f_IsActualElementsOnTemplate(Cl_Template template)
         {
             bool defNewElements = false;
@@ -133,7 +176,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
         /// <returns></returns>
         public Cl_Template f_SaveTemplate(Cl_Template curTemplate, I_Element[] elements, Cl_EntityLog m_Log)
         {
-            using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
+            using (var transaction = m_DataContextMegaTemplate.Database.BeginTransaction())
             {
                 try
                 {
@@ -159,10 +202,10 @@ namespace Sadco.FamilyDoctor.Core.Facades
                         newTemplate.p_ParentGroup = curTemplate.p_ParentGroup;
                         newTemplate.p_Description = curTemplate.p_Description;
 
-                        Cl_App.m_DataContext.p_Templates.Add(newTemplate);
+                        m_DataContextMegaTemplate.p_Templates.Add(newTemplate);
                     }
 
-                    Cl_App.m_DataContext.SaveChanges();
+                    m_DataContextMegaTemplate.SaveChanges();
 
                     foreach (I_Element item in elements)
                     {
@@ -184,10 +227,10 @@ namespace Sadco.FamilyDoctor.Core.Facades
 
                         tplEl.p_Index = Array.IndexOf(elements, item) + 1;
 
-                        Cl_App.m_DataContext.p_TemplatesElements.Add(tplEl);
+                        m_DataContextMegaTemplate.p_TemplatesElements.Add(tplEl);
                     }
 
-                    Cl_App.m_DataContext.SaveChanges();
+                    m_DataContextMegaTemplate.SaveChanges();
 
                     if (m_Log.f_IsChanged(newTemplate) == false)
                     {
@@ -224,7 +267,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
             if (this.f_IsActualElementsOnTemplate(curTemplate))
                 return f_SaveTemplate(curTemplate, elements, m_Log);
 
-            using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
+            using (var transaction = m_DataContextMegaTemplate.Database.BeginTransaction())
             {
                 try
                 {
@@ -266,8 +309,8 @@ namespace Sadco.FamilyDoctor.Core.Facades
             newTemplate.p_ParentGroup = template.p_ParentGroup;
             newTemplate.p_Description = template.p_Description;
 
-            Cl_App.m_DataContext.p_Templates.Add(newTemplate);
-            Cl_App.m_DataContext.SaveChanges();
+            m_DataContextMegaTemplate.p_Templates.Add(newTemplate);
+            m_DataContextMegaTemplate.SaveChanges();
 
             int i = 0;
             foreach (Cl_TemplateElement item in template.p_TemplateElements)
@@ -290,10 +333,10 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 }
 
                 tplEl.p_Index = i = ++i;
-                Cl_App.m_DataContext.p_TemplatesElements.Add(tplEl);
+                m_DataContextMegaTemplate.p_TemplatesElements.Add(tplEl);
             }
 
-            Cl_App.m_DataContext.SaveChanges();
+            m_DataContextMegaTemplate.SaveChanges();
 
             return newTemplate;
         }

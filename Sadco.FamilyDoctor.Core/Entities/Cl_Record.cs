@@ -235,6 +235,15 @@ namespace Sadco.FamilyDoctor.Core.Entities
             p_PatientDateBirth = a_User.p_DateBirth;
         }
 
+        /// <summary>Проверка наличия всех необходимых значений</summary>
+        public bool f_IsValid()
+        {
+            return (!string.IsNullOrWhiteSpace(p_Title) && !string.IsNullOrWhiteSpace(p_ClinicName)
+                 && p_DateCreate != null && p_DateForming != null && p_DateLastChange != null
+                 && !string.IsNullOrWhiteSpace(p_DoctorSurName) && !string.IsNullOrWhiteSpace(p_DoctorName) && !string.IsNullOrWhiteSpace(p_DoctorLastName)
+                 && !string.IsNullOrWhiteSpace(p_PatientSurName) && !string.IsNullOrWhiteSpace(p_PatientName) && !string.IsNullOrWhiteSpace(p_PatientLastName));
+        }
+
         /// <summary>Получение HTML текста записи для пациента</summary>
         public string f_GetHTMLPatient()
         {
@@ -261,7 +270,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
             string htmlTabling = null;
             string htmlFloating = null;
             byte age = f_GetPatientAge();
-            
+
             void f_EndTabling()
             {
                 if (htmlTabling != null)
