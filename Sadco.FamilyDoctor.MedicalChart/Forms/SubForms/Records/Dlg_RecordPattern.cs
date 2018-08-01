@@ -26,6 +26,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         }
 
         private Cl_Record m_Record = null;
+        private Cl_Record m_SourceRecord = null;
 
         private Cl_RecordPattern m_RecordPattern = null;
         public Cl_RecordPattern p_RecordPattern {
@@ -101,7 +102,20 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 Text = string.Format("Паттерн записей по шаблону \"{0}\" v{1}", m_RecordPattern.p_Template.p_Name, ConfigurationManager.AppSettings["Version"]);
                 m_Record = Cl_RecordsFacade.f_GetInstance().f_GetNewRecord(m_RecordPattern);
                 f_UpdateControls();
+                m_Log.f_SetEntity(m_Record);
             }
+        }
+
+        internal void FormatPaternFromRecord(Cl_Record a_Record)
+        {
+            if (a_Record == null) return;
+
+            m_SourceRecord = a_Record;
+            Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(a_Record.p_Template);
+            Cl_RecordPattern pattern = Cl_RecordsFacade.f_GetInstance().f_GetNewRecordPattern(a_Record);
+            pattern.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
+            pattern.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
+            this.p_RecordPattern = pattern;
         }
 
         private void ctrlBSave_Click(object sender, System.EventArgs e)
@@ -125,7 +139,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         var record = m_ControlTemplate.f_GetNewRecord();
                         if (record != null)
                         {
-                            if (m_Log.f_IsChanged(record) == false && record.p_Title == ctrlTitle.Text)
+                            if (m_SourceRecord == null && m_Log.f_IsChanged(record) == false && record.p_Title == ctrlTitle.Text)
                             {
                                 MonitoringStub.Message("Паттерн не изменялся!");
                                 transaction.Rollback();
@@ -137,6 +151,12 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             {
                                 Cl_App.m_DataContext.p_RecordsPatterns.Add(recordPattern);
                                 Cl_App.m_DataContext.SaveChanges();
+
+                                if (m_SourceRecord == null)
+                                    Cl_EntityLog.f_CustomMessageLog(1, E_EntityTypes.RecordsPatterns, 0, string.Format("Создан новый патерн \"{0}\" по шаблону \"{1}\"", recordPattern.p_Name, recordPattern.p_Template.p_Name));
+                                else
+                                    Cl_EntityLog.f_CustomMessageLog(1, E_EntityTypes.RecordsPatterns, 0, string.Format("Сформирован патерн по записи \"{0}\"", m_SourceRecord.p_Title));
+
                                 transaction.Commit();
                                 f_SetRecordPattern(recordPattern);
                                 e_Save?.Invoke(this, new EventArgs());

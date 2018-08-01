@@ -114,11 +114,11 @@
     <Compile Include="Forms\SubForms\Dlg_HistoryViewer.Designer.cs">
       <DependentUpon>Dlg_HistoryViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SubForms\Rating\Dlg_RatingViewer.cs">
+    <Compile Include="Forms\SubForms\Rating\Dlg_RatingEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\SubForms\Rating\Dlg_RatingViewer.Designer.cs">
-      <DependentUpon>Dlg_RatingViewer.cs</DependentUpon>
+    <Compile Include="Forms\SubForms\Rating\Dlg_RatingEditor.Designer.cs">
+      <DependentUpon>Dlg_RatingEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SubForms\Records\Dlg_RecordPattern.cs">
       <SubType>Form</SubType>
@@ -234,8 +234,8 @@
     <EmbeddedResource Include="Forms\SubForms\Dlg_HistoryViewer.resx">
       <DependentUpon>Dlg_HistoryViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SubForms\Rating\Dlg_RatingViewer.resx">
-      <DependentUpon>Dlg_RatingViewer.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\SubForms\Rating\Dlg_RatingEditor.resx">
+      <DependentUpon>Dlg_RatingEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SubForms\Records\Dlg_RecordPattern.resx">
       <DependentUpon>Dlg_RecordPattern.cs</DependentUpon>

@@ -87,6 +87,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Флаг архив</summary>
         [Column("F_ISARCHIVE")]
         [Description("Флаг архив")]
+        [Cl_ELogProperty("Запись перенесена в архив", p_IsCustomDescription = true, p_IgnoreValue = true)]
         public bool p_IsArchive { get; set; }
 
         /// <summary>Дата первой печати для доктора</summary>
@@ -121,6 +122,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Дата синхронизации с БМК</summary>
         [Column("F_DATESYNCBMK")]
         [Description("Дата синхронизации с БМК")]
+        [Cl_ELogProperty("Cинхронизации с БМК")]
         public DateTime? p_DateSyncBMK { get; set; }
 
         /// <summary>Флаг синхронизации с БМК</summary>

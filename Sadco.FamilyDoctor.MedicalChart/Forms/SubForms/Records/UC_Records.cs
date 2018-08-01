@@ -1,7 +1,9 @@
-﻿using OutlookStyleControls;
+﻿using FD.dat.mon.stb.lib;
+using OutlookStyleControls;
 using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Controls;
 using Sadco.FamilyDoctor.Core.Entities;
+using Sadco.FamilyDoctor.Core.EntityLogs;
 using Sadco.FamilyDoctor.Core.Facades;
 using Sadco.FamilyDoctor.Core.Permision;
 using Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Elements.Editors;
@@ -71,12 +73,13 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             if (a_Record != null && !a_Record.p_IsAutomatic && a_Record.p_Template != null)
             {
-                Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(a_Record.p_Template);
-                Cl_RecordPattern pattern = Cl_RecordsFacade.f_GetInstance().f_GetNewRecordPattern(a_Record);
-                pattern.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
-                pattern.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
+                //Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(a_Record.p_Template);
+                //Cl_RecordPattern pattern = Cl_RecordsFacade.f_GetInstance().f_GetNewRecordPattern(a_Record);
+                //pattern.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
+                //pattern.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
                 var dlgPattern = new Dlg_RecordPattern();
-                dlgPattern.p_RecordPattern = pattern;
+                //dlgPattern.p_RecordPattern = pattern;
+                dlgPattern.FormatPaternFromRecord(a_Record);
                 dlgPattern.ShowDialog(this);
             }
         }
@@ -98,10 +101,26 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 if (!m_SelectedRecord.p_IsArchive)
                 {
-                    m_SelectedRecord.p_IsArchive = true;
-                    Cl_App.m_DataContext.SaveChanges();
+                    using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            Cl_EntityLog log = new Cl_EntityLog();
+                            log.f_SetEntity(m_SelectedRecord);
+                            m_SelectedRecord.p_IsArchive = true;
+                            log.f_SaveEntity(m_SelectedRecord);
+                            Cl_App.m_DataContext.SaveChanges();
+                            transaction.Commit();
+                            ctrlBReportArchive.Visible = ctrlMIArchive.Visible = false;
+                        }
+                        catch
+                        {
+                            m_SelectedRecord.p_IsArchive = false;
+                            transaction.Rollback();
+                            MonitoringStub.Error("Error_Tree", "Не удалось перенести запись в архив", null, null, null);
+                        }
+                    }
                 }
-                ctrlBReportArchive.Visible = ctrlMIArchive.Visible = false;
             }
         }
 
@@ -110,7 +129,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             if (m_SelectedRecord != null)
             {
                 Dlg_RatingViewer viewer = new Dlg_RatingViewer();
-                viewer.LoadRating(m_SelectedRecord.p_RecordID);
+                viewer.f_LoadRating(m_SelectedRecord.p_RecordID);
                 viewer.ShowDialog(this);
             }
         }
@@ -121,10 +140,24 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 if (!m_SelectedRecord.p_IsSyncBMK)
                 {
-                    m_SelectedRecord.p_DateSyncBMK = DateTime.Now;
-                    Cl_App.m_DataContext.SaveChanges();
+                    using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            m_SelectedRecord.p_DateSyncBMK = DateTime.Now;
+                            Cl_App.m_DataContext.SaveChanges();
+                            Cl_EntityLog.f_CustomMessageLog(m_SelectedRecord, "Синхронизация записи с БМК");
+                            transaction.Commit();
+                            ctrlBReportSyncBMK.Visible = ctrlMISyncBMK.Visible = false;
+                        }
+                        catch
+                        {
+                            m_SelectedRecord.p_DateSyncBMK = null;
+                            transaction.Rollback();
+                            MonitoringStub.Error("Error_Tree", "Не удалось синхронизировать запись с БМК", null, null, null);
+                        }
+                    }
                 }
-                ctrlBReportSyncBMK.Visible = ctrlMISyncBMK.Visible = false;
             }
         }
 
@@ -137,6 +170,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 {
                     p_IsPrintDoctor = true;
                     m_WebBrowserPrint.DocumentText = m_SelectedRecord.f_GetDocumentTextDoctor(Application.StartupPath);
+                    Cl_EntityLog.f_CustomMessageLog(m_SelectedRecord, "Печать карточки для доктора" + (!m_SelectedRecord.p_IsPrintDoctor ? " (первая печать)" : ""));
                 }
             }
         }
@@ -149,6 +183,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 {
                     p_IsPrintDoctor = false;
                     m_WebBrowserPrint.DocumentText = m_SelectedRecord.f_GetDocumentTextPatient(Application.StartupPath);
+                    Cl_EntityLog.f_CustomMessageLog(m_SelectedRecord, "Печать карточки для пациента" + (!m_SelectedRecord.p_IsPrintPatient ? " (первая печать)" : ""));
                 }
             }
         }

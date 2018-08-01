@@ -162,6 +162,26 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
         }
 
         /// <summary>
+        /// Записывает индивидуальное сообщение лога для переданного объекта
+        /// </summary>
+        /// <param name="obj">Объект логирования</param>
+        /// <param name="message">Сообщение лога</param>
+        public static void f_CustomMessageLog(int id, E_EntityTypes entityType, int version, string message)
+        {
+            Cl_Log outEvent = new Cl_Log();
+
+            outEvent.p_ElementID = id;
+            outEvent.p_Version = version;
+            outEvent.p_EntityType = entityType;
+            outEvent.p_ChangeTime = DateTime.Now;
+            outEvent.p_Event = message;
+            outEvent.p_UserName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_FIO;
+
+            Cl_App.m_DataContext.p_Logs.Add(outEvent);
+            Cl_App.m_DataContext.SaveChanges();
+        }
+
+        /// <summary>
         /// Определяет имеются ли записи логирования у переданного объекта
         /// </summary>
         /// <returns>True - записей нет, False - записи имеются</returns>

@@ -6,6 +6,7 @@ using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.EntityLogs;
 using Sadco.FamilyDoctor.Core.Facades;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
@@ -27,7 +28,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     (System.Drawing.FontStyle)int.Parse(ConfigurationManager.AppSettings["FontStyle"]),
                     System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             InitializeComponent();
-            
+
             this.Load += Dlg_Record_Load;
         }
 
@@ -185,7 +186,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         private void ctrlBRating_Click(object sender, EventArgs e)
         {
             Dlg_RatingViewer viewer = new Dlg_RatingViewer();
-            viewer.LoadRating(p_Record.p_RecordID);
+            viewer.f_LoadRating(p_Record.p_RecordID);
             viewer.ShowDialog(this);
         }
 
@@ -198,9 +199,23 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             ctrlBRating.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditAllRatings;
 
             IQueryable<Cl_Rating> ratings = Cl_App.m_DataContext.p_Ratings.Where(l => l.p_RecordID == p_Record.p_RecordID);
+            Dictionary<int, Cl_Rating> result = new Dictionary<int, Cl_Rating>();
+
             foreach (Cl_Rating item in ratings)
             {
-                rate = rate + item.p_Value;
+                if (!result.ContainsKey(item.p_UserID))
+                {
+                    result.Add(item.p_UserID, item);
+                    continue;
+                }
+
+                if (result[item.p_UserID].p_Time < item.p_Time)
+                    result[item.p_UserID] = item;
+            }
+
+            foreach (KeyValuePair<int, Cl_Rating> item in result)
+            {
+                rate = rate + item.Value.p_Value;
                 total++;
             }
 

@@ -35,12 +35,14 @@
             this.p_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.p_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.p_TemplateName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ctrlHistory = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ctrlTablePatterns)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.ctrlHistory);
             this.panel1.Controls.Add(this.ctrlAdd);
             this.panel1.Controls.Add(this.ctrlDelete);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -113,6 +115,18 @@
             this.p_TemplateName.ReadOnly = true;
             this.p_TemplateName.Width = 250;
             // 
+            // ctrlHistory
+            // 
+            this.ctrlHistory.Dock = System.Windows.Forms.DockStyle.Left;
+            this.ctrlHistory.Location = new System.Drawing.Point(0, 0);
+            this.ctrlHistory.Margin = new System.Windows.Forms.Padding(10);
+            this.ctrlHistory.Name = "ctrlHistory";
+            this.ctrlHistory.Size = new System.Drawing.Size(82, 37);
+            this.ctrlHistory.TabIndex = 2;
+            this.ctrlHistory.Text = "история";
+            this.ctrlHistory.UseVisualStyleBackColor = true;
+            this.ctrlHistory.Click += new System.EventHandler(this.ctrlHistory_Click);
+            // 
             // F_RecordsPatterns
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
@@ -139,5 +153,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn p_ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_Name;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_TemplateName;
+        private System.Windows.Forms.Button ctrlHistory;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using FD.dat.mon.stb.lib;
 using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Entities;
+using Sadco.FamilyDoctor.Core.EntityLogs;
 using Sadco.FamilyDoctor.Core.Facades;
 using System;
 using System.Collections.Generic;
@@ -100,6 +101,9 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
                         if (pat != null)
                         {
                             var pattern = m_Patterns.FirstOrDefault(p => p.p_ID == pat.p_ID);
+
+                            Cl_EntityLog.f_CustomMessageLog(1, E_EntityTypes.RecordsPatterns, 0, string.Format("Удален патерн \"{0}\" по шаблону \"{1}\"", pattern.p_Name, pattern.p_Template.p_Name));
+
                             foreach (Cl_RecordPatternValue val in pattern.p_Values)
                             {
                                 Cl_App.m_DataContext.p_RecordsPatternsParams.RemoveRange(val.p_Params);
@@ -136,6 +140,13 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
                     }
                 }
             }
+        }
+
+        private void ctrlHistory_Click(object sender, EventArgs e)
+        {
+            Dlg_HistoryViewer viewer = new Dlg_HistoryViewer();
+            viewer.LoadHistory(1, E_EntityTypes.RecordsPatterns);
+            viewer.ShowDialog(this);
         }
     }
 }
