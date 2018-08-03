@@ -448,9 +448,15 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 record.p_CategoryClinic = a_RecordPattern.p_CategoryClinic;
                 record.p_CategoryTotalID = a_RecordPattern.p_CategoryTotalID;
                 record.p_CategoryTotal = a_RecordPattern.p_CategoryTotal;
-                record.f_SetTemplate(a_RecordPattern.p_Template);
                 record.p_Title = a_RecordPattern.p_Title;
-                record.p_Values = a_RecordPattern.p_Values.Select(v => f_GetRecordValue(record, v)).ToList();
+
+                var template = Cl_TemplatesFacade.f_GetInstance().f_GetActualTemplate(a_RecordPattern.p_Template);
+                Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(template);
+                var els = Cl_TemplatesFacade.f_GetInstance().f_GetElements(template);
+                record.f_SetTemplate(template);
+                var values = a_RecordPattern.p_Values.Select(v => f_GetRecordValue(record, v)).ToList();
+                values.RemoveAll(val => !els.Any(el => el.p_ID == val.p_ElementID));
+                record.p_Values = values;
             }
             return record;
         }
