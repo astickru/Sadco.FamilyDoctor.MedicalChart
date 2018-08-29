@@ -34,16 +34,16 @@
             this.ctrlTabClinik = new System.Windows.Forms.TabPage();
             this.ctrlCategoriesClinik = new System.Windows.Forms.DataGridView();
             this.p_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.ctrlAdd = new System.Windows.Forms.Button();
             this.ctrlEdit = new System.Windows.Forms.Button();
             this.ctrlDelete = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.ctrlCategoriesTab.SuspendLayout();
             this.ctrlTabTotal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ctrlCategoriesTotal)).BeginInit();
             this.ctrlTabClinik.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ctrlCategoriesClinik)).BeginInit();
-            this.panel1.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ctrlCategoriesTab
@@ -113,24 +113,12 @@
             // 
             this.p_Name.Name = "p_Name";
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.ctrlAdd);
-            this.panel1.Controls.Add(this.ctrlEdit);
-            this.panel1.Controls.Add(this.ctrlDelete);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 601);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(602, 37);
-            this.panel1.TabIndex = 1;
-            // 
             // ctrlAdd
             // 
-            this.ctrlAdd.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ctrlAdd.Location = new System.Drawing.Point(354, 0);
-            this.ctrlAdd.Margin = new System.Windows.Forms.Padding(10);
+            this.ctrlAdd.Location = new System.Drawing.Point(318, 3);
+            this.ctrlAdd.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
             this.ctrlAdd.Name = "ctrlAdd";
-            this.ctrlAdd.Size = new System.Drawing.Size(82, 37);
+            this.ctrlAdd.Size = new System.Drawing.Size(82, 25);
             this.ctrlAdd.TabIndex = 1;
             this.ctrlAdd.Text = "добавить";
             this.ctrlAdd.UseVisualStyleBackColor = true;
@@ -138,11 +126,11 @@
             // 
             // ctrlEdit
             // 
-            this.ctrlEdit.Dock = System.Windows.Forms.DockStyle.Right;
             this.ctrlEdit.Enabled = false;
-            this.ctrlEdit.Location = new System.Drawing.Point(436, 0);
+            this.ctrlEdit.Location = new System.Drawing.Point(415, 3);
+            this.ctrlEdit.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
             this.ctrlEdit.Name = "ctrlEdit";
-            this.ctrlEdit.Size = new System.Drawing.Size(83, 37);
+            this.ctrlEdit.Size = new System.Drawing.Size(83, 25);
             this.ctrlEdit.TabIndex = 2;
             this.ctrlEdit.Text = "изменить";
             this.ctrlEdit.UseVisualStyleBackColor = true;
@@ -150,23 +138,36 @@
             // 
             // ctrlDelete
             // 
-            this.ctrlDelete.Dock = System.Windows.Forms.DockStyle.Right;
             this.ctrlDelete.Enabled = false;
-            this.ctrlDelete.Location = new System.Drawing.Point(519, 0);
-            this.ctrlDelete.Margin = new System.Windows.Forms.Padding(10);
+            this.ctrlDelete.Location = new System.Drawing.Point(513, 3);
+            this.ctrlDelete.Margin = new System.Windows.Forms.Padding(0);
             this.ctrlDelete.Name = "ctrlDelete";
-            this.ctrlDelete.Size = new System.Drawing.Size(83, 37);
+            this.ctrlDelete.Size = new System.Drawing.Size(83, 25);
             this.ctrlDelete.TabIndex = 0;
             this.ctrlDelete.Text = "удалить";
             this.ctrlDelete.UseVisualStyleBackColor = true;
             this.ctrlDelete.Click += new System.EventHandler(this.ctrlDelete_Click);
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.ctrlDelete);
+            this.flowLayoutPanel1.Controls.Add(this.ctrlEdit);
+            this.flowLayoutPanel1.Controls.Add(this.ctrlAdd);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 606);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(3);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(602, 32);
+            this.flowLayoutPanel1.TabIndex = 3;
             // 
             // F_Categories
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(602, 638);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.ctrlCategoriesTab);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.MaximumSize = new System.Drawing.Size(1600, 1000);
@@ -178,7 +179,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ctrlCategoriesTotal)).EndInit();
             this.ctrlTabClinik.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ctrlCategoriesClinik)).EndInit();
-            this.panel1.ResumeLayout(false);
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -191,9 +192,9 @@
         private System.Windows.Forms.DataGridView ctrlCategoriesTotal;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_Name;
         private System.Windows.Forms.DataGridView ctrlCategoriesClinik;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button ctrlAdd;
         private System.Windows.Forms.Button ctrlDelete;
         private System.Windows.Forms.Button ctrlEdit;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }

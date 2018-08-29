@@ -1,5 +1,6 @@
 ﻿using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.Formula;
+using Sadco.FamilyDoctor.Core.Permision;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -63,7 +64,12 @@ namespace Sadco.FamilyDoctor.Core.Facades
                             txt = a_Text.Substring(Cl_FormulaConditionBlock.m_OperatorTag.Length, indexEnd - Cl_FormulaConditionBlock.m_OperatorTag.Length);
                         else
                             txt = a_Text.Replace(Cl_FormulaConditionBlock.m_OperatorTag, "");
-                        Cl_Element element = a_Elements.FirstOrDefault(el => el.p_Tag == txt);
+
+                        Cl_Element element = Cl_RecordsFacade.f_GetInstance().f_GetAgeElement(txt);
+                        if (element == null)
+                            element = Cl_RecordsFacade.f_GetInstance().f_GetGenderElement(txt);
+                        if (element == null)
+                            element = a_Elements.FirstOrDefault(el => el.p_Tag == txt);
                         if (element != null)
                             return new Cl_FormulaConditionBlock(element);
                     }
@@ -120,21 +126,36 @@ namespace Sadco.FamilyDoctor.Core.Facades
                         if (blocks.Count < 2) return null;
                         Cl_Element el = blocks[blocks.Count - 2].p_Object as Cl_Element;
                         if (el == null || el.p_IsNumber) return null;
-                        Cl_ElementParam prm = el.p_NormValues.FirstOrDefault(val => val.p_Value == txt);
-                        if (prm != null)
+                        if (el.p_Tag == "gender")
                         {
-                            block.p_Object = prm;
+                            Cl_User.E_Sex gender;
+                            if (Enum.TryParse(block.p_Object.ToString(), true, out gender))
+                            {
+                                block.p_Object = gender;
+                            }
+                            else
+                            {
+                                return null;
+                            }
                         }
                         else
                         {
-                            prm = el.p_PatValues.FirstOrDefault(val => val.p_Value == txt);
+                            Cl_ElementParam prm = el.p_NormValues.FirstOrDefault(val => val.p_Value == txt);
                             if (prm != null)
                             {
                                 block.p_Object = prm;
                             }
                             else
                             {
-                                return null;
+                                prm = el.p_PatValues.FirstOrDefault(val => val.p_Value == txt);
+                                if (prm != null)
+                                {
+                                    block.p_Object = prm;
+                                }
+                                else
+                                {
+                                    return null;
+                                }
                             }
                         }
                     }

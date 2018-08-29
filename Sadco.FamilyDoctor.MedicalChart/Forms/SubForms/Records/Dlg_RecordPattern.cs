@@ -95,39 +95,52 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             m_RecordPattern = a_RecordPattern;
             if (m_RecordPattern != null && m_RecordPattern.p_Template != null)
             {
-                Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(m_RecordPattern.p_Template);
-                ctrlDoctorFIO.Text = m_RecordPattern.p_DoctorFIO;
-                ctrlTitle.Text = m_RecordPattern.p_Title;
-                ctrlName.Text = m_RecordPattern.p_Name;
-                Text = string.Format("Паттерн записей по шаблону \"{0}\" v{1}", m_RecordPattern.p_Template.p_Name, ConfigurationManager.AppSettings["Version"]);
-                m_Record = Cl_RecordsFacade.f_GetInstance().f_GetNewRecord(m_RecordPattern);
-                f_UpdateControls();
-                m_Log.f_SetEntity(m_Record);
+                try
+                {
+                    Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(m_RecordPattern.p_Template);
+                    ctrlDoctorFIO.Text = m_RecordPattern.p_DoctorFIO;
+                    ctrlTitle.Text = m_RecordPattern.p_Title;
+                    ctrlName.Text = m_RecordPattern.p_Name;
+                    Text = string.Format("Паттерн записей по шаблону \"{0}\" v{1}", m_RecordPattern.p_Template.p_Name, ConfigurationManager.AppSettings["Version"]);
+                    m_Record = Cl_RecordsFacade.f_GetInstance().f_GetNewRecord(m_RecordPattern);
+                    f_UpdateControls();
+                    m_Log.f_SetEntity(m_Record);
+                }
+                catch (Exception er)
+                {
+                    MonitoringStub.Error("Error_Editor", "Не удалось установить паттерн записей по шаблону", er, null, null);
+                }
             }
         }
 
         internal void FormatPaternFromRecord(Cl_Record a_Record)
         {
             if (a_Record == null) return;
-
-            m_SourceRecord = a_Record;
-            Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(a_Record.p_Template);
-            Cl_RecordPattern pattern = Cl_RecordsFacade.f_GetInstance().f_GetNewRecordPattern(a_Record);
-            pattern.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
-            pattern.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
-            this.p_RecordPattern = pattern;
+            try
+            {
+                m_SourceRecord = a_Record;
+                Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(a_Record.p_Template);
+                Cl_RecordPattern pattern = Cl_RecordsFacade.f_GetInstance().f_GetNewRecordPattern(a_Record);
+                pattern.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
+                pattern.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
+                this.p_RecordPattern = pattern;
+            }
+            catch (Exception er)
+            {
+                MonitoringStub.Error("Error_Editor", "Не удалось сформировать паттерн записей по записи", er, null, null);
+            }
         }
 
-        private void ctrlBSave_Click(object sender, System.EventArgs e)
+        private void ctrlBSave_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(ctrlTitle.Text))
             {
-                MonitoringStub.Message("Заголовок пустой!");
+                MonitoringStub.Message("Заполните поле \"Заголовок\"!");
                 return;
             }
             if (string.IsNullOrWhiteSpace(ctrlName.Text))
             {
-                MonitoringStub.Message("Название пустое!");
+                MonitoringStub.Message("Заполните поле \"Название\"!");
                 return;
             }
             if (m_ControlTemplate != null)
@@ -136,7 +149,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 {
                     try
                     {
-                        var record = m_ControlTemplate.f_GetNewRecord();
+                        var record = m_ControlTemplate.f_GetNewRecord(false);
                         if (record != null)
                         {
                             if (m_SourceRecord == null && m_Log.f_IsChanged(record) == false && record.p_Title == ctrlTitle.Text)

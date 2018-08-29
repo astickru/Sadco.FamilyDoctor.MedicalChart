@@ -80,22 +80,29 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         private void f_UpdateControls()
         {
-            m_ControlTemplate = null;
-            ctrlPContent.Controls.Clear();
-            if (m_Record != null && m_Record.p_Template != null)
+            try
             {
-                if (m_Record.p_Template.p_TemplateElements == null)
+                m_ControlTemplate = null;
+                ctrlPContent.Controls.Clear();
+                if (m_Record != null && m_Record.p_Template != null)
                 {
-                    var cTe = Cl_App.m_DataContext.Entry(m_Record.p_Template).Collection(g => g.p_TemplateElements).Query().Include(te => te.p_ChildElement).Include(te => te.p_ChildElement.p_Default).Include(te => te.p_ChildTemplate);
-                    cTe.Load();
+                    if (m_Record.p_Template.p_TemplateElements == null)
+                    {
+                        var cTe = Cl_App.m_DataContext.Entry(m_Record.p_Template).Collection(g => g.p_TemplateElements).Query().Include(te => te.p_ChildElement).Include(te => te.p_ChildElement.p_Default).Include(te => te.p_ChildTemplate);
+                        cTe.Load();
+                    }
+                    m_ControlTemplate = new Ctrl_Template();
+                    m_ControlTemplate.Dock = DockStyle.Fill;
+                    m_ControlTemplate.p_Template = m_Record.p_Template;
+                    m_ControlTemplate.p_PaddingX = p_PaddingX;
+                    m_ControlTemplate.p_PaddingY = p_PaddingY;
+                    m_ControlTemplate.f_SetRecord(m_Record);
+                    ctrlPContent.Controls.Add(m_ControlTemplate);
                 }
-                m_ControlTemplate = new Ctrl_Template();
-                m_ControlTemplate.Dock = DockStyle.Fill;
-                m_ControlTemplate.p_Template = m_Record.p_Template;
-                m_ControlTemplate.p_PaddingX = p_PaddingX;
-                m_ControlTemplate.p_PaddingY = p_PaddingY;
-                m_ControlTemplate.f_SetRecord(m_Record);
-                ctrlPContent.Controls.Add(m_ControlTemplate);
+            }
+            catch (Exception er)
+            {
+                MonitoringStub.Error("Error_Editor", "Не удалось обновить контролы в записи", er, null, null);
             }
         }
 
@@ -104,19 +111,26 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             m_Record = a_Record;
             if (m_Record != null && m_Record.p_Template != null)
             {
-                Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(m_Record.p_Template);
-                ctrlDoctorFIO.Text = m_Record.p_DoctorFIO;
-                ctrlPatientFIO.Text = string.Format("{0} ({1}, {2})", m_Record.p_PatientFIO,
-                    m_Record.p_PatientSex == Core.Permision.Cl_User.E_Sex.Man ? "Мужчина" : m_Record.p_PatientSex == Core.Permision.Cl_User.E_Sex.Female ? "Женьщина" : "Нет данных",
-                    m_Record.p_PatientDateBirth.ToShortDateString());
-                ctrlTitle.Text = m_Record.p_Title;
-                Text = string.Format("Запись \"{0}\" v{1}", m_Record.p_Template.p_Name, ConfigurationManager.AppSettings["Version"]);
-                if (m_Record.p_Version == 0)
-                    ctrl_Version.Text = "Черновик";
-                else
-                    ctrl_Version.Text = m_Record.p_Version.ToString();
-                f_UpdateControls();
-                m_Log.f_SetEntity(m_Record);
+                try
+                {
+                    Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(m_Record.p_Template);
+                    ctrlDoctorFIO.Text = m_Record.p_DoctorFIO;
+                    ctrlPatientFIO.Text = string.Format("{0} ({1}, {2})", m_Record.p_PatientFIO,
+                        m_Record.p_PatientSex == Core.Permision.Cl_User.E_Sex.Man ? "Мужчина" : m_Record.p_PatientSex == Core.Permision.Cl_User.E_Sex.Female ? "Женьщина" : "Нет данных",
+                        m_Record.p_PatientDateBirth.ToShortDateString());
+                    ctrlTitle.Text = m_Record.p_Title;
+                    Text = string.Format("Запись \"{0}\" v{1}", m_Record.p_Template.p_Name, ConfigurationManager.AppSettings["Version"]);
+                    if (m_Record.p_Version == 0)
+                        ctrl_Version.Text = "Черновик";
+                    else
+                        ctrl_Version.Text = m_Record.p_Version.ToString();
+                    f_UpdateControls();
+                    m_Log.f_SetEntity(m_Record);
+                }
+                catch (Exception er)
+                {
+                    MonitoringStub.Error("Error_Editor", "Не удалось установить запись", er, null, null);
+                }
             }
         }
 
@@ -124,7 +138,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             if (string.IsNullOrWhiteSpace(ctrlTitle.Text))
             {
-                MonitoringStub.Message("Заголовок пустой!");
+                MonitoringStub.Message("Заполните поле \"Заголовок\"!");
                 return;
             }
             if (m_ControlTemplate != null)
@@ -146,7 +160,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             record.p_Title = ctrlTitle.Text;
                             Cl_App.m_DataContext.p_Records.Add(record);
                             Cl_App.m_DataContext.SaveChanges();
-                            record.p_FileType = Cl_Record.E_RecordFileType.HTML;
+                            record.p_FileType = E_RecordFileType.HTML;
                             record.p_HTMLDoctor = record.f_GetHTMLDoctor();
                             record.p_HTMLPatient = record.f_GetHTMLPatient();
                             if (record.p_Version == 1)
@@ -160,6 +174,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             f_SetRecord(record);
                             e_Save?.Invoke(this, new EventArgs());
                             //ctrl_Version.Text = record.p_Version.ToString();
+                            this.Close();
                         }
                         else
                         {
@@ -177,17 +192,31 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         private void ctrlBHistory_Click(object sender, EventArgs e)
         {
-            Dlg_HistoryViewer viewer = new Dlg_HistoryViewer();
-            viewer.LoadHistory(p_Record.p_RecordID, E_EntityTypes.Records);
-            viewer.ShowDialog(this);
+            try
+            {
+                Dlg_HistoryViewer viewer = new Dlg_HistoryViewer();
+                viewer.LoadHistory(p_Record.p_RecordID, E_EntityTypes.Records);
+                viewer.ShowDialog(this);
+            }
+            catch (Exception er)
+            {
+                MonitoringStub.Error("Error_Editor", "Не удалось открыть истории", er, null, null);
+            }
         }
 
         #region Рейтинг
         private void ctrlBRating_Click(object sender, EventArgs e)
         {
-            Dlg_RatingViewer viewer = new Dlg_RatingViewer();
-            viewer.f_LoadRating(p_Record.p_RecordID);
-            viewer.ShowDialog(this);
+            try
+            {
+                Dlg_RatingViewer viewer = new Dlg_RatingViewer();
+                viewer.f_LoadRating(p_Record.p_RecordID);
+                viewer.ShowDialog(this);
+            }
+            catch (Exception er)
+            {
+                MonitoringStub.Error("Error_Editor", "Не удалось открыть оценку", er, null, null);
+            }
         }
 
         private void InitRating()
@@ -198,30 +227,37 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
             ctrlBRating.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditAllRatings;
 
-            IQueryable<Cl_Rating> ratings = Cl_App.m_DataContext.p_Ratings.Where(l => l.p_RecordID == p_Record.p_RecordID);
-            Dictionary<int, Cl_Rating> result = new Dictionary<int, Cl_Rating>();
-
-            foreach (Cl_Rating item in ratings)
+            try
             {
-                if (!result.ContainsKey(item.p_UserID))
+                IQueryable<Cl_Rating> ratings = Cl_App.m_DataContext.p_Ratings.Where(l => l.p_RecordID == p_Record.p_RecordID);
+                Dictionary<int, Cl_Rating> result = new Dictionary<int, Cl_Rating>();
+
+                foreach (Cl_Rating item in ratings)
                 {
-                    result.Add(item.p_UserID, item);
-                    continue;
+                    if (!result.ContainsKey(item.p_UserID))
+                    {
+                        result.Add(item.p_UserID, item);
+                        continue;
+                    }
+
+                    if (result[item.p_UserID].p_Time < item.p_Time)
+                        result[item.p_UserID] = item;
                 }
 
-                if (result[item.p_UserID].p_Time < item.p_Time)
-                    result[item.p_UserID] = item;
-            }
+                foreach (KeyValuePair<int, Cl_Rating> item in result)
+                {
+                    rate = rate + item.Value.p_Value;
+                    total++;
+                }
 
-            foreach (KeyValuePair<int, Cl_Rating> item in result)
-            {
-                rate = rate + item.Value.p_Value;
-                total++;
+                if (rate > 0)
+                {
+                    this.Text += "   Оценка: " + Math.Round(rate / total, 1).ToString();
+                }
             }
-
-            if (rate > 0)
+            catch (Exception er)
             {
-                this.Text += "   Оценка: " + Math.Round(rate / total, 1).ToString();
+                MonitoringStub.Error("Error_Editor", "Не удалось инициализировать оценку", er, null, null);
             }
         }
         #endregion

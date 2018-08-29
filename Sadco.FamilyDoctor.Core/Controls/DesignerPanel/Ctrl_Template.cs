@@ -1,16 +1,13 @@
-﻿using System;
+﻿using Sadco.FamilyDoctor.Core.Entities;
+using Sadco.FamilyDoctor.Core.Facades;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Sadco.FamilyDoctor.Core.Entities;
-using System.Windows.Forms.VisualStyles;
 using System.Data.Entity;
-using FD.dat.mon.stb.lib;
-using Sadco.FamilyDoctor.Core.Facades;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
 {
@@ -311,7 +308,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         }
 
         /// <summary>Получение новой версии записи</summary>
-        private Cl_Record f_GetNewRecord(bool a_IsRequired)
+        public Cl_Record f_GetNewRecord(bool a_IsRequired)
         {
             if (m_Template == null || m_Record == null) return null;
             var record = new Cl_Record();

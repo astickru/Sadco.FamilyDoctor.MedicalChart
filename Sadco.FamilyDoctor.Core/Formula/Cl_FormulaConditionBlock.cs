@@ -1,4 +1,6 @@
 ﻿using Sadco.FamilyDoctor.Core.Entities;
+using Sadco.FamilyDoctor.Core.Permision;
+using System;
 using System.Drawing;
 
 namespace Sadco.FamilyDoctor.Core.Formula
@@ -68,6 +70,10 @@ namespace Sadco.FamilyDoctor.Core.Formula
             else if (p_Object is int)
             {
                 return p_Object.ToString();
+            }
+            else if (p_Object is Cl_User.E_Sex)
+            {
+                return Enum.GetName(typeof(Cl_User.E_Sex), p_Object).ToLower();
             }
             else if (p_Object is Cl_ElementParam)
             {

@@ -5,6 +5,7 @@ using Sadco.FamilyDoctor.Core.Permision;
 using Sadco.FamilyDoctor.MedicalChart.Forms.SubForms;
 using Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs;
 using System;
+using System.ComponentModel;
 using System.Configuration;
 using System.Windows.Forms;
 
@@ -18,33 +19,55 @@ namespace Sadco.FamilyDoctor.MedicalChart
         {
             f_InitSession(args);
             Tag = string.Format("Мегашаблон v{0}", ConfigurationManager.AppSettings["Version"]);
-            Cl_App.Initialize();
-            this.Font = new System.Drawing.Font(ConfigurationManager.AppSettings["FontFamily"],
-                    float.Parse(ConfigurationManager.AppSettings["FontSize"]),
-                    (System.Drawing.FontStyle)int.Parse(ConfigurationManager.AppSettings["FontStyle"]),
-                    System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            InitializeComponent();
-            p_PanelManager = new UI_PanelManager(ctrl_CustomControls);
-
-            menuMegaTemplate.Visible = false;
-            menuTemplate.Visible = false;
-
-            if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditMegaTemplates)
+            if (Cl_App.Initialize())
             {
-                menuMegaTemplate.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditMegaTemplates;
-            }
+                this.Font = new System.Drawing.Font(ConfigurationManager.AppSettings["FontFamily"],
+                        float.Parse(ConfigurationManager.AppSettings["FontSize"]),
+                        (System.Drawing.FontStyle)int.Parse(ConfigurationManager.AppSettings["FontStyle"]),
+                        System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+                InitializeComponent();
 
-            if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditTemplates)
+                string rolesVal = "";
+                var role = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_Role;
+                var memInfo = typeof(E_Roles).GetMember(typeof(E_Roles).GetEnumName(role));
+                var descriptionAttributes = memInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
+                if (descriptionAttributes.Length > 0)
+                {
+                    rolesVal = ((DescriptionAttribute)descriptionAttributes[0]).Description;
+                }
+
+                ctrlSessionInfo.Text = string.Format("Пользователь: {0}, {1} | Расположение: {2}", Cl_SessionFacade.f_GetInstance().p_Doctor.p_FIO, rolesVal, Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName);
+
+                p_PanelManager = new UI_PanelManager(ctrl_CustomControls);
+
+                menuMegaTemplate.Visible = false;
+                menuTemplate.Visible = false;
+
+                if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditMegaTemplates)
+                {
+                    menuMegaTemplate.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditMegaTemplates;
+                }
+
+                if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditTemplates)
+                {
+                    menuTemplate.Visible = menuPatterns.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditTemplates;
+                }
+
+                if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsShowDeleted)
+                {
+                    menuMegaTemplateDeleted.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsShowDeleted;
+                }
+
+                if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsShowDeleted)
+                {
+                    menuCatalogs.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditCatalogs;
+                }
+
+                f_SetControl<UC_Records>();
+            } else
             {
-                menuTemplate.Visible = menuPatterns.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditTemplates;
+                Application.Exit();
             }
-
-            if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsShowDeleted)
-            {
-                menuMegaTemplateDeleted.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsShowDeleted;
-            }
-
-            f_SetControl<UC_Records>();
         }
 
         private void f_InitSession(string[] args)

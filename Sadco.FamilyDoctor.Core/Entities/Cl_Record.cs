@@ -1,4 +1,5 @@
 ﻿using Sadco.FamilyDoctor.Core.EntityLogs;
+using Sadco.FamilyDoctor.Core.Facades;
 using Sadco.FamilyDoctor.Core.Permision;
 using System;
 using System.Collections.Generic;
@@ -11,40 +12,40 @@ using System.Text.RegularExpressions;
 namespace Sadco.FamilyDoctor.Core.Entities
 {
     /// <summary>
+    /// Типы записей
+    /// </summary>
+    public enum E_RecordType : byte
+    {
+        /// <summary>По шаблону</summary>
+        ByTemplate,
+        /// <summary>Готовый файл</summary>
+        FinishedFile
+    }
+
+    /// <summary>
+    /// Типы вложенных файлов записей
+    /// </summary>
+    public enum E_RecordFileType : byte
+    {
+        HTML,
+        PDF,
+        JPG,
+        JPEG,
+        JPE,
+        JFIF,
+        JIF,
+        PNG,
+        GIF,
+        XML
+    }
+
+    /// <summary>
     /// Класс сущности записи
     /// </summary>
     [Cl_ELogClass(E_EntityTypes.Records)]
     [Table("T_RECORDS")]
-    public class Cl_Record : Cl_RecordBase, I_Version, I_Delete, I_ELog
+    public class Cl_Record : Cl_RecordBase, I_Record, I_Version, I_Delete, I_ELog
     {
-        /// <summary>
-        /// Типы записей
-        /// </summary>
-        public enum E_RecordType : byte
-        {
-            /// <summary>По шаблону</summary>
-            ByTemplate,
-            /// <summary>Готовый файл</summary>
-            FinishedFile
-        }
-
-        /// <summary>
-        /// Типы вложенных файлов записей
-        /// </summary>
-        public enum E_RecordFileType : byte
-        {
-            HTML,
-            PDF,
-            JPG,
-            JPEG,
-            JPE,
-            JFIF,
-            JIF,
-            PNG,
-            GIF,
-            XML
-        }
-
         /// <summary>ID записи для всех версий</summary>
         [Column("F_RECORD_ID")]
         [Description("ID записи для всех версий")]
@@ -192,6 +193,15 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Description("Данные файла")]
         public byte[] p_FileBytes { get; set; }
 
+        /// <summary>Инициалы пациента</summary>
+        [NotMapped]
+        public string p_PatientFIO { get { return f_GetPatientInitials(); } }
+        /// <summary>Возвращает инициалы пациента</summary>
+        public string f_GetPatientInitials()
+        {
+            return string.Format("{0} {1} {2}", p_PatientSurName, string.IsNullOrWhiteSpace(p_PatientName) ? "" : p_PatientName[0].ToString() + ".", string.IsNullOrWhiteSpace(p_PatientLastName) ? "" : p_PatientLastName[0].ToString() + ".");
+        }
+
         private List<Cl_RecordValue> m_Values = new List<Cl_RecordValue>();
         /// <summary>Список значений элементов записи</summary>
         [ForeignKey("p_RecordID")]
@@ -202,13 +212,9 @@ namespace Sadco.FamilyDoctor.Core.Entities
             set { m_Values = value; }
         }
 
-        /// <summary>Инициалы пациента</summary>
-        [NotMapped]
-        public string p_PatientFIO { get { return f_GetPatientInitials(); } }
-        /// <summary>Возвращает инициалы пациента</summary>
-        public string f_GetPatientInitials()
+        public override IEnumerable<I_RecordValue> f_GetRecordsValues()
         {
-            return string.Format("{0} {1} {2}", p_PatientSurName, string.IsNullOrWhiteSpace(p_PatientName) ? "" : p_PatientName[0].ToString() + ".", string.IsNullOrWhiteSpace(p_PatientLastName) ? "" : p_PatientLastName[0].ToString() + ".");
+            return p_Values;
         }
 
         /// <summary>Возвращает возраст пациента</summary>
@@ -300,7 +306,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
             foreach (var value in p_Values)
             {
-                var te = value.f_GetTemplateElement();
+                var te = Cl_RecordsFacade.f_GetInstance().f_GetTemplateElement(value);
                 if (te != null && te.p_Template != null)
                 {
                     decimal? min = 0;
@@ -308,9 +314,9 @@ namespace Sadco.FamilyDoctor.Core.Entities
                     var partNorm = value.p_Element.f_GetPartNormValue(p_PatientSex, age, out min, out max);
                     string htmlBlock = "";
                     if (a_IsDoctor)
-                        htmlBlock = value.f_GetHTMLDoctor(this, te.p_Template.p_Type == Cl_Template.E_TemplateType.Table, min, max);
+                        htmlBlock = Cl_RecordsFacade.f_GetInstance().f_GetHTMLDoctor(this, value, te.p_Template.p_Type == Cl_Template.E_TemplateType.Table, min, max);
                     else
-                        htmlBlock = value.f_GetHTMLPatient(this, te.p_Template.p_Type == Cl_Template.E_TemplateType.Table, min, max);
+                        htmlBlock = Cl_RecordsFacade.f_GetInstance().f_GetHTMLPatient(this, value, te.p_Template.p_Type == Cl_Template.E_TemplateType.Table, min, max);
                     if (!string.IsNullOrWhiteSpace(htmlBlock))
                     {
                         if (te.p_Template.p_Type == Cl_Template.E_TemplateType.Table)
@@ -376,16 +382,16 @@ namespace Sadco.FamilyDoctor.Core.Entities
             }
             else
             {
-                if (p_Type == Cl_Record.E_RecordType.FinishedFile)
+                if (p_Type == E_RecordType.FinishedFile)
                 {
-                    if (p_FileType == Cl_Record.E_RecordFileType.HTML)
+                    if (p_FileType == E_RecordFileType.HTML)
                     {
                         return Encoding.UTF8.GetString(p_FileBytes).Replace("src=\"", "src=\"file:///" + a_AppStartupPath + "/");
                     }
-                    else if (p_FileType == Cl_Record.E_RecordFileType.JFIF || p_FileType == Cl_Record.E_RecordFileType.JIF || p_FileType == Cl_Record.E_RecordFileType.JPE ||
-                        p_FileType == Cl_Record.E_RecordFileType.JPEG || p_FileType == Cl_Record.E_RecordFileType.JPG || p_FileType == Cl_Record.E_RecordFileType.PNG)
+                    else if (p_FileType == E_RecordFileType.JFIF || p_FileType == E_RecordFileType.JIF || p_FileType == E_RecordFileType.JPE ||
+                        p_FileType == E_RecordFileType.JPEG || p_FileType == E_RecordFileType.JPG || p_FileType == E_RecordFileType.PNG)
                     {
-                        return string.Format(@"<img src=""data:image/{0};base64,{1}"" />", Enum.GetName(typeof(Cl_Record.E_RecordFileType), p_FileType).ToLower(), Convert.ToBase64String(p_FileBytes));
+                        return string.Format(@"<img src=""data:image/{0};base64,{1}"" />", Enum.GetName(typeof(E_RecordFileType), p_FileType).ToLower(), Convert.ToBase64String(p_FileBytes));
                     }
                 }
                 else

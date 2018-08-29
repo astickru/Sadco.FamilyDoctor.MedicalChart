@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Sadco.FamilyDoctor.Core.Entities
 {
     /// <summary>Базовый класс для параметра записи</summary>
-    public abstract class Cl_RecordParamBase : I_Comparable
+    public abstract class Cl_RecordParamBase : I_RecordParam, I_Comparable
     {
         /// <summary>ID параметра записи</summary>
         [Key]

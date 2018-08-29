@@ -598,14 +598,25 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             var tb = sender as TextBox;
             if (tb != null)
             {
-                int pos = tb.SelectionStart - tb.GetFirstCharIndexOfCurrentLine();
-                string txt = tb.Text;
-                if (tb.Lines.Length > 0)
+                if (e.KeyChar == 32)
                 {
-                    txt = tb.Lines.ElementAt(tb.GetLineFromCharIndex(tb.SelectionStart));
+                    e.Handled = true;
                 }
-                txt = string.Format("{0}{1}{2}", txt.Substring(0, pos), e.KeyChar, txt.Substring(pos, txt.Length - pos));
-                e.Handled = !f_ValidNumber(new string[] { txt });
+                else if (e.KeyChar != 8)
+                {
+                    int pos = tb.SelectionStart - tb.GetFirstCharIndexOfCurrentLine();
+                    string txt = tb.Text;
+                    if (tb.Lines.Length > 0)
+                    {
+                        txt = tb.Lines.ElementAt(tb.GetLineFromCharIndex(tb.SelectionStart));
+                    }
+                    txt = string.Format("{0}{1}{2}", txt.Substring(0, pos), e.KeyChar, txt.Substring(pos, txt.Length - pos));
+                    e.Handled = !f_ValidNumber(new string[] { txt });
+                }
+            }
+            else
+            {
+                e.Handled = false;
             }
         }
 
@@ -693,7 +704,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         }
                         else if (a_IsRequired && p_Element.p_Required)
                         {
-                            MonitoringStub.Message(string.Format("Локация с множественным выбором элемента {0} пустая", p_Element.p_Name));
+                            MonitoringStub.Message(string.Format("Заполните поле \"Локация с множественным выбором\" элемента {0}", p_Element.p_Name));
                             return null;
                         }
                     }
@@ -706,7 +717,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         }
                         else if (a_IsRequired && p_Element.p_Required)
                         {
-                            MonitoringStub.Message(string.Format("Локация элемента {0} пустая", p_Element.p_Name));
+                            MonitoringStub.Message(string.Format("Заполните поле \"Локация\" элемента {0}", p_Element.p_Name));
                             return null;
                         }
                     }
@@ -732,14 +743,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 }
                                 else if (a_IsRequired && p_Element.p_Required)
                                 {
-                                    MonitoringStub.Message(string.Format("Значения с множественным выбором из справочника для симметрического параметра элемента {0} пустые", p_Element.p_Name));
+                                    MonitoringStub.Message(string.Format("Заполните поле \"Значения с множественным выбором из справочника для симметрического параметра\" элемента {0}", p_Element.p_Name));
                                     return null;
                                 }
                             }
                         }
                         else if (a_IsRequired && p_Element.p_Required)
                         {
-                            MonitoringStub.Message(string.Format("Значения с множественным выбором из справочника элемента {0} пустые", p_Element.p_Name));
+                            MonitoringStub.Message(string.Format("Заполните поле \"Значения с множественным выбором из справочника\" элемента {0}", p_Element.p_Name));
                             return null;
                         }
                     }
@@ -758,14 +769,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 }
                                 else if (a_IsRequired && p_Element.p_Required)
                                 {
-                                    MonitoringStub.Message(string.Format("Значение из справочника для симметрического параметра элемента {0} пустое", p_Element.p_Name));
+                                    MonitoringStub.Message(string.Format("Заполните поле \"Значение из справочника для симметрического параметра\" элемента {0}", p_Element.p_Name));
                                     return null;
                                 }
                             }
                         }
                         else if (a_IsRequired && p_Element.p_Required)
                         {
-                            MonitoringStub.Message(string.Format("Значение из справочника элемента {0} пустое", p_Element.p_Name));
+                            MonitoringStub.Message(string.Format("Заполните поле \"Значение из справочника\" элемента {0}", p_Element.p_Name));
                             return null;
                         }
                     }
@@ -785,14 +796,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 }
                                 else if (a_IsRequired && p_Element.p_Required)
                                 {
-                                    MonitoringStub.Message(string.Format("Значение для симметрического параметра элемента {0} пустое", p_Element.p_Name));
+                                    MonitoringStub.Message(string.Format("Заполните поле \"Значение для симметрического параметра\" элемента {0}", p_Element.p_Name));
                                     return null;
                                 }
                             }
                         }
                         else if (a_IsRequired && p_Element.p_Required)
                         {
-                            MonitoringStub.Message(string.Format("Значение элемента {0} пустое", p_Element.p_Name));
+                            MonitoringStub.Message(string.Format("Заполните поле \"Значение\" элемента {0}", p_Element.p_Name));
                             return null;
                         }
                     }
@@ -809,14 +820,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 }
                                 else if (a_IsRequired && p_Element.p_Required)
                                 {
-                                    MonitoringStub.Message(string.Format("Значение для симметрического параметра элемента {0} пустое", p_Element.p_Name));
+                                    MonitoringStub.Message(string.Format("Заполните поле \"Значение для симметрического параметра\" элемента {0}", p_Element.p_Name));
                                     return null;
                                 }
                             }
                         }
                         else if (a_IsRequired && p_Element.p_Required)
                         {
-                            MonitoringStub.Message(string.Format("Значение элемента {0} пустое", p_Element.p_Name));
+                            MonitoringStub.Message(string.Format("Заполните поле \"Значение\" элемента {0}", p_Element.p_Name));
                             return null;
                         }
                     }

@@ -3,6 +3,7 @@ using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.Facades;
 using Sadco.FamilyDoctor.Core.Formula;
+using Sadco.FamilyDoctor.Core.Permision;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -18,18 +19,23 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
     {
         public F_EditorСondition()
         {
-            this.Font = new System.Drawing.Font(ConfigurationManager.AppSettings["FontFamily"],
+            this.Font = new Font(ConfigurationManager.AppSettings["FontFamily"],
                     float.Parse(ConfigurationManager.AppSettings["FontSize"]),
-                    (System.Drawing.FontStyle)int.Parse(ConfigurationManager.AppSettings["FontStyle"]),
-                    System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+                    (FontStyle)int.Parse(ConfigurationManager.AppSettings["FontStyle"]),
+                    GraphicsUnit.Point, ((byte)(204)));
             InitializeComponent();
             InitializeOptions();
 
             ctrlStandartValues.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Dash;
             ctrlCBAddElement.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             ctrlCBAddElement.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            m_Elements = Cl_App.m_DataContext.p_Elements.Where(e => !e.p_IsDelete && e.p_ElementType != Cl_Element.E_ElementsTypes.Image).GroupBy(e => e.p_ElementID)
-                                .Select(grp => grp.OrderByDescending(v => v.p_Version).FirstOrDefault()).ToArray();
+            var elements = Cl_App.m_DataContext.p_Elements.Where(e => !e.p_IsDelete && e.p_ElementType != Cl_Element.E_ElementsTypes.Image).GroupBy(e => e.p_ElementID)
+                                .Select(grp => grp.OrderByDescending(v => v.p_Version).FirstOrDefault()).ToList();
+
+            elements.Insert(0, new Cl_Element() { p_Tag = "age", p_Name = "Возраст", p_IsNumber = true });
+            elements.Insert(1, new Cl_Element() { p_Tag = "gender", p_Name = "Пол" });
+            m_Elements = elements.ToArray();
+
             ctrlCBAddElement.AutoCompleteCustomSource.AddRange(m_Elements.Select(e => e.p_Name).ToArray());
             ctrlCBAddElement.DataSource = new BindingSource(m_Elements, null);
             ctrlCBAddElement.DisplayMember = "p_Name";
@@ -60,6 +66,17 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 el = m_Blocks[index].p_Object as Cl_Element;
             if (el != null)
                 return el.p_IsNumber;
+            return false;
+        }
+
+        private bool f_GetIsGenderBlock()
+        {
+            Cl_Element el = null;
+            int index = m_Blocks.Count - m_NumberBlockOper + 1;
+            if (index >= 0 && m_Blocks.Count > index)
+                el = m_Blocks[index].p_Object as Cl_Element;
+            if (el != null)
+                return el.p_Tag == "gender";
             return false;
         }
 
@@ -125,6 +142,18 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             f_UpdateControls(++m_NumberBlockOper);
         }
 
+        private void ctrlBAddMan_Click(object sender, EventArgs e)
+        {
+            f_AppendBlock(new Cl_FormulaConditionBlock(Cl_User.E_Sex.Man));
+            f_UpdateControls(++m_NumberBlockOper);
+        }
+
+        private void ctrlBAddFemale_Click(object sender, EventArgs e)
+        {
+            f_AppendBlock(new Cl_FormulaConditionBlock(Cl_User.E_Sex.Female));
+            f_UpdateControls(++m_NumberBlockOper);
+        }
+
         private void ctrlBClear_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Очистить формулу?", "Очистка", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
@@ -184,14 +213,24 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             ctrlBOperNotEquals.Enabled = visGroup2;
             ctrlBOperEquals.Enabled = visGroup2;
 
+            if (f_GetIsGenderBlock())
+            {
+                ctrlPAddGender.Visible = true;
+                ctrlPAddValue.Visible = false;
+                ctrlPAddGender.Enabled = visGroup1;
+            }
+            else
+            {
+                ctrlPAddGender.Visible = false;
+                ctrlPAddValue.Visible = true;
+            }
             if (!f_GetIsNumberBlockNumber())
             {
                 ctrlBOperLess.Enabled = false;
                 ctrlBOperMore.Enabled = false;
                 ctrlCBAddElement.DataSource = new BindingSource(m_Elements, null);
                 ctrlStandartValues.Enabled = m_NumberBlockOper == 3;
-                ctrlTBValue.Enabled = false;
-                ctrlBAddValue.Enabled = false;
+                ctrlPAddValue.Enabled = false;
             }
             else
             {
@@ -201,8 +240,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 ctrlStandartValues.Enabled = false;
                 if (m_NumberBlockOper > 1)
                 {
-                    ctrlTBValue.Enabled = visGroup1;
-                    ctrlBAddValue.Enabled = visGroup1;
+                    ctrlPAddValue.Enabled = visGroup1;
                 }
             }
 

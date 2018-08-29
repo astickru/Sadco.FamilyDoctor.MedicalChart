@@ -35,13 +35,16 @@
             this.menuCategories = new System.Windows.Forms.ToolStripMenuItem();
             this.menuTemplate = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMegaTemplate = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuPatterns = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMegaTemplateDeleted = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlMIInfo = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel = new System.Windows.Forms.Panel();
             this.ctrl_CustomControls = new System.Windows.Forms.Panel();
-            this.menuPatterns = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctrlPFooter = new System.Windows.Forms.Panel();
+            this.ctrlSessionInfo = new System.Windows.Forms.Label();
             this.ctrlMIMenu.SuspendLayout();
             this.MainPanel.SuspendLayout();
+            this.ctrlPFooter.SuspendLayout();
             this.SuspendLayout();
             // 
             // ctrlMIMenu
@@ -130,6 +133,13 @@
             this.menuMegaTemplate.Text = "Элементы";
             this.menuMegaTemplate.Click += new System.EventHandler(this.ctrl_MenuShowElements_Click);
             // 
+            // menuPatterns
+            // 
+            this.menuPatterns.Name = "menuPatterns";
+            this.menuPatterns.Size = new System.Drawing.Size(231, 22);
+            this.menuPatterns.Text = "Паттерны";
+            this.menuPatterns.Click += new System.EventHandler(this.menuPatterns_Click);
+            // 
             // menuMegaTemplateDeleted
             // 
             this.menuMegaTemplateDeleted.Image = global::Sadco.FamilyDoctor.MedicalChart.Properties.Resources.data_table_deleted;
@@ -153,7 +163,7 @@
             this.MainPanel.Margin = new System.Windows.Forms.Padding(0);
             this.MainPanel.Name = "MainPanel";
             this.MainPanel.Padding = new System.Windows.Forms.Padding(5, 0, 5, 5);
-            this.MainPanel.Size = new System.Drawing.Size(984, 857);
+            this.MainPanel.Size = new System.Drawing.Size(984, 829);
             this.MainPanel.TabIndex = 2;
             // 
             // ctrl_CustomControls
@@ -164,15 +174,26 @@
             this.ctrl_CustomControls.Location = new System.Drawing.Point(5, 0);
             this.ctrl_CustomControls.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_CustomControls.Name = "ctrl_CustomControls";
-            this.ctrl_CustomControls.Size = new System.Drawing.Size(974, 852);
+            this.ctrl_CustomControls.Size = new System.Drawing.Size(974, 824);
             this.ctrl_CustomControls.TabIndex = 0;
             // 
-            // menuPatterns
+            // ctrlPFooter
             // 
-            this.menuPatterns.Name = "menuPatterns";
-            this.menuPatterns.Size = new System.Drawing.Size(231, 22);
-            this.menuPatterns.Text = "Паттерны";
-            this.menuPatterns.Click += new System.EventHandler(this.menuPatterns_Click);
+            this.ctrlPFooter.Controls.Add(this.ctrlSessionInfo);
+            this.ctrlPFooter.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.ctrlPFooter.Location = new System.Drawing.Point(0, 853);
+            this.ctrlPFooter.Name = "ctrlPFooter";
+            this.ctrlPFooter.Size = new System.Drawing.Size(984, 28);
+            this.ctrlPFooter.TabIndex = 0;
+            // 
+            // ctrlSessionInfo
+            // 
+            this.ctrlSessionInfo.AutoSize = true;
+            this.ctrlSessionInfo.Location = new System.Drawing.Point(9, 5);
+            this.ctrlSessionInfo.Name = "ctrlSessionInfo";
+            this.ctrlSessionInfo.Size = new System.Drawing.Size(76, 13);
+            this.ctrlSessionInfo.TabIndex = 0;
+            this.ctrlSessionInfo.Text = "ctrlSessionInfo";
             // 
             // F_Main
             // 
@@ -181,6 +202,7 @@
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(984, 881);
             this.Controls.Add(this.MainPanel);
+            this.Controls.Add(this.ctrlPFooter);
             this.Controls.Add(this.ctrlMIMenu);
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.MaximumSize = new System.Drawing.Size(1600, 1000);
@@ -192,6 +214,8 @@
             this.ctrlMIMenu.PerformLayout();
             this.MainPanel.ResumeLayout(false);
             this.MainPanel.PerformLayout();
+            this.ctrlPFooter.ResumeLayout(false);
+            this.ctrlPFooter.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -214,5 +238,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuCatalogs;
         private System.Windows.Forms.ToolStripMenuItem menuCategories;
         private System.Windows.Forms.ToolStripMenuItem menuPatterns;
-    }
+		private System.Windows.Forms.Panel ctrlPFooter;
+		private System.Windows.Forms.Label ctrlSessionInfo;
+	}
 }

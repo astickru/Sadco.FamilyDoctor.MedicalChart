@@ -25,19 +25,15 @@ namespace Sadco.FamilyDoctor.Core.Entities
             set { m_Params = value; }
         }
 
-        /// <summary>Локации</summary>
-        public Cl_RecordPatternParam[] p_PartLocations {
-            get { return p_Params.Where(p => p.p_ElementParam.p_TypeParam == Cl_ElementParam.E_TypeParam.Location).ToArray(); }
+        /// <summary>Получение записи</summary>
+        public override I_Record f_GetRecord()
+        {
+            return null;
         }
 
-        /// <summary>Значения из справочника</summary>
-        public Cl_RecordPatternParam[] p_ValuesCatalog {
-            get { return p_Params.Where(p => !p.p_IsDop && (p.p_ElementParam.p_TypeParam == Cl_ElementParam.E_TypeParam.NormValues || p.p_ElementParam.p_TypeParam == Cl_ElementParam.E_TypeParam.PatValues)).ToArray(); }
-        }
-
-        /// <summary>Дополнительные значения из справочника</summary>
-        public Cl_RecordPatternParam[] p_ValuesDopCatalog {
-            get { return p_Params.Where(p => p.p_IsDop && (p.p_ElementParam.p_TypeParam == Cl_ElementParam.E_TypeParam.NormValues || p.p_ElementParam.p_TypeParam == Cl_ElementParam.E_TypeParam.PatValues)).ToArray(); }
+        public override IEnumerable<I_RecordParam> f_GetParams()
+        {
+            return m_Params;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Sadco.FamilyDoctor.Core.EntityLogs;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Sadco.FamilyDoctor.Core.Entities
@@ -20,6 +19,11 @@ namespace Sadco.FamilyDoctor.Core.Entities
         public List<Cl_RecordPatternValue> p_Values {
             get { return m_Values; }
             set { m_Values = value; }
+        }
+
+        public override IEnumerable<I_RecordValue> f_GetRecordsValues()
+        {
+            return p_Values;
         }
     }
 }

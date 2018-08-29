@@ -37,7 +37,6 @@
             this.ctrl_MITemplateEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_MITemplateDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_TreeTemplates = new Sadco.FamilyDoctor.Core.Controls.Ctrl_TreeTemplates();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.ctrlTBSources = new System.Windows.Forms.TabControl();
@@ -47,12 +46,13 @@
             this.p_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.p_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.p_TemplateName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.ctrl_CMTemplate.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.ctrlTBSources.SuspendLayout();
             this.ctrlTabTemplate.SuspendLayout();
             this.ctrlTabPattern.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ctrlTablePatterns)).BeginInit();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ctrl_CMTemplate
@@ -119,25 +119,14 @@
             this.ctrl_TreeTemplates.p_IsShowDeleted = false;
             this.ctrl_TreeTemplates.p_ReadOnly = true;
             this.ctrl_TreeTemplates.SelectedImageKey = "FOLDER_16";
-            this.ctrl_TreeTemplates.Size = new System.Drawing.Size(536, 450);
+            this.ctrl_TreeTemplates.Size = new System.Drawing.Size(545, 443);
             this.ctrl_TreeTemplates.TabIndex = 1;
             this.ctrl_TreeTemplates.DoubleClick += new System.EventHandler(this.ctrl_TreeTemplates_DoubleClick);
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.button1);
-            this.panel1.Controls.Add(this.button2);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 482);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(559, 25);
-            this.panel1.TabIndex = 2;
             // 
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.button1.Location = new System.Drawing.Point(409, 0);
+            this.button1.Location = new System.Drawing.Point(400, 3);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 25);
             this.button1.TabIndex = 2;
@@ -147,8 +136,7 @@
             // button2
             // 
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.button2.Location = new System.Drawing.Point(484, 0);
+            this.button2.Location = new System.Drawing.Point(481, 3);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 25);
             this.button2.TabIndex = 1;
@@ -163,7 +151,7 @@
             this.ctrlTBSources.Location = new System.Drawing.Point(0, 0);
             this.ctrlTBSources.Name = "ctrlTBSources";
             this.ctrlTBSources.SelectedIndex = 0;
-            this.ctrlTBSources.Size = new System.Drawing.Size(559, 482);
+            this.ctrlTBSources.Size = new System.Drawing.Size(559, 475);
             this.ctrlTBSources.TabIndex = 3;
             // 
             // ctrlTabTemplate
@@ -172,7 +160,7 @@
             this.ctrlTabTemplate.Location = new System.Drawing.Point(4, 22);
             this.ctrlTabTemplate.Name = "ctrlTabTemplate";
             this.ctrlTabTemplate.Padding = new System.Windows.Forms.Padding(3);
-            this.ctrlTabTemplate.Size = new System.Drawing.Size(542, 456);
+            this.ctrlTabTemplate.Size = new System.Drawing.Size(551, 449);
             this.ctrlTabTemplate.TabIndex = 0;
             this.ctrlTabTemplate.Text = "Шаблоны записей";
             this.ctrlTabTemplate.UseVisualStyleBackColor = true;
@@ -226,6 +214,17 @@
             this.p_TemplateName.ReadOnly = true;
             this.p_TemplateName.Width = 250;
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.button2);
+            this.flowLayoutPanel1.Controls.Add(this.button1);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 475);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(559, 32);
+            this.flowLayoutPanel1.TabIndex = 3;
+            // 
             // Dlg_RecordSelectSource
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -233,16 +232,16 @@
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(559, 507);
             this.Controls.Add(this.ctrlTBSources);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.MaximumSize = new System.Drawing.Size(1600, 1000);
             this.Name = "Dlg_RecordSelectSource";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.ctrl_CMTemplate.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
             this.ctrlTBSources.ResumeLayout(false);
             this.ctrlTabTemplate.ResumeLayout(false);
             this.ctrlTabPattern.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ctrlTablePatterns)).EndInit();
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -256,7 +255,6 @@
         private System.Windows.Forms.ToolStripMenuItem ctrl_MIGroupEdit;
         private System.Windows.Forms.ToolStripMenuItem ctrl_MITemplateEdit;
         private Core.Controls.Ctrl_TreeTemplates ctrl_TreeTemplates;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TabControl ctrlTBSources;
@@ -266,5 +264,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn p_ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_Name;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_TemplateName;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }

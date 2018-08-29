@@ -1,8 +1,10 @@
-﻿using Sadco.FamilyDoctor.Core;
+﻿using FD.dat.mon.stb.lib;
+using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Controls;
 using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.Facades;
 using Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Elements.Editors;
+using System;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity;
@@ -36,10 +38,17 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         private void f_PopulateGroup()
         {
-            Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Elements && g.p_ParentID == null && (p_IsShowDeleted ? true : !g.p_IsDelete)).ToArray();
-            foreach (Cl_Group group in groups)
+            try
             {
-                f_PopulateTreeGroup(group, ctrl_TreeElements.Nodes);
+                Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Elements && g.p_ParentID == null && (p_IsShowDeleted ? true : !g.p_IsDelete)).ToArray();
+                foreach (Cl_Group group in groups)
+                {
+                    f_PopulateTreeGroup(group, ctrl_TreeElements.Nodes);
+                }
+            }
+            catch (Exception er)
+            {
+                MonitoringStub.Error("Error_Editor", "Не удалось сформировать дерево элементов", er, null, null);
             }
         }
 

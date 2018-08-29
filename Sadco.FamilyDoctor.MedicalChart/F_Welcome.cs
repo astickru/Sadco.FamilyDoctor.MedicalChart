@@ -112,9 +112,10 @@ namespace Sadco.FamilyDoctor.MedicalChart
 
             if (ctrlIsDebug.Checked)
             {
-                this.Hide();
-                new F_Main(startParams).ShowDialog();
-                this.Close();
+                Hide();
+                var fMain = new F_Main(startParams);
+                fMain.ShowDialog();
+                Close();
             }
             else
             {

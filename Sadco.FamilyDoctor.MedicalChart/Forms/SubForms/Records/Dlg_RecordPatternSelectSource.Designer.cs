@@ -33,12 +33,12 @@
             this.ctrl_MITemplateNew = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_MITemplateEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_MITemplateDelete = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.ctrl_TreeTemplates = new Sadco.FamilyDoctor.Core.Controls.Ctrl_TreeTemplates();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.ctrl_CMTemplate.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ctrl_CMTemplate
@@ -95,21 +95,11 @@
             this.ctrl_MITemplateDelete.Tag = "MI_TemplateDelete";
             this.ctrl_MITemplateDelete.Text = "Удалить шаблон";
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.button1);
-            this.panel1.Controls.Add(this.button2);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 482);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(550, 25);
-            this.panel1.TabIndex = 2;
-            // 
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.button1.Location = new System.Drawing.Point(400, 0);
+            this.button1.Location = new System.Drawing.Point(379, 3);
+            this.button1.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 25);
             this.button1.TabIndex = 2;
@@ -119,8 +109,8 @@
             // button2
             // 
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.button2.Location = new System.Drawing.Point(475, 0);
+            this.button2.Location = new System.Drawing.Point(469, 3);
+            this.button2.Margin = new System.Windows.Forms.Padding(0);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 25);
             this.button2.TabIndex = 1;
@@ -137,9 +127,22 @@
             this.ctrl_TreeTemplates.p_IsShowDeleted = false;
             this.ctrl_TreeTemplates.p_ReadOnly = true;
             this.ctrl_TreeTemplates.SelectedImageKey = "FOLDER_16";
-            this.ctrl_TreeTemplates.Size = new System.Drawing.Size(550, 482);
+            this.ctrl_TreeTemplates.Size = new System.Drawing.Size(550, 475);
             this.ctrl_TreeTemplates.TabIndex = 3;
             this.ctrl_TreeTemplates.DoubleClick += new System.EventHandler(this.ctrl_TreeTemplates_DoubleClick);
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.button2);
+            this.flowLayoutPanel1.Controls.Add(this.button1);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 475);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(3);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(550, 32);
+            this.flowLayoutPanel1.TabIndex = 3;
             // 
             // Dlg_RecordPatternSelectSource
             // 
@@ -148,12 +151,12 @@
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(550, 507);
             this.Controls.Add(this.ctrl_TreeTemplates);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.MaximumSize = new System.Drawing.Size(1600, 1000);
             this.Name = "Dlg_RecordPatternSelectSource";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.ctrl_CMTemplate.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
 		}
@@ -166,9 +169,9 @@
 		private System.Windows.Forms.ToolStripMenuItem ctrl_MITemplateDelete;
 		private System.Windows.Forms.ToolStripMenuItem ctrl_MIGroupEdit;
 		private System.Windows.Forms.ToolStripMenuItem ctrl_MITemplateEdit;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private Core.Controls.Ctrl_TreeTemplates ctrl_TreeTemplates;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }

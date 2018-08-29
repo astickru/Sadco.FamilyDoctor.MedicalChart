@@ -1,6 +1,7 @@
 ﻿using Sadco.FamilyDoctor.Core.EntityLogs;
 using Sadco.FamilyDoctor.Core.Permision;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,7 +10,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
     /// <summary>
     /// Абстрактный класс для записи
     /// </summary>
-    public abstract class Cl_RecordBase
+    public abstract class Cl_RecordBase : I_Record
     {
         /// <summary>Ключ записи</summary>
         [Key]
@@ -113,5 +114,8 @@ namespace Sadco.FamilyDoctor.Core.Entities
                 p_TemplateID = null;
             }
         }
+
+        /// <summary>Получение значений элементов записи</summary>
+        public abstract IEnumerable<I_RecordValue> f_GetRecordsValues();
     }
 }

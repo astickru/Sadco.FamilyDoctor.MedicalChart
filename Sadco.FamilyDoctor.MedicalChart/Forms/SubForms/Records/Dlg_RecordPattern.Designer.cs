@@ -34,14 +34,14 @@
             this.ctrl_MITemplateDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlPContent = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.ctrlName = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.ctrlTitle = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.ctrlDoctorFIO = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.ctrlBSave = new System.Windows.Forms.Button();
-            this.ctrlName = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.ctrl_CMTemplate.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -107,7 +107,7 @@
             this.ctrlPContent.Location = new System.Drawing.Point(14, 87);
             this.ctrlPContent.Name = "ctrlPContent";
             this.ctrlPContent.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.ctrlPContent.Size = new System.Drawing.Size(1199, 458);
+            this.ctrlPContent.Size = new System.Drawing.Size(1199, 451);
             this.ctrlPContent.TabIndex = 1;
             // 
             // panel1
@@ -124,6 +124,22 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1199, 77);
             this.panel1.TabIndex = 2;
+            // 
+            // ctrlName
+            // 
+            this.ctrlName.Location = new System.Drawing.Point(121, 26);
+            this.ctrlName.Name = "ctrlName";
+            this.ctrlName.Size = new System.Drawing.Size(347, 21);
+            this.ctrlName.TabIndex = 70;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 29);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(74, 13);
+            this.label2.TabIndex = 69;
+            this.label2.Text = "Название:";
             // 
             // ctrlTitle
             // 
@@ -163,37 +179,22 @@
             // 
             this.panel2.Controls.Add(this.ctrlBSave);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(14, 545);
+            this.panel2.Location = new System.Drawing.Point(14, 538);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1199, 25);
+            this.panel2.Padding = new System.Windows.Forms.Padding(3);
+            this.panel2.Size = new System.Drawing.Size(1199, 32);
             this.panel2.TabIndex = 0;
             // 
             // ctrlBSave
             // 
             this.ctrlBSave.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ctrlBSave.Location = new System.Drawing.Point(1100, 0);
+            this.ctrlBSave.Location = new System.Drawing.Point(1097, 3);
             this.ctrlBSave.Name = "ctrlBSave";
-            this.ctrlBSave.Size = new System.Drawing.Size(99, 25);
+            this.ctrlBSave.Size = new System.Drawing.Size(99, 26);
             this.ctrlBSave.TabIndex = 0;
             this.ctrlBSave.Text = "сохранить";
             this.ctrlBSave.UseVisualStyleBackColor = true;
             this.ctrlBSave.Click += new System.EventHandler(this.ctrlBSave_Click);
-            // 
-            // ctrlName
-            // 
-            this.ctrlName.Location = new System.Drawing.Point(121, 26);
-            this.ctrlName.Name = "ctrlName";
-            this.ctrlName.Size = new System.Drawing.Size(347, 21);
-            this.ctrlName.TabIndex = 70;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 29);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(74, 13);
-            this.label2.TabIndex = 69;
-            this.label2.Text = "Название:";
             // 
             // Dlg_RecordPattern
             // 

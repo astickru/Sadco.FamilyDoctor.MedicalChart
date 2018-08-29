@@ -32,35 +32,31 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
 
         private void f_Refresh()
         {
-            m_Patterns = Cl_App.m_DataContext.p_RecordsPatterns.Include(p => p.p_Template).Include(p => p.p_CategoryClinic).Include(p => p.p_CategoryTotal)
-                        .Include(p => p.p_Values).Include(r => r.p_Values.Select(v => v.p_Params)).Where(p => p.p_DoctorID == m_UserId).ToList();
-            ctrlTablePatterns.DataSource = m_Patterns;
-            foreach (DataGridViewColumn col in ctrlTablePatterns.Columns)
+            try
             {
-                if (col.Name == p_Name.Name)
+                m_Patterns = Cl_App.m_DataContext.p_RecordsPatterns.Include(p => p.p_Template).Include(p => p.p_CategoryClinic).Include(p => p.p_CategoryTotal)
+                            .Include(p => p.p_Values).Include(r => r.p_Values.Select(v => v.p_Params)).Where(p => p.p_DoctorID == m_UserId).ToList();
+                ctrlTablePatterns.DataSource = m_Patterns;
+                foreach (DataGridViewColumn col in ctrlTablePatterns.Columns)
                 {
-                    col.Width = p_Name.Width;
-                    col.HeaderText = p_Name.HeaderText;
+                    if (col.Name == p_Name.Name)
+                    {
+                        col.Width = p_Name.Width;
+                        col.HeaderText = p_Name.HeaderText;
+                    }
+                    else if (col.Name == "p_Template")
+                    {
+                        col.Width = p_TemplateName.Width;
+                        col.HeaderText = p_TemplateName.HeaderText;
+                    }
+                    else
+                        col.Visible = false;
                 }
-                else if (col.Name == "p_Template")
-                {
-                    col.Width = p_TemplateName.Width;
-                    col.HeaderText = p_TemplateName.HeaderText;
-                }
-                else
-                    col.Visible = false;
             }
-
-            //ctrlTablePatterns.Columns.Clear();
-            //m_Patterns = Cl_App.m_DataContext.p_RecordsPatterns.Include(p => p.p_Template).Include(p => p.p_CategoryClinik).Include(p => p.p_CategoryTotal)
-            //            .Include(p => p.p_Values).Include(r => r.p_Values.Select(v => v.p_Params)).Where(p => p.p_DoctorID == m_UserId).ToList();
-            //var patterns = m_Patterns.Select(p => new { p.p_ID, p.p_Name, p_TemplateName = p.p_Template.p_Name }).ToList();
-            //ctrlTablePatterns.DataSource = patterns;
-            //ctrlTablePatterns.Columns[0].Visible = false;
-            //ctrlTablePatterns.Columns[1].Width = p_Name.Width;
-            //ctrlTablePatterns.Columns[1].HeaderText = p_Name.HeaderText;
-            //ctrlTablePatterns.Columns[2].Width = p_TemplateName.Width;
-            //ctrlTablePatterns.Columns[2].HeaderText = p_TemplateName.HeaderText;
+            catch (Exception er)
+            {
+                MonitoringStub.Error("Error_Editor", "Не удалось обновить список патернов", er, null, null);
+            }
         }
 
 
@@ -71,14 +67,21 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
             {
                 if (dlg.p_SelectedTemplate != null)
                 {
-                    Cl_RecordPattern pattern = new Cl_RecordPattern();
-                    pattern.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
-                    pattern.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
-                    pattern.f_SetTemplate(dlg.p_SelectedTemplate);
-                    var dlgPattern = new Dlg_RecordPattern();
-                    dlgPattern.p_RecordPattern = pattern;
-                    dlgPattern.e_Save += DlgPattern_e_Save;
-                    dlgPattern.ShowDialog(this);
+                    try
+                    {
+                        Cl_RecordPattern pattern = new Cl_RecordPattern();
+                        pattern.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
+                        pattern.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
+                        pattern.f_SetTemplate(dlg.p_SelectedTemplate);
+                        var dlgPattern = new Dlg_RecordPattern();
+                        dlgPattern.p_RecordPattern = pattern;
+                        dlgPattern.e_Save += DlgPattern_e_Save;
+                        dlgPattern.ShowDialog(this);
+                    }
+                    catch (Exception er)
+                    {
+                        MonitoringStub.Error("Error_Editor", "Не удалось добавить новый патерн", er, null, null);
+                    }
                 }
             }
         }

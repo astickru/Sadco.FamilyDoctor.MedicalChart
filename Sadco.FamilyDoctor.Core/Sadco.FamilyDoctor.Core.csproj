@@ -184,6 +184,9 @@
     <Compile Include="Entities\Cl_Element.cs" />
     <Compile Include="Entities\I_Comparable.cs" />
     <Compile Include="Entities\I_Delete.cs" />
+    <Compile Include="Entities\I_Record.cs" />
+    <Compile Include="Entities\I_RecordParam.cs" />
+    <Compile Include="Entities\I_RecordValue.cs" />
     <Compile Include="EntityLogs\Cl_Log.cs" />
     <Compile Include="EntityLogs\Cl_ELogClassAttribute.cs" />
     <Compile Include="EntityLogs\Cl_ELogPropertyAttribute.cs" />

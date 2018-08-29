@@ -4,7 +4,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
 {
     /// <summary>Класс параметра паттерна записи</summary>
     [Table("T_RECORDSPATTERNSPRMS")]
-    public class Cl_RecordPatternParam : Cl_RecordParamBase, I_Comparable
+    public class Cl_RecordPatternParam : Cl_RecordParamBase, I_RecordParam, I_Comparable
     {
         /// <summary>ID параметра паттерна записи</summary>
         [Column("F_RECORDPATTERNPRM_ID")]

@@ -11,19 +11,19 @@ namespace Sadco.FamilyDoctor.Core.Permision
 		/// Главный врач
 		/// </summary>
 		[Description("Главный врач")]
-		[Cl_AccessLevel(E_AccessLevels.EditAllRecords | E_AccessLevels.EditAllRatings)]
+		[Cl_AccessLevel(E_AccessLevels.EditAllRecords | E_AccessLevels.EditAllRatings | E_AccessLevels.IsEditCatalogs | E_AccessLevels.IsPrint)]
 		ChiefDoctor,
 		/// <summary>
 		/// Врач - заведующий отделением
 		/// </summary>
 		[Description("Врач - заведующий отделением")]
-		[Cl_AccessLevel(E_AccessLevels.EditMegaTemplates | E_AccessLevels.EditTemplates | E_AccessLevels.IsShowDeleted)]
+		[Cl_AccessLevel(E_AccessLevels.EditMegaTemplates | E_AccessLevels.EditTemplates | E_AccessLevels.IsShowDeleted | E_AccessLevels.IsPrint)]
 		ChiefUnitDoctor,
 		/// <summary>
 		/// Врач
 		/// </summary>
 		[Description("Врач")]
-		[Cl_AccessLevel(E_AccessLevels.EditAllRecords)]
+		[Cl_AccessLevel(E_AccessLevels.EditAllRecords | E_AccessLevels.IsPrint)]
 		Doctor,
 		/// <summary>
 		/// Ассистент врача
@@ -35,13 +35,13 @@ namespace Sadco.FamilyDoctor.Core.Permision
 		/// Эксперт
 		/// </summary>
 		[Description("Эксперт")]
-		[Cl_AccessLevel(E_AccessLevels.ReadAllRecords | E_AccessLevels.EditAllRatings | E_AccessLevels.EditMegaTemplates | E_AccessLevels.EditTemplates | E_AccessLevels.EditAllRatings | E_AccessLevels.IsShowDeleted)]
+		[Cl_AccessLevel(E_AccessLevels.ReadAllRecords | E_AccessLevels.EditAllRatings | E_AccessLevels.EditMegaTemplates | E_AccessLevels.EditTemplates | E_AccessLevels.EditAllRatings | E_AccessLevels.IsShowDeleted | E_AccessLevels.IsPrint)]
 		Expert,
 		/// <summary>
 		/// Архивариус
 		/// </summary>
 		[Description("Архивариус")]
-		[Cl_AccessLevel(E_AccessLevels.EditAllRecords | E_AccessLevels.EditArchive)]
+		[Cl_AccessLevel(E_AccessLevels.ReadAllRecords | E_AccessLevels.EditArchive | E_AccessLevels.IsPrint)]
 		Archivarius,
 		/// <summary>
 		/// Проверяющий С/К

@@ -1,19 +1,16 @@
 ﻿using FD.dat.mon.stb.lib;
 using OutlookStyleControls;
 using Sadco.FamilyDoctor.Core;
-using Sadco.FamilyDoctor.Core.Controls;
 using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.EntityLogs;
 using Sadco.FamilyDoctor.Core.Facades;
 using Sadco.FamilyDoctor.Core.Permision;
-using Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Elements.Editors;
 using System;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
@@ -24,6 +21,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             Tag = string.Format("Записи клиента v{0}", ConfigurationManager.AppSettings["Version"]);
             InitializeComponent();
+
             p_DateForming.ValueType = typeof(DateTime);
             ctrlLPatientName.Text = Cl_SessionFacade.f_GetInstance().p_Patient.p_FIO;
             m_Permission = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission;
@@ -42,31 +40,53 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         private void f_UpdateRecords()
         {
-            var patientID = Cl_SessionFacade.f_GetInstance().p_Patient.p_UserID;
-            var patientUID = Cl_SessionFacade.f_GetInstance().p_Patient.p_UserUID;
-            m_Records = Cl_App.m_DataContext.p_Records.Where(r => p_IsShowDeleted ? true : !r.p_IsDelete && ((r.p_PatientUID != null && r.p_PatientUID == patientUID) || r.p_PatientID == patientID)).GroupBy(e => e.p_RecordID)
-                    .Select(grp => grp
-                        .OrderByDescending(v => v.p_Version).FirstOrDefault())
-                        .Include(r => r.p_CategoryTotal).Include(r => r.p_CategoryClinic).Include(r => r.p_Values).Include(r => r.p_Template).Include(r => r.p_Values.Select(v => v.p_Params)).ToArray();
-
-            ctrl_TRecords.BindData(null, null);
-            ctrl_TRecords.Columns.AddRange(p_MedicalCardID, p_ClinikName, p_DateForming, p_CategoryTotal, p_Title, p_DoctorFIO);
-
-            foreach (var record in m_Records)
+            try
             {
-                OutlookGridRow row = new OutlookGridRow();
-                row.CreateCells(ctrl_TRecords,
-                    record.p_MedicalCardID,
-                    record.p_ClinicName,
-                    record.p_DateForming,
-                    record.p_CategoryTotal != null ? record.p_CategoryTotal.p_Name : "",
-                    record.p_Title,
-                    record.p_DoctorFIO);
-                row.Tag = record;
-                ctrl_TRecords.Rows.Add(row);
+                var patientID = Cl_SessionFacade.f_GetInstance().p_Patient.p_UserID;
+                var patientUID = Cl_SessionFacade.f_GetInstance().p_Patient.p_UserUID;
+
+                var records = Cl_App.m_DataContext.p_Records.AsQueryable();
+                if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsReadSelectedRecords)
+                {
+                    if (Cl_SessionFacade.f_GetInstance().p_DateStart != null && Cl_SessionFacade.f_GetInstance().p_DateEnd != null)
+                    {
+                        var dateStart = Cl_SessionFacade.f_GetInstance().p_DateStart;
+                        var dateEnd = Cl_SessionFacade.f_GetInstance().p_DateEnd;
+                        records = records.Where(r => r.p_DateLastChange >= dateStart && r.p_DateLastChange <= dateEnd);
+                    }
+                    else
+                        MonitoringStub.Error("Error_Editor", "Для проверяющего С/К не указан период", null, null, null);
+                }
+
+                m_Records = records.Where(r => p_IsShowDeleted ? true : !r.p_IsDelete && ((r.p_PatientUID != null && r.p_PatientUID == patientUID) || r.p_PatientID == patientID)).GroupBy(e => e.p_RecordID)
+                        .Select(grp => grp
+                            .OrderByDescending(v => v.p_Version).FirstOrDefault())
+                            .Include(r => r.p_CategoryTotal).Include(r => r.p_CategoryClinic).Include(r => r.p_Values).Include(r => r.p_Template).Include(r => r.p_Values.Select(v => v.p_Params)).ToArray();
+
+                ctrl_TRecords.BindData(null, null);
+                ctrl_TRecords.Columns.AddRange(p_MedicalCardID, p_ClinikName, p_DateForming, p_CategoryTotal, p_Title, p_DoctorFIO);
+
+                foreach (var record in m_Records)
+                {
+                    OutlookGridRow row = new OutlookGridRow();
+                    row.CreateCells(ctrl_TRecords,
+                        record.p_MedicalCardID,
+                        record.p_ClinicName,
+                        record.p_DateForming.ToString("dd.MM.yyyy hh:mm"),
+                        record.p_CategoryTotal != null ? record.p_CategoryTotal.p_Name : "",
+                        record.p_Title,
+                        record.p_DoctorFIO);
+                    row.Tag = record;
+                    ctrl_TRecords.Rows.Add(row);
+                }
+                ctrl_TRecords.Columns[0].Visible = false;
+                ctrl_TRecords.GroupTemplate.Column = ctrl_TRecords.Columns[0];
+                ctrl_TRecords.Sort(ctrl_TRecords.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
             }
-            ctrl_TRecords.GroupTemplate.Column = ctrl_TRecords.Columns[0];
-            ctrl_TRecords.Sort(ctrl_TRecords.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+            catch (Exception er)
+            {
+                MonitoringStub.Error("Error_Editor", "Не удалось обновить записи", er, null, null);
+            }
         }
 
         private void f_FormatPattern(Cl_Record a_Record)
@@ -84,9 +104,34 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
         }
 
+        private bool f_GetEdited(Cl_Record a_Record)
+        {
+            if (a_Record != null)
+                return !a_Record.p_IsAutomatic && (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditAllRecords
+                    || (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditSelfRecords && a_Record.p_DoctorID == Cl_SessionFacade.f_GetInstance().p_Doctor.p_UserID));
+            else
+                return false;
+        }
+
+        private void f_AddRecordFromRecord(Cl_Record a_Record)
+        {
+            if (a_Record != null)
+            {
+                Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(a_Record.p_Template);
+                Cl_Record record = Cl_RecordsFacade.f_GetInstance().f_GetNewRecord(a_Record);
+                if (record != null)
+                {
+                    var dlgRecord = new Dlg_Record();
+                    dlgRecord.e_Save += DlgRecord_e_Save;
+                    dlgRecord.p_Record = record;
+                    dlgRecord.ShowDialog(this);
+                }
+            }
+        }
+
         private void f_Edit(Cl_Record a_Record)
         {
-            if (a_Record != null && !a_Record.p_IsAutomatic)
+            if (f_GetEdited(a_Record))
             {
                 var dlgRecord = new Dlg_Record();
                 dlgRecord.e_Save += DlgRecord_e_Save;
@@ -166,7 +211,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             if (m_SelectedRecord != null)
             {
-                if (m_SelectedRecord.p_FileType == Cl_Record.E_RecordFileType.HTML)
+                if (m_SelectedRecord.p_FileType == E_RecordFileType.HTML)
                 {
                     p_IsPrintDoctor = true;
                     m_WebBrowserPrint.DocumentText = m_SelectedRecord.f_GetDocumentTextDoctor(Application.StartupPath);
@@ -179,7 +224,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             if (m_SelectedRecord != null)
             {
-                if (m_SelectedRecord.p_FileType == Cl_Record.E_RecordFileType.HTML)
+                if (m_SelectedRecord.p_FileType == E_RecordFileType.HTML)
                 {
                     p_IsPrintDoctor = false;
                     m_WebBrowserPrint.DocumentText = m_SelectedRecord.f_GetDocumentTextPatient(Application.StartupPath);
@@ -193,37 +238,49 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             var dlg = new Dlg_RecordSelectSource();
             if (dlg.ShowDialog(this) == DialogResult.OK)
             {
-                if (dlg.p_SelectedTemplate != null)
+                try
                 {
-                    Cl_Record record = new Cl_Record();
-                    record.p_DateCreate = DateTime.Now;
-                    record.p_DateLastChange = record.p_DateForming = record.p_DateCreate;
-                    record.f_SetTemplate(dlg.p_SelectedTemplate);
-                    record.p_MedicalCardID = Cl_SessionFacade.f_GetInstance().p_MedCardNumber;
-                    record.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
-                    record.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
-                    record.f_SetPatient(Cl_SessionFacade.f_GetInstance().p_Patient);
-                    var dlgRecord = new Dlg_Record();
-                    dlgRecord.e_Save += DlgRecord_e_Save;
-                    dlgRecord.p_Record = record;
-                    dlgRecord.ShowDialog(this);
-                }
-                else if (dlg.p_SelectedRecordPattern != null)
-                {
-                    if (dlg.p_SelectedRecordPattern.p_Template != null)
+                    if (dlg.p_SelectedTemplate != null)
                     {
-                        Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(dlg.p_SelectedRecordPattern.p_Template);
-                        Cl_Record record = Cl_RecordsFacade.f_GetInstance().f_GetNewRecord(dlg.p_SelectedRecordPattern);
-                        if (record != null)
+                        Cl_Record record = new Cl_Record();
+                        record.p_DateCreate = DateTime.Now;
+                        record.p_DateLastChange = record.p_DateForming = record.p_DateCreate;
+                        record.f_SetTemplate(dlg.p_SelectedTemplate);
+                        record.p_MedicalCardID = Cl_SessionFacade.f_GetInstance().p_MedCardNumber;
+                        record.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
+                        record.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
+                        record.f_SetPatient(Cl_SessionFacade.f_GetInstance().p_Patient);
+                        var dlgRecord = new Dlg_Record();
+                        dlgRecord.e_Save += DlgRecord_e_Save;
+                        dlgRecord.p_Record = record;
+                        dlgRecord.ShowDialog(this);
+                    }
+                    else if (dlg.p_SelectedRecordPattern != null)
+                    {
+                        if (dlg.p_SelectedRecordPattern.p_Template != null)
                         {
-                            var dlgRecord = new Dlg_Record();
-                            dlgRecord.e_Save += DlgRecord_e_Save;
-                            dlgRecord.p_Record = record;
-                            dlgRecord.ShowDialog(this);
+                            Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(dlg.p_SelectedRecordPattern.p_Template);
+                            Cl_Record record = Cl_RecordsFacade.f_GetInstance().f_GetNewRecord(dlg.p_SelectedRecordPattern);
+                            if (record != null)
+                            {
+                                var dlgRecord = new Dlg_Record();
+                                dlgRecord.e_Save += DlgRecord_e_Save;
+                                dlgRecord.p_Record = record;
+                                dlgRecord.ShowDialog(this);
+                            }
                         }
                     }
                 }
+                catch (Exception er)
+                {
+                    MonitoringStub.Error("Error_Editor", "Не удалось добавить запись", er, null, null);
+                }
             }
+        }
+
+        private void ctrlBAddRecordFromRecord_Click(object sender, EventArgs e)
+        {
+            f_AddRecordFromRecord(m_SelectedRecord);
         }
 
         private void ctrlBReportAddPattern_Click(object sender, EventArgs e)
@@ -233,13 +290,20 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 if (dlg.p_SelectedTemplate != null)
                 {
-                    Cl_RecordPattern pattern = new Cl_RecordPattern();
-                    pattern.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
-                    pattern.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
-                    pattern.f_SetTemplate(dlg.p_SelectedTemplate);
-                    var dlgPattern = new Dlg_RecordPattern();
-                    dlgPattern.p_RecordPattern = pattern;
-                    dlgPattern.ShowDialog(this);
+                    try
+                    {
+                        Cl_RecordPattern pattern = new Cl_RecordPattern();
+                        pattern.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
+                        pattern.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
+                        pattern.f_SetTemplate(dlg.p_SelectedTemplate);
+                        var dlgPattern = new Dlg_RecordPattern();
+                        dlgPattern.p_RecordPattern = pattern;
+                        dlgPattern.ShowDialog(this);
+                    }
+                    catch (Exception er)
+                    {
+                        MonitoringStub.Error("Error_Editor", "Не удалось добавить патерн", er, null, null);
+                    }
                 }
             }
         }
@@ -297,60 +361,74 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             m_SelectedRecord = null;
             if (ctrl_TRecords.CurrentRow != null && ctrl_TRecords.CurrentRow is OutlookGridRow && !((OutlookGridRow)ctrl_TRecords.CurrentRow).IsGroupRow && ctrl_TRecords.CurrentRow.Tag != null)
             {
-                var record = m_SelectedRecord = m_Records.FirstOrDefault(r => r.p_ID == ((Cl_Record)ctrl_TRecords.CurrentRow.Tag).p_ID);
-                if (record != null)
+                try
                 {
-                    ctrlCMViewer.Enabled = true;
-                    ctrlBReportFormatPattern.Visible = !record.p_IsAutomatic;
-                    ctrlBReportEdit.Visible = ctrlMIEdit.Visible = !record.p_IsAutomatic;
-                    ctrlBReportArchive.Visible = ctrlMIArchive.Visible = !record.p_IsArchive && m_Permission.p_IsEditArchive;
-                    ctrlBReportRating.Visible = ctrlMIRating.Visible = m_Permission.p_IsEditAllRatings;
-                    ctrlBReportSyncBMK.Visible = ctrlMISyncBMK.Visible = !record.p_IsSyncBMK && record.p_IsPrintDoctor && m_Permission.p_IsEditArchive;
-                    ctrlBReportPrintDoctor.Visible = ctrlBReportPrintPatient.Visible = ctrlMIPrint.Visible = m_Permission.p_Role == E_Roles.ChiefDoctor || m_Permission.p_Role == E_Roles.ChiefUnitDoctor || m_Permission.p_Role == E_Roles.Doctor
-                        || m_Permission.p_Role == E_Roles.Expert || m_Permission.p_Role == E_Roles.Archivarius;
-                    if (record.p_HTMLDoctor != null)
+                    var record = m_SelectedRecord = m_Records.FirstOrDefault(r => r.p_ID == ((Cl_Record)ctrl_TRecords.CurrentRow.Tag).p_ID);
+                    if (record != null)
                     {
-                        ctrlHTMLViewer.DocumentText = record.f_GetDocumentTextDoctor(Application.StartupPath);
-                        ctrlHTMLViewer.Visible = true;
-                        ctrlPDFViewer.Visible = false;
-                    }
-                    else
-                    {
-                        if (record.p_Type == Cl_Record.E_RecordType.FinishedFile)
+                        ctrlPRecordInfo.Visible = true;
+                        ctrlRecordInfo.Text = string.Format("{0} {1} [{2}, {3}]", record.p_DateCreate.ToShortDateString(), record.p_Title, record.p_DateLastChange, record.p_DoctorFIO);
+
+                        ctrlCMViewer.Enabled = true;
+                        ctrlBReportFormatPattern.Visible = !record.p_IsAutomatic;
+                        ctrlBReportEdit.Visible = ctrlMIEdit.Visible = f_GetEdited(record);
+                        ctrlBReportArchive.Visible = ctrlMIArchive.Visible = !record.p_IsArchive && m_Permission.p_IsEditArchive;
+                        ctrlBReportRating.Visible = ctrlMIRating.Visible = m_Permission.p_IsEditAllRatings;
+                        ctrlBReportSyncBMK.Visible = ctrlMISyncBMK.Visible = !record.p_IsSyncBMK && record.p_IsPrintDoctor && m_Permission.p_IsEditArchive;
+                        ctrlBReportPrintDoctor.Visible = ctrlBReportPrintPatient.Visible = ctrlMIPrint.Visible = m_Permission.p_IsPrint;
+                        if (record.p_HTMLDoctor != null)
                         {
-                            if (record.p_FileType == Cl_Record.E_RecordFileType.HTML)
-                            {
-                                ctrlHTMLViewer.DocumentText = record.f_GetDocumentTextDoctor(Application.StartupPath);
-                                ctrlHTMLViewer.Visible = true;
-                                ctrlPDFViewer.Visible = false;
-                            }
-                            else if (record.p_FileType == Cl_Record.E_RecordFileType.PDF)
-                            {
-                                var path = string.Format("{0}medicalChartTemp.pdf", Path.GetTempPath());
-                                File.WriteAllBytes(path, record.p_FileBytes);
-                                ctrlPDFViewer.src = path;
-                                ctrlHTMLViewer.Visible = false;
-                                ctrlPDFViewer.Visible = true;
-                            }
-                            else if (record.p_FileType == Cl_Record.E_RecordFileType.JFIF || record.p_FileType == Cl_Record.E_RecordFileType.JIF || record.p_FileType == Cl_Record.E_RecordFileType.JPE ||
-                                record.p_FileType == Cl_Record.E_RecordFileType.JPEG || record.p_FileType == Cl_Record.E_RecordFileType.JPG || record.p_FileType == Cl_Record.E_RecordFileType.PNG)
-                            {
-                                ctrlHTMLViewer.DocumentText = record.f_GetDocumentTextDoctor(Application.StartupPath);
-                                ctrlHTMLViewer.Visible = true;
-                                ctrlPDFViewer.Visible = false;
-                            }
+                            ctrlHTMLViewer.DocumentText = record.f_GetDocumentTextDoctor(Application.StartupPath);
+                            ctrlHTMLViewer.Visible = true;
+                            ctrlPDFViewer.Visible = false;
                         }
                         else
                         {
-                            ctrlHTMLViewer.Visible = false;
-                            ctrlPDFViewer.Visible = false;
+                            if (record.p_Type == E_RecordType.FinishedFile)
+                            {
+                                if (record.p_FileType == E_RecordFileType.HTML)
+                                {
+                                    ctrlHTMLViewer.DocumentText = record.f_GetDocumentTextDoctor(Application.StartupPath);
+                                    ctrlHTMLViewer.Visible = true;
+                                    ctrlPDFViewer.Visible = false;
+                                }
+                                else if (record.p_FileType == E_RecordFileType.PDF)
+                                {
+                                    var path = string.Format("{0}medicalChartTemp.pdf", Path.GetTempPath());
+                                    File.WriteAllBytes(path, record.p_FileBytes);
+                                    ctrlPDFViewer.src = path;
+                                    ctrlHTMLViewer.Visible = false;
+                                    ctrlPDFViewer.Visible = true;
+                                }
+                                else if (record.p_FileType == E_RecordFileType.JFIF || record.p_FileType == E_RecordFileType.JIF || record.p_FileType == E_RecordFileType.JPE ||
+                                    record.p_FileType == E_RecordFileType.JPEG || record.p_FileType == E_RecordFileType.JPG || record.p_FileType == E_RecordFileType.PNG)
+                                {
+                                    ctrlHTMLViewer.DocumentText = record.f_GetDocumentTextDoctor(Application.StartupPath);
+                                    ctrlHTMLViewer.Visible = true;
+                                    ctrlPDFViewer.Visible = false;
+                                }
+                            }
+                            else
+                            {
+                                ctrlHTMLViewer.Visible = false;
+                                ctrlPDFViewer.Visible = false;
+                            }
                         }
                     }
+                    else
+                    {
+                        ctrlPRecordInfo.Visible = false;
+                    }
+                }
+                catch (Exception er)
+                {
+                    MonitoringStub.Error("Error_Editor", "Не удалось отобразить запись", er, null, null);
                 }
             }
             if (m_SelectedRecord == null)
             {
                 ctrlCMViewer.Enabled = false;
+                ctrlPRecordInfo.Visible = false;
                 ctrlBReportFormatPattern.Visible = false;
                 ctrlBReportEdit.Visible = false;
                 ctrlBReportArchive.Visible = false;

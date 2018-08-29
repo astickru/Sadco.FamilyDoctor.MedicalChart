@@ -12,48 +12,41 @@ namespace Sadco.FamilyDoctor.Core
     {
         public static Cl_DataContextMegaTemplate m_DataContext;
 
-        private static string ConnectionKey = "MedicalDatabase";
-        private static string ConnectionValue = Properties.Settings.Default.MedicalDatabase;
-
-        public static void Initialize()
+        public static bool Initialize()
         {
-            m_DataContext = new Cl_DataContextMegaTemplate(getConnectionString());
-            m_DataContext.f_Init();
-            if (!Cl_TemplatesFacade.f_GetInstance().f_Init(m_DataContext)) MonitoringStub.Error("Error_Load", "Не удалось инициализировать фасад работы с шаблонами", null, null, null);
-            if (!Cl_RecordsFacade.f_GetInstance().f_Init(m_DataContext)) MonitoringStub.Error("Error_Load", "Не удалось инициализировать фасад работы с записями", null, null, null);
-            if (!Cl_CatalogsFacade.f_GetInstance().f_Init(m_DataContext)) MonitoringStub.Error("Error_Load", "Не удалось инициализировать фасад работы со справочниками", null, null, null);
-        }
-
-        private static string getConnectionString()
-        {
-            Configuration appConfig = GetConfiguration();
-            return appConfig.ConnectionStrings.ConnectionStrings[ConnectionKey].ConnectionString;
-        }
-
-        static Configuration GetConfiguration()
-        {
-            Configuration config = ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location);
-
-            if (config.ConnectionStrings.ConnectionStrings[ConnectionKey] == null)
+            try
             {
-                ConnectionStringSettings connStrSettings = new ConnectionStringSettings();
-                connStrSettings.Name = ConnectionKey;
-                connStrSettings.ConnectionString = ConnectionValue;
-                connStrSettings.ProviderName = "System.Data.SqlClient";
-
-                config.ConnectionStrings.ConnectionStrings.Add(connStrSettings);
-
-                try
+                Configuration config = ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location);
+                var con = config.ConnectionStrings.ConnectionStrings["MedicalChartDatabase"];
+                if (con == null)
                 {
-                    config.Save(ConfigurationSaveMode.Full);
+                    MonitoringStub.Error("Error_Load", "Отсутствует настройка подключения к БД MedicalChartDatabase в конфигурационном фале", null, null, null);
+                    return false;
                 }
-                catch (Exception ex)
-                {
-                    MonitoringStub.Error("Error_Tree", "Не удалось подключиться к базе данных", ex, null, null);
-                }
+                m_DataContext = new Cl_DataContextMegaTemplate(config.ConnectionStrings.ConnectionStrings["MedicalChartDatabase"].ConnectionString);
+                m_DataContext.f_Init();
             }
-
-            return config;
+            catch (Exception er)
+            {
+                MonitoringStub.Error("Error_Tree", "Не удалось подключиться к базе данных", er, null, null);
+                return false;
+            }
+            if (!Cl_TemplatesFacade.f_GetInstance().f_Init(m_DataContext))
+            {
+                MonitoringStub.Error("Error_Load", "Не удалось инициализировать фасад работы с шаблонами", null, null, null);
+                return false;
+            }
+            if (!Cl_RecordsFacade.f_GetInstance().f_Init(m_DataContext))
+            {
+                MonitoringStub.Error("Error_Load", "Не удалось инициализировать фасад работы с записями", null, null, null);
+                return false;
+            }
+            if (!Cl_CatalogsFacade.f_GetInstance().f_Init(m_DataContext))
+            {
+                MonitoringStub.Error("Error_Load", "Не удалось инициализировать фасад работы со справочниками", null, null, null);
+                return false;
+            }
+            return true;
         }
     }
 }

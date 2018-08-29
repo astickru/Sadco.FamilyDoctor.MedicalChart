@@ -1,6 +1,8 @@
-﻿using Sadco.FamilyDoctor.Core;
+﻿using FD.dat.mon.stb.lib;
+using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Controls;
 using Sadco.FamilyDoctor.Core.Entities;
+using System;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity;
@@ -11,7 +13,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
     public partial class Dlg_RecordPatternSelectSource : Form
     {
-        public Dlg_RecordPatternSelectSource() {
+        public Dlg_RecordPatternSelectSource()
+        {
             Text = string.Format("Выбор шаблона для нового паттерна записей v{0}", ConfigurationManager.AppSettings["Version"]);
             InitializeComponent();
             f_InitTreeView();
@@ -31,15 +34,24 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
         }
 
-		private void f_InitTreeView() {
-            Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Templates && g.p_ParentID == null && !g.p_IsDelete).ToArray();
-            foreach (Cl_Group group in groups)
+        private void f_InitTreeView()
+        {
+            try
             {
-                f_PopulateTreeGroup(group, ctrl_TreeTemplates.Nodes);
+                Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Templates && g.p_ParentID == null && !g.p_IsDelete).ToArray();
+                foreach (Cl_Group group in groups)
+                {
+                    f_PopulateTreeGroup(group, ctrl_TreeTemplates.Nodes);
+                }
             }
-		}
+            catch (Exception er)
+            {
+                MonitoringStub.Error("Error_Editor", "Не удалось инициализировать дерево шаблонов", er, null, null);
+            }
+        }
 
-        private void f_PopulateTreeGroup(Cl_Group a_Group, TreeNodeCollection a_TreeNodes) {
+        private void f_PopulateTreeGroup(Cl_Group a_Group, TreeNodeCollection a_TreeNodes)
+        {
             TreeNode node = new Ctrl_TreeNodeGroup(a_Group);
             a_TreeNodes.Add(node);
             var tpls = Cl_App.m_DataContext.p_Templates
@@ -58,7 +70,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 if (!group.p_IsDelete)
                     f_PopulateTreeGroup(group, node.Nodes);
             }
-		}
+        }
 
         private void ctrl_TreeTemplates_DoubleClick(object sender, System.EventArgs e)
         {

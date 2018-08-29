@@ -7,9 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using static Sadco.FamilyDoctor.Core.Entities.Cl_Record;
 
 namespace Sadco.FamilyDoctor.Core.Facades
 {
@@ -26,6 +23,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
 
         private bool m_IsInit = false;
         private Cl_DataContextMegaTemplate m_DataContextMegaTemplate = null;
+        private string m_SeparatorMulti = ", ";
 
         /// <summary>Инициализация фасада</summary>
         public bool f_Init(Cl_DataContextMegaTemplate a_DataContextMegaTemplate)
@@ -35,39 +33,132 @@ namespace Sadco.FamilyDoctor.Core.Facades
             return m_IsInit;
         }
 
-        private object[] f_GetValuesProperty(Cl_Record a_Record, Cl_FormulaConditionBlock a_Block)
+        /// <summary>Получение элемента возраста</summary>
+        public Cl_Element f_GetAgeElement(string a_Tag)
+        {
+            if (a_Tag == "age")
+            {
+                return new Cl_Element()
+                {
+                    p_Name = "Возраст",
+                    p_Tag = "age",
+                    p_IsNumber = true
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>Получение элемента пола</summary>
+        public Cl_Element f_GetGenderElement(string a_Tag)
+        {
+            if (a_Tag == "gender")
+            {
+                return new Cl_Element()
+                {
+                    p_Name = "Пол",
+                    p_Tag = "gender",
+                    p_IsNumber = false
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>Получение элемента шаблона</summary>
+        private Cl_TemplateElement f_GetTemplateElement(I_RecordValue a_RecordValue, Cl_Template a_Template)
+        {
+            if (a_Template != null && a_Template.p_TemplateElements != null)
+            {
+                foreach (var te in a_Template.p_TemplateElements)
+                {
+                    if (te.p_ChildElement == a_RecordValue.p_Element)
+                    {
+                        return te;
+                    }
+                    else
+                    {
+                        var t = f_GetTemplateElement(a_RecordValue, te.p_ChildTemplate);
+                        if (t != null)
+                            return t;
+                    }
+                }
+            }
+            return null;
+        }
+
+
+        /// <summary>Получение элемента шаблона</summary>
+        public Cl_TemplateElement f_GetTemplateElement(Cl_RecordValue a_RecordValue)
+        {
+            if (a_RecordValue != null && a_RecordValue.p_Record != null)
+            {
+                return f_GetTemplateElement(a_RecordValue, a_RecordValue.p_Record.p_Template);
+            }
+            return null;
+        }
+
+        private object[] f_GetValuesProperty(I_Record a_Record, Cl_FormulaConditionBlock a_Block)
         {
             var vals = new List<object>();
             if (!a_Block.p_IsOperand && a_Block.p_Object is Cl_Element)
             {
-                var recValue = a_Record.p_Values.FirstOrDefault(v => v.p_ElementID == ((Cl_Element)a_Block.p_Object).p_ID);
-                if (recValue != null)
+                var el = (Cl_Element)a_Block.p_Object;
+                if (el.p_Tag == "age")
                 {
-                    if (recValue.p_ValuesCatalog != null && recValue.p_ValuesCatalog.Length > 0)
+                    if (a_Record is Cl_Record)
                     {
-                        vals.AddRange(recValue.p_ValuesCatalog.Select(vc => vc.p_ElementParam.p_Value));
+                        var record = (Cl_Record)a_Record;
+                        vals.Add((decimal)record.f_GetPatientAge());
                     }
-                    else
+                }
+                else if (el.p_Tag == "gender")
+                {
+                    if (a_Record is Cl_Record)
                     {
-                        if (recValue.p_Element != null && recValue.p_Element.p_IsNumber)
+                        var record = (Cl_Record)a_Record;
+                        vals.Add(Enum.GetName(typeof(Cl_User.E_Sex), record.p_PatientSex).ToLower());
+                    }
+                }
+                else
+                {
+                    var recValue = a_Record.f_GetRecordsValues().FirstOrDefault(v => v.p_ElementID == el.p_ID);
+                    if (recValue != null)
+                    {
+                        if (recValue.p_ValuesCatalog != null && recValue.p_ValuesCatalog.Length > 0)
                         {
-                            decimal dVal = 0;
-                            if (decimal.TryParse(recValue.p_ValueUser, out dVal)) vals.Add(dVal);
-                            else vals.Add(recValue.p_ValueUser);
+                            vals.AddRange(recValue.p_ValuesCatalog.Select(vc => vc.p_ElementParam.p_Value));
                         }
                         else
                         {
-                            vals.Add(recValue.p_ValueUser);
+                            if (recValue.p_Element != null && recValue.p_Element.p_IsNumber)
+                            {
+                                decimal dVal = 0;
+                                if (decimal.TryParse(recValue.p_ValueUser, out dVal)) vals.Add(dVal);
+                                else vals.Add(recValue.p_ValueUser);
+                            }
+                            else
+                            {
+                                vals.Add(recValue.p_ValueUser);
+                            }
                         }
                     }
+                    else return null;
                 }
-                else return null;
             }
             else if (a_Block.p_Object is int)
             {
                 vals.Add(decimal.Parse(a_Block.p_Object.ToString()));
             }
             else if (a_Block.p_Object is decimal)
+            {
+                vals.Add(a_Block.p_Object);
+            }
+            else if (a_Block.p_Object is Cl_User.E_Sex)
             {
                 vals.Add(a_Block.p_Object);
             }
@@ -142,7 +233,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
         }
 
         /// <summary>Получает видимость элемента по формуле</summary>
-        public bool f_GetElementVisible(Cl_Record a_Record, string a_Formula)
+        public bool f_GetElementVisible(I_Record a_Record, string a_Formula)
         {
             if (a_Record == null || a_Record.p_Template == null) return false;
             if (string.IsNullOrWhiteSpace(a_Formula)) return true;
@@ -202,7 +293,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
                                             }
                                             else if (oper == Cl_FormulaConditionBlock.E_Opers.equals)
                                             {
-                                                result = vals1[0].ToString() == vals2[0].ToString();
+                                                result = vals1[0].ToString().ToLower() == vals2[0].ToString().ToLower();
                                             }
                                             else if (oper == Cl_FormulaConditionBlock.E_Opers.notEquals)
                                             {
@@ -235,8 +326,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
             }
             return false;
         }
-
-
+        
         /// <summary>Получает видимость элемента по формуле</summary>
         public decimal? f_GetElementMathematicValue(Cl_Record a_Record, string a_Formula)
         {
@@ -296,6 +386,120 @@ namespace Sadco.FamilyDoctor.Core.Facades
             return null;
         }
 
+        /// <summary>Получение HTML текста для клиента</summary>
+        public string f_GetHTMLPatient(Cl_Record a_Record, I_RecordValue a_RecordValue, bool a_IsTable, decimal? a_Min, decimal? a_Max)
+        {
+            return f_GetHTML(a_Record, a_RecordValue, false, a_IsTable, a_Min, a_Max);
+        }
+
+        /// <summary>Получение HTML текста для пользователя</summary>
+        public string f_GetHTMLDoctor(Cl_Record a_Record, I_RecordValue a_RecordValue, bool a_IsTable, decimal? a_Min, decimal? a_Max)
+        {
+            return f_GetHTML(a_Record, a_RecordValue, true, a_IsTable, a_Min, a_Max);
+        }
+
+        private string f_GetValWithColorForHtml(I_RecordValue a_RecordValue, IEnumerable<string> a_Vals, decimal? a_Min, decimal? a_Max)
+        {
+            if (a_RecordValue.p_Element.p_IsNumber)
+            {
+                decimal dVal = 0;
+                var resVals = new List<string>();
+                foreach (var text in a_Vals)
+                {
+                    if (decimal.TryParse(text, out dVal))
+                    {
+                        if ((a_Min != null && a_Min > dVal) || (a_Max != null && a_Max < dVal))
+                            resVals.Add(string.Format("<span style=\"color=red\">{0}</span>", text));
+                        else
+                            resVals.Add(text);
+                    }
+                    else
+                    {
+                        resVals.Add(string.Format("<span style=\"color=red\">{0}</span>", text));
+                    }
+                }
+                return string.Join(m_SeparatorMulti, resVals);
+            }
+            return string.Join(m_SeparatorMulti, a_Vals);
+        }
+
+        private string f_GetValForHTML(I_RecordValue a_RecordValue, decimal? a_Min, decimal? a_Max)
+        {
+            string val = "";
+            if (a_RecordValue.p_Element.p_IsTextFromCatalog)
+            {
+                if (a_RecordValue.p_ValuesCatalog != null && a_RecordValue.p_ValuesCatalog.Length > 0)
+                {
+                    var vals = a_RecordValue.p_ValuesCatalog.Select(vc => vc.p_ElementParam.p_Value);
+                    val = f_GetValWithColorForHtml(a_RecordValue, vals, a_Min, a_Max);
+                    if (a_RecordValue.p_ValuesDopCatalog != null && a_RecordValue.p_ValuesDopCatalog.Length > 0)
+                    {
+                        var valsDop = a_RecordValue.p_ValuesDopCatalog.Select(vc => vc.p_ElementParam.p_Value);
+                        string valDop = f_GetValWithColorForHtml(a_RecordValue, valsDop, a_Min, a_Max);
+                        val = string.Format("{0}: {1}, {2}: {3}", a_RecordValue.p_Element.p_SymmetryParamLeft, val, a_RecordValue.p_Element.p_SymmetryParamRight, valDop);
+                    }
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(a_RecordValue.p_ValueUser))
+                    val = f_GetValWithColorForHtml(a_RecordValue, new string[] { a_RecordValue.p_ValueUser }, a_Min, a_Max);
+            }
+            return val;
+        }
+
+        /// <summary>Получение HTML текста запис</summary>
+        private string f_GetHTML(Cl_Record a_Record, I_RecordValue a_RecordValue, bool a_IsDoctor, bool a_IsTable, decimal? a_Min, decimal? a_Max)
+        {
+            var html = "";
+            if (a_RecordValue.p_Element != null && a_RecordValue.p_Element.p_Visible && Cl_RecordsFacade.f_GetInstance().f_GetElementVisible(a_Record, a_RecordValue.p_Element.p_VisibilityFormula) && (a_IsDoctor || a_RecordValue.p_Element.p_VisiblePatient))
+            {
+                if (a_IsTable)
+                {
+                    string val = f_GetValForHTML(a_RecordValue, a_Min, a_Max);
+                    var partNorm = a_RecordValue.p_Element.f_GetPartNormValue(a_Record.p_PatientSex, a_Record.f_GetPatientAge());
+                    html = string.Format("<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td></tr>", a_RecordValue.p_Element.p_PartPre, val, a_RecordValue.p_Element.p_PartPost, partNorm);
+                }
+                else if (a_RecordValue.p_Element.p_IsText)
+                {
+                    string tag = "span";
+                    if (a_RecordValue.p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Line || a_RecordValue.p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Bigbox)
+                        tag = "p";
+                    string val = f_GetValForHTML(a_RecordValue, a_Min, a_Max);
+                    if (a_RecordValue.p_Element.p_IsTextFromCatalog)
+                    {
+                        if (a_RecordValue.p_ValuesCatalog != null && a_RecordValue.p_ValuesCatalog.Length > 0)
+                        {
+                            if ((a_RecordValue.p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Line || a_RecordValue.p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Bigbox) && val[val.Length - 1] != '.')
+                            {
+                                val += ".";
+                            }
+                            html = string.Format("<{0} title=\"{1}\">{1}: {2}</{0}>", tag, a_RecordValue.p_Element.p_Name, val);
+                        }
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrWhiteSpace(a_RecordValue.p_ValueUser))
+                        {
+                            if ((a_RecordValue.p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Line || a_RecordValue.p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Bigbox) && val[val.Length - 1] != '.')
+                            {
+                                val += ".";
+                            }
+                            if (a_RecordValue.p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Bigbox)
+                                html = string.Format("<{0} title=\"{1}\"><pre>{1}: {2}</pre></{0}>", tag, a_RecordValue.p_Element.p_Name, val);
+                            else
+                                html = string.Format("<{0} title=\"{1}\">{1}: {2}</{0}>", tag, a_RecordValue.p_Element.p_Name, val);
+                        }
+                    }
+                }
+                else if (a_RecordValue.p_Element.p_IsImage && a_RecordValue.p_ImageBytes != null)
+                {
+                    html = string.Format("<div><img title=\"{0}\" src=\"data:image/jpeg;base64,{1}\" /></div>", a_RecordValue.p_Element.p_Name, Convert.ToBase64String(a_RecordValue.p_ImageBytes));
+                }
+            }
+            return html;
+        }
+
         /// <summary>Добавление записей в БД</summary>
         public bool f_AddRecords(IEnumerable<Cl_Record> a_Records)
         {
@@ -322,7 +526,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
             }
         }
 
-        private Cl_RecordPatternParam f_GetRecordPatternParam(Cl_RecordPatternValue a_RecordPatternValue, Cl_RecordParam a_RecordParam)
+        private Cl_RecordPatternParam f_GetRecordPatternParam(Cl_RecordPatternValue a_RecordPatternValue, I_RecordParam a_RecordParam)
         {
             Cl_RecordPatternParam param = null;
             if (a_RecordPatternValue != null && a_RecordParam != null)
@@ -338,7 +542,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
             return param;
         }
 
-        private Cl_RecordParam f_GetRecordParam(Cl_RecordValue a_RecordValue, Cl_RecordPatternParam a_RecordPatternParam)
+        private Cl_RecordParam f_GetRecordParam(Cl_RecordValue a_RecordValue, I_RecordParam a_RecordPatternParam)
         {
             Cl_RecordParam param = null;
             if (a_RecordValue != null && a_RecordPatternParam != null)
@@ -354,7 +558,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
             return param;
         }
 
-        private Cl_RecordPatternValue f_GetRecordPatternValue(Cl_RecordPattern a_RecordPattern, Cl_RecordValue a_RecordValue)
+        private Cl_RecordPatternValue f_GetRecordPatternValue(Cl_RecordPattern a_RecordPattern, I_RecordValue a_RecordValue)
         {
             Cl_RecordPatternValue val = null;
             if (a_RecordPattern != null && a_RecordValue != null)
@@ -368,13 +572,13 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 val.p_Image = a_RecordValue.p_Image;
                 val.p_ValueUser = a_RecordValue.p_ValueUser;
                 val.p_ValueDopUser = a_RecordValue.p_ValueDopUser;
-                val.p_Params = a_RecordValue.p_Params.Select(p => f_GetRecordPatternParam(val, p)).ToList();
+                val.p_Params = a_RecordValue.f_GetParams().Select(p => f_GetRecordPatternParam(val, p)).ToList();
 
             }
             return val;
         }
 
-        private Cl_RecordValue f_GetRecordValue(Cl_Record a_Record, Cl_RecordPatternValue a_RecordPatternValue)
+        private Cl_RecordValue f_GetRecordValue(Cl_Record a_Record, I_RecordValue a_RecordPatternValue)
         {
             Cl_RecordValue val = null;
             if (a_Record != null && a_RecordPatternValue != null)
@@ -388,7 +592,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 val.p_Image = a_RecordPatternValue.p_Image;
                 val.p_ValueUser = a_RecordPatternValue.p_ValueUser;
                 val.p_ValueDopUser = a_RecordPatternValue.p_ValueDopUser;
-                val.p_Params = a_RecordPatternValue.p_Params.Select(p => f_GetRecordParam(val, p)).ToList();
+                val.p_Params = a_RecordPatternValue.f_GetParams().Select(p => f_GetRecordParam(val, p)).ToList();
 
             }
             return val;
@@ -406,7 +610,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
         /// <param name="a_Record">Запись</param>
         /// <param name="a_PatternName">Название паттерна</param>
         /// <returns>Новый паттерн записей</returns>
-        public Cl_RecordPattern f_GetNewRecordPattern(string a_PatternName, Cl_Record a_Record)
+        public Cl_RecordPattern f_GetNewRecordPattern(string a_PatternName, I_Record a_Record)
         {
             Cl_RecordPattern pattern = null;
             if (!string.IsNullOrEmpty(a_PatternName) && a_Record != null)
@@ -424,15 +628,15 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 pattern.p_CategoryTotal = a_Record.p_CategoryTotal;
                 pattern.f_SetTemplate(a_Record.p_Template);
                 pattern.p_Title = a_Record.p_Title;
-                pattern.p_Values = a_Record.p_Values.Select(v => f_GetRecordPatternValue(pattern, v)).ToList();
+                pattern.p_Values = a_Record.f_GetRecordsValues().Select(v => f_GetRecordPatternValue(pattern, v)).ToList();
             }
             return pattern;
         }
 
-        /// <summary>Получение паттерна записей</summary>
-        /// <param name="a_Record">Запись</param>
+        /// <summary>Получение записи из паттерна записей</summary>
+        /// <param name="a_RecordPattern">Паттерн записи</param>
         /// <returns>Паттерн записей</returns>
-        public Cl_Record f_GetNewRecord(Cl_RecordPattern a_RecordPattern)
+        public Cl_Record f_GetNewRecord(I_Record a_RecordPattern)
         {
             Cl_Record record = null;
             if (a_RecordPattern != null)
@@ -454,7 +658,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(template);
                 var els = Cl_TemplatesFacade.f_GetInstance().f_GetElements(template);
                 record.f_SetTemplate(template);
-                var values = a_RecordPattern.p_Values.Select(v => f_GetRecordValue(record, v)).ToList();
+                var values = a_RecordPattern.f_GetRecordsValues().Select(v => f_GetRecordValue(record, v)).ToList();
                 values.RemoveAll(val => !els.Any(el => el.p_ID == val.p_ElementID));
                 record.p_Values = values;
             }

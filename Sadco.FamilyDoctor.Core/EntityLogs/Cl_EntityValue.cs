@@ -143,7 +143,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             return sBuild.ToString().Trim();
         }
 
-        private static string f_GetRecordParamsValue(Cl_RecordParam[] elm1, Cl_RecordParam[] elm2)
+        private static string f_GetRecordParamsValue(I_RecordParam[] elm1, I_RecordParam[] elm2)
         {
             StringBuilder sBuild = new StringBuilder();
 
@@ -156,7 +156,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             return sBuild.ToString().Trim();
         }
 
-        private static string f_GetRecordParamValue(Cl_RecordParam[] elm1)
+        private static string f_GetRecordParamValue(I_RecordParam[] elm1)
         {
             StringBuilder sBuild = new StringBuilder();
 

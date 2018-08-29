@@ -45,11 +45,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.ctrlBRating = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.ctrlBHistory = new System.Windows.Forms.Button();
             this.ctrlBSave = new System.Windows.Forms.Button();
             this.ctrl_CMTemplate.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ctrl_CMTemplate
@@ -112,7 +114,7 @@
             this.ctrlPContent.Location = new System.Drawing.Point(14, 84);
             this.ctrlPContent.Name = "ctrlPContent";
             this.ctrlPContent.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.ctrlPContent.Size = new System.Drawing.Size(1199, 461);
+            this.ctrlPContent.Size = new System.Drawing.Size(1199, 454);
             this.ctrlPContent.TabIndex = 1;
             // 
             // panel1
@@ -212,29 +214,42 @@
             // panel2
             // 
             this.panel2.Controls.Add(this.ctrlBRating);
-            this.panel2.Controls.Add(this.ctrlBHistory);
-            this.panel2.Controls.Add(this.ctrlBSave);
+            this.panel2.Controls.Add(this.flowLayoutPanel1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(14, 545);
+            this.panel2.Location = new System.Drawing.Point(14, 538);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1199, 25);
+            this.panel2.Padding = new System.Windows.Forms.Padding(3);
+            this.panel2.Size = new System.Drawing.Size(1199, 32);
             this.panel2.TabIndex = 0;
             // 
             // ctrlBRating
             // 
             this.ctrlBRating.Dock = System.Windows.Forms.DockStyle.Left;
-            this.ctrlBRating.Location = new System.Drawing.Point(0, 0);
+            this.ctrlBRating.Location = new System.Drawing.Point(3, 3);
             this.ctrlBRating.Name = "ctrlBRating";
-            this.ctrlBRating.Size = new System.Drawing.Size(99, 25);
+            this.ctrlBRating.Size = new System.Drawing.Size(99, 26);
             this.ctrlBRating.TabIndex = 2;
             this.ctrlBRating.Text = "оценка";
             this.ctrlBRating.UseVisualStyleBackColor = true;
             this.ctrlBRating.Click += new System.EventHandler(this.ctrlBRating_Click);
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.Controls.Add(this.ctrlBHistory);
+            this.flowLayoutPanel1.Controls.Add(this.ctrlBSave);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(983, 3);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(213, 26);
+            this.flowLayoutPanel1.TabIndex = 3;
+            this.flowLayoutPanel1.WrapContents = false;
+            // 
             // ctrlBHistory
             // 
-            this.ctrlBHistory.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ctrlBHistory.Location = new System.Drawing.Point(1001, 0);
+            this.ctrlBHistory.Location = new System.Drawing.Point(0, 0);
+            this.ctrlBHistory.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
             this.ctrlBHistory.Name = "ctrlBHistory";
             this.ctrlBHistory.Size = new System.Drawing.Size(99, 25);
             this.ctrlBHistory.TabIndex = 1;
@@ -244,8 +259,8 @@
             // 
             // ctrlBSave
             // 
-            this.ctrlBSave.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ctrlBSave.Location = new System.Drawing.Point(1100, 0);
+            this.ctrlBSave.Location = new System.Drawing.Point(114, 0);
+            this.ctrlBSave.Margin = new System.Windows.Forms.Padding(0);
             this.ctrlBSave.Name = "ctrlBSave";
             this.ctrlBSave.Size = new System.Drawing.Size(99, 25);
             this.ctrlBSave.TabIndex = 0;
@@ -272,6 +287,8 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
 		}
@@ -298,5 +315,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox ctrlTitle;
         private System.Windows.Forms.Button ctrlBRating;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }

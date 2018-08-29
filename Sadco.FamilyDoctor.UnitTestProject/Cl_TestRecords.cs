@@ -21,6 +21,8 @@ namespace Sadco.FamilyDoctor.UnitTestProject
         {
             //tag_one = "pat2"; tag_dva = 11; tag_tri = 5
             var record = new Cl_Record() { p_Title = "Тест проверки формул" };
+            record.p_PatientSex = Core.Permision.Cl_User.E_Sex.Man;
+            record.p_PatientDateBirth = new DateTime(1981, 4, 1);
             record.p_Values = new List<Cl_RecordValue>();
 
             var template = new Cl_Template() { p_Name = "Тест проверки формул", p_Type = Cl_Template.E_TemplateType.Template };
@@ -48,6 +50,7 @@ namespace Sadco.FamilyDoctor.UnitTestProject
                 element.p_ParamsValues.Add(ep);
             }
             elements.Add(new Cl_TemplateElement() { p_Template = template, p_ChildElement = element, p_Index = 0 });
+
             element = new Cl_Element()
             {
                 p_ID = 2,
@@ -64,6 +67,7 @@ namespace Sadco.FamilyDoctor.UnitTestProject
             }
             record.p_Values.Add(new Cl_RecordValue() { p_ElementID = element.p_ID, p_Element = element, p_ValueUser = "11" });
             elements.Add(new Cl_TemplateElement() { p_Template = template, p_ChildElement = element, p_Index = 1 });
+
             element = new Cl_Element()
             {
                 p_ID = 3,
@@ -80,6 +84,7 @@ namespace Sadco.FamilyDoctor.UnitTestProject
             }
             record.p_Values.Add(new Cl_RecordValue() { p_ElementID = element.p_ID, p_Element = element, p_ValueUser = "5" });
             elements.Add(new Cl_TemplateElement() { p_Template = template, p_ChildElement = element, p_Index = 2 });
+
             template.p_TemplateElements = elements;
             record.f_SetTemplate(template);
 
@@ -127,6 +132,15 @@ namespace Sadco.FamilyDoctor.UnitTestProject
             actual = Cl_RecordsFacade.f_GetInstance().f_GetElementVisible(record, "tag_one = \"pat3\" И tag_dva = 11");
             Assert.AreEqual(false, actual);
             actual = Cl_RecordsFacade.f_GetInstance().f_GetElementVisible(record, "tag_one = \"\" И tag_dva = 11");
+            Assert.AreEqual(false, actual);
+
+            actual = Cl_RecordsFacade.f_GetInstance().f_GetElementVisible(record, "tag_gender = man И tag_age > 10");
+            Assert.AreEqual(true, actual);
+            actual = Cl_RecordsFacade.f_GetInstance().f_GetElementVisible(record, "tag_gender = man И tag_age > 40");
+            Assert.AreEqual(false, actual);
+            actual = Cl_RecordsFacade.f_GetInstance().f_GetElementVisible(record, "tag_gender = female И tag_age > 10");
+            Assert.AreEqual(false, actual);
+            actual = Cl_RecordsFacade.f_GetInstance().f_GetElementVisible(record, "tag_gender = female");
             Assert.AreEqual(false, actual);
         }
 
@@ -245,7 +259,7 @@ namespace Sadco.FamilyDoctor.UnitTestProject
             result = Cl_RecordsFacade.f_GetInstance().f_CreateRecord(catTotal, catClinic, "Заголовок API тест - файл", "Клиника API тест файл", 56369, 10,
                 "Доктор_Фамилия", "Доктор_Имя", "Доктор_Отчество",
                 201, Core.Permision.Cl_User.E_Sex.Man, "Пациент_Фамилия", "Пациент_Имя", "Пациент_Отчество", new DateTime(1983, 3, 21),
-                Cl_Record.E_RecordFileType.HTML, Encoding.UTF8.GetBytes("<h1>API тест файл<h1>"));
+                E_RecordFileType.HTML, Encoding.UTF8.GetBytes("<h1>API тест файл<h1>"));
             Assert.AreEqual(true, result);
         }
     }

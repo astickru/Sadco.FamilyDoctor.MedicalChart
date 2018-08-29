@@ -4,15 +4,11 @@ using Sadco.FamilyDoctor.Core.Facades;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using static Sadco.FamilyDoctor.Core.Entities.Cl_Record;
 
-namespace Sadco.FamilyDoctor.LoaderRecords
-{
-    enum E_MessageType
+namespace Sadco.FamilyDoctor.LoaderRecords {
+	enum E_MessageType
     {
         Error,
         Warning,
@@ -43,43 +39,43 @@ namespace Sadco.FamilyDoctor.LoaderRecords
             }
             if (extension == ".htm" || extension == ".html")
             {
-                return Cl_Record.E_RecordFileType.HTML;
+                return E_RecordFileType.HTML;
             }
             else if (extension == ".pdf")
             {
-                return Cl_Record.E_RecordFileType.PDF;
+                return E_RecordFileType.PDF;
             }
             else if (extension == ".jpg")
             {
-                return Cl_Record.E_RecordFileType.JPG;
+                return E_RecordFileType.JPG;
             }
             else if (extension == ".jpeg")
             {
-                return Cl_Record.E_RecordFileType.JPEG;
+                return E_RecordFileType.JPEG;
             }
             else if (extension == ".jpe")
             {
-                return Cl_Record.E_RecordFileType.JPE;
+                return E_RecordFileType.JPE;
             }
             else if (extension == ".jfif")
             {
-                return Cl_Record.E_RecordFileType.JFIF;
+                return E_RecordFileType.JFIF;
             }
             else if (extension == ".jif")
             {
-                return Cl_Record.E_RecordFileType.JIF;
+                return E_RecordFileType.JIF;
             }
             else if (extension == ".png")
             {
-                return Cl_Record.E_RecordFileType.PNG;
+                return E_RecordFileType.PNG;
             }
             else if (extension == ".gif")
             {
-                return Cl_Record.E_RecordFileType.GIF;
+                return E_RecordFileType.GIF;
             }
             else if (extension == ".xml")
             {
-                return Cl_Record.E_RecordFileType.XML;
+                return E_RecordFileType.XML;
             }
             else
             {
@@ -191,7 +187,7 @@ namespace Sadco.FamilyDoctor.LoaderRecords
                                                             {
                                                                 var record = new Cl_Record();
                                                                 record.p_Version = 1;
-                                                                record.p_Type = Cl_Record.E_RecordType.FinishedFile;
+                                                                record.p_Type = E_RecordType.FinishedFile;
                                                                 record.p_IsAutomatic = true;
                                                                 record.p_DateCreate = record.p_DateForming = record.p_DateLastChange = dtVal;
                                                                 record.p_MedicalCardID = medicalCardID;
@@ -361,7 +357,7 @@ namespace Sadco.FamilyDoctor.LoaderRecords
                                                                 var html = Encoding.UTF8.GetString(record.Value.p_FileBytes);
                                                                 foreach (var img in images)
                                                                 {
-                                                                    html = html.Replace(img.m_FileName, string.Format(@"data:image/{0};base64,{1}", Enum.GetName(typeof(Cl_Record.E_RecordFileType), img.m_FileType).ToLower(), Convert.ToBase64String(img.m_FileData)));
+                                                                    html = html.Replace(img.m_FileName, string.Format(@"data:image/{0};base64,{1}", Enum.GetName(typeof(E_RecordFileType), img.m_FileType).ToLower(), Convert.ToBase64String(img.m_FileData)));
                                                                 }
                                                                 record.Value.p_FileBytes = Encoding.UTF8.GetBytes(html);
                                                             }

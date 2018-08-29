@@ -165,8 +165,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             Cl_Rating curRating = (Cl_Rating)curRow.DataBoundItem;
             f_FillRating(curRating);
             f_UpdateRateEditingState(curRating);
-
-            ctrl_TabRating.SelectedIndex = 0;
         }
 
         private void ctrlBReRate_Click(object sender, EventArgs e)

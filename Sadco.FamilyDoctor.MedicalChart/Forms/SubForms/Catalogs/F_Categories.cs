@@ -28,21 +28,28 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
 
         private void f_RefreshTotal()
         {
-            var categories = Cl_App.m_DataContext.p_Categories.Local.ToBindingList().Where(c => c.p_Type == Cl_Category.E_CategoriesTypes.Total);
-            if (categories.Count() > 0)
+            try
             {
-                BindingSource bs = new BindingSource();
-                bs.DataSource = categories;
-                ctrlCategoriesTotal.DataSource = bs;
-                var col = ctrlCategoriesTotal.Columns["p_Name"];
-                ctrlCategoriesTotal.Columns["p_ID"].Visible = false;
-                ctrlCategoriesTotal.Columns["p_Type"].Visible = false;
-                col.HeaderText = "Название категории";
-                col.Width = 300;
+                var categories = Cl_App.m_DataContext.p_Categories.Local.ToBindingList().Where(c => c.p_Type == Cl_Category.E_CategoriesTypes.Total);
+                if (categories.Count() > 0)
+                {
+                    BindingSource bs = new BindingSource();
+                    bs.DataSource = categories;
+                    ctrlCategoriesTotal.DataSource = bs;
+                    var col = ctrlCategoriesTotal.Columns["p_Name"];
+                    ctrlCategoriesTotal.Columns["p_ID"].Visible = false;
+                    ctrlCategoriesTotal.Columns["p_Type"].Visible = false;
+                    col.HeaderText = "Название категории";
+                    col.Width = 300;
+                }
+                else
+                {
+                    ctrlCategoriesTotal.DataSource = null;
+                }
             }
-            else
+            catch (Exception er)
             {
-                ctrlCategoriesTotal.DataSource = null;
+                MonitoringStub.Error("Error_Editor", "Не удалось обновить общую категорию", er, null, null);
             }
         }
 
@@ -51,14 +58,21 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
             var categories = Cl_App.m_DataContext.p_Categories.Local.ToBindingList().Where(c => c.p_Type == Cl_Category.E_CategoriesTypes.Clinic);
             if (categories.Count() > 0)
             {
-                BindingSource bs = new BindingSource();
-                bs.DataSource = categories;
-                ctrlCategoriesClinik.DataSource = bs;
-                var col = ctrlCategoriesClinik.Columns["p_Name"];
-                ctrlCategoriesClinik.Columns["p_ID"].Visible = false;
-                ctrlCategoriesClinik.Columns["p_Type"].Visible = false;
-                col.HeaderText = "Название категории";
-                col.Width = 300;
+                try
+                {
+                    BindingSource bs = new BindingSource();
+                    bs.DataSource = categories;
+                    ctrlCategoriesClinik.DataSource = bs;
+                    var col = ctrlCategoriesClinik.Columns["p_Name"];
+                    ctrlCategoriesClinik.Columns["p_ID"].Visible = false;
+                    ctrlCategoriesClinik.Columns["p_Type"].Visible = false;
+                    col.HeaderText = "Название категории";
+                    col.Width = 300;
+                }
+                catch (Exception er)
+                {
+                    MonitoringStub.Error("Error_Editor", "Не удалось обновить клиническую категорию", er, null, null);
+                }
             }
             else
             {
@@ -70,72 +84,86 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
         {
             var wEdit = new F_CategoryEdit();
             wEdit.Text = "Добавление новой категории";
-            if (ctrlCategoriesTab.SelectedTab == ctrlTabTotal)
+            try
             {
-                wEdit.ctrlCategoryType.Text = "Общая категория";
-                if (wEdit.ShowDialog() == DialogResult.OK)
+                if (ctrlCategoriesTab.SelectedTab == ctrlTabTotal)
                 {
-                    var cat = new Cl_Category();
-                    cat.p_Type = Cl_Category.E_CategoriesTypes.Total;
-                    cat.p_Name = wEdit.ctrlCategotyName.Text;
-                    Cl_App.m_DataContext.p_Categories.Add(cat);
-                    Cl_App.m_DataContext.SaveChanges();
-                    f_RefreshTotal();
+                    wEdit.ctrlCategoryType.Text = "Общая категория";
+                    if (wEdit.ShowDialog() == DialogResult.OK)
+                    {
+                        var cat = new Cl_Category();
+                        cat.p_Type = Cl_Category.E_CategoriesTypes.Total;
+                        cat.p_Name = wEdit.ctrlCategotyName.Text;
+                        Cl_App.m_DataContext.p_Categories.Add(cat);
+                        Cl_App.m_DataContext.SaveChanges();
+                        f_RefreshTotal();
+                    }
+                }
+                else if (ctrlCategoriesTab.SelectedTab == ctrlTabClinik)
+                {
+                    wEdit.ctrlCategoryType.Text = "Клиническая категория";
+                    if (wEdit.ShowDialog() == DialogResult.OK)
+                    {
+                        var cat = new Cl_Category();
+                        cat.p_Type = Cl_Category.E_CategoriesTypes.Clinic;
+                        cat.p_Name = wEdit.ctrlCategotyName.Text;
+                        Cl_App.m_DataContext.p_Categories.Add(cat);
+                        Cl_App.m_DataContext.SaveChanges();
+                        f_RefreshClinik();
+                    }
                 }
             }
-            else if (ctrlCategoriesTab.SelectedTab == ctrlTabClinik)
+            catch (Exception er)
             {
-                wEdit.ctrlCategoryType.Text = "Клиническая категория";
-                if (wEdit.ShowDialog() == DialogResult.OK)
-                {
-                    var cat = new Cl_Category();
-                    cat.p_Type = Cl_Category.E_CategoriesTypes.Clinic;
-                    cat.p_Name = wEdit.ctrlCategotyName.Text;
-                    Cl_App.m_DataContext.p_Categories.Add(cat);
-                    Cl_App.m_DataContext.SaveChanges();
-                    f_RefreshClinik();
-                }
+                MonitoringStub.Error("Error_Editor", "Не удалось добавить новую категорию", er, null, null);
             }
         }
 
         private void ctrlEdit_Click(object sender, EventArgs e)
         {
             var wEdit = new F_CategoryEdit();
-            if (ctrlCategoriesTab.SelectedTab == ctrlTabTotal)
+            try
             {
-                if (ctrlCategoriesTotal.SelectedRows.Count == 1)
+                if (ctrlCategoriesTab.SelectedTab == ctrlTabTotal)
                 {
-                    var cat = (Cl_Category)ctrlCategoriesTotal.SelectedRows[0].DataBoundItem;
-                    if (cat != null)
+                    if (ctrlCategoriesTotal.SelectedRows.Count == 1)
                     {
-                        wEdit.Text = string.Format("Изменение категории \"{0}\"", cat.p_Name);
-                        wEdit.ctrlCategoryType.Text = "Общая категория";
-                        if (wEdit.ShowDialog() == DialogResult.OK)
+                        var cat = (Cl_Category)ctrlCategoriesTotal.SelectedRows[0].DataBoundItem;
+                        if (cat != null)
                         {
-                            cat.p_Name = wEdit.ctrlCategotyName.Text;
-                            Cl_App.m_DataContext.SaveChanges();
-                            f_RefreshTotal();
+                            wEdit.Text = string.Format("Изменение категории \"{0}\"", cat.p_Name);
+                            wEdit.ctrlCategoryType.Text = "Общая категория";
+                            if (wEdit.ShowDialog() == DialogResult.OK)
+                            {
+                                cat.p_Name = wEdit.ctrlCategotyName.Text;
+                                Cl_App.m_DataContext.SaveChanges();
+                                f_RefreshTotal();
+                            }
+                        }
+                    }
+                }
+                else if (ctrlCategoriesTab.SelectedTab == ctrlTabClinik)
+                {
+                    if (ctrlCategoriesClinik.SelectedRows.Count == 1)
+                    {
+                        var cat = (Cl_Category)ctrlCategoriesClinik.SelectedRows[0].DataBoundItem;
+                        if (cat != null)
+                        {
+                            wEdit.Text = string.Format("Изменение категории \"{0}\"", cat.p_Name);
+                            wEdit.ctrlCategoryType.Text = "Клиническая категория";
+                            if (wEdit.ShowDialog() == DialogResult.OK)
+                            {
+                                cat.p_Name = wEdit.ctrlCategotyName.Text;
+                                Cl_App.m_DataContext.SaveChanges();
+                                f_RefreshClinik();
+                            }
                         }
                     }
                 }
             }
-            else if (ctrlCategoriesTab.SelectedTab == ctrlTabClinik)
+            catch (Exception er)
             {
-                if (ctrlCategoriesClinik.SelectedRows.Count == 1)
-                {
-                    var cat = (Cl_Category)ctrlCategoriesClinik.SelectedRows[0].DataBoundItem;
-                    if (cat != null)
-                    {
-                        wEdit.Text = string.Format("Изменение категории \"{0}\"", cat.p_Name);
-                        wEdit.ctrlCategoryType.Text = "Клиническая категория";
-                        if (wEdit.ShowDialog() == DialogResult.OK)
-                        {
-                            cat.p_Name = wEdit.ctrlCategotyName.Text;
-                            Cl_App.m_DataContext.SaveChanges();
-                            f_RefreshClinik();
-                        }
-                    }
-                }
+                MonitoringStub.Error("Error_Editor", "Не удалось отредактировать категорию", er, null, null);
             }
         }
 

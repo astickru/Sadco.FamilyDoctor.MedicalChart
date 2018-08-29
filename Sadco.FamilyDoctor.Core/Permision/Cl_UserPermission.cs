@@ -53,6 +53,12 @@ namespace Sadco.FamilyDoctor.Core.Permision
         /// <summary>Флаг отображения удаленных элементов</summary>
         public bool p_IsShowDeleted { get { return (p_AccessLevel & E_AccessLevels.IsShowDeleted) == E_AccessLevels.IsShowDeleted; } }
 
+        /// <summary>Печать заказов</summary>
+        public bool p_IsPrint { get { return (p_AccessLevel & E_AccessLevels.IsPrint) == E_AccessLevels.IsPrint; } }
+
+        /// <summary>Доступ редактирования справочника</summary>
+		public bool p_IsEditCatalogs { get { return (p_AccessLevel & E_AccessLevels.IsEditCatalogs) == E_AccessLevels.IsEditCatalogs; } }
+
         private string m_Role;
 
         private T f_GetRole<T>(string roleName)

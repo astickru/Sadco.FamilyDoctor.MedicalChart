@@ -571,14 +571,21 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             RichTextBox el = ((RichTextBox)sender);
             if (ctrl_IsNumber.Checked)
             {
-                int pos = el.SelectionStart - el.GetFirstCharIndexOfCurrentLine();
-                string txt = el.Text;
-                if (el.Lines.Length > 0)
+                if (e.KeyChar == 32)
                 {
-                    txt = el.Lines.ElementAt(el.GetLineFromCharIndex(el.SelectionStart));
+                    e.Handled = true;
                 }
-                txt = string.Format("{0}{1}{2}", txt.Substring(0, pos), e.KeyChar, txt.Substring(pos, txt.Length - pos));
-                e.Handled = !f_ValidNumber(new string[] { txt });
+                else if (e.KeyChar != 8)
+                {
+                    int pos = el.SelectionStart - el.GetFirstCharIndexOfCurrentLine();
+                    string txt = el.Text;
+                    if (el.Lines.Length > 0)
+                    {
+                        txt = el.Lines.ElementAt(el.GetLineFromCharIndex(el.SelectionStart));
+                    }
+                    txt = string.Format("{0}{1}{2}", txt.Substring(0, pos), e.KeyChar, txt.Substring(pos, txt.Length - pos));
+                    e.Handled = !f_ValidNumber(new string[] { txt });
+                }
             }
             else
             {
