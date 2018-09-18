@@ -17,9 +17,9 @@ namespace Sadco.FamilyDoctor.Core.Facades
         private bool m_IsInit = false;
 
         /// <summary>Инициализация фасада</summary>
-        public bool f_Init(Cl_User a_Doctor, Cl_User a_Patient, int a_MedCardNumber, string a_ConnectionString, DateTime? a_DateStart = null, DateTime? a_DateEnd = null)
+        public bool f_Init(Cl_User a_Doctor, Cl_User a_Patient, int a_MedCardNumber, DateTime? a_DateStart = null, DateTime? a_DateEnd = null)
         {
-            m_IsInit = f_Update(a_Doctor, a_Patient, a_MedCardNumber, a_ConnectionString, a_DateStart, a_DateEnd);
+            m_IsInit = f_Update(a_Doctor, a_Patient, a_MedCardNumber, a_DateStart, a_DateEnd);
 
             if (p_SessionID == null || p_SessionID == Guid.Empty)
                 p_SessionID = Guid.NewGuid();
@@ -28,14 +28,13 @@ namespace Sadco.FamilyDoctor.Core.Facades
         }
 
         /// <summary>Обновление фасада</summary>
-        public bool f_Update(Cl_User a_Doctor, Cl_User a_Patient, int a_MedCardNumber, string a_ConnectionString, DateTime? a_DateStart = null, DateTime? a_DateEnd = null)
+        public bool f_Update(Cl_User a_Doctor, Cl_User a_Patient, int a_MedCardNumber, DateTime? a_DateStart = null, DateTime? a_DateEnd = null)
         {
             p_Doctor = a_Doctor;
             p_Patient = a_Patient;
             p_DateStart = a_DateStart;
             p_DateEnd = a_DateEnd;
             p_MedCardNumber = a_MedCardNumber;
-            p_ConnectionString = a_ConnectionString;
             return true;
         }
 
@@ -54,9 +53,6 @@ namespace Sadco.FamilyDoctor.Core.Facades
 
         /// <summary>Конец выбранного диапазона даты</summary>
         public DateTime? p_DateEnd { get; private set; }
-
-        /// <summary>Строка подключения</summary>
-        public string p_ConnectionString { get; private set; }
 
         /// <summary>
         /// ID сессии

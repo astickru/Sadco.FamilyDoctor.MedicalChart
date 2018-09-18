@@ -71,10 +71,6 @@
             this.clinicPanel = new System.Windows.Forms.Panel();
             this.label14 = new System.Windows.Forms.Label();
             this.ctrlClinikName = new System.Windows.Forms.TextBox();
-            this.sqlConnectionPanel = new System.Windows.Forms.Panel();
-            this.label17 = new System.Windows.Forms.Label();
-            this.ctrlConnectionString = new System.Windows.Forms.TextBox();
-            this.button3 = new System.Windows.Forms.Button();
             this.mainPanel.SuspendLayout();
             this.panel7.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -82,7 +78,6 @@
             this.buttonsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.clinicPanel.SuspendLayout();
-            this.sqlConnectionPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainPanel
@@ -96,7 +91,7 @@
             this.mainPanel.Margin = new System.Windows.Forms.Padding(0);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Padding = new System.Windows.Forms.Padding(0, 4, 0, 4);
-            this.mainPanel.Size = new System.Drawing.Size(373, 315);
+            this.mainPanel.Size = new System.Drawing.Size(373, 316);
             this.mainPanel.TabIndex = 0;
             // 
             // panel7
@@ -466,7 +461,7 @@
             this.buttonsPanel.Controls.Add(this.button1);
             this.buttonsPanel.Controls.Add(this.button2);
             this.buttonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonsPanel.Location = new System.Drawing.Point(5, 432);
+            this.buttonsPanel.Location = new System.Drawing.Point(5, 405);
             this.buttonsPanel.Name = "buttonsPanel";
             this.buttonsPanel.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
             this.buttonsPanel.Size = new System.Drawing.Size(373, 34);
@@ -552,57 +547,14 @@
             this.ctrlClinikName.TabIndex = 7;
             this.ctrlClinikName.Text = "Клиника1";
             // 
-            // sqlConnectionPanel
-            // 
-            this.sqlConnectionPanel.BackColor = System.Drawing.SystemColors.Control;
-            this.sqlConnectionPanel.Controls.Add(this.button3);
-            this.sqlConnectionPanel.Controls.Add(this.label17);
-            this.sqlConnectionPanel.Controls.Add(this.ctrlConnectionString);
-            this.sqlConnectionPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.sqlConnectionPanel.Location = new System.Drawing.Point(5, 404);
-            this.sqlConnectionPanel.Name = "sqlConnectionPanel";
-            this.sqlConnectionPanel.Size = new System.Drawing.Size(373, 28);
-            this.sqlConnectionPanel.TabIndex = 8;
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(0, 8);
-            this.label17.Margin = new System.Windows.Forms.Padding(0);
-            this.label17.Name = "label17";
-            this.label17.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label17.Size = new System.Drawing.Size(113, 13);
-            this.label17.TabIndex = 6;
-            this.label17.Text = "Строка подключения";
-            // 
-            // ctrlConnectionString
-            // 
-            this.ctrlConnectionString.Location = new System.Drawing.Point(117, 4);
-            this.ctrlConnectionString.Margin = new System.Windows.Forms.Padding(0);
-            this.ctrlConnectionString.Name = "ctrlConnectionString";
-            this.ctrlConnectionString.Size = new System.Drawing.Size(223, 20);
-            this.ctrlConnectionString.TabIndex = 7;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(341, 3);
-            this.button3.Margin = new System.Windows.Forms.Padding(0);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(29, 22);
-            this.button3.TabIndex = 8;
-            this.button3.Text = "CS";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
             // F_Welcome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(383, 471);
+            this.ClientSize = new System.Drawing.Size(383, 444);
             this.Controls.Add(this.mainPanel);
             this.Controls.Add(this.clinicPanel);
-            this.Controls.Add(this.sqlConnectionPanel);
             this.Controls.Add(this.buttonsPanel);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -623,8 +575,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.clinicPanel.ResumeLayout(false);
             this.clinicPanel.PerformLayout();
-            this.sqlConnectionPanel.ResumeLayout(false);
-            this.sqlConnectionPanel.PerformLayout();
             this.ResumeLayout(false);
 
 		}
@@ -673,10 +623,6 @@
         private System.Windows.Forms.TextBox ctrlMedCardNumber;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox ctrlPatientUID;
-        private System.Windows.Forms.Panel sqlConnectionPanel;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.TextBox ctrlConnectionString;
-        private System.Windows.Forms.Button button3;
     }
 }
 
