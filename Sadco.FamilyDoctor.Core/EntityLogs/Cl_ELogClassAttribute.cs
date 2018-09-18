@@ -7,23 +7,31 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
         /// <summary>
         /// Группа
         /// </summary>
-        Groups,
+        Groups = 1,
         /// <summary>
         /// Элемент
         /// </summary>
-        Elements,
+        Elements = 2,
         /// <summary>
         /// Шаблон
         /// </summary>
-        Templates,
+        Templates = 3,
         /// <summary>
         /// Записи врача
         /// </summary>
-        Records,
+        Records = 4,
         /// <summary>
         /// Паттерны записей врача
         /// </summary>
-        RecordsPatterns
+        RecordsPatterns = 5,
+        /// <summary>
+        /// События приложения
+        /// </summary>
+        AppEvents = 100,
+        /// <summary>
+        /// События UI форм
+        /// </summary>
+        UIEvents = 110,
     }
 
     [AttributeUsage(AttributeTargets.Class)]

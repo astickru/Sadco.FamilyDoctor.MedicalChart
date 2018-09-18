@@ -168,6 +168,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                 record.p_RecordID = record.p_ID;
                             }
                             Cl_App.m_DataContext.SaveChanges();
+                            Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.UIEvents, string.Format("Сохранение записи: {0}, дата записи: {1}, клиника: {2}", record.p_Title,  record.p_DateCreate, record.p_ClinicName), record.p_RecordID);
                             m_Log.f_SaveEntity(record);
                             transaction.Commit();
                             //m_ControlTemplate.f_SetRecord(record);
@@ -195,7 +196,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             try
             {
                 Dlg_HistoryViewer viewer = new Dlg_HistoryViewer();
-                viewer.LoadHistory(p_Record.p_RecordID, E_EntityTypes.Records);
+                viewer.LoadHistory(false, E_EntityTypes.Records, p_Record.p_RecordID);
                 viewer.ShowDialog(this);
             }
             catch (Exception er)

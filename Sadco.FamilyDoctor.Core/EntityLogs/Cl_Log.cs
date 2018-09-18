@@ -14,10 +14,16 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 		[Column("F_ID")]
 		public int p_ID { get; set; }
 
-		/// <summary>
-		/// ID элемента
-		/// </summary>
-		[Column("F_ELEMENT_ID")]
+        /// <summary>
+        /// ID сессии
+        /// </summary>
+        [Column("F_SESSION_ID")]
+        public Guid p_SessionID { get; set; }
+
+        /// <summary>
+        /// ID элемента
+        /// </summary>
+        [Column("F_ELEMENT_ID")]
 		public int p_ElementID { get; set; }
 
 		/// <summary>

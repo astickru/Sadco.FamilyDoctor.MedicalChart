@@ -286,6 +286,10 @@
     <Compile Include="Migrations\201807091641431_appClinic.Designer.cs">
       <DependentUpon>201807091641431_appClinic.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809181020097_appStartLogs.cs" />
+    <Compile Include="Migrations\201809181020097_appStartLogs.Designer.cs">
+      <DependentUpon>201809181020097_appStartLogs.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\Cl_AccessLevelAttribute.cs" />
     <Compile Include="Permision\Cl_User.cs" />
@@ -415,6 +419,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807091641431_appClinic.resx">
       <DependentUpon>201807091641431_appClinic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809181020097_appStartLogs.resx">
+      <DependentUpon>201809181020097_appStartLogs.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

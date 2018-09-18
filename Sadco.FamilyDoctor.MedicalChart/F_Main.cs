@@ -1,5 +1,6 @@
 ﻿using FD.dat.mon.stb.lib;
 using Sadco.FamilyDoctor.Core;
+using Sadco.FamilyDoctor.Core.EntityLogs;
 using Sadco.FamilyDoctor.Core.Facades;
 using Sadco.FamilyDoctor.Core.Permision;
 using Sadco.FamilyDoctor.MedicalChart.Forms.SubForms;
@@ -17,10 +18,17 @@ namespace Sadco.FamilyDoctor.MedicalChart
 
         public F_Main(string[] args)
         {
+            this.FormClosing += F_Main_FormClosing;
+
             f_InitSession(args);
+
             Tag = string.Format("Мегашаблон v{0}", ConfigurationManager.AppSettings["Version"]);
-            if (Cl_App.Initialize())
+            if (Cl_App.Initialize(Cl_SessionFacade.f_GetInstance().p_ConnectionString))
             {
+                Cl_SessionFacade sess = Cl_SessionFacade.f_GetInstance();
+                Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.AppEvents, string.Format("Запуск ЭМК. Пользователь: {0}/({1}). Пациент: {2}/({3})", sess.p_Doctor.f_GetInitials(), sess.p_Doctor.p_UserID, sess.p_Patient.f_GetInitials(), sess.p_Patient.p_UserID));
+
+
                 this.Font = new System.Drawing.Font(ConfigurationManager.AppSettings["FontFamily"],
                         float.Parse(ConfigurationManager.AppSettings["FontSize"]),
                         (System.Drawing.FontStyle)int.Parse(ConfigurationManager.AppSettings["FontStyle"]),
@@ -64,10 +72,16 @@ namespace Sadco.FamilyDoctor.MedicalChart
                 }
 
                 f_SetControl<UC_Records>();
-            } else
+            }
+            else
             {
                 Application.Exit();
             }
+        }
+
+        private void F_Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.AppEvents, "Завершение работы с ЭМК.");
         }
 
         private void f_InitSession(string[] args)
@@ -88,10 +102,10 @@ namespace Sadco.FamilyDoctor.MedicalChart
             patient.p_UserLastName = args[10];
             patient.p_Sex = (Cl_User.E_Sex)Enum.Parse(typeof(Cl_User.E_Sex), args[12]);
             patient.p_DateBirth = DateTime.Parse(args[13]);
-            if (args.Length == 16)
-                Cl_SessionFacade.f_GetInstance().f_Init(user, patient, int.Parse(args[11]), DateTime.Parse(args[14]), DateTime.Parse(args[15]));
+            if (args.Length == 17)
+                Cl_SessionFacade.f_GetInstance().f_Init(user, patient, int.Parse(args[11]), args[14], DateTime.Parse(args[15]), DateTime.Parse(args[16]));
             else
-                Cl_SessionFacade.f_GetInstance().f_Init(user, patient, int.Parse(args[11]));
+                Cl_SessionFacade.f_GetInstance().f_Init(user, patient, int.Parse(args[11]), args[14]);
         }
 
         private void ctrlMIRecord_Click(object sender, EventArgs e)

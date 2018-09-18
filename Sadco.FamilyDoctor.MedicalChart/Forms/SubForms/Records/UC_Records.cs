@@ -133,10 +133,13 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             if (f_GetEdited(a_Record))
             {
+                Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.UIEvents, string.Format("Редактирование записи: {0}, дата записи: {1}, клиника: {2}", a_Record.p_Title, a_Record.p_DateCreate, a_Record.p_ClinicName), a_Record.p_RecordID);
+
                 var dlgRecord = new Dlg_Record();
                 dlgRecord.e_Save += DlgRecord_e_Save;
                 dlgRecord.p_Record = a_Record;
                 dlgRecord.ShowDialog(this);
+                Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.UIEvents, string.Format("Выход из редактирования записи: {0}, дата записи: {1}, клиника: {2}", a_Record.p_Title, a_Record.p_DateCreate, a_Record.p_ClinicName), a_Record.p_RecordID);
             }
         }
 
@@ -366,6 +369,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     var record = m_SelectedRecord = m_Records.FirstOrDefault(r => r.p_ID == ((Cl_Record)ctrl_TRecords.CurrentRow.Tag).p_ID);
                     if (record != null)
                     {
+                        Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.UIEvents, string.Format("Просмотр записи: {0}, дата записи: {1}, клиника: {2}", record.p_Title, record.p_DateCreate, record.p_ClinicName), record.p_RecordID);
+
                         ctrlPRecordInfo.Visible = true;
                         ctrlRecordInfo.Text = string.Format("{0} {1} [{2}, {3}]", record.p_DateCreate.ToShortDateString(), record.p_Title, record.p_DateLastChange, record.p_DoctorFIO);
 

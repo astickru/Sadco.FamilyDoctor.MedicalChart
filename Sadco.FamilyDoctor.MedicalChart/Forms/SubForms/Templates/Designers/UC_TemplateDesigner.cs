@@ -68,7 +68,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         private void ctrl_B_History_Click(object sender, EventArgs e)
         {
             Dlg_HistoryViewer viewer = new Dlg_HistoryViewer();
-            viewer.LoadHistory(p_EditingTemplate.p_TemplateID, E_EntityTypes.Templates);
+            viewer.LoadHistory(false, E_EntityTypes.Templates, p_EditingTemplate.p_TemplateID);
             viewer.ShowDialog(this);
         }
     }

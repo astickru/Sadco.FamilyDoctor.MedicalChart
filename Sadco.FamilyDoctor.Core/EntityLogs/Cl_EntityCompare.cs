@@ -12,6 +12,15 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
         {
             if (val1 == null && val2 == null) return true;
 
+            if (val1 == null || val2 == null)
+            {
+                if ((val1 == null && val2 != null) || (val1 != null && val2 == null))
+                    return false;
+
+                if (val1 == null && val2 == null)
+                    return true;
+            }
+
             bool outResult = false;
             if (type.GetInterface(nameof(I_Comparable)) != null)
             {
@@ -243,6 +252,8 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
                 return f_Array_I_Comparable(val1, val2);
             else if (elementType == typeof(Byte))
                 return f_Array_Byte(val1, val2);
+            else if (elementType == typeof(I_RecordParam))
+                return f_Array_I_RecordParam(val1, val2);
             else
                 return Array.Equals(val1, val2);
         }
@@ -265,6 +276,29 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
 
             for (int i = 0; i < a1.Count(); i++)
                 if (a1[i] != a2[i])
+                    return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Сравнение массивов с типом Byte
+        /// </summary>
+        /// <param name="val1">Сравниваемый объект</param>
+        /// <param name="val2">Сравниваемый объект</param>
+        /// <returns></returns>
+        public static bool f_Array_I_RecordParam(object val1, object val2)
+        {
+            if (val1 == null || val2 == null) return false;
+
+            I_RecordParam[] a1 = (I_RecordParam[])val1;
+            I_RecordParam[] a2 = (I_RecordParam[])val2;
+
+            if (a1.Count() != a2.Count())
+                return false;
+
+            for (int i = 0; i < a1.Count(); i++)
+                if (a1[i].p_ElementParam.f_Equals(a2[i].p_ElementParam) == false)
                     return false;
 
             return true;

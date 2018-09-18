@@ -1,5 +1,6 @@
 ﻿using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.EntityLogs;
+using Sadco.FamilyDoctor.Core.Facades;
 using System.Configuration;
 using System.Data;
 using System.Linq;
@@ -25,10 +26,16 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 			}
 		}
 
-		public void LoadHistory(int LoadForID, E_EntityTypes eType)
+		public void LoadHistory(bool onlyThisSesion, E_EntityTypes eType, int LoadForID = 1)
 		{
-			IOrderedQueryable<Cl_Log> logs = Cl_App.m_DataContext.p_Logs.Where(l => l.p_ElementID == LoadForID && l.p_EntityType == eType).OrderByDescending(d => d.p_ChangeTime);
-			if (logs.Count() == 0) return;
+            IOrderedQueryable<Cl_Log> logs = null;
+
+            if (onlyThisSesion)
+                logs = Cl_App.m_DataContext.p_Logs.Where(l => l.p_SessionID == Cl_SessionFacade.f_GetInstance().p_SessionID && l.p_ElementID == LoadForID && l.p_EntityType == eType).OrderByDescending(d => d.p_ChangeTime);
+            else
+                logs = Cl_App.m_DataContext.p_Logs.Where(l => l.p_ElementID == LoadForID && l.p_EntityType == eType).OrderByDescending(d => d.p_ChangeTime);
+
+            if (logs.Count() == 0) return;
 
             foreach(Cl_Log log in logs)
             {

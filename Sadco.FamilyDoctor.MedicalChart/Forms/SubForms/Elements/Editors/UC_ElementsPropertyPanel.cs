@@ -104,7 +104,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Elements.Editors
 		private void ctrl_BHistory_Click(object sender, EventArgs e)
 		{
 			Dlg_HistoryViewer viewer = new Dlg_HistoryViewer();
-			viewer.LoadHistory(p_EditableElement.p_Element.p_ElementID, E_EntityTypes.Elements);
+			viewer.LoadHistory(false, E_EntityTypes.Elements, p_EditableElement.p_Element.p_ElementID);
 			viewer.ShowDialog(this);
 		}
 	}

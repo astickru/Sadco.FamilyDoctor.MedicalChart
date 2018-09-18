@@ -3,8 +3,9 @@ using FD.dat.mon.stb.lib;
 using Sadco.FamilyDoctor.Core.Data;
 using Sadco.FamilyDoctor.Core.Facades;
 using System;
-using System.Configuration;
-using System.Reflection;
+
+//using System.Configuration;
+//using System.Reflection;
 
 namespace Sadco.FamilyDoctor.Core
 {
@@ -12,18 +13,23 @@ namespace Sadco.FamilyDoctor.Core
     {
         public static Cl_DataContextMegaTemplate m_DataContext;
 
-        public static bool Initialize()
+        public static bool Initialize(string connectionString)
         {
+            if (string.IsNullOrEmpty(connectionString) || string.IsNullOrWhiteSpace(connectionString))
+                MonitoringStub.Error("Error_Tree", "Входящий параметр \"connectionString\" не может быть пустым.", null, null, null);
+
             try
             {
-                Configuration config = ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location);
+                /*Configuration config = ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location);
                 var con = config.ConnectionStrings.ConnectionStrings["MedicalChartDatabase"];
                 if (con == null)
                 {
                     MonitoringStub.Error("Error_Load", "Отсутствует настройка подключения к БД MedicalChartDatabase в конфигурационном фале", null, null, null);
                     return false;
                 }
-                m_DataContext = new Cl_DataContextMegaTemplate(config.ConnectionStrings.ConnectionStrings["MedicalChartDatabase"].ConnectionString);
+                m_DataContext = new Cl_DataContextMegaTemplate(config.ConnectionStrings.ConnectionStrings["MedicalChartDatabase"].ConnectionString);*/
+
+                m_DataContext = new Cl_DataContextMegaTemplate(connectionString);
                 m_DataContext.f_Init();
             }
             catch (Exception er)

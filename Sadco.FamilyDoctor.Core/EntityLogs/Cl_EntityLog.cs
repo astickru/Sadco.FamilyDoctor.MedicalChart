@@ -145,17 +145,21 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
         /// <param name="message">Сообщение лога</param>
         public static void f_CustomMessageLog(I_ELog obj, string message)
         {
+            if (Cl_App.m_DataContext == null) return;
+
             Cl_ELogClassAttribute classAtr = Cl_EntityLog.f_GetClassAttribute<Cl_ELogClassAttribute>(obj);
             if (classAtr == null) return;
 
-            Cl_Log outEvent = new Cl_Log();
-
-            outEvent.p_ElementID = obj.p_GetLogEntityID;
-            outEvent.p_Version = obj.p_Version;
-            outEvent.p_EntityType = classAtr.p_EntityType;
-            outEvent.p_ChangeTime = DateTime.Now;
-            outEvent.p_Event = message;
-            outEvent.p_UserName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_FIO;
+            Cl_Log outEvent = new Cl_Log
+            {
+                p_SessionID = Cl_SessionFacade.f_GetInstance().p_SessionID,
+                p_ElementID = obj.p_GetLogEntityID,
+                p_Version = obj.p_Version,
+                p_EntityType = classAtr.p_EntityType,
+                p_ChangeTime = DateTime.Now,
+                p_Event = message,
+                p_UserName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_FIO
+            };
 
             Cl_App.m_DataContext.p_Logs.Add(outEvent);
             Cl_App.m_DataContext.SaveChanges();
@@ -166,16 +170,20 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
         /// </summary>
         /// <param name="obj">Объект логирования</param>
         /// <param name="message">Сообщение лога</param>
-        public static void f_CustomMessageLog(int id, E_EntityTypes entityType, int version, string message)
+        public static void f_CustomMessageLog(E_EntityTypes entityType, string message, int id = 1, int version = 0)
         {
-            Cl_Log outEvent = new Cl_Log();
+            if (Cl_App.m_DataContext == null) return;
 
-            outEvent.p_ElementID = id;
-            outEvent.p_Version = version;
-            outEvent.p_EntityType = entityType;
-            outEvent.p_ChangeTime = DateTime.Now;
-            outEvent.p_Event = message;
-            outEvent.p_UserName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_FIO;
+            Cl_Log outEvent = new Cl_Log
+            {
+                p_SessionID = Cl_SessionFacade.f_GetInstance().p_SessionID,
+                p_ElementID = id,
+                p_Version = version,
+                p_EntityType = entityType,
+                p_ChangeTime = DateTime.Now,
+                p_Event = message,
+                p_UserName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_FIO
+            };
 
             Cl_App.m_DataContext.p_Logs.Add(outEvent);
             Cl_App.m_DataContext.SaveChanges();
@@ -202,14 +210,16 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
         /// </summary>
         private Cl_Log f_CreateEvent(I_ELog obj, string message)
         {
-            Cl_Log outEvent = new Cl_Log();
-
-            outEvent.p_ElementID = obj.p_GetLogEntityID;
-            outEvent.p_Version = obj.p_Version;
-            outEvent.p_EntityType = this.entityLogType;
-            outEvent.p_ChangeTime = DateTime.Now;
-            outEvent.p_Event = message;
-            outEvent.p_UserName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_FIO;
+            Cl_Log outEvent = new Cl_Log
+            {
+                p_SessionID = Cl_SessionFacade.f_GetInstance().p_SessionID,
+                p_ElementID = obj.p_GetLogEntityID,
+                p_Version = obj.p_Version,
+                p_EntityType = this.entityLogType,
+                p_ChangeTime = DateTime.Now,
+                p_Event = message,
+                p_UserName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_FIO
+            };
 
             return outEvent;
         }
