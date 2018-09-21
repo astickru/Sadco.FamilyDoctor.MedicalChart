@@ -29,17 +29,17 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.ctrlHistory = new System.Windows.Forms.Button();
-            this.ctrlAdd = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.ctrlDelete = new System.Windows.Forms.Button();
+            this.ctrlAdd = new System.Windows.Forms.Button();
+            this.ctrlHistory = new System.Windows.Forms.Button();
             this.ctrlTablePatterns = new System.Windows.Forms.DataGridView();
             this.p_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.p_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.p_TemplateName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ctrlTablePatterns)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ctrlTablePatterns)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -50,8 +50,44 @@
             this.panel1.Location = new System.Drawing.Point(0, 606);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(3);
-            this.panel1.Size = new System.Drawing.Size(602, 32);
+            this.panel1.Size = new System.Drawing.Size(688, 32);
             this.panel1.TabIndex = 1;
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.Controls.Add(this.ctrlDelete);
+            this.flowLayoutPanel1.Controls.Add(this.ctrlAdd);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(479, 3);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(206, 26);
+            this.flowLayoutPanel1.TabIndex = 3;
+            this.flowLayoutPanel1.WrapContents = false;
+            // 
+            // ctrlDelete
+            // 
+            this.ctrlDelete.Location = new System.Drawing.Point(111, 0);
+            this.ctrlDelete.Margin = new System.Windows.Forms.Padding(0);
+            this.ctrlDelete.Name = "ctrlDelete";
+            this.ctrlDelete.Size = new System.Drawing.Size(95, 25);
+            this.ctrlDelete.TabIndex = 0;
+            this.ctrlDelete.Text = "удалить";
+            this.ctrlDelete.UseVisualStyleBackColor = true;
+            this.ctrlDelete.Click += new System.EventHandler(this.ctrlDelete_Click);
+            // 
+            // ctrlAdd
+            // 
+            this.ctrlAdd.Location = new System.Drawing.Point(0, 0);
+            this.ctrlAdd.Margin = new System.Windows.Forms.Padding(0, 0, 17, 0);
+            this.ctrlAdd.Name = "ctrlAdd";
+            this.ctrlAdd.Size = new System.Drawing.Size(94, 25);
+            this.ctrlAdd.TabIndex = 1;
+            this.ctrlAdd.Text = "добавить";
+            this.ctrlAdd.UseVisualStyleBackColor = true;
+            this.ctrlAdd.Click += new System.EventHandler(this.ctrlAdd_Click);
             // 
             // ctrlHistory
             // 
@@ -59,33 +95,11 @@
             this.ctrlHistory.Location = new System.Drawing.Point(3, 3);
             this.ctrlHistory.Margin = new System.Windows.Forms.Padding(0);
             this.ctrlHistory.Name = "ctrlHistory";
-            this.ctrlHistory.Size = new System.Drawing.Size(82, 26);
+            this.ctrlHistory.Size = new System.Drawing.Size(94, 26);
             this.ctrlHistory.TabIndex = 2;
             this.ctrlHistory.Text = "история";
             this.ctrlHistory.UseVisualStyleBackColor = true;
             this.ctrlHistory.Click += new System.EventHandler(this.ctrlHistory_Click);
-            // 
-            // ctrlAdd
-            // 
-            this.ctrlAdd.Location = new System.Drawing.Point(0, 0);
-            this.ctrlAdd.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
-            this.ctrlAdd.Name = "ctrlAdd";
-            this.ctrlAdd.Size = new System.Drawing.Size(82, 25);
-            this.ctrlAdd.TabIndex = 1;
-            this.ctrlAdd.Text = "добавить";
-            this.ctrlAdd.UseVisualStyleBackColor = true;
-            this.ctrlAdd.Click += new System.EventHandler(this.ctrlAdd_Click);
-            // 
-            // ctrlDelete
-            // 
-            this.ctrlDelete.Location = new System.Drawing.Point(97, 0);
-            this.ctrlDelete.Margin = new System.Windows.Forms.Padding(0);
-            this.ctrlDelete.Name = "ctrlDelete";
-            this.ctrlDelete.Size = new System.Drawing.Size(83, 25);
-            this.ctrlDelete.TabIndex = 0;
-            this.ctrlDelete.Text = "удалить";
-            this.ctrlDelete.UseVisualStyleBackColor = true;
-            this.ctrlDelete.Click += new System.EventHandler(this.ctrlDelete_Click);
             // 
             // ctrlTablePatterns
             // 
@@ -102,7 +116,7 @@
             this.ctrlTablePatterns.Name = "ctrlTablePatterns";
             this.ctrlTablePatterns.ReadOnly = true;
             this.ctrlTablePatterns.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ctrlTablePatterns.Size = new System.Drawing.Size(602, 606);
+            this.ctrlTablePatterns.Size = new System.Drawing.Size(688, 606);
             this.ctrlTablePatterns.TabIndex = 2;
             this.ctrlTablePatterns.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ctrlTablePatterns_CellDoubleClick);
             // 
@@ -127,36 +141,22 @@
             this.p_TemplateName.ReadOnly = true;
             this.p_TemplateName.Width = 250;
             // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.Controls.Add(this.ctrlDelete);
-            this.flowLayoutPanel1.Controls.Add(this.ctrlAdd);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(419, 3);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(180, 26);
-            this.flowLayoutPanel1.TabIndex = 3;
-            this.flowLayoutPanel1.WrapContents = false;
-            // 
             // F_RecordsPatterns
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(602, 638);
+            this.ClientSize = new System.Drawing.Size(688, 638);
             this.Controls.Add(this.ctrlTablePatterns);
             this.Controls.Add(this.panel1);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.MaximumSize = new System.Drawing.Size(1600, 1000);
+            this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold);
+            this.MaximumSize = new System.Drawing.Size(1826, 1000);
             this.Name = "F_RecordsPatterns";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Паттерны";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ctrlTablePatterns)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ctrlTablePatterns)).EndInit();
             this.ResumeLayout(false);
 
         }

@@ -236,8 +236,8 @@ namespace Sadco.FamilyDoctor.Core.Controls
         /// <summary>Удаляет выбранную группу</summary>
         private void f_DeleteGroup()
         {
-            if (MessageBox.Show("Удалить группу?", "Удаление группы", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
             if (p_SelectedGroup == null && p_SelectedGroup.p_Group == null) return;
+            if (MessageBox.Show($"Удалить группу {p_SelectedGroup.p_Group.p_Name}?", "Удаление группы", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
             Cl_Group parentGroup = p_SelectedGroup.p_Group.p_Parent;
             if (parentGroup == null) return;
             p_SelectedGroup.p_Group.p_IsDelete = true;

@@ -17,13 +17,13 @@ namespace Sadco.FamilyDoctor.Core.Permision
 		/// Врач - заведующий отделением
 		/// </summary>
 		[Description("Врач - заведующий отделением")]
-		[Cl_AccessLevel(E_AccessLevels.EditMegaTemplates | E_AccessLevels.EditTemplates | E_AccessLevels.IsShowDeleted | E_AccessLevels.IsPrint)]
+		[Cl_AccessLevel(E_AccessLevels.EditAllRecords | E_AccessLevels.EditMegaTemplates | E_AccessLevels.EditTemplates | E_AccessLevels.IsShowDeleted | E_AccessLevels.IsPrint)]
 		ChiefUnitDoctor,
 		/// <summary>
 		/// Врач
 		/// </summary>
 		[Description("Врач")]
-		[Cl_AccessLevel(E_AccessLevels.EditAllRecords | E_AccessLevels.IsPrint)]
+		[Cl_AccessLevel(E_AccessLevels.EditSelfRecords | E_AccessLevels.IsPrint)]
 		Doctor,
 		/// <summary>
 		/// Ассистент врача

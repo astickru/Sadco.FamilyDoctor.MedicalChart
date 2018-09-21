@@ -1,4 +1,5 @@
-﻿using Sadco.FamilyDoctor.Core.EntityLogs;
+﻿using FD.dat.mon.stb.lib;
+using Sadco.FamilyDoctor.Core.EntityLogs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

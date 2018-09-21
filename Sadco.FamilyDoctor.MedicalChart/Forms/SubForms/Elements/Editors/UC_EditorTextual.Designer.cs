@@ -493,6 +493,7 @@
             this.ctrl_TPartNormRangeValues.Name = "ctrl_TPartNormRangeValues";
             this.ctrl_TPartNormRangeValues.Size = new System.Drawing.Size(664, 156);
             this.ctrl_TPartNormRangeValues.TabIndex = 87;
+            this.ctrl_TPartNormRangeValues.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.ctrl_TPartNormRangeValues_CellValueChanged);
             // 
             // p_AgeFrom
             // 
@@ -735,6 +736,7 @@
             this.ctrl_IsEditing.TabIndex = 54;
             this.ctrl_IsEditing.Text = "Редактируемое поле";
             this.ctrl_IsEditing.UseVisualStyleBackColor = true;
+            this.ctrl_IsEditing.CheckedChanged += new System.EventHandler(this.ctrl_IsEditing_CheckedChanged);
             // 
             // ctrl_IsVisible
             // 

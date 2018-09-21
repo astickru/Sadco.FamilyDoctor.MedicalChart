@@ -25,6 +25,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             p_DateForming.ValueType = typeof(DateTime);
             ctrlLPatientName.Text = Cl_SessionFacade.f_GetInstance().p_Patient.p_FIO;
             m_Permission = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission;
+
+            ctrlBReportAddRecord.Visible = ctrlBReportAddPattern.Visible = m_Permission.p_IsEditAllRecords || m_Permission.p_IsEditSelfRecords;
+            ctrlBAddRecordFromRecord.Visible = false;
+            ctrlBReportFormatPattern.Visible = false;
+
             m_WebBrowserPrint.Parent = this;
             m_WebBrowserPrint.DocumentCompleted += M_WebBrowserPrint_DocumentCompleted;
             f_UpdateRecords();
@@ -375,7 +380,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         ctrlRecordInfo.Text = string.Format("{0} {1} [{2}, {3}]", record.p_DateCreate.ToShortDateString(), record.p_Title, record.p_DateLastChange, record.p_DoctorFIO);
 
                         ctrlCMViewer.Enabled = true;
-                        ctrlBReportFormatPattern.Visible = !record.p_IsAutomatic;
+                        ctrlBAddRecordFromRecord.Visible = ctrlBReportFormatPattern.Visible = !record.p_IsAutomatic && (m_Permission.p_IsEditAllRecords || m_Permission.p_IsEditSelfRecords);
                         ctrlBReportEdit.Visible = ctrlMIEdit.Visible = f_GetEdited(record);
                         ctrlBReportArchive.Visible = ctrlMIArchive.Visible = !record.p_IsArchive && m_Permission.p_IsEditArchive;
                         ctrlBReportRating.Visible = ctrlMIRating.Visible = m_Permission.p_IsEditAllRatings;

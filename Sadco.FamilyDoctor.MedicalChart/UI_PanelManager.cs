@@ -36,8 +36,7 @@ namespace Sadco.FamilyDoctor.MedicalChart
 		public void f_DeleteElement()
 		{
 			if (p_ActiveControl == null) return;
-			this.p_ActiveControl.Dispose();
 			this.m_MainPanel.Controls.Remove(p_ActiveControl);
-		}
-	}
+        }
+    }
 }

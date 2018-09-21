@@ -11,7 +11,7 @@ namespace Sadco.FamilyDoctor.Core.Data
 	public class Cl_DataContextMegaTemplate : DbContext
 	{
 		public Cl_DataContextMegaTemplate()
-			 : base("MedicalChart") {
+			 : base("name=MedicalChartDatabase") {
 		}
 		public Cl_DataContextMegaTemplate(string a_ConnectionPath)
 		: base(a_ConnectionPath) {

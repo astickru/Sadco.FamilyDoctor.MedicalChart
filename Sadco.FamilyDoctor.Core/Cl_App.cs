@@ -24,6 +24,9 @@ namespace Sadco.FamilyDoctor.Core
                     return false;
                 }
                 m_DataContext = new Cl_DataContextMegaTemplate(config.ConnectionStrings.ConnectionStrings["MedicalChartDatabase"].ConnectionString);
+
+                m_DataContext.Database.Connection.Open();
+
                 m_DataContext.f_Init();
             }
             catch (Exception er)

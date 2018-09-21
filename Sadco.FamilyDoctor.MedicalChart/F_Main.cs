@@ -47,29 +47,13 @@ namespace Sadco.FamilyDoctor.MedicalChart
                 ctrlSessionInfo.Text = string.Format("Пользователь: {0}, {1} | Расположение: {2}", Cl_SessionFacade.f_GetInstance().p_Doctor.p_FIO, rolesVal, Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName);
 
                 p_PanelManager = new UI_PanelManager(ctrl_CustomControls);
-
-                menuMegaTemplate.Visible = false;
-                menuTemplate.Visible = false;
-
-                if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditMegaTemplates)
-                {
-                    menuMegaTemplate.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditMegaTemplates;
-                }
-
-                if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditTemplates)
-                {
-                    menuTemplate.Visible = menuPatterns.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditTemplates;
-                }
-
-                if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsShowDeleted)
-                {
-                    menuMegaTemplateDeleted.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsShowDeleted;
-                }
-
-                if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsShowDeleted)
-                {
-                    menuCatalogs.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditCatalogs;
-                }
+                bool visibleEditor = false;
+                visibleEditor |= menuMegaTemplate.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditMegaTemplates;
+                visibleEditor |= menuTemplate.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditTemplates;
+                visibleEditor |= menuMegaTemplateDeleted.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsShowDeleted;
+                visibleEditor |= menuCatalogs.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditCatalogs;
+                visibleEditor |= menuPatterns.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditAllRecords || Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditSelfRecords;
+                ctrlMIEditor.Visible = visibleEditor;
 
                 f_SetControl<UC_Records>();
             }

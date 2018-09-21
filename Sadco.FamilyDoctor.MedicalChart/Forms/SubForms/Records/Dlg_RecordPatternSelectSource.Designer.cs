@@ -98,10 +98,10 @@
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(379, 3);
-            this.button1.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
+            this.button1.Location = new System.Drawing.Point(505, 3);
+            this.button1.Margin = new System.Windows.Forms.Padding(0, 0, 20, 0);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 25);
+            this.button1.Size = new System.Drawing.Size(100, 25);
             this.button1.TabIndex = 2;
             this.button1.Text = "выбрать";
             this.button1.UseVisualStyleBackColor = true;
@@ -109,10 +109,10 @@
             // button2
             // 
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point(469, 3);
+            this.button2.Location = new System.Drawing.Point(625, 3);
             this.button2.Margin = new System.Windows.Forms.Padding(0);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 25);
+            this.button2.Size = new System.Drawing.Size(100, 25);
             this.button2.TabIndex = 1;
             this.button2.Text = "отменить";
             this.button2.UseVisualStyleBackColor = true;
@@ -123,11 +123,12 @@
             this.ctrl_TreeTemplates.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ctrl_TreeTemplates.ImageKey = "FOLDER_16";
             this.ctrl_TreeTemplates.Location = new System.Drawing.Point(0, 0);
+            this.ctrl_TreeTemplates.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.ctrl_TreeTemplates.Name = "ctrl_TreeTemplates";
             this.ctrl_TreeTemplates.p_IsShowDeleted = false;
             this.ctrl_TreeTemplates.p_ReadOnly = true;
             this.ctrl_TreeTemplates.SelectedImageKey = "FOLDER_16";
-            this.ctrl_TreeTemplates.Size = new System.Drawing.Size(550, 475);
+            this.ctrl_TreeTemplates.Size = new System.Drawing.Size(733, 475);
             this.ctrl_TreeTemplates.TabIndex = 3;
             this.ctrl_TreeTemplates.DoubleClick += new System.EventHandler(this.ctrl_TreeTemplates_DoubleClick);
             // 
@@ -140,19 +141,21 @@
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 475);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(3);
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(550, 32);
+            this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(733, 32);
             this.flowLayoutPanel1.TabIndex = 3;
             // 
             // Dlg_RecordPatternSelectSource
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(550, 507);
+            this.ClientSize = new System.Drawing.Size(733, 507);
             this.Controls.Add(this.ctrl_TreeTemplates);
             this.Controls.Add(this.flowLayoutPanel1);
-            this.MaximumSize = new System.Drawing.Size(1600, 1000);
+            this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold);
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.MaximumSize = new System.Drawing.Size(2128, 1000);
             this.Name = "Dlg_RecordPatternSelectSource";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.ctrl_CMTemplate.ResumeLayout(false);

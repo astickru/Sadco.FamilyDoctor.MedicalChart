@@ -268,8 +268,20 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
         private void ctrl_TemplateDelete_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Удалить шаблон?", "Удаление шаблона", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
             if (p_SelectedTemplate == null && p_SelectedTemplate.p_Template == null) return;
+            string typeName = "шаблон";
+            string typeNameR = "шаблона";
+            if (p_SelectedTemplate.p_Template.p_Type == Cl_Template.E_TemplateType.Block)
+            {
+                typeName = "блок";
+                typeNameR = "блока";
+            }
+            else if(p_SelectedTemplate.p_Template.p_Type == Cl_Template.E_TemplateType.Table)
+            {
+                typeName = "таблицу";
+                typeNameR = "таблицы";
+            }
+            if (MessageBox.Show($"Удалить {typeName} {p_SelectedTemplate.p_Template.p_Name}?", $"Удаление {typeNameR}", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
 
             using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
             {

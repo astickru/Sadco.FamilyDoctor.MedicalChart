@@ -205,7 +205,7 @@
             this.Controls.Add(this.ctrlPFooter);
             this.Controls.Add(this.ctrlMIMenu);
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.MaximumSize = new System.Drawing.Size(1600, 1000);
+            this.MaximumSize = new System.Drawing.Size(1600, 1200);
             this.MinimumSize = new System.Drawing.Size(650, 350);
             this.Name = "F_Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

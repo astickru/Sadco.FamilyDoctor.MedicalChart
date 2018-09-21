@@ -46,6 +46,10 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
                 {
                     ctrlCategoriesTotal.DataSource = null;
                 }
+                if (ctrlCategoriesTotal.Rows.Count > 0)
+                {
+                    ctrlCategoriesTotal.Rows[ctrlCategoriesTotal.Rows.Count - 1].Selected = true;
+                }
             }
             catch (Exception er)
             {
@@ -72,6 +76,10 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
                 catch (Exception er)
                 {
                     MonitoringStub.Error("Error_Editor", "Не удалось обновить клиническую категорию", er, null, null);
+                }
+                if (ctrlCategoriesClinik.Rows.Count > 0)
+                {
+                    ctrlCategoriesClinik.Rows[ctrlCategoriesClinik.Rows.Count - 1].Selected = true;
                 }
             }
             else
@@ -133,6 +141,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
                         {
                             wEdit.Text = string.Format("Изменение категории \"{0}\"", cat.p_Name);
                             wEdit.ctrlCategoryType.Text = "Общая категория";
+                            wEdit.ctrlCategotyName.Text = cat.p_Name;
                             if (wEdit.ShowDialog() == DialogResult.OK)
                             {
                                 cat.p_Name = wEdit.ctrlCategotyName.Text;
@@ -151,6 +160,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
                         {
                             wEdit.Text = string.Format("Изменение категории \"{0}\"", cat.p_Name);
                             wEdit.ctrlCategoryType.Text = "Клиническая категория";
+                            wEdit.ctrlCategotyName.Text = cat.p_Name;
                             if (wEdit.ShowDialog() == DialogResult.OK)
                             {
                                 cat.p_Name = wEdit.ctrlCategotyName.Text;
@@ -169,44 +179,54 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
 
         private void ctrlDelete_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Удалить категорию?", "Удаление категории", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
-            using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
+            Cl_Category cat = null;
+            if (ctrlCategoriesTab.SelectedTab == ctrlTabTotal)
             {
-                try
+                cat = (Cl_Category)ctrlCategoriesTotal.SelectedRows[0].DataBoundItem;
+            }
+            else if (ctrlCategoriesTab.SelectedTab == ctrlTabClinik)
+            {
+                cat = (Cl_Category)ctrlCategoriesClinik.SelectedRows[0].DataBoundItem;
+            }
+            if (cat != null)
+            {
+                if (MessageBox.Show($"Удалить категорию {cat.p_Name}?", "Удаление категории", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+                using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
                 {
-                    if (ctrlCategoriesTab.SelectedTab == ctrlTabTotal)
+                    try
                     {
-                        if (ctrlCategoriesTotal.SelectedRows.Count == 1)
+                        if (ctrlCategoriesTab.SelectedTab == ctrlTabTotal)
                         {
-                            var cat = (Cl_Category)ctrlCategoriesTotal.SelectedRows[0].DataBoundItem;
-                            if (cat != null)
+                            if (ctrlCategoriesTotal.SelectedRows.Count == 1)
                             {
-                                Cl_App.m_DataContext.p_Categories.Remove(cat);
-                                Cl_App.m_DataContext.SaveChanges();
-                                transaction.Commit();
-                                f_RefreshTotal();
+                                if (cat != null)
+                                {
+                                    Cl_App.m_DataContext.p_Categories.Remove(cat);
+                                    Cl_App.m_DataContext.SaveChanges();
+                                    transaction.Commit();
+                                    f_RefreshTotal();
+                                }
+                            }
+                        }
+                        else if (ctrlCategoriesTab.SelectedTab == ctrlTabClinik)
+                        {
+                            if (ctrlCategoriesClinik.SelectedRows.Count == 1)
+                            {
+                                if (cat != null)
+                                {
+                                    Cl_App.m_DataContext.p_Categories.Remove(cat);
+                                    Cl_App.m_DataContext.SaveChanges();
+                                    transaction.Commit();
+                                    f_RefreshClinik();
+                                }
                             }
                         }
                     }
-                    else if (ctrlCategoriesTab.SelectedTab == ctrlTabClinik)
+                    catch
                     {
-                        if (ctrlCategoriesClinik.SelectedRows.Count == 1)
-                        {
-                            var cat = (Cl_Category)ctrlCategoriesClinik.SelectedRows[0].DataBoundItem;
-                            if (cat != null)
-                            {
-                                Cl_App.m_DataContext.p_Categories.Remove(cat);
-                                Cl_App.m_DataContext.SaveChanges();
-                                transaction.Commit();
-                                f_RefreshClinik();
-                            }
-                        }
+                        transaction.Rollback();
+                        MonitoringStub.Error("Error_Tree", "Нельзя удалить категорию", null, null, null);
                     }
-                }
-                catch
-                {
-                    transaction.Rollback();
-                    MonitoringStub.Error("Error_Tree", "Нельзя удалить категорию", null, null, null);
                 }
             }
         }

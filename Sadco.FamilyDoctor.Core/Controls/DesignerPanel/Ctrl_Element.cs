@@ -556,7 +556,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
         }
 
-        private bool f_ValidNumber(string[] a_Texts)
+        private bool f_ValidNumber(string[] a_Texts, bool isKeyPass = false)
         {
             bool valid = true;
             if (p_Element != null && p_Element.p_IsNumber)
@@ -565,7 +565,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 {
                     foreach (string txt in a_Texts)
                     {
-                        if (string.IsNullOrWhiteSpace(txt)) continue;
+                        if (string.IsNullOrWhiteSpace(txt) || (isKeyPass && txt == "-")) continue;
+                        if (txt.LastOrDefault() == '-') return false;
                         decimal x;
                         valid = decimal.TryParse(txt, out x);
                         if (valid)
@@ -611,7 +612,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         txt = tb.Lines.ElementAt(tb.GetLineFromCharIndex(tb.SelectionStart));
                     }
                     txt = string.Format("{0}{1}{2}", txt.Substring(0, pos), e.KeyChar, txt.Substring(pos, txt.Length - pos));
-                    e.Handled = !f_ValidNumber(new string[] { txt });
+                    e.Handled = !f_ValidNumber(new string[] { txt }, true);
                 }
             }
             else
@@ -679,7 +680,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         }
 
         /// <summary>Получение значения элемента записи</summary>
-        public Cl_RecordValue f_GetRecordElementValues(Cl_Record a_Record, bool a_IsRequired = false)
+        public Cl_RecordValue f_GetRecordElementValues(Cl_Record a_Record, bool a_IsValid = false)
         {
             if (a_Record == null || p_Element == null) return null;
             var recordValue = new Cl_RecordValue();
@@ -702,7 +703,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue });
                             }
                         }
-                        else if (a_IsRequired && p_Element.p_Required)
+                        else if (a_IsValid && p_Element.p_Required)
                         {
                             MonitoringStub.Message(string.Format("Заполните поле \"Локация с множественным выбором\" элемента {0}", p_Element.p_Name));
                             return null;
@@ -715,7 +716,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             var ep = (Cl_ElementParam)ctrl_PartLocations.SelectedItem;
                             recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue });
                         }
-                        else if (a_IsRequired && p_Element.p_Required)
+                        else if (a_IsValid && p_Element.p_Required)
                         {
                             MonitoringStub.Message(string.Format("Заполните поле \"Локация\" элемента {0}", p_Element.p_Name));
                             return null;
@@ -741,14 +742,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                         recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue, p_IsDop = true });
                                     }
                                 }
-                                else if (a_IsRequired && p_Element.p_Required)
+                                else if (a_IsValid && p_Element.p_Required)
                                 {
                                     MonitoringStub.Message(string.Format("Заполните поле \"Значения с множественным выбором из справочника для симметрического параметра\" элемента {0}", p_Element.p_Name));
                                     return null;
                                 }
                             }
                         }
-                        else if (a_IsRequired && p_Element.p_Required)
+                        else if (a_IsValid && p_Element.p_Required)
                         {
                             MonitoringStub.Message(string.Format("Заполните поле \"Значения с множественным выбором из справочника\" элемента {0}", p_Element.p_Name));
                             return null;
@@ -767,14 +768,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                     ep = (Cl_ElementParam)ctrl_DopValues.SelectedItem;
                                     recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue, p_IsDop = true });
                                 }
-                                else if (a_IsRequired && p_Element.p_Required)
+                                else if (a_IsValid && p_Element.p_Required)
                                 {
                                     MonitoringStub.Message(string.Format("Заполните поле \"Значение из справочника для симметрического параметра\" элемента {0}", p_Element.p_Name));
                                     return null;
                                 }
                             }
                         }
-                        else if (a_IsRequired && p_Element.p_Required)
+                        else if (a_IsValid && p_Element.p_Required)
                         {
                             MonitoringStub.Message(string.Format("Заполните поле \"Значение из справочника\" элемента {0}", p_Element.p_Name));
                             return null;
@@ -787,21 +788,37 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     {
                         if (ctrl_Value != null && !string.IsNullOrWhiteSpace(ctrl_Value.Text))
                         {
+                            if (a_IsValid && p_Element.p_IsNumber)
+                            {
+                                if (!f_ValidNumber(new[] { ctrl_Value.Text }))
+                                {
+                                    MonitoringStub.Message($"Значения поля \"Значение\" не являются числовыми или не соответствуют точности числа элемента {p_Element.p_Name}");
+                                    return null;
+                                }
+                            }
                             recordValue.p_ValueUser = ctrl_Value.Text;
                             if (p_Element.p_Symmetrical)
                             {
                                 if (ctrl_DopValue != null && !string.IsNullOrWhiteSpace(ctrl_DopValue.Text))
                                 {
+                                    if (a_IsValid && p_Element.p_IsNumber)
+                                    {
+                                        if (!f_ValidNumber(new[] { ctrl_DopValue.Text }))
+                                        {
+                                            MonitoringStub.Message($"Значения поля \"Значение для симметрического параметра\" не являются числовыми или не соответствуют точности числа элемента {p_Element.p_Name}");
+                                            return null;
+                                        }
+                                    }
                                     recordValue.p_ValueDopUser = ctrl_DopValue.Text;
                                 }
-                                else if (a_IsRequired && p_Element.p_Required)
+                                else if (a_IsValid && p_Element.p_Required)
                                 {
                                     MonitoringStub.Message(string.Format("Заполните поле \"Значение для симметрического параметра\" элемента {0}", p_Element.p_Name));
                                     return null;
                                 }
                             }
                         }
-                        else if (a_IsRequired && p_Element.p_Required)
+                        else if (a_IsValid && p_Element.p_Required)
                         {
                             MonitoringStub.Message(string.Format("Заполните поле \"Значение\" элемента {0}", p_Element.p_Name));
                             return null;
@@ -818,14 +835,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 {
                                     recordValue.p_ValueDopUser = ctrl_DopValueBox.Text;
                                 }
-                                else if (a_IsRequired && p_Element.p_Required)
+                                else if (a_IsValid && p_Element.p_Required)
                                 {
                                     MonitoringStub.Message(string.Format("Заполните поле \"Значение для симметрического параметра\" элемента {0}", p_Element.p_Name));
                                     return null;
                                 }
                             }
                         }
-                        else if (a_IsRequired && p_Element.p_Required)
+                        else if (a_IsValid && p_Element.p_Required)
                         {
                             MonitoringStub.Message(string.Format("Заполните поле \"Значение\" элемента {0}", p_Element.p_Name));
                             return null;

@@ -226,7 +226,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             int total = 0;
             if (p_Record == null) return;
 
-            ctrlBRating.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditAllRatings;
+            ctrlBRating.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditAllRatings && p_Record != null && p_Record.p_Version > 0;
 
             try
             {

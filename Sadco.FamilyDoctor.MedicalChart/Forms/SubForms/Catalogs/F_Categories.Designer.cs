@@ -54,7 +54,7 @@
             this.ctrlCategoriesTab.Location = new System.Drawing.Point(0, 0);
             this.ctrlCategoriesTab.Name = "ctrlCategoriesTab";
             this.ctrlCategoriesTab.SelectedIndex = 0;
-            this.ctrlCategoriesTab.Size = new System.Drawing.Size(602, 638);
+            this.ctrlCategoriesTab.Size = new System.Drawing.Size(688, 638);
             this.ctrlCategoriesTab.TabIndex = 0;
             // 
             // ctrlTabTotal
@@ -63,7 +63,7 @@
             this.ctrlTabTotal.Location = new System.Drawing.Point(4, 22);
             this.ctrlTabTotal.Name = "ctrlTabTotal";
             this.ctrlTabTotal.Padding = new System.Windows.Forms.Padding(3);
-            this.ctrlTabTotal.Size = new System.Drawing.Size(594, 612);
+            this.ctrlTabTotal.Size = new System.Drawing.Size(680, 612);
             this.ctrlTabTotal.TabIndex = 0;
             this.ctrlTabTotal.Text = "Общая категория";
             this.ctrlTabTotal.UseVisualStyleBackColor = true;
@@ -79,7 +79,7 @@
             this.ctrlCategoriesTotal.Name = "ctrlCategoriesTotal";
             this.ctrlCategoriesTotal.ReadOnly = true;
             this.ctrlCategoriesTotal.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ctrlCategoriesTotal.Size = new System.Drawing.Size(588, 606);
+            this.ctrlCategoriesTotal.Size = new System.Drawing.Size(674, 606);
             this.ctrlCategoriesTotal.TabIndex = 0;
             this.ctrlCategoriesTotal.SelectionChanged += new System.EventHandler(this.ctrlCategoriesTotal_SelectionChanged);
             // 
@@ -89,7 +89,7 @@
             this.ctrlTabClinik.Location = new System.Drawing.Point(4, 22);
             this.ctrlTabClinik.Name = "ctrlTabClinik";
             this.ctrlTabClinik.Padding = new System.Windows.Forms.Padding(3);
-            this.ctrlTabClinik.Size = new System.Drawing.Size(594, 612);
+            this.ctrlTabClinik.Size = new System.Drawing.Size(680, 612);
             this.ctrlTabClinik.TabIndex = 1;
             this.ctrlTabClinik.Text = "Клиническая категория";
             this.ctrlTabClinik.UseVisualStyleBackColor = true;
@@ -105,7 +105,7 @@
             this.ctrlCategoriesClinik.Name = "ctrlCategoriesClinik";
             this.ctrlCategoriesClinik.ReadOnly = true;
             this.ctrlCategoriesClinik.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ctrlCategoriesClinik.Size = new System.Drawing.Size(588, 606);
+            this.ctrlCategoriesClinik.Size = new System.Drawing.Size(674, 606);
             this.ctrlCategoriesClinik.TabIndex = 1;
             this.ctrlCategoriesClinik.SelectionChanged += new System.EventHandler(this.ctrlCategoriesClinik_SelectionChanged);
             // 
@@ -115,10 +115,10 @@
             // 
             // ctrlAdd
             // 
-            this.ctrlAdd.Location = new System.Drawing.Point(318, 3);
-            this.ctrlAdd.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
+            this.ctrlAdd.Location = new System.Drawing.Point(364, 3);
+            this.ctrlAdd.Margin = new System.Windows.Forms.Padding(0, 0, 17, 0);
             this.ctrlAdd.Name = "ctrlAdd";
-            this.ctrlAdd.Size = new System.Drawing.Size(82, 25);
+            this.ctrlAdd.Size = new System.Drawing.Size(94, 25);
             this.ctrlAdd.TabIndex = 1;
             this.ctrlAdd.Text = "добавить";
             this.ctrlAdd.UseVisualStyleBackColor = true;
@@ -127,10 +127,10 @@
             // ctrlEdit
             // 
             this.ctrlEdit.Enabled = false;
-            this.ctrlEdit.Location = new System.Drawing.Point(415, 3);
-            this.ctrlEdit.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
+            this.ctrlEdit.Location = new System.Drawing.Point(475, 3);
+            this.ctrlEdit.Margin = new System.Windows.Forms.Padding(0, 0, 17, 0);
             this.ctrlEdit.Name = "ctrlEdit";
-            this.ctrlEdit.Size = new System.Drawing.Size(83, 25);
+            this.ctrlEdit.Size = new System.Drawing.Size(95, 25);
             this.ctrlEdit.TabIndex = 2;
             this.ctrlEdit.Text = "изменить";
             this.ctrlEdit.UseVisualStyleBackColor = true;
@@ -139,10 +139,10 @@
             // ctrlDelete
             // 
             this.ctrlDelete.Enabled = false;
-            this.ctrlDelete.Location = new System.Drawing.Point(513, 3);
+            this.ctrlDelete.Location = new System.Drawing.Point(587, 3);
             this.ctrlDelete.Margin = new System.Windows.Forms.Padding(0);
             this.ctrlDelete.Name = "ctrlDelete";
-            this.ctrlDelete.Size = new System.Drawing.Size(83, 25);
+            this.ctrlDelete.Size = new System.Drawing.Size(95, 25);
             this.ctrlDelete.TabIndex = 0;
             this.ctrlDelete.Text = "удалить";
             this.ctrlDelete.UseVisualStyleBackColor = true;
@@ -159,18 +159,18 @@
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(3);
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(602, 32);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(688, 32);
             this.flowLayoutPanel1.TabIndex = 3;
             // 
             // F_Categories
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(602, 638);
+            this.ClientSize = new System.Drawing.Size(688, 638);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.ctrlCategoriesTab);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.MaximumSize = new System.Drawing.Size(1600, 1000);
+            this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold);
+            this.MaximumSize = new System.Drawing.Size(1826, 1000);
             this.Name = "F_Categories";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Справочник категорий";

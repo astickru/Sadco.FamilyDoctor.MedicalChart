@@ -60,6 +60,219 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             return templates.ToArray();
         }
 
+        #region TPartNormRangeValues
+        private byte? f_GetAgeFrom(DataGridViewRow a_Row)
+        {
+            byte bVal = 0;
+            if (a_Row.Cells[0].Value == null)
+            {
+                MonitoringStub.Message("Поле \"Возраст от\" пустое!");
+                return null;
+            }
+            else
+            {
+                if (byte.TryParse(a_Row.Cells[0].Value.ToString(), out bVal))
+                    return bVal;
+                else
+                {
+                    MonitoringStub.Message("Значение поля \"Возраст от\" не корректное!");
+                    return null;
+                }
+            }
+        }
+
+        private byte? f_GetAgeTo(DataGridViewRow a_Row)
+        {
+            byte bVal = 0;
+            if (a_Row.Cells[1].Value == null)
+            {
+                MonitoringStub.Message("Поле \"Возраст до\" пустое!");
+                return null;
+            }
+            else
+            {
+                if (byte.TryParse(a_Row.Cells[1].Value.ToString(), out bVal))
+                    return bVal;
+                else
+                {
+                    MonitoringStub.Message("Значение поля \"Возраст до\" не корректное!");
+                    return null;
+                }
+            }
+        }
+
+        private decimal? f_GetMaleMin(DataGridViewRow a_Row)
+        {
+            decimal dVal = 0;
+            if (a_Row.Cells[2].Value == null)
+            {
+                MonitoringStub.Message("Поле \"Муж мин\" пустое!");
+                return null;
+            }
+            else
+            {
+                if (decimal.TryParse(a_Row.Cells[2].Value.ToString(), out dVal))
+                {
+                    if (f_ValidNumber(new string[] { dVal.ToString() }))
+                        return dVal;
+                    else
+                    {
+                        MonitoringStub.Message("Значение поля \"Муж мин\" не соответствует точности!");
+                        return null;
+                    }
+                }
+                else
+                {
+                    MonitoringStub.Message("Значение поля \"Муж мин\" не корректное!");
+                    return null;
+                }
+            }
+        }
+
+        private decimal? f_GetMaleMax(DataGridViewRow a_Row)
+        {
+            decimal dVal = 0;
+            if (a_Row.Cells[3].Value == null)
+            {
+                MonitoringStub.Message("Поле \"Муж макс\" пустое!");
+                return null;
+            }
+            else
+            {
+                if (decimal.TryParse(a_Row.Cells[3].Value.ToString(), out dVal))
+                {
+                    if (f_ValidNumber(new string[] { dVal.ToString() }))
+                        return dVal;
+                    else
+                    {
+                        MonitoringStub.Message("Значение поля \"Муж макс\" не соответствует точности!");
+                        return null;
+                    }
+                }
+                else
+                {
+                    MonitoringStub.Message("Значение поля \"Муж макс\" не корректное!");
+                    return null;
+                }
+            }
+        }
+
+        private decimal? f_GetFemaleMin(DataGridViewRow a_Row)
+        {
+            decimal dVal = 0;
+            if (a_Row.Cells[4].Value == null)
+            {
+                MonitoringStub.Message("Поле \"Жен мин\" пустое!");
+                return null;
+            }
+            else
+            {
+                if (decimal.TryParse(a_Row.Cells[4].Value.ToString(), out dVal))
+                {
+                    if (f_ValidNumber(new string[] { dVal.ToString() }))
+                        return dVal;
+                    else
+                    {
+                        MonitoringStub.Message("Значение поля \"Жен мин\" не соответствует точности!");
+                        return null;
+                    }
+                }
+                else
+                {
+                    MonitoringStub.Message("Значение поля \"Жен мин\" не корректное!");
+                    return null;
+                }
+            }
+        }
+
+        private decimal? f_GetFemaleMax(DataGridViewRow a_Row)
+        {
+            decimal dVal = 0;
+            if (a_Row.Cells[5].Value == null)
+            {
+                MonitoringStub.Message("Поле \"Жен макс\" пустое!");
+                return null;
+            }
+            else
+            {
+                if (decimal.TryParse(a_Row.Cells[5].Value.ToString(), out dVal))
+                {
+                    if (f_ValidNumber(new string[] { dVal.ToString() }))
+                        return dVal;
+                    else
+                    {
+                        MonitoringStub.Message("Значение поля \"Жен макс\" не соответствует точности!");
+                        return null;
+                    }
+                }
+                else
+                {
+                    MonitoringStub.Message("Значение поля \"Жен макс\" не корректное!");
+                    return null;
+                }
+            }
+        }
+
+        private List<Cl_AgeNorm> f_GetPartNormRanges(int a_ElementID)
+        {
+            var norms = new List<Cl_AgeNorm>();
+            decimal? dVal = null;
+            byte? bVal = null;
+            foreach (DataGridViewRow row in ctrl_TPartNormRangeValues.Rows)
+            {
+                if (!row.IsNewRow)
+                {
+                    Cl_AgeNorm norm = new Cl_AgeNorm();
+                    bVal = f_GetAgeFrom(row);
+                    if (bVal != null) norm.p_AgeFrom = (byte)bVal;
+                    else return null;
+
+                    bVal = f_GetAgeTo(row);
+                    if (bVal != null) norm.p_AgeTo = (byte)bVal;
+                    else return null;
+
+                    if (norm.p_AgeFrom > norm.p_AgeTo)
+                    {
+                        MonitoringStub.Message("Значение поля \"Возраст от\" больше значения поля \"Возраст до\"!");
+                        return null;
+                    }
+
+                    dVal = f_GetMaleMin(row);
+                    if (dVal != null) norm.p_MaleMin = (decimal)dVal;
+                    else return null;
+                    dVal = f_GetMaleMax(row);
+                    if (dVal != null) norm.p_MaleMax = (decimal)dVal;
+                    else return null;
+
+                    dVal = f_GetFemaleMin(row);
+                    if (dVal != null) norm.p_FemaleMin = (decimal)dVal;
+                    else return null;
+                    dVal = f_GetFemaleMax(row);
+                    if (dVal != null) norm.p_FemaleMax = (decimal)dVal;
+                    else return null;
+
+                    norm.p_ElementID = a_ElementID;
+                    norms.Add(norm);
+                }
+            }
+            return norms;
+        }
+
+        private void ctrl_TPartNormRangeValues_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex > -1)
+            {
+                if (e.ColumnIndex == 0) f_GetAgeFrom(ctrl_TPartNormRangeValues.Rows[e.RowIndex]);
+                if (e.ColumnIndex == 1) f_GetAgeTo(ctrl_TPartNormRangeValues.Rows[e.RowIndex]);
+                if (e.ColumnIndex == 2) f_GetMaleMin(ctrl_TPartNormRangeValues.Rows[e.RowIndex]);
+                if (e.ColumnIndex == 3) f_GetMaleMax(ctrl_TPartNormRangeValues.Rows[e.RowIndex]);
+                if (e.ColumnIndex == 4) f_GetFemaleMin(ctrl_TPartNormRangeValues.Rows[e.RowIndex]);
+                if (e.ColumnIndex == 5) f_GetFemaleMax(ctrl_TPartNormRangeValues.Rows[e.RowIndex]);
+            }
+        }
+
+        #endregion
+
         public object f_ConfirmChanges()
         {
             if (!f_ValidNumber(ctrl_NormValues.Lines))
@@ -89,7 +302,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 try
                 {
-
                     decimal dVal = 0;
                     Cl_Element el = null;
                     if (p_EditingElement.p_Version == 0)
@@ -173,160 +385,15 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     el.p_PartAgeNorms.Clear();
                     if (el.p_IsPartNormRange)
                     {
-                        if (ctrl_TPartNormRangeValues.DataSource is DataTable)
+                        var norms = f_GetPartNormRanges(el.p_ID);
+                        if (norms != null)
                         {
-                            DataTable dt = (DataTable)ctrl_TPartNormRangeValues.DataSource;
-                            foreach (DataRow row in dt.Rows)
-                            {
-                                Cl_AgeNorm norm = new Cl_AgeNorm();
-                                byte bVal = 0;
-                                if (row["p_AgeFrom"] == null)
-                                {
-                                    MonitoringStub.Message("Поле \"Возраст от\" пустое!");
-                                    transaction.Rollback();
-                                    return null;
-                                }
-                                else
-                                {
-                                    if (byte.TryParse(row["p_AgeFrom"].ToString(), out bVal))
-                                        norm.p_AgeFrom = bVal;
-                                    else
-                                    {
-                                        MonitoringStub.Message("Значение поля \"Возраст от\" не корректное!");
-                                        transaction.Rollback();
-                                        return null;
-                                    }
-                                }
-                                if (row["p_AgeTo"] == null)
-                                {
-                                    MonitoringStub.Message("Поле \"Возраст до\" пустое!");
-                                    transaction.Rollback();
-                                    return null;
-                                }
-                                else
-                                {
-                                    if (byte.TryParse(row["p_AgeTo"].ToString(), out bVal))
-                                        norm.p_AgeTo = bVal;
-                                    else
-                                    {
-                                        MonitoringStub.Message("Значение поля \"Возраст до\" не корректное!");
-                                        transaction.Rollback();
-                                        return null;
-                                    }
-                                }
-                                if (norm.p_AgeFrom > norm.p_AgeTo)
-                                {
-                                    MonitoringStub.Message("Значение поля \"Возраст от\" больше значения поля \"Возраст до\"!");
-                                    transaction.Rollback();
-                                    return null;
-                                }
-                                if (row["p_MaleMin"] == null)
-                                {
-                                    MonitoringStub.Message("Поле \"Муж мин\" пустое!");
-                                    transaction.Rollback();
-                                    return null;
-                                }
-                                else
-                                {
-                                    if (decimal.TryParse(row["p_MaleMin"].ToString(), out dVal))
-                                    {
-                                        if (f_ValidNumber(new string[] { dVal.ToString() }))
-                                            norm.p_MaleMin = dVal;
-                                        else
-                                        {
-                                            MonitoringStub.Message("Значение поля \"Муж мин\" не соответствует точности!");
-                                            transaction.Rollback();
-                                            return null;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        MonitoringStub.Message("Значение поля \"Муж мин\" не корректное!");
-                                        transaction.Rollback();
-                                        return null;
-                                    }
-                                }
-                                if (row["p_MaleMax"] == null)
-                                {
-                                    MonitoringStub.Message("Поле \"Муж макс\" пустое!");
-                                    transaction.Rollback();
-                                    return null;
-                                }
-                                else
-                                {
-                                    if (decimal.TryParse(row["p_MaleMax"].ToString(), out dVal))
-                                    {
-                                        if (f_ValidNumber(new string[] { dVal.ToString() }))
-                                            norm.p_MaleMax = dVal;
-                                        else
-                                        {
-                                            MonitoringStub.Message("Значение поля \"Муж макс\" не соответствует точности!");
-                                            transaction.Rollback();
-                                            return null;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        MonitoringStub.Message("Значение поля \"Муж макс\" не корректное!");
-                                        transaction.Rollback();
-                                        return null;
-                                    }
-                                }
-                                if (row["p_FemaleMin"] == null)
-                                {
-                                    MonitoringStub.Message("Поле \"Жен мин\" пустое!");
-                                    transaction.Rollback();
-                                    return null;
-                                }
-                                else
-                                {
-                                    if (decimal.TryParse(row["p_FemaleMin"].ToString(), out dVal))
-                                    {
-                                        if (f_ValidNumber(new string[] { dVal.ToString() }))
-                                            norm.p_FemaleMin = dVal;
-                                        else
-                                        {
-                                            MonitoringStub.Message("Значение поля \"Жен мин\" не соответствует точности!");
-                                            transaction.Rollback();
-                                            return null;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        MonitoringStub.Message("Значение поля \"Жен мин\" не корректное!");
-                                        transaction.Rollback();
-                                        return null;
-                                    }
-                                }
-                                if (row["p_FemaleMax"] == null)
-                                {
-                                    MonitoringStub.Message("Поле \"Жен макс\" пустое!");
-                                    transaction.Rollback();
-                                    return null;
-                                }
-                                else
-                                {
-                                    if (decimal.TryParse(row["p_FemaleMax"].ToString(), out dVal))
-                                    {
-                                        if (f_ValidNumber(new string[] { dVal.ToString() }))
-                                            norm.p_FemaleMax = dVal;
-                                        else
-                                        {
-                                            MonitoringStub.Message("Значение поля \"Жен макс\" не соответствует точности!");
-                                            transaction.Rollback();
-                                            return null;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        MonitoringStub.Message("Значение поля \"Жен макс\" не корректное!");
-                                        transaction.Rollback();
-                                        return null;
-                                    }
-                                }
-                                norm.p_ElementID = el.p_ID;
-                                el.p_PartAgeNorms.Add(norm);
-                            }
+                            el.p_PartAgeNorms.AddRange(norms);
+                        }
+                        else
+                        {
+                            transaction.Rollback();
+                            return null;
                         }
                     }
 
@@ -526,10 +593,19 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 m_IsBlockPartNorm = false;
             }
         }
+
+        private void ctrl_IsEditing_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!ctrl_IsPartPost.Checked)
+            {
+                ctrl_IsRequiredFIeld.Checked = false;
+            }
+            ctrl_IsRequiredFIeld.Enabled = ctrl_IsEditing.Checked;
+        }
         #endregion
 
         #region Number
-        private bool f_ValidNumber(string[] a_Texts)
+        private bool f_ValidNumber(string[] a_Texts, bool isKeyPass = false)
         {
             bool valid = true;
             if (ctrl_IsNumber.Checked)
@@ -538,7 +614,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 {
                     foreach (string txt in a_Texts)
                     {
-                        if (string.IsNullOrWhiteSpace(txt)) continue;
+                        if (string.IsNullOrWhiteSpace(txt) || (isKeyPass && txt == "-")) continue;
+                        if (txt.LastOrDefault() == '-') return false;
                         decimal x;
                         valid = decimal.TryParse(txt, out x);
                         if (valid)
@@ -584,7 +661,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         txt = el.Lines.ElementAt(el.GetLineFromCharIndex(el.SelectionStart));
                     }
                     txt = string.Format("{0}{1}{2}", txt.Substring(0, pos), e.KeyChar, txt.Substring(pos, txt.Length - pos));
-                    e.Handled = !f_ValidNumber(new string[] { txt });
+                    e.Handled = !f_ValidNumber(new string[] { txt }, true);
                 }
             }
             else
@@ -618,7 +695,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         private void ctrl_PartNormValue_KeyPress(object sender, KeyPressEventArgs e)
         {
             TextBox el = ((TextBox)sender);
-            e.Handled = !f_ValidNumber(new string[] { el.Text + e.KeyChar });
+            e.Handled = !f_ValidNumber(new string[] { el.Text + e.KeyChar }, true);
         }
 
         private void ctrl_Default_KeyPress(object sender, KeyPressEventArgs e)
