@@ -174,6 +174,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 }
             }
             ctrlMenuDel.Visible = Items.Count > 0;
+            this.Invalidate();
         }
 
         protected override void OnPaintBackground(PaintEventArgs e)
@@ -415,6 +416,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
         /// Raises the <see cref="E:System.Windows.Forms.Control.MouseMove"/> event.
         /// </summary>
         /// <param name="e">A <see cref="T:System.Windows.Forms.MouseEventArgs"/> that contains the event data. </param>
+        [DebuggerHidden]
         protected override void OnMouseMove(MouseEventArgs e)
         {
             if (this.p_AllowItemDrag && !this.IsDragging && e.Button == MouseButtons.Left && this.f_IsOutsideDragZone(e.Location))

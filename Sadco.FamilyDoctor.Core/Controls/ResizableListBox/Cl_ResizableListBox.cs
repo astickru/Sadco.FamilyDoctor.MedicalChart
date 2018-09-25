@@ -16,6 +16,7 @@
 // ////////////////////////////////////////////////////////////////////////////
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -143,6 +144,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.ResizableListBox
         /// like in the original ListBox.
         /// </summary>
         /// <param name="pe"></param>
+        [DebuggerHidden]
         protected override void OnPaint(PaintEventArgs pe)
         {
             base.OnPaint(pe);
