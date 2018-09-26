@@ -104,11 +104,11 @@ namespace Sadco.FamilyDoctor.Core.Controls
         [Category("Property Changed")]
         public event EventHandler e_AllowItemDragChanged;
 
-        /// <summary>
-        /// Occurs when the InsertionLineColor property value changes.
-        /// </summary>
-        [Category("Property Changed")]
-        public event EventHandler InsertionLineColorChanged;
+        ///// <summary>
+        ///// Occurs when the InsertionLineColor property value changes.
+        ///// </summary>
+        //[Category("Property Changed")]
+        //public event EventHandler InsertionLineColorChanged;
 
         ///// <summary>
         ///// Occurs when the user begins dragging an item.

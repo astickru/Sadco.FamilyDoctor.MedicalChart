@@ -47,7 +47,9 @@
             this.ctrlBRating = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.ctrlBHistory = new System.Windows.Forms.Button();
+            this.ctrlBFormatByPattern = new System.Windows.Forms.Button();
             this.ctrlBSave = new System.Windows.Forms.Button();
+            this.ctrlBMKB = new System.Windows.Forms.Button();
             this.ctrl_CMTemplate.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -213,6 +215,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.ctrlBMKB);
             this.panel2.Controls.Add(this.ctrlBRating);
             this.panel2.Controls.Add(this.flowLayoutPanel1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -237,12 +240,13 @@
             // 
             this.flowLayoutPanel1.AutoSize = true;
             this.flowLayoutPanel1.Controls.Add(this.ctrlBHistory);
+            this.flowLayoutPanel1.Controls.Add(this.ctrlBFormatByPattern);
             this.flowLayoutPanel1.Controls.Add(this.ctrlBSave);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(983, 3);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(780, 3);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(213, 26);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(416, 26);
             this.flowLayoutPanel1.TabIndex = 3;
             this.flowLayoutPanel1.WrapContents = false;
             // 
@@ -257,9 +261,20 @@
             this.ctrlBHistory.UseVisualStyleBackColor = true;
             this.ctrlBHistory.Click += new System.EventHandler(this.ctrlBHistory_Click);
             // 
+            // ctrlBFormatByPattern
+            // 
+            this.ctrlBFormatByPattern.Location = new System.Drawing.Point(114, 0);
+            this.ctrlBFormatByPattern.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
+            this.ctrlBFormatByPattern.Name = "ctrlBFormatByPattern";
+            this.ctrlBFormatByPattern.Size = new System.Drawing.Size(188, 25);
+            this.ctrlBFormatByPattern.TabIndex = 2;
+            this.ctrlBFormatByPattern.Text = "заполнить по патерну";
+            this.ctrlBFormatByPattern.UseVisualStyleBackColor = true;
+            this.ctrlBFormatByPattern.Click += new System.EventHandler(this.ctrlBFormatByPattern_Click);
+            // 
             // ctrlBSave
             // 
-            this.ctrlBSave.Location = new System.Drawing.Point(114, 0);
+            this.ctrlBSave.Location = new System.Drawing.Point(317, 0);
             this.ctrlBSave.Margin = new System.Windows.Forms.Padding(0);
             this.ctrlBSave.Name = "ctrlBSave";
             this.ctrlBSave.Size = new System.Drawing.Size(99, 25);
@@ -267,6 +282,17 @@
             this.ctrlBSave.Text = "сохранить";
             this.ctrlBSave.UseVisualStyleBackColor = true;
             this.ctrlBSave.Click += new System.EventHandler(this.ctrlBSave_Click);
+            // 
+            // ctrlBMKB
+            // 
+            this.ctrlBMKB.Dock = System.Windows.Forms.DockStyle.Left;
+            this.ctrlBMKB.Location = new System.Drawing.Point(102, 3);
+            this.ctrlBMKB.Name = "ctrlBMKB";
+            this.ctrlBMKB.Size = new System.Drawing.Size(99, 26);
+            this.ctrlBMKB.TabIndex = 4;
+            this.ctrlBMKB.Text = "МКБ";
+            this.ctrlBMKB.UseVisualStyleBackColor = true;
+            this.ctrlBMKB.Click += new System.EventHandler(this.ctrlBMKB_Click);
             // 
             // Dlg_Record
             // 
@@ -316,5 +342,7 @@
         private System.Windows.Forms.TextBox ctrlTitle;
         private System.Windows.Forms.Button ctrlBRating;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Button ctrlBFormatByPattern;
+        private System.Windows.Forms.Button ctrlBMKB;
     }
 }

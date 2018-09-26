@@ -2,6 +2,7 @@
 using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.Facades;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -87,6 +88,7 @@ namespace Sadco.FamilyDoctor.LoaderRecords {
         {
             string path = null;
             string dbConnection = null;
+            var medicalCards = new Dictionary<string, Cl_MedicalCard>();
 
             if (args != null && args.Length >= 4)
             {
@@ -142,7 +144,7 @@ namespace Sadco.FamilyDoctor.LoaderRecords {
                             {
                                 if (int.TryParse(vals[0], out iVal))
                                 {
-                                    var medicalCardID = iVal;
+                                    var medicalNumber = iVal;
                                     var patientSurName = vals[1];
                                     var patientName = vals[2];
                                     var patientLastName = vals[3];
@@ -190,14 +192,26 @@ namespace Sadco.FamilyDoctor.LoaderRecords {
                                                                 record.p_Type = E_RecordType.FinishedFile;
                                                                 record.p_IsAutomatic = true;
                                                                 record.p_DateCreate = record.p_DateForming = record.p_DateLastChange = dtVal;
-                                                                record.p_MedicalCardID = medicalCardID;
-                                                                record.p_PatientID = patientID;
-                                                                if (patientUID != Guid.Empty)
-                                                                    record.p_PatientUID = patientUID;
-                                                                record.p_PatientSurName = patientSurName;
-                                                                record.p_PatientName = patientName;
-                                                                record.p_PatientLastName = patientLastName;
-                                                                record.p_PatientDateBirth = patientDateBirth;
+                                                                
+                                                                string patID = patientUID != Guid.Empty ? patientUID.ToString() : patientID.ToString();
+                                                                string medicalCardKey = $"{medicalNumber}_{patID}";
+                                                                Cl_MedicalCard medicalCard = null;
+                                                                if (!medicalCards.TryGetValue(medicalCardKey, out medicalCard))
+                                                                {
+                                                                    medicalCard = new Cl_MedicalCard();
+                                                                    medicalCard.p_Number = medicalNumber.ToString();
+                                                                    medicalCard.p_DateCreate = record.p_DateCreate;
+                                                                    medicalCard.p_PatientID = patientID;
+                                                                    if (patientUID != Guid.Empty)
+                                                                        medicalCard.p_PatientUID = patientUID;
+                                                                    medicalCard.p_PatientSurName = patientSurName;
+                                                                    medicalCard.p_PatientName = patientName;
+                                                                    medicalCard.p_PatientLastName = patientLastName;
+                                                                    medicalCard.p_PatientDateBirth = patientDateBirth;
+                                                                    medicalCards.Add(medicalCardKey, medicalCard);
+                                                                }
+                                                                record.p_MedicalCard = medicalCard;
+
                                                                 record.p_ClinicName = clinik;
                                                                 record.p_CategoryTotalID = category.p_ID;
                                                                 record.p_CategoryTotal = category;

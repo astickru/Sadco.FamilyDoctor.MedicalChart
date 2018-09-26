@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Sadco.FamilyDoctor.Core.Data;
 using Sadco.FamilyDoctor.Core.Entities;
@@ -13,7 +14,7 @@ namespace Sadco.FamilyDoctor.UnitTestProject
     {
         private string f_GetConnectionString()
         {
-            return @"Data Source=(localdb)\mssqllocaldb;Initial Catalog=MedicalChart;Integrated Security=True";
+            return @"Server=(localdb)\mssqllocaldb;Database=FamilyDoctor.InMemory;Trusted_Connection=True;ConnectRetryCount=0";
         }
 
         [TestMethod]
@@ -21,8 +22,10 @@ namespace Sadco.FamilyDoctor.UnitTestProject
         {
             //tag_one = "pat2"; tag_dva = 11; tag_tri = 5
             var record = new Cl_Record() { p_Title = "Тест проверки формул" };
-            record.p_PatientSex = Core.Permision.Cl_User.E_Sex.Man;
-            record.p_PatientDateBirth = new DateTime(1981, 4, 1);
+            var medicalCard = new Cl_MedicalCard();
+            medicalCard.p_PatientSex = Core.Permision.Cl_User.E_Sex.Man;
+            medicalCard.p_PatientDateBirth = new DateTime(1981, 4, 1);
+            record.p_MedicalCard = medicalCard;
             record.p_Values = new List<Cl_RecordValue>();
 
             var template = new Cl_Template() { p_Name = "Тест проверки формул", p_Type = Cl_Template.E_TemplateType.Template };
@@ -252,15 +255,91 @@ namespace Sadco.FamilyDoctor.UnitTestProject
             {
                 vals.Add(new Cl_RecordValue() { p_ElementID = el.p_ID, p_Element = el, p_ValueUser = "5" });
             }
-            result = Cl_RecordsFacade.f_GetInstance().f_CreateRecord(catTotal, catClinic, "Заголовок API тест - значения", "Клиника API тест значения", 56369, 10,
+            var medicalCard1 = Cl_MedicalCardsFacade.f_GetInstance().f_CreateMedicalCard("777", 1, Core.Permision.Cl_User.E_Sex.Man, "Иванов", "Иван", "Иванович", new DateTime(1996, 3, 11), "Медкарта API тест 777");
+            Assert.IsNotNull(medicalCard1);
+            result = Cl_RecordsFacade.f_GetInstance().f_CreateRecord(medicalCard1, catTotal, catClinic, "Заголовок API тест - значения", "Клиника API тест значения", 56369, 10,
                 "Доктор_Фамилия", "Доктор_Имя", "Доктор_Отчество",
                 201, Core.Permision.Cl_User.E_Sex.Man, "Пациент_Фамилия", "Пациент_Имя", "Пациент_Отчество", new DateTime(1983, 3, 21), tmpl, vals);
             Assert.AreEqual(true, result);
-            result = Cl_RecordsFacade.f_GetInstance().f_CreateRecord(catTotal, catClinic, "Заголовок API тест - файл", "Клиника API тест файл", 56369, 10,
+            result = Cl_RecordsFacade.f_GetInstance().f_CreateRecord(medicalCard1, catTotal, catClinic, "Заголовок API тест - файл", "Клиника API тест файл", 56369, 10,
                 "Доктор_Фамилия", "Доктор_Имя", "Доктор_Отчество",
                 201, Core.Permision.Cl_User.E_Sex.Man, "Пациент_Фамилия", "Пациент_Имя", "Пациент_Отчество", new DateTime(1983, 3, 21),
                 E_RecordFileType.HTML, Encoding.UTF8.GetBytes("<h1>API тест файл<h1>"));
             Assert.AreEqual(true, result);
+        }
+
+        [TestMethod]
+        public void f_TestCreateMedicalCard()
+        {
+            var dc = new Cl_DataContextMegaTemplate(f_GetConnectionString());
+            dc.f_Init();
+            var result = Cl_MedicalCardsFacade.f_GetInstance().f_Init(dc);
+            Assert.AreEqual(true, result);
+
+            using (var transaction = dc.Database.BeginTransaction())
+            {
+                try
+                {
+                    var medicalCard1 = Cl_MedicalCardsFacade.f_GetInstance().f_CreateMedicalCard("001", 1, Core.Permision.Cl_User.E_Sex.Man, "Иванов", "Иван", "Иванович", new DateTime(1996, 3, 11), "Медкарта API тест 001");
+                    Assert.IsNotNull(medicalCard1);
+                    var medicalCard2 = Cl_MedicalCardsFacade.f_GetInstance().f_CreateMedicalCard("002", 2, Core.Permision.Cl_User.E_Sex.Man, "Петров", "Петр", "Петрович", new DateTime(1997, 3, 11), "Медкарта API тест 002");
+                    Assert.IsNotNull(medicalCard2);
+                    var medicalCard3 = Cl_MedicalCardsFacade.f_GetInstance().f_CreateMedicalCard("003", 3, Core.Permision.Cl_User.E_Sex.Female, "Александрова", "Александра", "Александровна", new DateTime(1998, 3, 11), "Медкарта API тест 003");
+                    Assert.IsNotNull(medicalCard2);
+                    var medicalCard4 = Cl_MedicalCardsFacade.f_GetInstance().f_CreateMedicalCard("004", 4, Core.Permision.Cl_User.E_Sex.Female, "Сидорова", "Александра", "Александровна", new DateTime(1999, 3, 11), "Медкарта API тест 004");
+                    Assert.IsNotNull(medicalCard4);
+                    var medicalCard5 = Cl_MedicalCardsFacade.f_GetInstance().f_CreateMedicalCard("005", 5, Core.Permision.Cl_User.E_Sex.Man, "Петров", "Александра", "Петрович", new DateTime(2000, 3, 11), "Медкарта API тест 005");
+                    Assert.IsNotNull(medicalCard5);
+                    var medicalCard6 = Cl_MedicalCardsFacade.f_GetInstance().f_CreateMedicalCard("006", 5, Core.Permision.Cl_User.E_Sex.Man, "Иванов", "Михаил", "Иванович", new DateTime(2001, 3, 11), "Медкарта API тест 006");
+                    Assert.IsNotNull(medicalCard6);
+                    var medicalCard7 = Cl_MedicalCardsFacade.f_GetInstance().f_CreateMedicalCard("007", 5, Core.Permision.Cl_User.E_Sex.Man, "Сидоров", "Петр", "Александрович", new DateTime(2002, 3, 11), "Медкарта API тест 007");
+                    Assert.IsNotNull(medicalCard7);
+
+                    var sdfd = dc.p_MedicalCards.ToList();
+
+
+                    result = Cl_MedicalCardsFacade.f_GetInstance().f_DeleteMedicalCard("001", 2);
+                    Assert.AreEqual(false, result);
+                    result = Cl_MedicalCardsFacade.f_GetInstance().f_DeleteMedicalCard("002", 1);
+                    Assert.AreEqual(false, result);
+                    result = Cl_MedicalCardsFacade.f_GetInstance().f_DeleteMedicalCard("001", 1);
+                    Assert.AreEqual(true, result);
+
+                    result = Cl_MedicalCardsFacade.f_GetInstance().f_ArchiveMedicalCard("001", 2);
+                    Assert.AreEqual(false, result);
+                    result = Cl_MedicalCardsFacade.f_GetInstance().f_ArchiveMedicalCard("002", 1);
+                    Assert.AreEqual(false, result);
+                    result = Cl_MedicalCardsFacade.f_GetInstance().f_ArchiveMedicalCard("002", 2);
+                    Assert.AreEqual(true, result);
+
+                    result = Cl_MedicalCardsFacade.f_GetInstance().f_MergeMedicalCards("003", 4, "004", 4);
+                    Assert.AreEqual(false, result);
+                    result = Cl_MedicalCardsFacade.f_GetInstance().f_MergeMedicalCards("004", 3, "004", 4);
+                    Assert.AreEqual(false, result);
+                    result = Cl_MedicalCardsFacade.f_GetInstance().f_MergeMedicalCards("003", 3, "003", 4);
+                    Assert.AreEqual(false, result);
+                    result = Cl_MedicalCardsFacade.f_GetInstance().f_MergeMedicalCards("003", 3, "004", 3);
+                    Assert.AreEqual(false, result);
+
+                    result = Cl_MedicalCardsFacade.f_GetInstance().f_MergeMedicalCards("003", 3, "004", 4);
+                    Assert.AreEqual(true, result);
+                    var medSource = Cl_MedicalCardsFacade.f_GetInstance().f_GetMedicalCard("003", 3);
+                    Assert.IsNotNull(medSource);
+                    Assert.AreEqual(true, medSource.p_IsDelete);
+                    var medTarget = Cl_MedicalCardsFacade.f_GetInstance().f_GetMedicalCard("004", 4);
+                    Assert.IsNotNull(medTarget);
+
+                    result = Cl_MedicalCardsFacade.f_GetInstance().f_MergeMedicalCards(100);
+                    Assert.AreEqual(false, result);
+                    result = Cl_MedicalCardsFacade.f_GetInstance().f_MergeMedicalCards(5);
+                    Assert.AreEqual(true, result);
+                    transaction.Commit();
+                } catch (Exception er)
+                {
+                    transaction.Rollback();
+                    throw er;
+                }
+            }
         }
     }
 }

@@ -11,6 +11,6 @@ namespace Sadco.FamilyDoctor.Core.Entities
     public interface I_Delete
     {
         /// <summary>Флаг нахождения сущности в удалении</summary>
-        bool p_IsDelete { get; set; }
+        bool p_IsDelete { get; }
     }
 }

@@ -82,15 +82,16 @@ namespace Sadco.FamilyDoctor.Core.Entities
         public DateTime p_DateLastChange { get; set; }
 
         /// <summary>ID медицинской карты</summary>
-        [Column("F_CARD_ID")]
+        [Column("F_MEDICALCARD_ID")]
         [Description("ID медицинской карты")]
-        public int p_MedicalCardID { get; set; }
+        public int? p_MedicalCardID { get; set; }
 
-        /// <summary>Флаг архив</summary>
-        [Column("F_ISARCHIVE")]
-        [Description("Флаг архив")]
-        [Cl_ELogProperty("Запись перенесена в архив", p_IsCustomDescription = true, p_IgnoreValue = true)]
-        public bool p_IsArchive { get; set; }
+        /// <summary>Mедицинская карта</summary>
+        [Description("Mедицинская карта")]
+        [ForeignKey("p_MedicalCardID")]
+        public Cl_MedicalCard p_MedicalCard { get; set; }
+
+        public string p_MedicalCardNumber { get { return p_MedicalCard != null ? p_MedicalCard.p_Number : ""; } }
 
         /// <summary>Дата первой печати для доктора</summary>
         [Column("F_DATEPRINTDOCTOR")]
@@ -139,40 +140,22 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Description("Тип записи")]
         public E_RecordType p_Type { get; set; }
 
-        /// <summary>ID пациента</summary>
-        [Column("F_PATIENT_ID")]
-        [Description("ID пациента")]
-        public int p_PatientID { get; set; }
-
-        /// <summary>GUID пациента</summary>
-        [Column("F_PATIENT_UID")]
-        [Description("GUID пациента")]
-        public Guid? p_PatientUID { get; set; }
-
-        /// <summary>Пол пациента</summary>
-        [Column("F_GENDER")]
-        [Description("Пол пациента")]
-        public Cl_User.E_Sex p_PatientSex { get; set; }
-
-        /// <summary>Имя пациента</summary>
-        [Column("F_PATIENT_NAME")]
-        [Description("Имя пациента")]
-        public string p_PatientName { get; set; }
-
-        /// <summary>Фамиля пациента</summary>
-        [Column("F_PATIENT_SURNAME")]
-        [Description("Фамиля пациента")]
-        public string p_PatientSurName { get; set; }
-
-        /// <summary>Отчество пациента</summary>
-        [Column("F_PATIENT_LASTNAME")]
-        [Description("Отчество пациента")]
-        public string p_PatientLastName { get; set; }
-
-        /// <summary>Дата рождения пациента</summary>
-        [Column("F_PATIENT_DATEBIRTH")]
-        [Description("Дата рождения пациента")]
-        public DateTime p_PatientDateBirth { get; set; }
+        /// <summary>MKB1</summary>
+        [Column("F_MKB1")]
+        [MaxLength(50)]
+        public string p_MKB1 { get; set; }
+        /// <summary>MKB1</summary>
+        [Column("F_MKB2")]
+        [MaxLength(50)]
+        public string p_MKB2 { get; set; }
+        /// <summary>MKB1</summary>
+        [Column("F_MKB3")]
+        [MaxLength(50)]
+        public string p_MKB3 { get; set; }
+        /// <summary>MKB1</summary>
+        [Column("F_MKB4")]
+        [MaxLength(50)]
+        public string p_MKB4 { get; set; }
 
         /// <summary>HTML текст записи для клиента</summary>
         [Column("F_HTMLPATIENT")]
@@ -194,15 +177,6 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Description("Данные файла")]
         public byte[] p_FileBytes { get; set; }
 
-        /// <summary>Инициалы пациента</summary>
-        [NotMapped]
-        public string p_PatientFIO { get { return f_GetPatientInitials(); } }
-        /// <summary>Возвращает инициалы пациента</summary>
-        public string f_GetPatientInitials()
-        {
-            return string.Format("{0} {1} {2}", p_PatientSurName, string.IsNullOrWhiteSpace(p_PatientName) ? "" : p_PatientName[0].ToString() + ".", string.IsNullOrWhiteSpace(p_PatientLastName) ? "" : p_PatientLastName[0].ToString() + ".");
-        }
-
         private List<Cl_RecordValue> m_Values = new List<Cl_RecordValue>();
         /// <summary>Список значений элементов записи</summary>
         [ForeignKey("p_RecordID")]
@@ -218,39 +192,13 @@ namespace Sadco.FamilyDoctor.Core.Entities
             return p_Values;
         }
 
-        /// <summary>Возвращает возраст пациента</summary>
-        public byte f_GetPatientAge()
-        {
-            byte age = 0;
-            if (p_PatientDateBirth != null)
-            {
-                DateTime dateNow = DateTime.Now;
-                byte year = (byte)(dateNow.Year - p_PatientDateBirth.Year);
-                if (dateNow.Month < p_PatientDateBirth.Month ||
-                    (dateNow.Month == p_PatientDateBirth.Month && dateNow.Day < p_PatientDateBirth.Day)) year--;
-                return year;
-            }
-            return age;
-        }
-
-        /// <summary>Установка пациента</summary>
-        public void f_SetPatient(Cl_User a_User)
-        {
-            p_PatientID = a_User.p_UserID;
-            p_PatientSurName = a_User.p_UserSurName;
-            p_PatientName = a_User.p_UserName;
-            p_PatientLastName = a_User.p_UserLastName;
-            p_PatientSex = a_User.p_Sex;
-            p_PatientDateBirth = a_User.p_DateBirth;
-        }
-
         /// <summary>Проверка наличия всех необходимых значений</summary>
         public bool f_IsValid()
         {
             return (!string.IsNullOrWhiteSpace(p_Title) && !string.IsNullOrWhiteSpace(p_ClinicName)
                  && p_DateCreate != null && p_DateForming != null && p_DateLastChange != null
                  && !string.IsNullOrWhiteSpace(p_DoctorSurName) && !string.IsNullOrWhiteSpace(p_DoctorName) && !string.IsNullOrWhiteSpace(p_DoctorLastName)
-                 && !string.IsNullOrWhiteSpace(p_PatientSurName) && !string.IsNullOrWhiteSpace(p_PatientName) && !string.IsNullOrWhiteSpace(p_PatientLastName));
+                 && p_MedicalCard != null);
         }
 
         /// <summary>Получение HTML текста записи для пациента</summary>
@@ -271,14 +219,14 @@ namespace Sadco.FamilyDoctor.Core.Entities
             var template = Properties.Resources.ResourceManager.GetObject("template_report").ToString();
             template = Regex.Replace(template, "<fd\\.document\\.location>.*?<\\/fd\\.document\\.location>", string.Format("<fd.document.location>{0}</fd.document.location>", p_ClinicName));
             template = Regex.Replace(template, "<fd\\.document\\.patient>.*?<\\/fd\\.document\\.patient>", string.Format("<fd.document.patient>{0} {1} {2} {3} {4} # {5}</fd.document.patient>",
-                p_RecordID, p_PatientSurName, p_PatientName, p_PatientLastName, p_PatientDateBirth.ToString("dd.MM.yyyy"), p_ID));
+                p_RecordID, p_MedicalCard.p_PatientSurName, p_MedicalCard.p_PatientName, p_MedicalCard.p_PatientLastName, p_MedicalCard.p_PatientDateBirth.ToString("dd.MM.yyyy"), p_ID));
             template = Regex.Replace(template, "<fd\\.document\\.date>.*?<\\/fd\\.document\\.date>", string.Format("<fd.document.date>{0}</fd.document.date>", p_DateCreate.ToString("dd.MM.yyyy")));
             template = Regex.Replace(template, "<fd\\.document\\.time>.*?<\\/fd\\.document\\.time>", string.Format("<fd.document.time>{0}</fd.document.time>", p_DateCreate.ToString("hh:mm")));
             template = Regex.Replace(template, "<fd\\.document\\.title>.*?<\\/fd\\.document\\.title>", string.Format("<fd.document.title>{0}</fd.document.title>", p_Title));
             string htmlContent = "";
             string htmlTabling = null;
             string htmlFloating = null;
-            byte age = f_GetPatientAge();
+            byte age = p_MedicalCard.f_GetPatientAge();
 
             void f_EndTabling()
             {
@@ -312,7 +260,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
                 {
                     decimal? min = 0;
                     decimal? max = 0;
-                    var partNorm = value.p_Element.f_GetPartNormValue(p_PatientSex, age, out min, out max);
+                    var partNorm = value.p_Element.f_GetPartNormValue(p_MedicalCard.p_PatientSex, age, out min, out max);
                     string htmlBlock = "";
                     if (a_IsDoctor)
                         htmlBlock = Cl_RecordsFacade.f_GetInstance().f_GetHTMLDoctor(this, value, te.p_Template.p_Type == Cl_Template.E_TemplateType.Table, min, max);
@@ -347,6 +295,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
                     }
                 }
             }
+            htmlContent += $"<p>MKB: {p_MKB1} - {p_MKB2} - {p_MKB3} - {p_MKB4}</p>";
             f_EndTabling();
             f_EndFloating();
             template = Regex.Replace(template, "<fd\\.document\\.content>.*?<\\/fd\\.document\\.content>", string.Format("<fd.document.content>{0}</fd.document.content>", htmlContent));

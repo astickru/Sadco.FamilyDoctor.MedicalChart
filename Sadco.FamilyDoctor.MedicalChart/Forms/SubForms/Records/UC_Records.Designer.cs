@@ -38,14 +38,13 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             this.ctrlBReportAddPattern = new System.Windows.Forms.Button();
             this.ctrlBReportFormatPattern = new System.Windows.Forms.Button();
             this.ctrlBReportEdit = new System.Windows.Forms.Button();
-            this.ctrlBReportArchive = new System.Windows.Forms.Button();
             this.ctrlBReportRating = new System.Windows.Forms.Button();
             this.ctrlBReportSyncBMK = new System.Windows.Forms.Button();
             this.ctrlBReportPrintDoctor = new System.Windows.Forms.Button();
             this.ctrlBReportPrintPatient = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.ctrl_TRecords = new OutlookStyleControls.OutlookGrid();
-            this.p_MedicalCardID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p_MedicalCardNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.p_ClinikName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.p_DateForming = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.p_CategoryTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -64,6 +63,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             this.ctrlPRecordInfo = new System.Windows.Forms.Panel();
             this.ctrlRecordInfo = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.ctrlBReportAddRecordByFile = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -117,7 +117,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             // 
             // ctrlBReportAddRecord
             // 
-            this.ctrlBReportAddRecord.Location = new System.Drawing.Point(170, 3);
+            this.ctrlBReportAddRecord.Location = new System.Drawing.Point(305, 3);
             this.ctrlBReportAddRecord.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
             this.ctrlBReportAddRecord.Name = "ctrlBReportAddRecord";
             this.ctrlBReportAddRecord.Size = new System.Drawing.Size(99, 38);
@@ -128,7 +128,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             // 
             // ctrlBAddRecordFromRecord
             // 
-            this.ctrlBAddRecordFromRecord.Location = new System.Drawing.Point(284, 3);
+            this.ctrlBAddRecordFromRecord.Location = new System.Drawing.Point(419, 3);
             this.ctrlBAddRecordFromRecord.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
             this.ctrlBAddRecordFromRecord.Name = "ctrlBAddRecordFromRecord";
             this.ctrlBAddRecordFromRecord.Size = new System.Drawing.Size(103, 38);
@@ -139,7 +139,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             // 
             // ctrlBReportAddPattern
             // 
-            this.ctrlBReportAddPattern.Location = new System.Drawing.Point(543, 3);
+            this.ctrlBReportAddPattern.Location = new System.Drawing.Point(678, 3);
             this.ctrlBReportAddPattern.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
             this.ctrlBReportAddPattern.Name = "ctrlBReportAddPattern";
             this.ctrlBReportAddPattern.Size = new System.Drawing.Size(95, 38);
@@ -150,7 +150,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             // 
             // ctrlBReportFormatPattern
             // 
-            this.ctrlBReportFormatPattern.Location = new System.Drawing.Point(653, 3);
+            this.ctrlBReportFormatPattern.Location = new System.Drawing.Point(788, 3);
             this.ctrlBReportFormatPattern.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
             this.ctrlBReportFormatPattern.Name = "ctrlBReportFormatPattern";
             this.ctrlBReportFormatPattern.Size = new System.Drawing.Size(116, 38);
@@ -162,7 +162,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             // 
             // ctrlBReportEdit
             // 
-            this.ctrlBReportEdit.Location = new System.Drawing.Point(402, 3);
+            this.ctrlBReportEdit.Location = new System.Drawing.Point(537, 3);
             this.ctrlBReportEdit.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
             this.ctrlBReportEdit.Name = "ctrlBReportEdit";
             this.ctrlBReportEdit.Size = new System.Drawing.Size(126, 38);
@@ -172,21 +172,9 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             this.ctrlBReportEdit.Visible = false;
             this.ctrlBReportEdit.Click += new System.EventHandler(this.ctrlBReportEdit_Click);
             // 
-            // ctrlBReportArchive
-            // 
-            this.ctrlBReportArchive.Location = new System.Drawing.Point(1230, 3);
-            this.ctrlBReportArchive.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
-            this.ctrlBReportArchive.Name = "ctrlBReportArchive";
-            this.ctrlBReportArchive.Size = new System.Drawing.Size(120, 38);
-            this.ctrlBReportArchive.TabIndex = 5;
-            this.ctrlBReportArchive.Text = "архивировать";
-            this.ctrlBReportArchive.UseVisualStyleBackColor = true;
-            this.ctrlBReportArchive.Visible = false;
-            this.ctrlBReportArchive.Click += new System.EventHandler(this.ctrlBReportArchive_Click);
-            // 
             // ctrlBReportRating
             // 
-            this.ctrlBReportRating.Location = new System.Drawing.Point(1119, 3);
+            this.ctrlBReportRating.Location = new System.Drawing.Point(1254, 3);
             this.ctrlBReportRating.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
             this.ctrlBReportRating.Name = "ctrlBReportRating";
             this.ctrlBReportRating.Size = new System.Drawing.Size(96, 38);
@@ -198,7 +186,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             // 
             // ctrlBReportSyncBMK
             // 
-            this.ctrlBReportSyncBMK.Location = new System.Drawing.Point(999, 3);
+            this.ctrlBReportSyncBMK.Location = new System.Drawing.Point(1134, 3);
             this.ctrlBReportSyncBMK.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
             this.ctrlBReportSyncBMK.Name = "ctrlBReportSyncBMK";
             this.ctrlBReportSyncBMK.Size = new System.Drawing.Size(105, 38);
@@ -210,7 +198,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             // 
             // ctrlBReportPrintDoctor
             // 
-            this.ctrlBReportPrintDoctor.Location = new System.Drawing.Point(784, 3);
+            this.ctrlBReportPrintDoctor.Location = new System.Drawing.Point(919, 3);
             this.ctrlBReportPrintDoctor.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
             this.ctrlBReportPrintDoctor.Name = "ctrlBReportPrintDoctor";
             this.ctrlBReportPrintDoctor.Size = new System.Drawing.Size(91, 38);
@@ -222,7 +210,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             // 
             // ctrlBReportPrintPatient
             // 
-            this.ctrlBReportPrintPatient.Location = new System.Drawing.Point(890, 3);
+            this.ctrlBReportPrintPatient.Location = new System.Drawing.Point(1025, 3);
             this.ctrlBReportPrintPatient.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
             this.ctrlBReportPrintPatient.Name = "ctrlBReportPrintPatient";
             this.ctrlBReportPrintPatient.Size = new System.Drawing.Size(94, 38);
@@ -260,7 +248,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             this.ctrl_TRecords.CollapseIcon = null;
             this.ctrl_TRecords.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ctrl_TRecords.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.p_MedicalCardID,
+            this.p_MedicalCardNumber,
             this.p_ClinikName,
             this.p_DateForming,
             this.p_CategoryTotal,
@@ -285,12 +273,12 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             this.ctrl_TRecords.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ctrl_TRecords_CellClick);
             this.ctrl_TRecords.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ctrl_TRecords_CellDoubleClick);
             // 
-            // p_MedicalCardID
+            // p_MedicalCardNumber
             // 
-            this.p_MedicalCardID.HeaderText = "№ медкарты";
-            this.p_MedicalCardID.Name = "p_MedicalCardID";
-            this.p_MedicalCardID.ReadOnly = true;
-            this.p_MedicalCardID.Width = 120;
+            this.p_MedicalCardNumber.HeaderText = "№ медкарты";
+            this.p_MedicalCardNumber.Name = "p_MedicalCardNumber";
+            this.p_MedicalCardNumber.ReadOnly = true;
+            this.p_MedicalCardNumber.Width = 120;
             // 
             // p_ClinikName
             // 
@@ -370,7 +358,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             this.ctrlMIArchive.Name = "ctrlMIArchive";
             this.ctrlMIArchive.Size = new System.Drawing.Size(215, 22);
             this.ctrlMIArchive.Text = "Архивировать";
-            this.ctrlMIArchive.Click += new System.EventHandler(this.ctrlMIArhive_Click);
             // 
             // ctrlMIRating
             // 
@@ -430,7 +417,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             // 
             // flowLayoutPanel1
             // 
-            this.flowLayoutPanel1.Controls.Add(this.ctrlBReportArchive);
             this.flowLayoutPanel1.Controls.Add(this.ctrlBReportRating);
             this.flowLayoutPanel1.Controls.Add(this.ctrlBReportSyncBMK);
             this.flowLayoutPanel1.Controls.Add(this.ctrlBReportPrintPatient);
@@ -440,6 +426,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             this.flowLayoutPanel1.Controls.Add(this.ctrlBReportEdit);
             this.flowLayoutPanel1.Controls.Add(this.ctrlBAddRecordFromRecord);
             this.flowLayoutPanel1.Controls.Add(this.ctrlBReportAddRecord);
+            this.flowLayoutPanel1.Controls.Add(this.ctrlBReportAddRecordByFile);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 300);
@@ -449,6 +436,17 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             this.flowLayoutPanel1.Size = new System.Drawing.Size(1371, 44);
             this.flowLayoutPanel1.TabIndex = 11;
             this.flowLayoutPanel1.WrapContents = false;
+            // 
+            // ctrlBReportAddRecordByFile
+            // 
+            this.ctrlBReportAddRecordByFile.Location = new System.Drawing.Point(191, 3);
+            this.ctrlBReportAddRecordByFile.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
+            this.ctrlBReportAddRecordByFile.Name = "ctrlBReportAddRecordByFile";
+            this.ctrlBReportAddRecordByFile.Size = new System.Drawing.Size(99, 38);
+            this.ctrlBReportAddRecordByFile.TabIndex = 11;
+            this.ctrlBReportAddRecordByFile.Text = "добавить запись";
+            this.ctrlBReportAddRecordByFile.UseVisualStyleBackColor = true;
+            this.ctrlBReportAddRecordByFile.Click += new System.EventHandler(this.ctrlBReportAddRecordByFile_Click);
             // 
             // UC_Records
             // 
@@ -496,7 +494,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         private System.Windows.Forms.ToolStripMenuItem ctrlMIRating;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Button ctrlBReportPrintPatient;
-        private System.Windows.Forms.Button ctrlBReportArchive;
         private System.Windows.Forms.Button ctrlBReportEdit;
         private System.Windows.Forms.Button ctrlBReportPrintDoctor;
         private System.Windows.Forms.Button ctrlBReportRating;
@@ -507,11 +504,12 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         private System.Windows.Forms.Label ctrlRecordInfo;
         private System.Windows.Forms.Button ctrlBAddRecordFromRecord;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn p_MedicalCardID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn p_MedicalCardNumber;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_ClinikName;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_DateForming;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_CategoryTotal;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_Title;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_DoctorFIO;
+        private System.Windows.Forms.Button ctrlBReportAddRecordByFile;
     }
 }

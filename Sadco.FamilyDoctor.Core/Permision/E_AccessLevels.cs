@@ -33,6 +33,6 @@ namespace Sadco.FamilyDoctor.Core.Permision
         /// <summary>Доступ печати</summary>
         IsPrint = 0x400,
         /// <summary>Доступ редактирования справочников</summary>
-        IsEditCatalogs = 0x800,
+        IsEditCatalogs = 0x800
     }
 }

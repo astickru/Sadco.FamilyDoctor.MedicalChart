@@ -169,6 +169,7 @@
     <Compile Include="Controls\TreeView\I_TreeNode.cs" />
     <Compile Include="Entities\Cl_Category.cs" />
     <Compile Include="Entities\Cl_Rating.cs" />
+    <Compile Include="Entities\Cl_MedicalCard.cs" />
     <Compile Include="Entities\Cl_RecordPatternParam.cs" />
     <Compile Include="Entities\Cl_RecordParamBase.cs" />
     <Compile Include="Entities\Cl_RecordPattern.cs" />
@@ -200,6 +201,7 @@
     <Compile Include="EntityLogs\Cl_EntityValue.cs" />
     <Compile Include="Facades\Cl_CatalogsFacade.cs" />
     <Compile Include="Facades\Cl_FormulaFacade.cs" />
+    <Compile Include="Facades\Cl_MedicalCardsFacade.cs" />
     <Compile Include="Facades\Cl_RecordsFacade.cs" />
     <Compile Include="Facades\Cl_SessionFacade.cs" />
     <Compile Include="Facades\Cl_TemplatesFacade.cs" />
@@ -293,6 +295,30 @@
     <Compile Include="Migrations\201809181020097_appStartLogs.Designer.cs">
       <DependentUpon>201809181020097_appStartLogs.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809240914204_appInitMecalCards.cs" />
+    <Compile Include="Migrations\201809240914204_appInitMecalCards.Designer.cs">
+      <DependentUpon>201809240914204_appInitMecalCards.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809240916576_appMecalCardsLinks.cs" />
+    <Compile Include="Migrations\201809240916576_appMecalCardsLinks.Designer.cs">
+      <DependentUpon>201809240916576_appMecalCardsLinks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809241106235_appMecalCardsdates.cs" />
+    <Compile Include="Migrations\201809241106235_appMecalCardsdates.Designer.cs">
+      <DependentUpon>201809241106235_appMecalCardsdates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809251044583_appMecalCardsAlter.cs" />
+    <Compile Include="Migrations\201809251044583_appMecalCardsAlter.Designer.cs">
+      <DependentUpon>201809251044583_appMecalCardsAlter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809251346170_appMecalCardsDel.cs" />
+    <Compile Include="Migrations\201809251346170_appMecalCardsDel.Designer.cs">
+      <DependentUpon>201809251346170_appMecalCardsDel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809260711093_appRecordMKB.cs" />
+    <Compile Include="Migrations\201809260711093_appRecordMKB.Designer.cs">
+      <DependentUpon>201809260711093_appRecordMKB.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\Cl_AccessLevelAttribute.cs" />
     <Compile Include="Permision\Cl_User.cs" />
@@ -312,7 +338,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config">
+    <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
@@ -425,6 +451,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809181020097_appStartLogs.resx">
       <DependentUpon>201809181020097_appStartLogs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809240914204_appInitMecalCards.resx">
+      <DependentUpon>201809240914204_appInitMecalCards.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809240916576_appMecalCardsLinks.resx">
+      <DependentUpon>201809240916576_appMecalCardsLinks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809241106235_appMecalCardsdates.resx">
+      <DependentUpon>201809241106235_appMecalCardsdates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809251044583_appMecalCardsAlter.resx">
+      <DependentUpon>201809251044583_appMecalCardsAlter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809251346170_appMecalCardsDel.resx">
+      <DependentUpon>201809251346170_appMecalCardsDel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809260711093_appRecordMKB.resx">
+      <DependentUpon>201809260711093_appRecordMKB.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -77,27 +77,38 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         public event EventHandler e_Save;
 
         private Ctrl_Template m_ControlTemplate = null;
+        private UС_RecordByFile m_ControlRecordByFile = null;
 
         private void f_UpdateControls()
         {
             try
             {
                 m_ControlTemplate = null;
+                m_ControlRecordByFile = null;
                 ctrlPContent.Controls.Clear();
-                if (m_Record != null && m_Record.p_Template != null)
+                if (m_Record != null)
                 {
-                    if (m_Record.p_Template.p_TemplateElements == null)
+                    if (m_Record.p_Template != null)
                     {
-                        var cTe = Cl_App.m_DataContext.Entry(m_Record.p_Template).Collection(g => g.p_TemplateElements).Query().Include(te => te.p_ChildElement).Include(te => te.p_ChildElement.p_Default).Include(te => te.p_ChildTemplate);
-                        cTe.Load();
+                        if (m_Record.p_Template.p_TemplateElements == null)
+                        {
+                            var cTe = Cl_App.m_DataContext.Entry(m_Record.p_Template).Collection(g => g.p_TemplateElements).Query().Include(te => te.p_ChildElement).Include(te => te.p_ChildElement.p_Default).Include(te => te.p_ChildTemplate);
+                            cTe.Load();
+                        }
+                        m_ControlTemplate = new Ctrl_Template();
+                        m_ControlTemplate.Dock = DockStyle.Fill;
+                        m_ControlTemplate.p_Template = m_Record.p_Template;
+                        m_ControlTemplate.p_PaddingX = p_PaddingX;
+                        m_ControlTemplate.p_PaddingY = p_PaddingY;
+                        m_ControlTemplate.f_SetRecord(m_Record);
+                        ctrlPContent.Controls.Add(m_ControlTemplate);
                     }
-                    m_ControlTemplate = new Ctrl_Template();
-                    m_ControlTemplate.Dock = DockStyle.Fill;
-                    m_ControlTemplate.p_Template = m_Record.p_Template;
-                    m_ControlTemplate.p_PaddingX = p_PaddingX;
-                    m_ControlTemplate.p_PaddingY = p_PaddingY;
-                    m_ControlTemplate.f_SetRecord(m_Record);
-                    ctrlPContent.Controls.Add(m_ControlTemplate);
+                    else if (m_Record.p_Type == E_RecordType.FinishedFile)
+                    {
+                        m_ControlRecordByFile = new UС_RecordByFile();
+                        m_ControlRecordByFile.f_SetRecord(m_Record);
+                        ctrlPContent.Controls.Add(m_ControlRecordByFile);
+                    }
                 }
             }
             catch (Exception er)
@@ -109,28 +120,58 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         public void f_SetRecord(Cl_Record a_Record)
         {
             m_Record = a_Record;
-            if (m_Record != null && m_Record.p_Template != null)
+            if (m_Record != null)
             {
-                try
+                if (m_Record.p_MedicalCard != null)
                 {
-                    Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(m_Record.p_Template);
                     ctrlDoctorFIO.Text = m_Record.p_DoctorFIO;
-                    ctrlPatientFIO.Text = string.Format("{0} ({1}, {2})", m_Record.p_PatientFIO,
-                        m_Record.p_PatientSex == Core.Permision.Cl_User.E_Sex.Man ? "Мужчина" : m_Record.p_PatientSex == Core.Permision.Cl_User.E_Sex.Female ? "Женьщина" : "Нет данных",
-                        m_Record.p_PatientDateBirth.ToShortDateString());
+                    ctrlPatientFIO.Text = string.Format("{0} ({1}, {2})", m_Record.p_MedicalCard.p_PatientFIO,
+                        m_Record.p_MedicalCard.p_PatientSex == Core.Permision.Cl_User.E_Sex.Man ? "Мужчина" : m_Record.p_MedicalCard.p_PatientSex == Core.Permision.Cl_User.E_Sex.Female ? "Женьщина" : "Нет данных",
+                        m_Record.p_MedicalCard.p_PatientDateBirth.ToShortDateString());
                     ctrlTitle.Text = m_Record.p_Title;
-                    Text = string.Format("Запись \"{0}\" v{1}", m_Record.p_Template.p_Name, ConfigurationManager.AppSettings["Version"]);
                     if (m_Record.p_Version == 0)
                         ctrl_Version.Text = "Черновик";
                     else
                         ctrl_Version.Text = m_Record.p_Version.ToString();
-                    f_UpdateControls();
-                    m_Log.f_SetEntity(m_Record);
                 }
-                catch (Exception er)
+                if (m_Record.p_Template != null)
                 {
-                    MonitoringStub.Error("Error_Editor", "Не удалось установить запись", er, null, null);
+                    try
+                    {
+                        Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(m_Record.p_Template);
+                        Text = string.Format("Запись \"{0}\" v{1}", m_Record.p_Template.p_Name, ConfigurationManager.AppSettings["Version"]);
+                        f_UpdateControls();
+                        m_Log.f_SetEntity(m_Record);
+                    }
+                    catch (Exception er)
+                    {
+                        MonitoringStub.Error("Error_Editor", "Не удалось установить запись", er, null, null);
+                    }
                 }
+                else if (m_Record.p_Type == E_RecordType.FinishedFile)
+                {
+                    try
+                    {
+                        Text = string.Format("Запись c готовым файлом v{0}", ConfigurationManager.AppSettings["Version"]);
+                        f_UpdateControls();
+                    }
+                    catch (Exception er)
+                    {
+                        MonitoringStub.Error("Error_Editor", "Не удалось установить запись", er, null, null);
+                    }
+                }
+            }
+        }
+
+        public void f_FormatByPattern(Cl_RecordPattern a_Pattern)
+        {
+            if (a_Pattern != null)
+            {
+                ctrlDoctorFIO.Text = a_Pattern.p_DoctorFIO;
+                ctrlTitle.Text = a_Pattern.p_Title;
+                Cl_RecordsFacade.f_GetInstance().f_EditRecordFromPattern(m_Record, a_Pattern);
+                f_UpdateControls();
+                m_Log.f_SetEntity(m_Record);
             }
         }
 
@@ -141,14 +182,27 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 MonitoringStub.Message("Заполните поле \"Заголовок\"!");
                 return;
             }
-            if (m_ControlTemplate != null)
+            if (m_Record != null)
             {
-                using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
+                Cl_Record record = null;
+                if (m_Record.p_Type == E_RecordType.ByTemplate && m_ControlTemplate != null)
                 {
-                    try
+                    record = m_ControlTemplate.f_GetNewRecord();
+                }
+                else if (m_Record.p_Type == E_RecordType.FinishedFile && m_ControlRecordByFile != null)
+                {
+                    record = m_ControlRecordByFile.f_GetNewRecord();
+                    if (record?.p_FileBytes == null)
                     {
-                        var record = m_ControlTemplate.f_GetNewRecord();
-                        if (record != null)
+                        MonitoringStub.Message("Заполните поле \"Файл записи\"!");
+                        return;
+                    }
+                }
+                if (record != null)
+                {
+                    using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
+                    {
+                        try
                         {
                             if (m_Log.f_IsChanged(record) == false && record.p_Title == ctrlTitle.Text)
                             {
@@ -168,7 +222,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                 record.p_RecordID = record.p_ID;
                             }
                             Cl_App.m_DataContext.SaveChanges();
-                            Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.UIEvents, string.Format("Сохранение записи: {0}, дата записи: {1}, клиника: {2}", record.p_Title,  record.p_DateCreate, record.p_ClinicName), record.p_RecordID);
+                            Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.UIEvents, string.Format("Сохранение записи: {0}, дата записи: {1}, клиника: {2}", record.p_Title, record.p_DateCreate, record.p_ClinicName), record.p_RecordID);
                             m_Log.f_SaveEntity(record);
                             transaction.Commit();
                             //m_ControlTemplate.f_SetRecord(record);
@@ -176,18 +230,28 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             e_Save?.Invoke(this, new EventArgs());
                             //ctrl_Version.Text = record.p_Version.ToString();
                             this.Close();
+
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            return;
+                            transaction.Rollback();
+                            MonitoringStub.Error("Error_Editor", "При сохранении изменений записи произошла ошибка", ex, null, null);
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        MonitoringStub.Error("Error_Editor", "При сохранении изменений записи произошла ошибка", ex, null, null);
                     }
                 }
+            }
+        }
+
+        private void ctrlBFormatByPattern_Click(object sender, EventArgs e)
+        {
+            var pattern = Cl_RecordsFacade.f_GetInstance().f_GetRecordLastPattern(m_Record);
+            if (pattern != null)
+            {
+                f_FormatByPattern(pattern);
+            }
+            else
+            {
+                MonitoringStub.Message("Для данной записи паттерн отсутствует");
             }
         }
 
@@ -202,6 +266,30 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             catch (Exception er)
             {
                 MonitoringStub.Error("Error_Editor", "Не удалось открыть истории", er, null, null);
+            }
+        }
+
+        private void ctrlBMKB_Click(object sender, EventArgs e)
+        {
+            var dlgMKB = new Dlg_MKB();
+            dlgMKB.ctrlTBMKB1.Text = m_Record.p_MKB1;
+            dlgMKB.ctrlTBMKB2.Text = m_Record.p_MKB2;
+            dlgMKB.ctrlTBMKB3.Text = m_Record.p_MKB3;
+            dlgMKB.ctrlTBMKB4.Text = m_Record.p_MKB4;
+            if (dlgMKB.ShowDialog() == DialogResult.OK)
+            {
+                m_Record.p_MKB1 = dlgMKB.ctrlTBMKB1.Text;
+                m_Record.p_MKB2 = dlgMKB.ctrlTBMKB2.Text;
+                m_Record.p_MKB3 = dlgMKB.ctrlTBMKB3.Text;
+                m_Record.p_MKB4 = dlgMKB.ctrlTBMKB4.Text;
+                if (m_Record.p_Type == E_RecordType.ByTemplate && m_ControlTemplate != null)
+                {
+                    m_ControlTemplate.f_UpdateMKB();
+                }
+                else if (m_Record.p_Type == E_RecordType.FinishedFile && m_ControlRecordByFile != null)
+                {
+                    m_ControlRecordByFile.f_UpdateMKB();
+                }
             }
         }
 

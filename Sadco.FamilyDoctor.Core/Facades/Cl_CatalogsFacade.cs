@@ -1,9 +1,6 @@
 ﻿using Sadco.FamilyDoctor.Core.Data;
 using Sadco.FamilyDoctor.Core.Entities;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Sadco.FamilyDoctor.Core.Facades
 {

@@ -115,11 +115,23 @@
     <Compile Include="Forms\SubForms\Dlg_HistoryViewer.Designer.cs">
       <DependentUpon>Dlg_HistoryViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SubForms\MedicalCards\UC_MedicalCards.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\SubForms\MedicalCards\UC_MedicalCards.Designer.cs">
+      <DependentUpon>UC_MedicalCards.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SubForms\Rating\Dlg_RatingEditor.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\SubForms\Rating\Dlg_RatingEditor.Designer.cs">
       <DependentUpon>Dlg_RatingEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SubForms\Records\Dlg_MKB.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SubForms\Records\Dlg_MKB.Designer.cs">
+      <DependentUpon>Dlg_MKB.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SubForms\Records\Dlg_RecordPattern.cs">
       <SubType>Form</SubType>
@@ -156,6 +168,12 @@
     </Compile>
     <Compile Include="Forms\SubForms\Records\UC_Records.Designer.cs">
       <DependentUpon>UC_Records.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SubForms\Records\UС_RecordByFile.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\SubForms\Records\UС_RecordByFile.Designer.cs">
+      <DependentUpon>UС_RecordByFile.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SubForms\Templates\F_DesignerTemplate.cs">
       <SubType>Form</SubType>
@@ -199,6 +217,12 @@
     <Compile Include="Forms\SubForms\Templates\Designers\UC_TemplateDesigner.Designer.cs">
       <DependentUpon>UC_TemplateDesigner.cs</DependentUpon>
     </Compile>
+    <Compile Include="F_AddMK.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="F_AddMK.Designer.cs">
+      <DependentUpon>F_AddMK.cs</DependentUpon>
+    </Compile>
     <Compile Include="F_Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -235,8 +259,14 @@
     <EmbeddedResource Include="Forms\SubForms\Dlg_HistoryViewer.resx">
       <DependentUpon>Dlg_HistoryViewer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SubForms\MedicalCards\UC_MedicalCards.resx">
+      <DependentUpon>UC_MedicalCards.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SubForms\Rating\Dlg_RatingEditor.resx">
       <DependentUpon>Dlg_RatingEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SubForms\Records\Dlg_MKB.resx">
+      <DependentUpon>Dlg_MKB.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SubForms\Records\Dlg_RecordPattern.resx">
       <DependentUpon>Dlg_RecordPattern.cs</DependentUpon>
@@ -255,6 +285,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SubForms\Records\UC_Records.resx">
       <DependentUpon>UC_Records.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SubForms\Records\UС_RecordByFile.resx">
+      <DependentUpon>UС_RecordByFile.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SubForms\Templates\F_DesignerTemplate.resx">
       <DependentUpon>F_DesignerTemplate.cs</DependentUpon>
@@ -276,6 +309,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SubForms\Templates\Designers\UC_TemplateDesigner.resx">
       <DependentUpon>UC_TemplateDesigner.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="F_AddMK.resx">
+      <DependentUpon>F_AddMK.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="F_Main.resx">
       <DependentUpon>F_Main.cs</DependentUpon>

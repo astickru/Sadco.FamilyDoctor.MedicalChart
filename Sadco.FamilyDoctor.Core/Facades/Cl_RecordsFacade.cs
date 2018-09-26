@@ -6,6 +6,7 @@ using Sadco.FamilyDoctor.Core.Permision;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Linq;
 
 namespace Sadco.FamilyDoctor.Core.Facades
@@ -113,7 +114,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
                     if (a_Record is Cl_Record)
                     {
                         var record = (Cl_Record)a_Record;
-                        vals.Add((decimal)record.f_GetPatientAge());
+                        vals.Add((decimal)record.p_MedicalCard.f_GetPatientAge());
                     }
                 }
                 else if (el.p_Tag == "gender")
@@ -121,7 +122,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
                     if (a_Record is Cl_Record)
                     {
                         var record = (Cl_Record)a_Record;
-                        vals.Add(Enum.GetName(typeof(Cl_User.E_Sex), record.p_PatientSex).ToLower());
+                        vals.Add(Enum.GetName(typeof(Cl_User.E_Sex), record.p_MedicalCard.p_PatientSex).ToLower());
                     }
                 }
                 else
@@ -326,7 +327,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
             }
             return false;
         }
-        
+
         /// <summary>Получает видимость элемента по формуле</summary>
         public decimal? f_GetElementMathematicValue(Cl_Record a_Record, string a_Formula)
         {
@@ -457,7 +458,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 if (a_IsTable)
                 {
                     string val = f_GetValForHTML(a_RecordValue, a_Min, a_Max);
-                    var partNorm = a_RecordValue.p_Element.f_GetPartNormValue(a_Record.p_PatientSex, a_Record.f_GetPatientAge());
+                    var partNorm = a_RecordValue.p_Element.f_GetPartNormValue(a_Record.p_MedicalCard.p_PatientSex, a_Record.p_MedicalCard.f_GetPatientAge());
                     html = string.Format("<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td></tr>", a_RecordValue.p_Element.p_PartPre, val, a_RecordValue.p_Element.p_PartPost, partNorm);
                 }
                 else if (a_RecordValue.p_Element.p_IsText)
@@ -500,29 +501,61 @@ namespace Sadco.FamilyDoctor.Core.Facades
             return html;
         }
 
+        /// <summary>Получение записей медкарты из БД</summary>
+        public IEnumerable<Cl_Record> f_GetRecords(Cl_MedicalCard a_MedicalCard)
+        {
+            if (a_MedicalCard != null)
+                return f_GetRecords(a_MedicalCard.p_ID);
+            else
+                return null;
+        }
+
+        /// <summary>Получение записей медкарты из БД</summary>
+        public IEnumerable<Cl_Record> f_GetRecords(int a_MedicalCardId)
+        {
+            if (m_DataContextMegaTemplate != null)
+            {
+                return m_DataContextMegaTemplate.p_Records.Include(r => r.p_MedicalCard).Where(m => m.p_MedicalCard.p_ID == a_MedicalCardId);
+            }
+            return null;
+        }
+
         /// <summary>Добавление записей в БД</summary>
         public bool f_AddRecords(IEnumerable<Cl_Record> a_Records)
         {
-            using (var transaction = m_DataContextMegaTemplate.Database.BeginTransaction())
+            if (a_Records.Any(r => r.p_MedicalCard != null))
             {
-                try
+                if (a_Records.Any(r => r.p_MedicalCard.p_IsArchive || r.p_MedicalCard.p_IsDelete))
                 {
-                    m_DataContextMegaTemplate.p_Records.AddRange(a_Records);
-                    m_DataContextMegaTemplate.SaveChanges();
-                    foreach (var record in a_Records)
-                    {
-                        record.p_RecordID = record.p_ID;
-                    }
-                    m_DataContextMegaTemplate.SaveChanges();
-                    transaction.Commit();
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    MonitoringStub.Error("Error_Editor", "При сохранении изменений записей произошла ошибка", ex, null, null);
+                    MonitoringStub.Error("Error_AddRecords", "В списке записей имеется не действующая медкарта", null, null, null);
                     return false;
                 }
+                using (var transaction = m_DataContextMegaTemplate.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        m_DataContextMegaTemplate.p_Records.AddRange(a_Records);
+                        m_DataContextMegaTemplate.SaveChanges();
+                        foreach (var record in a_Records)
+                        {
+                            record.p_RecordID = record.p_ID;
+                        }
+                        m_DataContextMegaTemplate.SaveChanges();
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        MonitoringStub.Error("Error_AddRecords", "При сохранении изменений записей произошла ошибка", ex, null, null);
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                MonitoringStub.Error("Error_AddRecords", "При сохранении изменений записей не указана медицинская карта", null, null, null);
+                return false;
             }
         }
 
@@ -644,10 +677,10 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 record = new Cl_Record();
                 record.p_DateCreate = DateTime.Now;
                 record.p_DateLastChange = record.p_DateForming = record.p_DateCreate;
-                record.p_MedicalCardID = Cl_SessionFacade.f_GetInstance().p_MedCardNumber;
+                record.p_MedicalCard = Cl_SessionFacade.f_GetInstance().p_MedicalCard;
+                record.p_MedicalCardID = record.p_MedicalCard.p_ID;
                 record.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
                 record.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
-                record.f_SetPatient(Cl_SessionFacade.f_GetInstance().p_Patient);
                 record.p_CategoryClinicID = a_RecordPattern.p_CategoryClinicID;
                 record.p_CategoryClinic = a_RecordPattern.p_CategoryClinic;
                 record.p_CategoryTotalID = a_RecordPattern.p_CategoryTotalID;
@@ -665,26 +698,101 @@ namespace Sadco.FamilyDoctor.Core.Facades
             return record;
         }
 
+        /// <summary>Изменение записи из паттерна записей</summary>
+        /// <param name="a_Record">Запись</param>
+        /// <param name="a_RecordPattern">Паттерн записи</param>
+        public void f_EditRecordFromPattern(Cl_Record a_Record, I_Record a_RecordPattern)
+        {
+            if (a_Record == null)
+            {
+                MonitoringStub.Error("Error_RecordsFacade_EditRecordFromPattern", "Запись пустая", null, null, null);
+                return;
+            }
+            if (a_RecordPattern == null)
+            {
+                MonitoringStub.Error("Error_RecordsFacade_EditRecordFromPattern", "Паттерн записи пустой", null, null, null);
+                return;
+            }
+            if (a_RecordPattern != null)
+            {
+                a_Record.p_DateCreate = DateTime.Now;
+                a_Record.p_DateLastChange = a_Record.p_DateForming = a_Record.p_DateCreate;
+                a_Record.p_MedicalCard = Cl_SessionFacade.f_GetInstance().p_MedicalCard;
+                a_Record.p_MedicalCardID = a_Record.p_MedicalCard.p_ID;
+                a_Record.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
+                a_Record.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
+                a_Record.p_CategoryClinicID = a_RecordPattern.p_CategoryClinicID;
+                a_Record.p_CategoryClinic = a_RecordPattern.p_CategoryClinic;
+                a_Record.p_CategoryTotalID = a_RecordPattern.p_CategoryTotalID;
+                a_Record.p_CategoryTotal = a_RecordPattern.p_CategoryTotal;
+                a_Record.p_Title = a_RecordPattern.p_Title;
+
+                var els = Cl_TemplatesFacade.f_GetInstance().f_GetElements(a_Record.p_Template);
+                var values = a_RecordPattern.f_GetRecordsValues().Select(v => f_GetRecordValue(a_Record, v)).ToList();
+                values.RemoveAll(val => !els.Any(el => el.p_ID == val.p_ElementID));
+                var curVals = a_Record.p_Values.Where(val => !values.Any(el => el.p_ID == val.p_ElementID));
+                values.AddRange(curVals);
+                a_Record.p_Values = values;
+            }
+        }
+
+        /// <summary>Получение списка паттернов записи</summary>
+        /// <param name="a_Record">Запись</param>
+        public List<Cl_RecordPattern> f_GetRecordPatterns(Cl_Record a_Record)
+        {
+            if (m_DataContextMegaTemplate != null)
+            {
+                if (a_Record != null)
+                {
+                    return m_DataContextMegaTemplate.p_RecordsPatterns.Include(p => p.p_Template).Include(p => p.p_Values).Include(p => p.p_Values.Select(v => v.p_Params)).Where(p => p.p_Template.p_TemplateID == a_Record.p_Template.p_TemplateID).ToList();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                MonitoringStub.Error("Error_RecordsFacade", "Не инициализирован фасад", null, null, null);
+                return null;
+            }
+        }
+
+        /// <summary>Получение последнего паттернов записи</summary>
+        /// <param name="a_Record">Запись</param>
+        public Cl_RecordPattern f_GetRecordLastPattern(Cl_Record a_Record)
+        {
+            if (m_DataContextMegaTemplate != null)
+            {
+                if (a_Record != null)
+                {
+                    return m_DataContextMegaTemplate.p_RecordsPatterns.Include(p => p.p_Template).Include(p => p.p_Values).Include(p => p.p_Values.Select(v => v.p_Params)).FirstOrDefault(p => p.p_Template.p_TemplateID == a_Record.p_Template.p_TemplateID);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                MonitoringStub.Error("Error_RecordsFacade", "Не инициализирован фасад", null, null, null);
+                return null;
+            }
+        }
+
         /// <summary>Полечение новой записи</summary>
+        /// <param name="a_MedicalCard">Медкарта</param>
         /// <param name="a_CategoryTotal">Общая категория</param>
         /// <param name="a_CategoryClinic">Клиническая категория</param>
         /// <param name="a_Title">Заголовок записи</param>
         /// <param name="a_ClinicName">Название клиники</param>
-        /// <param name="a_MedicalCardID">ID медицинской карты</param>
         /// <param name="a_DoctorID">ID доктора</param>
         /// <param name="a_DoctorSurName">Фамиля доктора</param>
         /// <param name="a_DoctorName">Имя доктора</param>
         /// <param name="a_DoctorLastName">Отчество доктора</param>
-        /// <param name="a_PatientID">ID пациента</param>
-        /// <param name="a_PatientSex">Пол пациента</param>
-        /// <param name="a_PatientSurName">Фамиля пациента</param>
-        /// <param name="a_PatientName">Имя пациента</param>
-        /// <param name="a_PatientLastName">Отчество пациента</param>
-        /// <param name="a_PatientDateBirth">Дата рождения пациента</param>
         /// <returns>Флаг успешного создания записи</returns>
-        private Cl_Record f_GetRecord(Cl_Category a_CategoryTotal, Cl_Category a_CategoryClinic, string a_Title, string a_ClinicName, int a_MedicalCardID,
-            int a_DoctorID, string a_DoctorSurName, string a_DoctorName, string a_DoctorLastName,
-            int a_PatientID, Cl_User.E_Sex a_PatientSex, string a_PatientSurName, string a_PatientName, string a_PatientLastName, DateTime a_PatientDateBirth)
+        private Cl_Record f_GetNewRecord(Cl_MedicalCard a_MedicalCard, Cl_Category a_CategoryTotal, Cl_Category a_CategoryClinic, string a_Title, string a_ClinicName,
+            int a_DoctorID, string a_DoctorSurName, string a_DoctorName, string a_DoctorLastName)
         {
             Cl_Record record = new Cl_Record();
             record.p_Version = 1;
@@ -701,27 +809,73 @@ namespace Sadco.FamilyDoctor.Core.Facades
             }
             record.p_Title = a_Title;
             record.p_ClinicName = a_ClinicName;
-            record.p_MedicalCardID = a_MedicalCardID;
+            record.p_MedicalCardID = a_MedicalCard?.p_ID;
+            record.p_MedicalCard = a_MedicalCard;
             record.p_DoctorID = a_DoctorID;
             record.p_DoctorSurName = a_DoctorSurName;
             record.p_DoctorName = a_DoctorName;
             record.p_DoctorLastName = a_DoctorLastName;
-            record.p_PatientID = a_PatientID;
-            record.p_PatientSex = a_PatientSex;
-            record.p_PatientSurName = a_PatientSurName;
-            record.p_PatientName = a_PatientName;
-            record.p_PatientLastName = a_PatientLastName;
-            record.p_PatientDateBirth = a_PatientDateBirth;
+            record.p_MedicalCard = a_MedicalCard;
             return record;
         }
 
+        private bool f_ValidCreateRecord(Cl_MedicalCard a_MedicalCard, Cl_Category a_CategoryTotal, Cl_Category a_CategoryClinic, string a_Title, string a_ClinicName,
+            int a_DoctorID, string a_DoctorSurName, string a_DoctorName, string a_DoctorLastName)
+        {
+            if (a_MedicalCard == null)
+            {
+                MonitoringStub.Error("Error_RecordFacade", "Медкарта пустая", null, null, null);
+                return false;
+            }
+            if (a_CategoryTotal == null)
+            {
+                MonitoringStub.Error("Error_RecordFacade", "Общая категория пустая", null, null, null);
+                return false;
+            }
+            if (a_CategoryTotal == null)
+            {
+                MonitoringStub.Error("Error_RecordFacade", "Клиническая категория пустая", null, null, null);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(a_Title))
+            {
+                MonitoringStub.Error("Error_RecordFacade", "Заголовок пустой", null, null, null);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(a_ClinicName))
+            {
+                MonitoringStub.Error("Error_RecordFacade", "Имя клиники пустое", null, null, null);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(a_DoctorSurName))
+            {
+                MonitoringStub.Error("Error_RecordFacade", "Фамилия доктора пустое", null, null, null);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(a_DoctorName))
+            {
+                MonitoringStub.Error("Error_RecordFacade", "Имя доктора пустое", null, null, null);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(a_DoctorLastName))
+            {
+                MonitoringStub.Error("Error_RecordFacade", "Отчество доктора пустое", null, null, null);
+                return false;
+            }
+            if (a_MedicalCard.p_IsDelete || a_MedicalCard.p_IsArchive)
+            {
+                MonitoringStub.Error("Error_AppInit", "Медицинская карта не является действующей", null, null, null);
+                return false;
+            }
+            return true;
+        }
+
         /// <summary>Создание новой записи</summary>
+        /// <param name="a_MedicalCard">Медкарта</param>
         /// <param name="a_CategoryTotal">Общая категория</param>
         /// <param name="a_CategoryClinic">Клиническая категория</param>
         /// <param name="a_Title">Заголовок записи</param>
         /// <param name="a_ClinicName">Название клиники</param>
-        /// <param name="a_MedicalCardID">ID медицинской карты</param>
-        /// <param name="a_Type">Тип записи</param>
         /// <param name="a_DoctorID">ID доктора</param>
         /// <param name="a_DoctorSurName">Фамиля доктора</param>
         /// <param name="a_DoctorName">Имя доктора</param>
@@ -735,16 +889,18 @@ namespace Sadco.FamilyDoctor.Core.Facades
         /// <param name="a_Template">Шаблон</param>
         /// <param name="a_Values">Значения записи</param>
         /// <returns>Флаг успешного создания записи</returns>
-        public bool f_CreateRecord(Cl_Category a_CategoryTotal, Cl_Category a_CategoryClinic, string a_Title, string a_ClinicName, int a_MedicalCardID,
+        public bool f_CreateRecord(Cl_MedicalCard a_MedicalCard, Cl_Category a_CategoryTotal, Cl_Category a_CategoryClinic, string a_Title, string a_ClinicName,
             int a_DoctorID, string a_DoctorSurName, string a_DoctorName, string a_DoctorLastName,
-            int a_PatientID, Cl_User.E_Sex a_PatientSex, string a_PatientSurName, string a_PatientName, string a_PatientLastName, DateTime a_PatientDateBirth,
             Cl_Template a_Template, IEnumerable<Cl_RecordValue> a_Values)
         {
-            if (a_Template != null)
+            if (f_ValidCreateRecord(a_MedicalCard, a_CategoryTotal, a_CategoryClinic, a_Title, a_ClinicName, a_DoctorID, a_DoctorSurName, a_DoctorName, a_DoctorLastName))
             {
-                Cl_Record record = f_GetRecord(a_CategoryTotal, a_CategoryClinic, a_Title, a_ClinicName, a_MedicalCardID,
-                    a_DoctorID, a_DoctorSurName, a_DoctorName, a_DoctorLastName,
-                    a_PatientID, a_PatientSex, a_PatientSurName, a_PatientName, a_PatientLastName, a_PatientDateBirth);
+                if (a_Template == null)
+                {
+                    MonitoringStub.Error("Error_RecordFacade", "Шаблон пустой", null, null, null);
+                    return false;
+                }
+                Cl_Record record = f_GetNewRecord(a_MedicalCard, a_CategoryTotal, a_CategoryClinic, a_Title, a_ClinicName, a_DoctorID, a_DoctorSurName, a_DoctorName, a_DoctorLastName);
                 if (record != null)
                 {
                     record.p_TemplateID = a_Template.p_ID;
@@ -755,33 +911,29 @@ namespace Sadco.FamilyDoctor.Core.Facades
         }
 
         /// <summary>Создание новой записи</summary>
+        /// <param name="a_MedicalCard">Медкарта</param>
         /// <param name="a_CategoryTotal">Общая категория</param>
         /// <param name="a_CategoryClinic">Клиническая категория</param>
         /// <param name="a_Title">Заголовок записи</param>
         /// <param name="a_ClinicName">Название клиники</param>
-        /// <param name="a_MedicalCardID">ID медицинской карты</param>
         /// <param name="a_DoctorID">ID доктора</param>
         /// <param name="a_DoctorSurName">Фамиля доктора</param>
         /// <param name="a_DoctorName">Имя доктора</param>
         /// <param name="a_DoctorLastName">Отчество доктора</param>
-        /// <param name="a_PatientID">ID пациента</param>
-        /// <param name="a_PatientSex">Пол пациента</param>
-        /// <param name="a_PatientSurName">Фамиля пациента</param>
-        /// <param name="a_PatientName">Имя пациента</param>
-        /// <param name="a_PatientLastName">Отчество пациента</param>
-        /// <param name="a_PatientDateBirth">Дата рождения пациента</param>
         /// <param name="a_RecordFileType">Тип файла</param>
         /// <param name="a_FileBytes">Данные файла записи</param>
         /// <returns>Флаг успешного создания записи</returns>
-        public bool f_CreateRecord(Cl_Category a_CategoryTotal, Cl_Category a_CategoryClinic, string a_Title, string a_ClinicName, int a_MedicalCardID,
+        public bool f_CreateRecord(Cl_MedicalCard a_MedicalCard, Cl_Category a_CategoryTotal, Cl_Category a_CategoryClinic, string a_Title, string a_ClinicName,
             int a_DoctorID, string a_DoctorSurName, string a_DoctorName, string a_DoctorLastName,
-            int a_PatientID, Cl_User.E_Sex a_PatientSex, string a_PatientSurName, string a_PatientName, string a_PatientLastName, DateTime a_PatientDateBirth,
             E_RecordFileType a_RecordFileType, byte[] a_FileBytes)
         {
-            Cl_Record record = f_GetRecord(a_CategoryTotal, a_CategoryClinic, a_Title, a_ClinicName, a_MedicalCardID,
-                a_DoctorID, a_DoctorSurName, a_DoctorName, a_DoctorLastName,
-                a_PatientID, a_PatientSex, a_PatientSurName, a_PatientName, a_PatientLastName, a_PatientDateBirth);
-            return f_CreateRecord(record, a_RecordFileType, a_FileBytes);
+            if (f_ValidCreateRecord(a_MedicalCard, a_CategoryTotal, a_CategoryClinic, a_Title, a_ClinicName, a_DoctorID, a_DoctorSurName, a_DoctorName, a_DoctorLastName))
+            {
+                Cl_Record record = f_GetNewRecord(a_MedicalCard, a_CategoryTotal, a_CategoryClinic, a_Title, a_ClinicName,
+                a_DoctorID, a_DoctorSurName, a_DoctorName, a_DoctorLastName);
+                return f_CreateRecord(record, a_RecordFileType, a_FileBytes);
+            }
+            return false;
         }
 
 
@@ -792,29 +944,51 @@ namespace Sadco.FamilyDoctor.Core.Facades
         /// <returns>Флаг успешного создания записи</returns>
         public bool f_CreateRecord(Cl_Record a_Record, IEnumerable<Cl_RecordValue> a_Values)
         {
-            if (m_DataContextMegaTemplate != null && a_Record != null && a_Record.p_TemplateID != null && a_Record.f_IsValid() && a_Values != null && a_Values.Count() > 0)
+            if (m_DataContextMegaTemplate == null)
             {
-                using (var transaction = m_DataContextMegaTemplate.Database.BeginTransaction())
+                MonitoringStub.Error("Error_RecordFacade", "Фасад не инициализирован", null, null, null);
+                return false;
+            }
+            if (a_Record == null)
+            {
+                MonitoringStub.Error("Error_RecordFacade", "Запись пустая", null, null, null);
+                return false;
+            }
+            if (a_Record.p_TemplateID == null)
+            {
+                MonitoringStub.Error("Error_RecordFacade", "Шаблон записи пустой", null, null, null);
+                return false;
+            }
+            if (a_Record.f_IsValid())
+            {
+                MonitoringStub.Error("Error_RecordFacade", "Некорректная запись", null, null, null);
+                return false;
+            }
+            if (a_Values == null && a_Values.Count() == 0)
+            {
+                MonitoringStub.Error("Error_RecordFacade", "Не указаны значения записи", null, null, null);
+                return false;
+            }
+            using (var transaction = m_DataContextMegaTemplate.Database.BeginTransaction())
+            {
+                try
                 {
-                    try
-                    {
-                        a_Record.p_Version = 1;
-                        a_Record.p_Type = E_RecordType.ByTemplate;
-                        a_Record.p_Values.AddRange(a_Values);
-                        m_DataContextMegaTemplate.p_Records.Add(a_Record);
-                        m_DataContextMegaTemplate.SaveChanges();
-                        a_Record.p_FileType = E_RecordFileType.HTML;
-                        a_Record.p_HTMLDoctor = a_Record.f_GetHTMLDoctor();
-                        a_Record.p_HTMLPatient = a_Record.f_GetHTMLPatient();
-                        a_Record.p_RecordID = a_Record.p_ID;
-                        m_DataContextMegaTemplate.SaveChanges();
-                        transaction.Commit();
-                        return true;
-                    }
-                    catch
-                    {
-                        transaction.Rollback();
-                    }
+                    a_Record.p_Version = 1;
+                    a_Record.p_Type = E_RecordType.ByTemplate;
+                    a_Record.p_Values.AddRange(a_Values);
+                    m_DataContextMegaTemplate.p_Records.Add(a_Record);
+                    m_DataContextMegaTemplate.SaveChanges();
+                    a_Record.p_FileType = E_RecordFileType.HTML;
+                    a_Record.p_HTMLDoctor = a_Record.f_GetHTMLDoctor();
+                    a_Record.p_HTMLPatient = a_Record.f_GetHTMLPatient();
+                    a_Record.p_RecordID = a_Record.p_ID;
+                    m_DataContextMegaTemplate.SaveChanges();
+                    transaction.Commit();
+                    return true;
+                }
+                catch
+                {
+                    transaction.Rollback();
                 }
             }
             return false;

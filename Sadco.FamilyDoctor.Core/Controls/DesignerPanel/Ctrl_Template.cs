@@ -18,6 +18,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             InitializeComponent();
         }
 
+        private Label ctrlLMKB = null;
+
         private Color m_BorderColor = Color.Black;
         [DefaultValue(typeof(Color), "Black")]
         public Color p_BorderColor {
@@ -286,19 +288,29 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         {
             ctrlContent.Controls.Clear();
             m_Record = a_Record;
-            if (m_Record.p_Version > 0)
+            if (m_Record != null)
             {
+                if (m_Record.p_Version > 0)
+                {
+                    if (m_Record.p_Values == null)
+                    {
+                        var recs = Cl_App.m_DataContext.Entry(m_Record).Collection(g => g.p_Values).Query().Include(te => te.p_Element).Include(te => te.p_Element.p_Default).Include(te => te.p_Params);
+                        recs.Load();
+                    }
+                }
                 if (m_Record.p_Values == null)
                 {
-                    var recs = Cl_App.m_DataContext.Entry(m_Record).Collection(g => g.p_Values).Query().Include(te => te.p_Element).Include(te => te.p_Element.p_Default).Include(te => te.p_Params);
-                    recs.Load();
+                    m_Record.p_Values = new List<Cl_RecordValue>();
                 }
+                f_AddControlsTemplate(m_Template);
+                ctrlLMKB = new Label() { Width = 500 };
+                ctrlContent.Controls.Add(ctrlLMKB);
+                f_UpdateMKB();
             }
-            if (m_Record.p_Values == null)
+            else
             {
-                m_Record.p_Values = new List<Cl_RecordValue>();
+                ctrlLMKB = null;
             }
-            f_AddControlsTemplate(m_Template);
         }
 
         /// <summary>Получение новой версии записи</summary>
@@ -312,6 +324,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         {
             if (m_Template == null || m_Record == null) return null;
             var record = new Cl_Record();
+            record.p_Type = E_RecordType.ByTemplate;
             record.p_RecordID = m_Record.p_RecordID;
             record.p_MedicalCardID = m_Record.p_MedicalCardID;
             record.p_ClinicName = m_Record.p_ClinicName;
@@ -327,15 +340,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             record.p_DoctorSurName = m_Record.p_DoctorSurName;
             record.p_DoctorName = m_Record.p_DoctorName;
             record.p_DoctorLastName = m_Record.p_DoctorLastName;
-            record.p_PatientID = m_Record.p_PatientID;
-            record.p_PatientSurName = m_Record.p_PatientSurName;
-            record.p_PatientName = m_Record.p_PatientName;
-            record.p_PatientLastName = m_Record.p_PatientLastName;
-            record.p_PatientSex = m_Record.p_PatientSex;
-            record.p_PatientDateBirth = m_Record.p_PatientDateBirth;
+            record.p_MedicalCard = m_Record.p_MedicalCard;
             record.p_DateCreate = m_Record.p_DateCreate;
             record.p_DateForming = m_Record.p_DateForming;
             record.p_Version = m_Record.p_Version + 1;
+            record.p_MKB1 = m_Record.p_MKB1;
+            record.p_MKB2 = m_Record.p_MKB2;
+            record.p_MKB3 = m_Record.p_MKB3;
+            record.p_MKB4 = m_Record.p_MKB4;
             record.p_Values = new List<Cl_RecordValue>();
             foreach (var el in m_Elements)
             {
@@ -350,6 +362,19 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 }
             }
             return record;
+        }
+
+        /// <summary>Обновление МКБ</summary>
+        public void f_UpdateMKB()
+        {
+            if (m_Record != null)
+            {
+                ctrlLMKB.Text = $"MKB: {m_Record.p_MKB1} - {m_Record.p_MKB2} - {m_Record.p_MKB3} - {m_Record.p_MKB4}";
+            }
+            else
+            {
+                ctrlLMKB.Text = "";
+            }
         }
 
         private int f_GetHeight(Cl_Template a_Template)

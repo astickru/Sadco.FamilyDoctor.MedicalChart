@@ -182,8 +182,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             Label l = null;
             if (p_Element.p_IsText)
             {
-                byte age = a_RecordValue.p_Record.f_GetPatientAge();
-                var partNorm = p_Element.f_GetPartNormValue(a_RecordValue.p_Record.p_PatientSex, age, out m_Min, out m_Max);
+                byte age = a_RecordValue.p_Record.p_MedicalCard.f_GetPatientAge();
+                var partNorm = p_Element.f_GetPartNormValue(a_RecordValue.p_Record.p_MedicalCard.p_PatientSex, age, out m_Min, out m_Max);
                 if (p_Element.p_IsPartPre)
                 {
                     l = new Label() { Text = p_Element.p_PartPre };

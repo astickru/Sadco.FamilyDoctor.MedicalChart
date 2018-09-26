@@ -26,7 +26,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             ctrlLPatientName.Text = Cl_SessionFacade.f_GetInstance().p_Patient.p_FIO;
             m_Permission = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission;
 
-            ctrlBReportAddRecord.Visible = ctrlBReportAddPattern.Visible = m_Permission.p_IsEditAllRecords || m_Permission.p_IsEditSelfRecords;
+            ctrlBReportAddRecordByFile.Visible = !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsDelete && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsArchive
+                    && m_Permission.p_IsEditArchive;
+            ctrlBReportAddRecord.Visible = ctrlBReportAddPattern.Visible = !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsDelete && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsArchive
+                    && (m_Permission.p_IsEditAllRecords || m_Permission.p_IsEditSelfRecords);
+
             ctrlBAddRecordFromRecord.Visible = false;
             ctrlBReportFormatPattern.Visible = false;
 
@@ -50,7 +54,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 var patientID = Cl_SessionFacade.f_GetInstance().p_Patient.p_UserID;
                 var patientUID = Cl_SessionFacade.f_GetInstance().p_Patient.p_UserUID;
 
-                var records = Cl_App.m_DataContext.p_Records.AsQueryable();
+                var records = Cl_App.m_DataContext.p_Records.Include(r => r.p_MedicalCard).AsQueryable();
                 if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsReadSelectedRecords)
                 {
                     if (Cl_SessionFacade.f_GetInstance().p_DateStart != null && Cl_SessionFacade.f_GetInstance().p_DateEnd != null)
@@ -63,19 +67,19 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         MonitoringStub.Error("Error_Editor", "Для проверяющего С/К не указан период", null, null, null);
                 }
 
-                m_Records = records.Where(r => p_IsShowDeleted ? true : !r.p_IsDelete && ((r.p_PatientUID != null && r.p_PatientUID == patientUID) || r.p_PatientID == patientID)).GroupBy(e => e.p_RecordID)
+                m_Records = records.Where(r => p_IsShowDeleted ? true : !r.p_IsDelete && ((r.p_MedicalCard.p_PatientUID != null && r.p_MedicalCard.p_PatientUID == patientUID) || r.p_MedicalCard.p_PatientID == patientID)).GroupBy(e => e.p_RecordID)
                         .Select(grp => grp
                             .OrderByDescending(v => v.p_Version).FirstOrDefault())
                             .Include(r => r.p_CategoryTotal).Include(r => r.p_CategoryClinic).Include(r => r.p_Values).Include(r => r.p_Template).Include(r => r.p_Values.Select(v => v.p_Params)).ToArray();
 
                 ctrl_TRecords.BindData(null, null);
-                ctrl_TRecords.Columns.AddRange(p_MedicalCardID, p_ClinikName, p_DateForming, p_CategoryTotal, p_Title, p_DoctorFIO);
+                ctrl_TRecords.Columns.AddRange(p_MedicalCardNumber, p_ClinikName, p_DateForming, p_CategoryTotal, p_Title, p_DoctorFIO);
 
                 foreach (var record in m_Records)
                 {
                     OutlookGridRow row = new OutlookGridRow();
                     row.CreateCells(ctrl_TRecords,
-                        record.p_MedicalCardID,
+                        record.p_MedicalCardNumber,
                         record.p_ClinicName,
                         record.p_DateForming.ToString("dd.MM.yyyy hh:mm"),
                         record.p_CategoryTotal != null ? record.p_CategoryTotal.p_Name : "",
@@ -112,10 +116,16 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         private bool f_GetEdited(Cl_Record a_Record)
         {
             if (a_Record != null)
-                return !a_Record.p_IsAutomatic && (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditAllRecords
-                    || (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditSelfRecords && a_Record.p_DoctorID == Cl_SessionFacade.f_GetInstance().p_Doctor.p_UserID));
+            {
+                var perm = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission;
+                return !a_Record.p_IsAutomatic && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsDelete && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsArchive
+                    && ((a_Record.p_Type == E_RecordType.ByTemplate && (perm.p_IsEditAllRecords || (perm.p_IsEditSelfRecords && a_Record.p_DoctorID == Cl_SessionFacade.f_GetInstance().p_Doctor.p_UserID)))
+                        || (perm.p_IsEditArchive && a_Record.p_Type == E_RecordType.FinishedFile));
+            }
             else
+            {
                 return false;
+            }
         }
 
         private void f_AddRecordFromRecord(Cl_Record a_Record)
@@ -145,35 +155,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 dlgRecord.p_Record = a_Record;
                 dlgRecord.ShowDialog(this);
                 Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.UIEvents, string.Format("Выход из редактирования записи: {0}, дата записи: {1}, клиника: {2}", a_Record.p_Title, a_Record.p_DateCreate, a_Record.p_ClinicName), a_Record.p_RecordID);
-            }
-        }
-
-        private void f_Archive()
-        {
-            if (m_SelectedRecord != null)
-            {
-                if (!m_SelectedRecord.p_IsArchive)
-                {
-                    using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
-                    {
-                        try
-                        {
-                            Cl_EntityLog log = new Cl_EntityLog();
-                            log.f_SetEntity(m_SelectedRecord);
-                            m_SelectedRecord.p_IsArchive = true;
-                            log.f_SaveEntity(m_SelectedRecord);
-                            Cl_App.m_DataContext.SaveChanges();
-                            transaction.Commit();
-                            ctrlBReportArchive.Visible = ctrlMIArchive.Visible = false;
-                        }
-                        catch
-                        {
-                            m_SelectedRecord.p_IsArchive = false;
-                            transaction.Rollback();
-                            MonitoringStub.Error("Error_Tree", "Не удалось перенести запись в архив", null, null, null);
-                        }
-                    }
-                }
             }
         }
 
@@ -241,6 +222,27 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
         }
 
+        private void ctrlBReportAddRecordByFile_Click(object sender, EventArgs e)
+        {
+            Cl_Record record = new Cl_Record();
+            record.p_DateCreate = DateTime.Now;
+            record.p_Type = E_RecordType.FinishedFile;
+            record.p_DateLastChange = record.p_DateForming = record.p_DateCreate;
+            record.p_MedicalCard = Cl_SessionFacade.f_GetInstance().p_MedicalCard;
+            record.p_MedicalCardID = record.p_MedicalCard.p_ID;
+            record.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
+
+            record.p_Title = "Новая запись с готовым файлом";
+            //record.p_CategoryTotalID = category.p_ID;
+            //record.p_CategoryTotal = category;
+
+            record.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
+            var dlgRecord = new Dlg_Record();
+            dlgRecord.e_Save += DlgRecord_e_Save;
+            dlgRecord.p_Record = record;
+            dlgRecord.ShowDialog(this);
+        }
+
         private void ctrlBReportAddRecord_Click(object sender, System.EventArgs e)
         {
             var dlg = new Dlg_RecordSelectSource();
@@ -254,29 +256,14 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         record.p_DateCreate = DateTime.Now;
                         record.p_DateLastChange = record.p_DateForming = record.p_DateCreate;
                         record.f_SetTemplate(dlg.p_SelectedTemplate);
-                        record.p_MedicalCardID = Cl_SessionFacade.f_GetInstance().p_MedCardNumber;
+                        record.p_MedicalCard = Cl_SessionFacade.f_GetInstance().p_MedicalCard;
+                        record.p_MedicalCardID = record.p_MedicalCard.p_ID;
                         record.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
                         record.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor);
-                        record.f_SetPatient(Cl_SessionFacade.f_GetInstance().p_Patient);
                         var dlgRecord = new Dlg_Record();
                         dlgRecord.e_Save += DlgRecord_e_Save;
                         dlgRecord.p_Record = record;
                         dlgRecord.ShowDialog(this);
-                    }
-                    else if (dlg.p_SelectedRecordPattern != null)
-                    {
-                        if (dlg.p_SelectedRecordPattern.p_Template != null)
-                        {
-                            Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(dlg.p_SelectedRecordPattern.p_Template);
-                            Cl_Record record = Cl_RecordsFacade.f_GetInstance().f_GetNewRecord(dlg.p_SelectedRecordPattern);
-                            if (record != null)
-                            {
-                                var dlgRecord = new Dlg_Record();
-                                dlgRecord.e_Save += DlgRecord_e_Save;
-                                dlgRecord.p_Record = record;
-                                dlgRecord.ShowDialog(this);
-                            }
-                        }
                     }
                 }
                 catch (Exception er)
@@ -331,11 +318,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             f_Edit(m_SelectedRecord);
         }
 
-        private void ctrlBReportArchive_Click(object sender, EventArgs e)
-        {
-            f_Archive();
-        }
-
         private void ctrlBReportRating_Click(object sender, EventArgs e)
         {
             f_Rating();
@@ -380,9 +362,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         ctrlRecordInfo.Text = string.Format("{0} {1} [{2}, {3}]", record.p_DateCreate.ToShortDateString(), record.p_Title, record.p_DateLastChange, record.p_DoctorFIO);
 
                         ctrlCMViewer.Enabled = true;
-                        ctrlBAddRecordFromRecord.Visible = ctrlBReportFormatPattern.Visible = !record.p_IsAutomatic && (m_Permission.p_IsEditAllRecords || m_Permission.p_IsEditSelfRecords);
+                        ctrlBAddRecordFromRecord.Visible = ctrlBReportFormatPattern.Visible = !record.p_IsAutomatic && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsDelete && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsArchive && (m_Permission.p_IsEditAllRecords || m_Permission.p_IsEditSelfRecords);
                         ctrlBReportEdit.Visible = ctrlMIEdit.Visible = f_GetEdited(record);
-                        ctrlBReportArchive.Visible = ctrlMIArchive.Visible = !record.p_IsArchive && m_Permission.p_IsEditArchive;
                         ctrlBReportRating.Visible = ctrlMIRating.Visible = m_Permission.p_IsEditAllRatings;
                         ctrlBReportSyncBMK.Visible = ctrlMISyncBMK.Visible = !record.p_IsSyncBMK && record.p_IsPrintDoctor && m_Permission.p_IsEditArchive;
                         ctrlBReportPrintDoctor.Visible = ctrlBReportPrintPatient.Visible = ctrlMIPrint.Visible = m_Permission.p_IsPrint;
@@ -441,7 +422,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 ctrlPRecordInfo.Visible = false;
                 ctrlBReportFormatPattern.Visible = false;
                 ctrlBReportEdit.Visible = false;
-                ctrlBReportArchive.Visible = false;
                 ctrlBReportRating.Visible = false;
                 ctrlBReportPrintDoctor.Visible = ctrlBReportPrintPatient.Visible = false;
             }
@@ -450,11 +430,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         private void ctrlMIEdit_Click(object sender, EventArgs e)
         {
             f_Edit(m_SelectedRecord);
-        }
-
-        private void ctrlMIArhive_Click(object sender, EventArgs e)
-        {
-            f_Archive();
         }
 
         private void ctrlMIRating_Click(object sender, EventArgs e)
@@ -481,7 +456,10 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             if (m_SelectedRecord != null)
             {
-                m_WebBrowserPrint.ShowPrintPreviewDialog();
+                if (Cl_SessionFacade.f_GetInstance().p_SettingsPrintWithParams)
+                    m_WebBrowserPrint.ShowPrintPreviewDialog();
+                else
+                    m_WebBrowserPrint.Print();
                 if (p_IsPrintDoctor)
                 {
                     if (!m_SelectedRecord.p_IsPrintDoctor)

@@ -18,48 +18,60 @@ namespace Sadco.FamilyDoctor.MedicalChart
 
         public F_Main(string[] args)
         {
-            this.FormClosing += F_Main_FormClosing;
-
-            f_InitSession(args);
-
-            Tag = string.Format("Мегашаблон v{0}", ConfigurationManager.AppSettings["Version"]);
-            if (Cl_App.Initialize())
+            try
             {
-                Cl_SessionFacade sess = Cl_SessionFacade.f_GetInstance();
-                Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.AppEvents, string.Format("Запуск ЭМК. Пользователь: {0}/({1}). Пациент: {2}/({3})", sess.p_Doctor.f_GetInitials(), sess.p_Doctor.p_UserID, sess.p_Patient.f_GetInitials(), sess.p_Patient.p_UserID));
-
-
-                this.Font = new System.Drawing.Font(ConfigurationManager.AppSettings["FontFamily"],
-                        float.Parse(ConfigurationManager.AppSettings["FontSize"]),
-                        (System.Drawing.FontStyle)int.Parse(ConfigurationManager.AppSettings["FontStyle"]),
-                        System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-                InitializeComponent();
-
-                string rolesVal = "";
-                var role = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_Role;
-                var memInfo = typeof(E_Roles).GetMember(typeof(E_Roles).GetEnumName(role));
-                var descriptionAttributes = memInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
-                if (descriptionAttributes.Length > 0)
+                this.FormClosing += F_Main_FormClosing;
+                Tag = string.Format("Мегашаблон v{0}", ConfigurationManager.AppSettings["Version"]);
+                if (Cl_App.Initialize())
                 {
-                    rolesVal = ((DescriptionAttribute)descriptionAttributes[0]).Description;
+                    if (f_InitSession(args))
+                    {
+                        Cl_SessionFacade sess = Cl_SessionFacade.f_GetInstance();
+                        Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.AppEvents, string.Format("Запуск ЭМК. Пользователь: {0}/({1}). Пациент: {2}/({3})", sess.p_Doctor.f_GetInitials(), sess.p_Doctor.p_UserID, sess.p_Patient.f_GetInitials(), sess.p_Patient.p_UserID));
+
+
+                        this.Font = new System.Drawing.Font(ConfigurationManager.AppSettings["FontFamily"],
+                                float.Parse(ConfigurationManager.AppSettings["FontSize"]),
+                                (System.Drawing.FontStyle)int.Parse(ConfigurationManager.AppSettings["FontStyle"]),
+                                System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+                        InitializeComponent();
+
+                        string rolesVal = "";
+                        var role = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_Role;
+                        var memInfo = typeof(E_Roles).GetMember(typeof(E_Roles).GetEnumName(role));
+                        var descriptionAttributes = memInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
+                        if (descriptionAttributes.Length > 0)
+                        {
+                            rolesVal = ((DescriptionAttribute)descriptionAttributes[0]).Description;
+                        }
+
+                        ctrlSessionInfo.Text = string.Format("Пользователь: {0}, {1} | Расположение: {2}", Cl_SessionFacade.f_GetInstance().p_Doctor.p_FIO, rolesVal, Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName);
+
+                        p_PanelManager = new UI_PanelManager(ctrl_CustomControls);
+                        bool visibleEditor = false;
+                        visibleEditor |= menuMegaTemplate.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditMegaTemplates;
+                        visibleEditor |= menuTemplate.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditTemplates;
+                        visibleEditor |= menuMegaTemplateDeleted.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsShowDeleted;
+                        visibleEditor |= menuCatalogs.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditCatalogs;
+                        visibleEditor |= menuPatterns.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditAllRecords || Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditSelfRecords;
+                        ctrlMIEditor.Visible = visibleEditor;
+
+                        ctrlMISettingsPrint.Checked = Cl_SessionFacade.f_GetInstance().p_SettingsPrintWithParams;
+
+                        f_SetControl<UC_Records>();
+                    }
+                    else
+                    {
+                        Application.Exit();
+                    }
                 }
-
-                ctrlSessionInfo.Text = string.Format("Пользователь: {0}, {1} | Расположение: {2}", Cl_SessionFacade.f_GetInstance().p_Doctor.p_FIO, rolesVal, Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName);
-
-                p_PanelManager = new UI_PanelManager(ctrl_CustomControls);
-                bool visibleEditor = false;
-                visibleEditor |= menuMegaTemplate.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditMegaTemplates;
-                visibleEditor |= menuTemplate.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditTemplates;
-                visibleEditor |= menuMegaTemplateDeleted.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsShowDeleted;
-                visibleEditor |= menuCatalogs.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditCatalogs;
-                visibleEditor |= menuPatterns.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditAllRecords || Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditSelfRecords;
-                ctrlMIEditor.Visible = visibleEditor;
-
-                f_SetControl<UC_Records>();
-            }
-            else
+                else
+                {
+                    Application.Exit();
+                }
+            } catch (Exception er)
             {
-                Application.Exit();
+                MonitoringStub.Error("Error_App", "В приложении возникла ошибка", er, null, null);
             }
         }
 
@@ -68,7 +80,7 @@ namespace Sadco.FamilyDoctor.MedicalChart
             Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.AppEvents, "Завершение работы с ЭМК.");
         }
 
-        private void f_InitSession(string[] args)
+        private bool f_InitSession(string[] args)
         {
             Cl_User user = new Cl_User();
             user.p_ClinicName = args[0];
@@ -77,19 +89,33 @@ namespace Sadco.FamilyDoctor.MedicalChart
             user.p_UserName = args[3];
             user.p_UserLastName = args[4];
             user.p_Permission = new Cl_UserPermission(args[5]);
-            Cl_User patient = new Cl_User();
-            patient.p_UserID = int.Parse(args[6]);
-            if (!string.IsNullOrWhiteSpace(args[7]))
-                patient.p_UserUID = Guid.Parse(args[7]);
-            patient.p_UserSurName = args[8];
-            patient.p_UserName = args[9];
-            patient.p_UserLastName = args[10];
-            patient.p_Sex = (Cl_User.E_Sex)Enum.Parse(typeof(Cl_User.E_Sex), args[12]);
-            patient.p_DateBirth = DateTime.Parse(args[13]);
-            if (args.Length == 16)
-                Cl_SessionFacade.f_GetInstance().f_Init(user, patient, int.Parse(args[11]), DateTime.Parse(args[14]), DateTime.Parse(args[15]));
+            int patientId = 0;
+            if (int.TryParse(args[7], out patientId))
+            {
+                var medCard = Cl_MedicalCardsFacade.f_GetInstance().f_GetMedicalCard(args[6], patientId);
+                if (medCard != null)
+                {
+                    if (args.Length == 10)
+                        return Cl_SessionFacade.f_GetInstance().f_Init(user, medCard, DateTime.Parse(args[8]), DateTime.Parse(args[9]));
+                    else
+                        return Cl_SessionFacade.f_GetInstance().f_Init(user, medCard);
+                }
+                else
+                {
+                    MonitoringStub.Error("Error_AppInit", "Не найдена медицинская карта", null, null, null);
+                    return false;
+                }
+            }
             else
-                Cl_SessionFacade.f_GetInstance().f_Init(user, patient, int.Parse(args[11]));
+            {
+                MonitoringStub.Error("Error_AppInit", "Не верно указан Id пациента", null, null, null);
+                return false;
+            }
+        }
+
+        private void ctrlMIMedicalCards_Click(object sender, EventArgs e)
+        {
+            f_SetControl<UC_MedicalCards>();
         }
 
         private void ctrlMIRecord_Click(object sender, EventArgs e)
@@ -150,6 +176,11 @@ namespace Sadco.FamilyDoctor.MedicalChart
         {
             var wPatterns = new F_RecordsPatterns();
             wPatterns.ShowDialog();
+        }
+
+        private void ctrlMISettingsPrint_CheckedChanged(object sender, EventArgs e)
+        {
+            Cl_SessionFacade.f_GetInstance().p_SettingsPrintWithParams = ctrlMISettingsPrint.Checked;
         }
     }
 }

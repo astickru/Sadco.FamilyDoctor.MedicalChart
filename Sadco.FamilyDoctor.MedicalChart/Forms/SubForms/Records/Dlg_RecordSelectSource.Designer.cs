@@ -36,22 +36,11 @@
             this.ctrl_MITemplateNew = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_MITemplateEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_MITemplateDelete = new System.Windows.Forms.ToolStripMenuItem();
-            this.ctrl_TreeTemplates = new Sadco.FamilyDoctor.Core.Controls.Ctrl_TreeTemplates();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.ctrlTBSources = new System.Windows.Forms.TabControl();
-            this.ctrlTabTemplate = new System.Windows.Forms.TabPage();
-            this.ctrlTabPattern = new System.Windows.Forms.TabPage();
-            this.ctrlTablePatterns = new System.Windows.Forms.DataGridView();
-            this.p_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.p_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.p_TemplateName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.ctrl_TreeTemplates = new Sadco.FamilyDoctor.Core.Controls.Ctrl_TreeTemplates();
             this.ctrl_CMTemplate.SuspendLayout();
-            this.ctrlTBSources.SuspendLayout();
-            this.ctrlTabTemplate.SuspendLayout();
-            this.ctrlTabPattern.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ctrlTablePatterns)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -109,21 +98,6 @@
             this.ctrl_MITemplateDelete.Tag = "MI_TemplateDelete";
             this.ctrl_MITemplateDelete.Text = "Удалить шаблон";
             // 
-            // ctrl_TreeTemplates
-            // 
-            this.ctrl_TreeTemplates.AllowDrop = true;
-            this.ctrl_TreeTemplates.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ctrl_TreeTemplates.ImageKey = "FOLDER_16";
-            this.ctrl_TreeTemplates.Location = new System.Drawing.Point(4, 3);
-            this.ctrl_TreeTemplates.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.ctrl_TreeTemplates.Name = "ctrl_TreeTemplates";
-            this.ctrl_TreeTemplates.p_IsShowDeleted = false;
-            this.ctrl_TreeTemplates.p_ReadOnly = true;
-            this.ctrl_TreeTemplates.SelectedImageKey = "FOLDER_16";
-            this.ctrl_TreeTemplates.Size = new System.Drawing.Size(729, 443);
-            this.ctrl_TreeTemplates.TabIndex = 1;
-            this.ctrl_TreeTemplates.DoubleClick += new System.EventHandler(this.ctrl_TreeTemplates_DoubleClick);
-            // 
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -146,81 +120,6 @@
             this.button2.Text = "отменить";
             this.button2.UseVisualStyleBackColor = true;
             // 
-            // ctrlTBSources
-            // 
-            this.ctrlTBSources.Controls.Add(this.ctrlTabTemplate);
-            this.ctrlTBSources.Controls.Add(this.ctrlTabPattern);
-            this.ctrlTBSources.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ctrlTBSources.Location = new System.Drawing.Point(0, 0);
-            this.ctrlTBSources.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.ctrlTBSources.Name = "ctrlTBSources";
-            this.ctrlTBSources.SelectedIndex = 0;
-            this.ctrlTBSources.Size = new System.Drawing.Size(745, 475);
-            this.ctrlTBSources.TabIndex = 3;
-            // 
-            // ctrlTabTemplate
-            // 
-            this.ctrlTabTemplate.Controls.Add(this.ctrl_TreeTemplates);
-            this.ctrlTabTemplate.Location = new System.Drawing.Point(4, 22);
-            this.ctrlTabTemplate.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.ctrlTabTemplate.Name = "ctrlTabTemplate";
-            this.ctrlTabTemplate.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.ctrlTabTemplate.Size = new System.Drawing.Size(737, 449);
-            this.ctrlTabTemplate.TabIndex = 0;
-            this.ctrlTabTemplate.Text = "Шаблоны записей";
-            this.ctrlTabTemplate.UseVisualStyleBackColor = true;
-            // 
-            // ctrlTabPattern
-            // 
-            this.ctrlTabPattern.Controls.Add(this.ctrlTablePatterns);
-            this.ctrlTabPattern.Location = new System.Drawing.Point(4, 22);
-            this.ctrlTabPattern.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.ctrlTabPattern.Name = "ctrlTabPattern";
-            this.ctrlTabPattern.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.ctrlTabPattern.Size = new System.Drawing.Size(737, 449);
-            this.ctrlTabPattern.TabIndex = 1;
-            this.ctrlTabPattern.Text = "Паттерны записей";
-            this.ctrlTabPattern.UseVisualStyleBackColor = true;
-            // 
-            // ctrlTablePatterns
-            // 
-            this.ctrlTablePatterns.AllowUserToAddRows = false;
-            this.ctrlTablePatterns.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ctrlTablePatterns.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.p_ID,
-            this.p_Name,
-            this.p_TemplateName});
-            this.ctrlTablePatterns.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ctrlTablePatterns.Location = new System.Drawing.Point(4, 3);
-            this.ctrlTablePatterns.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.ctrlTablePatterns.Name = "ctrlTablePatterns";
-            this.ctrlTablePatterns.ReadOnly = true;
-            this.ctrlTablePatterns.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ctrlTablePatterns.Size = new System.Drawing.Size(729, 443);
-            this.ctrlTablePatterns.TabIndex = 0;
-            this.ctrlTablePatterns.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ctrlTablePatterns_CellDoubleClick);
-            // 
-            // p_ID
-            // 
-            this.p_ID.HeaderText = "p_ID";
-            this.p_ID.Name = "p_ID";
-            this.p_ID.ReadOnly = true;
-            this.p_ID.Visible = false;
-            // 
-            // p_Name
-            // 
-            this.p_Name.HeaderText = "Название";
-            this.p_Name.Name = "p_Name";
-            this.p_Name.ReadOnly = true;
-            this.p_Name.Width = 250;
-            // 
-            // p_TemplateName
-            // 
-            this.p_TemplateName.HeaderText = "Шаблон";
-            this.p_TemplateName.Name = "p_TemplateName";
-            this.p_TemplateName.ReadOnly = true;
-            this.p_TemplateName.Width = 250;
-            // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Controls.Add(this.button2);
@@ -233,13 +132,27 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(745, 32);
             this.flowLayoutPanel1.TabIndex = 3;
             // 
+            // ctrl_TreeTemplates
+            // 
+            this.ctrl_TreeTemplates.AllowDrop = true;
+            this.ctrl_TreeTemplates.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ctrl_TreeTemplates.ImageKey = "FOLDER_16";
+            this.ctrl_TreeTemplates.Location = new System.Drawing.Point(0, 0);
+            this.ctrl_TreeTemplates.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.ctrl_TreeTemplates.Name = "ctrl_TreeTemplates";
+            this.ctrl_TreeTemplates.p_IsShowDeleted = false;
+            this.ctrl_TreeTemplates.p_ReadOnly = true;
+            this.ctrl_TreeTemplates.SelectedImageKey = "FOLDER_16";
+            this.ctrl_TreeTemplates.Size = new System.Drawing.Size(745, 475);
+            this.ctrl_TreeTemplates.TabIndex = 4;
+            // 
             // Dlg_RecordSelectSource
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(745, 507);
-            this.Controls.Add(this.ctrlTBSources);
+            this.Controls.Add(this.ctrl_TreeTemplates);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold);
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -247,10 +160,6 @@
             this.Name = "Dlg_RecordSelectSource";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.ctrl_CMTemplate.ResumeLayout(false);
-            this.ctrlTBSources.ResumeLayout(false);
-            this.ctrlTabTemplate.ResumeLayout(false);
-            this.ctrlTabPattern.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ctrlTablePatterns)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -264,16 +173,9 @@
         private System.Windows.Forms.ToolStripMenuItem ctrl_MITemplateDelete;
         private System.Windows.Forms.ToolStripMenuItem ctrl_MIGroupEdit;
         private System.Windows.Forms.ToolStripMenuItem ctrl_MITemplateEdit;
-        private Core.Controls.Ctrl_TreeTemplates ctrl_TreeTemplates;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TabControl ctrlTBSources;
-        private System.Windows.Forms.TabPage ctrlTabTemplate;
-        private System.Windows.Forms.TabPage ctrlTabPattern;
-        private System.Windows.Forms.DataGridView ctrlTablePatterns;
-        private System.Windows.Forms.DataGridViewTextBoxColumn p_ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn p_Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn p_TemplateName;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private Core.Controls.Ctrl_TreeTemplates ctrl_TreeTemplates;
     }
 }

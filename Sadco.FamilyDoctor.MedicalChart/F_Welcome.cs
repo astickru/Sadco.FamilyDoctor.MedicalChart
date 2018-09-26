@@ -1,4 +1,9 @@
-﻿using Sadco.FamilyDoctor.Core.Permision;
+﻿using FD.dat.mon.stb.lib;
+using Sadco.FamilyDoctor.Core;
+using Sadco.FamilyDoctor.Core.Data;
+using Sadco.FamilyDoctor.Core.Entities;
+using Sadco.FamilyDoctor.Core.Facades;
+using Sadco.FamilyDoctor.Core.Permision;
 using System;
 using System.ComponentModel;
 using System.Configuration;
@@ -14,9 +19,6 @@ namespace Sadco.FamilyDoctor.MedicalChart
 {
     public partial class F_Welcome : Form
     {
-        bool tryConnectionString = false;
-        string connectionString = "";
-
         private Type m_EnumType = null;
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HT_CAPTION = 0x2;
@@ -25,12 +27,19 @@ namespace Sadco.FamilyDoctor.MedicalChart
         private static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [DllImportAttribute("user32.dll")]
         private static extern bool ReleaseCapture();
+        private Cl_MedicalCard _currentMedCard = null;
 
         public F_Welcome()
         {
             InitializeComponent();
-            ctrlPatientSex.f_SetEnum(typeof(Cl_User.E_Sex));
-            f_InitValues();
+            if (Cl_App.Initialize())
+            {
+                f_InitValues();
+            }
+            else
+            {
+                Application.Exit();
+            }
         }
 
         private void f_InitValues()
@@ -78,37 +87,26 @@ namespace Sadco.FamilyDoctor.MedicalChart
             isNotValid |= ctrlUserSurName.Text == "";
             isNotValid |= ctrlUserName.Text == "";
             isNotValid |= ctrlUserLastName.Text == "";
-            isNotValid |= ctrlPatientID.Text == "";
-            isNotValid |= ctrlPatientSurName.Text == "";
-            isNotValid |= ctrlPatientName.Text == "";
-            isNotValid |= ctrlPatientLastName.Text == "";
-            isNotValid |= ctrlPatientDateBirth.Text == "";
-            isNotValid |= ctrlMedCardNumber.Text == "";
+            isNotValid |= _currentMedCard == null;
 
             if (isNotValid) return new string[0];
 
-            string[] startParams = new string[16];
+            string[] startParams = new string[10];
             startParams[0] = ctrlClinikName.Text;
             startParams[1] = ctrlUserID.Text;
             startParams[2] = ctrlUserSurName.Text;
             startParams[3] = ctrlUserName.Text;
             startParams[4] = ctrlUserLastName.Text;
             startParams[5] = f_GetSelectedItem<E_Roles>().ToString();
-            startParams[6] = ctrlPatientID.Text;
-            Guid gVal = Guid.Empty;
-            if (Guid.TryParse(ctrlPatientUID.Text, out gVal))
-                startParams[7] = ctrlPatientUID.Text;
-            startParams[8] = ctrlPatientSurName.Text;
-            startParams[9] = ctrlPatientName.Text;
-            startParams[10] = ctrlPatientLastName.Text;
-            startParams[11] = ctrlMedCardNumber.Text;
-            startParams[12] = ((Cl_User.E_Sex)ctrlPatientSex.f_GetSelectedItem()).GetHashCode().ToString();
-            startParams[13] = ctrlPatientDateBirth.Value.ToString("dd.MM.yyyy");
-
+            if (_currentMedCard != null)
+            {
+                startParams[6] = _currentMedCard.p_Number;
+                startParams[7] = _currentMedCard.p_PatientID.ToString();
+            }
             if (ctrlDateStart.Value != null)
-                startParams[14] = ctrlDateStart.Value.ToString("dd.MM.yyyy");
+                startParams[8] = ctrlDateStart.Value.ToString("dd.MM.yyyy");
             if (ctrlDateEnd.Value != null)
-                startParams[15] = ctrlDateEnd.Value.ToString("dd.MM.yyyy");
+                startParams[9] = ctrlDateEnd.Value.ToString("dd.MM.yyyy");
 
             return startParams;
         }
@@ -170,5 +168,49 @@ namespace Sadco.FamilyDoctor.MedicalChart
             }
         }
         #endregion
+
+        private void ctrlBLoadMedicalCard_Click(object sender, EventArgs e)
+        {
+            int patientId = 0;
+            Guid patientUid = Guid.Empty;
+            ctrlMedcardInfo.Text = "";
+            _currentMedCard = null;
+            if (int.TryParse(ctrlTBPatientID.Text, out patientId))
+            {
+                var medCard = Cl_MedicalCardsFacade.f_GetInstance().f_GetMedicalCard(ctrlTBMedCardNumber.Text, patientId);
+                if (medCard != null)
+                {
+                    ctrlMedcardInfo.Text = $"№{medCard.p_Number}, {medCard.p_PatientFIO}, {medCard.p_PatientDateBirth}";
+                    _currentMedCard = medCard;
+                }
+                else
+                {
+                    MonitoringStub.Warning("Не найдена медицинская карта");
+                }
+            }
+            else if (Guid.TryParse(ctrlTBPatientID.Text, out patientUid))
+            {
+                var medCard = Cl_MedicalCardsFacade.f_GetInstance().f_GetMedicalCard(ctrlTBMedCardNumber.Text, patientUid);
+                if (medCard != null)
+                {
+                    ctrlMedcardInfo.Text = $"№{medCard.p_Number}, {medCard.p_PatientFIO}, {medCard.p_PatientDateBirth}";
+                    _currentMedCard = medCard;
+                }
+                else
+                {
+                    MonitoringStub.Warning("Не найдена медицинская карта");
+                }
+            }
+            else
+            {
+                MonitoringStub.Error("Error_Welcome", "Не верно указан Id пациента", null, null, null);
+            }
+        }
+
+        private void ctrlBAddMK_Click(object sender, EventArgs e)
+        {
+            var fAddMK = new F_AddMK();
+            fAddMK.ShowDialog();
+        }
     }
 }

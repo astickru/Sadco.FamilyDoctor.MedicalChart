@@ -29,6 +29,7 @@
             this.ctrlMIFile = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlMISave = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlMIExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctrlMIMedicalCards = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlMIRecord = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlMIEditor = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCatalogs = new System.Windows.Forms.ToolStripMenuItem();
@@ -37,6 +38,8 @@
             this.menuMegaTemplate = new System.Windows.Forms.ToolStripMenuItem();
             this.menuPatterns = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMegaTemplateDeleted = new System.Windows.Forms.ToolStripMenuItem();
+            this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctrlMISettingsPrint = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlMIInfo = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel = new System.Windows.Forms.Panel();
             this.ctrl_CustomControls = new System.Windows.Forms.Panel();
@@ -52,8 +55,10 @@
             this.ctrlMIMenu.BackColor = System.Drawing.SystemColors.Control;
             this.ctrlMIMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ctrlMIFile,
+            this.ctrlMIMedicalCards,
             this.ctrlMIRecord,
             this.ctrlMIEditor,
+            this.настройкиToolStripMenuItem,
             this.ctrlMIInfo});
             this.ctrlMIMenu.Location = new System.Drawing.Point(0, 0);
             this.ctrlMIMenu.Name = "ctrlMIMenu";
@@ -82,6 +87,13 @@
             this.ctrlMIExit.Size = new System.Drawing.Size(132, 22);
             this.ctrlMIExit.Text = "Выход";
             this.ctrlMIExit.Click += new System.EventHandler(this.ctrlMIExit_Click);
+            // 
+            // ctrlMIMedicalCards
+            // 
+            this.ctrlMIMedicalCards.Name = "ctrlMIMedicalCards";
+            this.ctrlMIMedicalCards.Size = new System.Drawing.Size(75, 20);
+            this.ctrlMIMedicalCards.Text = "Медкарты";
+            this.ctrlMIMedicalCards.Click += new System.EventHandler(this.ctrlMIMedicalCards_Click);
             // 
             // ctrlMIRecord
             // 
@@ -147,6 +159,22 @@
             this.menuMegaTemplateDeleted.Size = new System.Drawing.Size(231, 22);
             this.menuMegaTemplateDeleted.Text = "Показ удаленных элементов";
             this.menuMegaTemplateDeleted.Click += new System.EventHandler(this.menuMegaTemplateDeleted_Click);
+            // 
+            // настройкиToolStripMenuItem
+            // 
+            this.настройкиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ctrlMISettingsPrint});
+            this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
+            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
+            this.настройкиToolStripMenuItem.Text = "Настройки";
+            // 
+            // ctrlMISettingsPrint
+            // 
+            this.ctrlMISettingsPrint.CheckOnClick = true;
+            this.ctrlMISettingsPrint.Name = "ctrlMISettingsPrint";
+            this.ctrlMISettingsPrint.Size = new System.Drawing.Size(198, 22);
+            this.ctrlMISettingsPrint.Text = "Печать с настройками";
+            this.ctrlMISettingsPrint.CheckedChanged += new System.EventHandler(this.ctrlMISettingsPrint_CheckedChanged);
             // 
             // ctrlMIInfo
             // 
@@ -240,5 +268,8 @@
         private System.Windows.Forms.ToolStripMenuItem menuPatterns;
 		private System.Windows.Forms.Panel ctrlPFooter;
 		private System.Windows.Forms.Label ctrlSessionInfo;
-	}
+        private System.Windows.Forms.ToolStripMenuItem ctrlMIMedicalCards;
+        private System.Windows.Forms.ToolStripMenuItem настройкиToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ctrlMISettingsPrint;
+    }
 }
