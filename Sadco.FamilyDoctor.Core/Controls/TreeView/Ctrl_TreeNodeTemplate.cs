@@ -1,4 +1,5 @@
 ﻿using Sadco.FamilyDoctor.Core.Entities;
+using Sadco.FamilyDoctor.Core.Facades;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -20,12 +21,19 @@ namespace Sadco.FamilyDoctor.Core.Controls
             }
             set {
                 m_Template = value;
-                f_Update();
+                f_ReDraw();
             }
         }
 
         /// <summary>Обновление части дерева</summary>
         public void f_Update()
+        {
+            // Падает с ошибкой
+            m_Template = Cl_TemplatesFacade.f_GetInstance().f_GetActualTemplate(m_Template);
+            f_ReDraw();
+        }
+
+        private void f_ReDraw()
         {
             if (m_Template != null)
             {

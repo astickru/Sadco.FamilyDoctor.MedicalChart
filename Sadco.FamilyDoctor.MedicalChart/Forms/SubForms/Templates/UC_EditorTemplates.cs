@@ -65,6 +65,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 .Where(t => t.p_TemplateID == treeNode.p_Template.p_TemplateID && !t.p_IsDelete).OrderByDescending(v => v.p_Version).FirstOrDefault();
             if (tpl != null)
             {
+                Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(tpl);
                 treeNode.p_Template = tpl;
                 F_DesignerTemplate editor = new F_DesignerTemplate();
                 editor.p_ActiveTemplate = treeNode.p_Template;
