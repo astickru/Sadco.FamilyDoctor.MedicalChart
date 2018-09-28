@@ -46,8 +46,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         private void Dlg_RatingViewer_Load(object sender, EventArgs e)
         {
-            ctrlRBValue_5.Checked = true;
-
             f_UpdateRateEditingState(selfRating);
         }
 
@@ -56,12 +54,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             ctrlLAuthor.Text = Cl_SessionFacade.f_GetInstance().p_Doctor.f_GetInitials();
             ctrlLDate.Text = DateTime.Now.ToString();
             ctrlTBComment.Text = "";
-
-            ctrlRBValue_1.Checked = false;
-            ctrlRBValue_2.Checked = false;
-            ctrlRBValue_3.Checked = false;
-            ctrlRBValue_4.Checked = false;
-            ctrlRBValue_5.Checked = true;
 
             if (rating == null) return;
 
@@ -80,11 +72,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             ctrl_TRatings.DataSource = null;
 
-            var curRatings = Cl_App.m_DataContext.p_Ratings.Local.ToBindingList().Where(l => l.p_RecordID == p_RecordID).OrderByDescending(l => l.p_Time);
+            var curRatings = Cl_App.m_DataContext.p_Ratings.Where(l => l.p_RecordID == p_RecordID).OrderByDescending(l => l.p_Time);
             if (curRatings.Count() == 0) return;
 
             BindingSource bs = new BindingSource();
-            bs.DataSource = curRatings;
+            bs.DataSource = curRatings.ToList();
             ctrl_TRatings.DataSource = bs;
         }
 

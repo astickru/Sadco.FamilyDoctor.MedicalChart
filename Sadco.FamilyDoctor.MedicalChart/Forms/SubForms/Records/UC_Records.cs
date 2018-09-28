@@ -240,6 +240,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             var dlgRecord = new Dlg_Record();
             dlgRecord.e_Save += DlgRecord_e_Save;
             dlgRecord.p_Record = record;
+            Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.UIEvents, "Создание новой записи с готовым файлом");
             dlgRecord.ShowDialog(this);
         }
 
@@ -263,6 +264,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         var dlgRecord = new Dlg_Record();
                         dlgRecord.e_Save += DlgRecord_e_Save;
                         dlgRecord.p_Record = record;
+                        Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.UIEvents, string.Format("Создание новой записи. Шаблон {0}", record.p_Template.p_Name));
                         dlgRecord.ShowDialog(this);
                     }
                 }

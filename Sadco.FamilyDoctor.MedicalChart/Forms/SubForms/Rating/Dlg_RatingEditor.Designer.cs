@@ -26,6 +26,7 @@
 		/// </summary>
 		private void InitializeComponent() {
             this.panel2 = new System.Windows.Forms.Panel();
+            this.p_Buttons = new System.Windows.Forms.FlowLayoutPanel();
             this.ctrlBReRate = new System.Windows.Forms.Button();
             this.ctrlBSave = new System.Windows.Forms.Button();
             this.p_Elements = new System.Windows.Forms.Panel();
@@ -51,11 +52,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.ctrlLAuthor = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.p_Buttons = new System.Windows.Forms.FlowLayoutPanel();
             this.panel2.SuspendLayout();
+            this.p_Buttons.SuspendLayout();
             this.p_Elements.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ctrl_TRatings)).BeginInit();
-            this.p_Buttons.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel2
@@ -68,6 +68,19 @@
             this.panel2.Size = new System.Drawing.Size(571, 574);
             this.panel2.TabIndex = 67;
             // 
+            // p_Buttons
+            // 
+            this.p_Buttons.Controls.Add(this.ctrlBReRate);
+            this.p_Buttons.Controls.Add(this.ctrlBSave);
+            this.p_Buttons.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.p_Buttons.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.p_Buttons.Location = new System.Drawing.Point(0, 542);
+            this.p_Buttons.Margin = new System.Windows.Forms.Padding(0);
+            this.p_Buttons.Name = "p_Buttons";
+            this.p_Buttons.Padding = new System.Windows.Forms.Padding(3);
+            this.p_Buttons.Size = new System.Drawing.Size(571, 32);
+            this.p_Buttons.TabIndex = 19;
+            // 
             // ctrlBReRate
             // 
             this.ctrlBReRate.Location = new System.Drawing.Point(475, 3);
@@ -77,6 +90,7 @@
             this.ctrlBReRate.TabIndex = 18;
             this.ctrlBReRate.Text = "оценить";
             this.ctrlBReRate.UseVisualStyleBackColor = true;
+            this.ctrlBReRate.Click += new System.EventHandler(this.ctrlBReRate_Click);
             // 
             // ctrlBSave
             // 
@@ -87,6 +101,7 @@
             this.ctrlBSave.TabIndex = 17;
             this.ctrlBSave.Text = "сохранить";
             this.ctrlBSave.UseVisualStyleBackColor = true;
+            this.ctrlBSave.Click += new System.EventHandler(this.ctrlBSave_Click);
             // 
             // p_Elements
             // 
@@ -137,6 +152,7 @@
             this.ctrl_TRatings.ShowRowErrors = false;
             this.ctrl_TRatings.Size = new System.Drawing.Size(566, 298);
             this.ctrl_TRatings.TabIndex = 17;
+            this.ctrl_TRatings.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ctrl_TRatings_CellDoubleClick);
             // 
             // p_Value
             // 
@@ -331,19 +347,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Автор:";
             // 
-            // p_Buttons
-            // 
-            this.p_Buttons.Controls.Add(this.ctrlBReRate);
-            this.p_Buttons.Controls.Add(this.ctrlBSave);
-            this.p_Buttons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.p_Buttons.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.p_Buttons.Location = new System.Drawing.Point(0, 542);
-            this.p_Buttons.Margin = new System.Windows.Forms.Padding(0);
-            this.p_Buttons.Name = "p_Buttons";
-            this.p_Buttons.Padding = new System.Windows.Forms.Padding(3);
-            this.p_Buttons.Size = new System.Drawing.Size(571, 32);
-            this.p_Buttons.TabIndex = 19;
-            // 
             // Dlg_RatingViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 13F);
@@ -360,10 +363,10 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Экспертиза";
             this.panel2.ResumeLayout(false);
+            this.p_Buttons.ResumeLayout(false);
             this.p_Elements.ResumeLayout(false);
             this.p_Elements.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ctrl_TRatings)).EndInit();
-            this.p_Buttons.ResumeLayout(false);
             this.ResumeLayout(false);
 
 		}
