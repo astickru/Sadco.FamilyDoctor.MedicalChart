@@ -24,7 +24,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         private void f_InitTreeView() {
             ctrl_TreeTemplates.p_IsShowDeleted = p_IsShowDeleted;
             ctrl_TreeTemplates.AfterSelect += Ctrl_TreeTemplates_AfterSelect;
-            ctrl_TreeTemplates.e_EditElement += Ctrl_TreeTemplates_e_EditElement;
+            ctrl_TreeTemplates.e_EditTemplate += Ctrl_TreeTemplates_e_EditTemplate;
             Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Templates && g.p_ParentID == null && !g.p_IsDelete).ToArray();
             foreach (Cl_Group group in groups)
             {
@@ -58,7 +58,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             //f_LoadTemplates();
         }
 
-        private void Ctrl_TreeTemplates_e_EditElement(object sender, TreeViewEventArgs e)
+        private void Ctrl_TreeTemplates_e_EditTemplate(object sender, TreeViewEventArgs e)
         {
             Ctrl_TreeNodeTemplate treeNode = (Ctrl_TreeNodeTemplate)e.Node;
             var tpl = Cl_App.m_DataContext.p_Templates
@@ -69,6 +69,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 treeNode.p_Template = tpl;
                 F_DesignerTemplate editor = new F_DesignerTemplate();
                 editor.p_ActiveTemplate = treeNode.p_Template;
+                editor.WindowState = FormWindowState.Maximized;
                 editor.ShowDialog(ParentForm);
                 ctrl_TreeTemplates.f_Update();
             }

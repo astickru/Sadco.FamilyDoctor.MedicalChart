@@ -106,8 +106,8 @@
             // 
             this.ctrlMIEditor.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuCatalogs,
-            this.menuTemplate,
             this.menuMegaTemplate,
+            this.menuTemplate,
             this.menuPatterns,
             this.menuMegaTemplateDeleted});
             this.ctrlMIEditor.Name = "ctrlMIEditor";

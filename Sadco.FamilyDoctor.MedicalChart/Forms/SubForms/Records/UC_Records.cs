@@ -44,6 +44,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         private Cl_Record[] m_Records = null;
         private Cl_Record m_SelectedRecord = null;
+        private DataGridViewRow m_SelectedRow = null;
         private Cl_UserPermission m_Permission = null;
         private WebBrowser m_WebBrowserPrint = new WebBrowser();
 
@@ -67,10 +68,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         MonitoringStub.Error("Error_Editor", "Для проверяющего С/К не указан период", null, null, null);
                 }
 
-                m_Records = records.Where(r => p_IsShowDeleted ? true : !r.p_IsDelete && ((r.p_MedicalCard.p_PatientUID != null && r.p_MedicalCard.p_PatientUID == patientUID) || r.p_MedicalCard.p_PatientID == patientID)).GroupBy(e => e.p_RecordID)
-                        .Select(grp => grp
-                            .OrderByDescending(v => v.p_Version).FirstOrDefault())
-                            .Include(r => r.p_CategoryTotal).Include(r => r.p_CategoryClinic).Include(r => r.p_Values).Include(r => r.p_Template).Include(r => r.p_Values.Select(v => v.p_Params)).ToArray();
+                records = records.Where(r => p_IsShowDeleted ? true : !r.p_IsDelete && r.p_MedicalCard != null && (r.p_MedicalCard.p_PatientUID == patientUID || r.p_MedicalCard.p_PatientID == patientID));
+
+                m_Records = records.GroupBy(e => e.p_RecordID).Select(grp => grp
+                    .OrderByDescending(v => v.p_Version).FirstOrDefault())
+                    .Include(r => r.p_CategoryTotal).Include(r => r.p_CategoryClinic).Include(r => r.p_Values).Include(r => r.p_Template).Include(r => r.p_Values.Select(v => v.p_Params)).ToArray();
 
                 ctrl_TRecords.BindData(null, null);
                 ctrl_TRecords.Columns.AddRange(p_MedicalCardNumber, p_ClinikName, p_DateForming, p_CategoryTotal, p_Title, p_DoctorFIO);
@@ -81,7 +83,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     row.CreateCells(ctrl_TRecords,
                         record.p_MedicalCardNumber,
                         record.p_ClinicName,
-                        record.p_DateForming.ToString("dd.MM.yyyy hh:mm"),
+                        record.p_DateReception.ToString("dd.MM.yyyy HH:mm"),
                         record.p_CategoryTotal != null ? record.p_CategoryTotal.p_Name : "",
                         record.p_Title,
                         record.p_DoctorFIO);
@@ -91,6 +93,19 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 ctrl_TRecords.Columns[0].Visible = false;
                 ctrl_TRecords.GroupTemplate.Column = ctrl_TRecords.Columns[0];
                 ctrl_TRecords.Sort(ctrl_TRecords.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+
+                if (m_SelectedRecord != null)
+                {
+                    foreach (DataGridViewRow row in ctrl_TRecords.Rows)
+                    {
+                        if (((Cl_Record)row.Tag).p_ID == m_SelectedRecord.p_ID)
+                        {
+                            row.Selected = true;
+                            f_OnSelectRow(row);
+                            break;
+                        }
+                    }
+                }
             }
             catch (Exception er)
             {
@@ -308,14 +323,28 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             f_FormatPattern(m_SelectedRecord);
         }
 
-        private void DlgRecord_e_Save(object sender, EventArgs e)
+        private void DlgRecord_e_Save(object sender, Cl_Record.Cl_EventArgs e)
         {
+            m_SelectedRecord = e.p_Record;
             f_UpdateRecords();
         }
 
         private void ctrlBReportEdit_Click(object sender, EventArgs e)
         {
             f_Edit(m_SelectedRecord);
+        }
+
+
+        private void ctrlBReportDelete_Click(object sender, EventArgs e)
+        {
+            if (m_SelectedRecord != null)
+            {
+                if (MessageBox.Show($"Удалить запись {m_SelectedRecord.p_Title}?", $"Удаление записи", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+                m_SelectedRecord.p_IsDelete = true;
+                Cl_App.m_DataContext.SaveChanges();
+                if (m_SelectedRow != null)
+                    ctrl_TRecords.Rows.Remove(m_SelectedRow);
+            }
         }
 
         private void ctrlBReportRating_Click(object sender, EventArgs e)
@@ -346,16 +375,18 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
         }
 
-        private void ctrl_TRecords_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void f_OnSelectRow(DataGridViewRow row)
         {
             m_SelectedRecord = null;
-            if (ctrl_TRecords.CurrentRow != null && ctrl_TRecords.CurrentRow is OutlookGridRow && !((OutlookGridRow)ctrl_TRecords.CurrentRow).IsGroupRow && ctrl_TRecords.CurrentRow.Tag != null)
+            m_SelectedRow = null;
+            if (row != null && row is OutlookGridRow && !((OutlookGridRow)row).IsGroupRow && row.Tag != null)
             {
                 try
                 {
-                    var record = m_SelectedRecord = m_Records.FirstOrDefault(r => r.p_ID == ((Cl_Record)ctrl_TRecords.CurrentRow.Tag).p_ID);
+                    var record = m_SelectedRecord = m_Records.FirstOrDefault(r => r.p_ID == ((Cl_Record)row.Tag).p_ID);
                     if (record != null)
                     {
+                        m_SelectedRow = row;
                         Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.UIEvents, string.Format("Просмотр записи: {0}, дата записи: {1}, клиника: {2}", record.p_Title, record.p_DateCreate, record.p_ClinicName), record.p_RecordID);
 
                         ctrlPRecordInfo.Visible = true;
@@ -364,6 +395,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         ctrlCMViewer.Enabled = true;
                         ctrlBAddRecordFromRecord.Visible = ctrlBReportFormatPattern.Visible = !record.p_IsAutomatic && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsDelete && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsArchive && (m_Permission.p_IsEditAllRecords || m_Permission.p_IsEditSelfRecords);
                         ctrlBReportEdit.Visible = ctrlMIEdit.Visible = f_GetEdited(record);
+                        ctrlBReportDelete.Visible = ctrlMIDelete.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditSelfRecords && record.p_DoctorID == Cl_SessionFacade.f_GetInstance().p_Doctor.p_UserID;
                         ctrlBReportRating.Visible = ctrlMIRating.Visible = m_Permission.p_IsEditAllRatings;
                         ctrlBReportSyncBMK.Visible = ctrlMISyncBMK.Visible = !record.p_IsSyncBMK && record.p_IsPrintDoctor && m_Permission.p_IsEditArchive;
                         ctrlBReportPrintDoctor.Visible = ctrlBReportPrintPatient.Visible = ctrlMIPrint.Visible = m_Permission.p_IsPrint;
@@ -425,6 +457,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 ctrlBReportRating.Visible = false;
                 ctrlBReportPrintDoctor.Visible = ctrlBReportPrintPatient.Visible = false;
             }
+        }
+
+        private void ctrl_TRecords_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            f_OnSelectRow(ctrl_TRecords.CurrentRow);
         }
 
         private void ctrlMIEdit_Click(object sender, EventArgs e)

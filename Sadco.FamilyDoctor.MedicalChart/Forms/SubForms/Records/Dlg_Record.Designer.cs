@@ -35,6 +35,8 @@
             this.ctrl_MITemplateDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlPContent = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.ctrlDTPDateReception = new System.Windows.Forms.DateTimePicker();
+            this.label4 = new System.Windows.Forms.Label();
             this.ctrlTitle = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -44,12 +46,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.ctrlBMKB = new System.Windows.Forms.Button();
             this.ctrlBRating = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.ctrlBHistory = new System.Windows.Forms.Button();
             this.ctrlBFormatByPattern = new System.Windows.Forms.Button();
             this.ctrlBSave = new System.Windows.Forms.Button();
-            this.ctrlBMKB = new System.Windows.Forms.Button();
             this.ctrl_CMTemplate.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -113,15 +115,17 @@
             // ctrlPContent
             // 
             this.ctrlPContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ctrlPContent.Location = new System.Drawing.Point(14, 84);
+            this.ctrlPContent.Location = new System.Drawing.Point(14, 112);
             this.ctrlPContent.Name = "ctrlPContent";
             this.ctrlPContent.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.ctrlPContent.Size = new System.Drawing.Size(1199, 454);
+            this.ctrlPContent.Size = new System.Drawing.Size(1199, 426);
             this.ctrlPContent.TabIndex = 1;
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel1.Controls.Add(this.ctrlDTPDateReception);
+            this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.ctrlTitle);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.label3);
@@ -133,12 +137,28 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(14, 10);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1199, 74);
+            this.panel1.Size = new System.Drawing.Size(1199, 102);
             this.panel1.TabIndex = 2;
+            // 
+            // ctrlDTPDateReception
+            // 
+            this.ctrlDTPDateReception.Location = new System.Drawing.Point(165, 74);
+            this.ctrlDTPDateReception.Name = "ctrlDTPDateReception";
+            this.ctrlDTPDateReception.Size = new System.Drawing.Size(171, 21);
+            this.ctrlDTPDateReception.TabIndex = 71;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 77);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(151, 13);
+            this.label4.TabIndex = 69;
+            this.label4.Text = "Дата и время приема:";
             // 
             // ctrlTitle
             // 
-            this.ctrlTitle.Location = new System.Drawing.Point(121, 48);
+            this.ctrlTitle.Location = new System.Drawing.Point(165, 48);
             this.ctrlTitle.Name = "ctrlTitle";
             this.ctrlTitle.Size = new System.Drawing.Size(848, 21);
             this.ctrlTitle.TabIndex = 68;
@@ -180,7 +200,7 @@
             // ctrlPatientFIO
             // 
             this.ctrlPatientFIO.AutoSize = true;
-            this.ctrlPatientFIO.Location = new System.Drawing.Point(118, 29);
+            this.ctrlPatientFIO.Location = new System.Drawing.Point(162, 29);
             this.ctrlPatientFIO.Name = "ctrlPatientFIO";
             this.ctrlPatientFIO.Size = new System.Drawing.Size(98, 13);
             this.ctrlPatientFIO.TabIndex = 3;
@@ -189,7 +209,7 @@
             // ctrlDoctorFIO
             // 
             this.ctrlDoctorFIO.AutoSize = true;
-            this.ctrlDoctorFIO.Location = new System.Drawing.Point(118, 7);
+            this.ctrlDoctorFIO.Location = new System.Drawing.Point(162, 7);
             this.ctrlDoctorFIO.Name = "ctrlDoctorFIO";
             this.ctrlDoctorFIO.Size = new System.Drawing.Size(82, 13);
             this.ctrlDoctorFIO.TabIndex = 2;
@@ -224,6 +244,17 @@
             this.panel2.Padding = new System.Windows.Forms.Padding(3);
             this.panel2.Size = new System.Drawing.Size(1199, 32);
             this.panel2.TabIndex = 0;
+            // 
+            // ctrlBMKB
+            // 
+            this.ctrlBMKB.Dock = System.Windows.Forms.DockStyle.Left;
+            this.ctrlBMKB.Location = new System.Drawing.Point(102, 3);
+            this.ctrlBMKB.Name = "ctrlBMKB";
+            this.ctrlBMKB.Size = new System.Drawing.Size(99, 26);
+            this.ctrlBMKB.TabIndex = 4;
+            this.ctrlBMKB.Text = "МКБ";
+            this.ctrlBMKB.UseVisualStyleBackColor = true;
+            this.ctrlBMKB.Click += new System.EventHandler(this.ctrlBMKB_Click);
             // 
             // ctrlBRating
             // 
@@ -283,17 +314,6 @@
             this.ctrlBSave.UseVisualStyleBackColor = true;
             this.ctrlBSave.Click += new System.EventHandler(this.ctrlBSave_Click);
             // 
-            // ctrlBMKB
-            // 
-            this.ctrlBMKB.Dock = System.Windows.Forms.DockStyle.Left;
-            this.ctrlBMKB.Location = new System.Drawing.Point(102, 3);
-            this.ctrlBMKB.Name = "ctrlBMKB";
-            this.ctrlBMKB.Size = new System.Drawing.Size(99, 26);
-            this.ctrlBMKB.TabIndex = 4;
-            this.ctrlBMKB.Text = "МКБ";
-            this.ctrlBMKB.UseVisualStyleBackColor = true;
-            this.ctrlBMKB.Click += new System.EventHandler(this.ctrlBMKB_Click);
-            // 
             // Dlg_Record
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 13F);
@@ -344,5 +364,7 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button ctrlBFormatByPattern;
         private System.Windows.Forms.Button ctrlBMKB;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.DateTimePicker ctrlDTPDateReception;
     }
 }

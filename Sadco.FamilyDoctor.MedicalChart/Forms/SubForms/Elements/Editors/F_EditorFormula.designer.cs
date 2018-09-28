@@ -168,7 +168,6 @@
             this.ctrlTBValue.Name = "ctrlTBValue";
             this.ctrlTBValue.Size = new System.Drawing.Size(49, 20);
             this.ctrlTBValue.TabIndex = 9;
-            this.ctrlTBValue.Text = "10";
             // 
             // ctrlBCarve
             // 

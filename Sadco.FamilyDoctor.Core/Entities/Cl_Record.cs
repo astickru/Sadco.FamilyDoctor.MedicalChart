@@ -47,6 +47,11 @@ namespace Sadco.FamilyDoctor.Core.Entities
     [Table("T_RECORDS")]
     public class Cl_Record : Cl_RecordBase, I_Record, I_Version, I_Delete, I_ELog
     {
+        public class Cl_EventArgs : EventArgs
+        {
+            public Cl_Record p_Record { get; set; }
+        }
+
         /// <summary>ID записи для всех версий</summary>
         [Column("F_RECORD_ID")]
         [Description("ID записи для всех версий")]
@@ -65,6 +70,11 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
         /// <summary>Возвращает уникальный ID записи</summary>
         int I_ELog.p_GetLogEntityID => this.p_RecordID;
+
+        /// <summary>Время приема</summary>
+        [Column("F_DATERECEPTION")]
+        [Description("Время приема")]
+        public DateTime p_DateReception { get; set; }
 
         /// <summary>Время формирования записи</summary>
         [Column("F_DATEFORMING")]
@@ -220,8 +230,8 @@ namespace Sadco.FamilyDoctor.Core.Entities
             template = Regex.Replace(template, "<fd\\.document\\.location>.*?<\\/fd\\.document\\.location>", string.Format("<fd.document.location>{0}</fd.document.location>", p_ClinicName));
             template = Regex.Replace(template, "<fd\\.document\\.patient>.*?<\\/fd\\.document\\.patient>", string.Format("<fd.document.patient>{0} {1} {2} {3} {4} # {5}</fd.document.patient>",
                 p_RecordID, p_MedicalCard.p_PatientSurName, p_MedicalCard.p_PatientName, p_MedicalCard.p_PatientLastName, p_MedicalCard.p_PatientDateBirth.ToString("dd.MM.yyyy"), p_ID));
-            template = Regex.Replace(template, "<fd\\.document\\.date>.*?<\\/fd\\.document\\.date>", string.Format("<fd.document.date>{0}</fd.document.date>", p_DateCreate.ToString("dd.MM.yyyy")));
-            template = Regex.Replace(template, "<fd\\.document\\.time>.*?<\\/fd\\.document\\.time>", string.Format("<fd.document.time>{0}</fd.document.time>", p_DateCreate.ToString("hh:mm")));
+            template = Regex.Replace(template, "<fd\\.document\\.date>.*?<\\/fd\\.document\\.date>", string.Format("<fd.document.date>{0}</fd.document.date>", p_DateReception.ToString("dd.MM.yyyy")));
+            template = Regex.Replace(template, "<fd\\.document\\.time>.*?<\\/fd\\.document\\.time>", string.Format("<fd.document.time>{0}</fd.document.time>", p_DateReception.ToString("HH:mm")));
             template = Regex.Replace(template, "<fd\\.document\\.title>.*?<\\/fd\\.document\\.title>", string.Format("<fd.document.title>{0}</fd.document.title>", p_Title));
             string htmlContent = "";
             string htmlTabling = null;
@@ -295,9 +305,9 @@ namespace Sadco.FamilyDoctor.Core.Entities
                     }
                 }
             }
-            htmlContent += $"<p>MKB: {p_MKB1} - {p_MKB2} - {p_MKB3} - {p_MKB4}</p>";
             f_EndTabling();
             f_EndFloating();
+            htmlContent += $"<p>MKБ: {p_MKB1} - {p_MKB2} - {p_MKB3} - {p_MKB4}</p>";
             template = Regex.Replace(template, "<fd\\.document\\.content>.*?<\\/fd\\.document\\.content>", string.Format("<fd.document.content>{0}</fd.document.content>", htmlContent));
             template = Regex.Replace(template, "<fd\\.document\\.doctor>.*?<\\/fd\\.document\\.doctor>", string.Format("<fd.document.doctor>{0}</fd.document.doctor>", p_DoctorFIO));
             return template;

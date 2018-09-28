@@ -369,7 +369,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         {
             if (m_Record != null)
             {
-                ctrlLMKB.Text = $"MKB: {m_Record.p_MKB1} - {m_Record.p_MKB2} - {m_Record.p_MKB3} - {m_Record.p_MKB4}";
+                ctrlLMKB.Text = $"MKБ: {m_Record.p_MKB1} - {m_Record.p_MKB2} - {m_Record.p_MKB3} - {m_Record.p_MKB4}";
             }
             else
             {

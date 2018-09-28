@@ -113,6 +113,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         private string m_SeparatorMulti = ", ";
         private Cl_Record m_Record = null;
         private ComboBox ctrl_PartLocations;
+        private ComboBox ctrl_ValuesChangeNotNormValues;
         private Ctrl_CheckedComboBox ctrl_PartLocationsMulti;
         private Ctrl_SeparatorCombobox ctrl_Values;
         private Ctrl_CheckedComboBox ctrl_ValuesMulti;
@@ -160,6 +161,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             m_Record = a_RecordValue.p_Record;
             ctrl_PartLocations = null;
             ctrl_PartLocationsMulti = null;
+            ctrl_ValuesChangeNotNormValues = null;
             ctrl_Values = null;
             ctrl_ValuesMulti = null;
             ctrl_Value = null;
@@ -377,12 +379,20 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         {
                             ctrl_Values.SelectedItem = rValue.p_ElementParam;
                         }
+                        else
+                        {
+                            ctrl_Values.Text = a_RecordValue.p_ValueUser;
+                        }
                         if (p_Element.p_Symmetrical)
                         {
                             rValue = a_RecordValue.p_ValuesDopCatalog.FirstOrDefault();
                             if (rValue != null)
                             {
                                 ctrl_DopValues.SelectedItem = rValue.p_ElementParam;
+                            }
+                            else
+                            {
+                                ctrl_DopValues.Text = a_RecordValue.p_ValueDopUser;
                             }
                         }
                         if (m_Record.p_Version == 0 && p_Element.p_Default != null)
@@ -757,28 +767,52 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     }
                     else
                     {
-                        if (ctrl_Values != null && ctrl_Values.SelectedItem != null)
+                        if (ctrl_Values != null && (ctrl_Values.SelectedItem != null || (p_Element.p_IsChangeNotNormValues && !string.IsNullOrWhiteSpace(ctrl_Values.Text))))
                         {
-                            var ep = (Cl_ElementParam)ctrl_Values.SelectedItem;
-                            recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue, p_IsDop = false });
-                            if (p_Element.p_Symmetrical)
+                            if (ctrl_Values.SelectedItem != null)
                             {
-                                if (ctrl_DopValues != null && ctrl_DopValues.SelectedItem != null)
+                                var ep = (Cl_ElementParam)ctrl_Values.SelectedItem;
+                                recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue, p_IsDop = false });
+                                if (p_Element.p_Symmetrical)
                                 {
-                                    ep = (Cl_ElementParam)ctrl_DopValues.SelectedItem;
-                                    recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue, p_IsDop = true });
+                                    if (ctrl_DopValues != null && ctrl_DopValues.SelectedItem != null)
+                                    {
+                                        ep = (Cl_ElementParam)ctrl_DopValues.SelectedItem;
+                                        recordValue.p_Params.Add(new Cl_RecordParam() { p_ElementParam = ep, p_ElementParamID = ep.p_ID, p_RecordValue = recordValue, p_IsDop = true });
+                                    }
+                                    else if (a_IsValid && p_Element.p_Required)
+                                    {
+                                        MonitoringStub.Message(string.Format("Заполните поле \"Значение из справочника для симметрического параметра\" элемента {0}", p_Element.p_Name));
+                                        return null;
+                                    }
                                 }
-                                else if (a_IsValid && p_Element.p_Required)
+                            }
+                            else
+                            {
+                                recordValue.p_ValueUser = ctrl_Values.Text;
+                                if (p_Element.p_Symmetrical)
                                 {
-                                    MonitoringStub.Message(string.Format("Заполните поле \"Значение из справочника для симметрического параметра\" элемента {0}", p_Element.p_Name));
-                                    return null;
+                                    if (ctrl_DopValues != null && !string.IsNullOrWhiteSpace(ctrl_DopValues.Text))
+                                    {
+                                        recordValue.p_ValueDopUser = ctrl_DopValues.Text;
+                                    }
+                                    else if (a_IsValid && p_Element.p_Required)
+                                    {
+                                        MonitoringStub.Message(string.Format("Заполните поле \"Значение для симметрического параметра\" элемента {0}", p_Element.p_Name));
+                                        return null;
+                                    }
                                 }
                             }
                         }
                         else if (a_IsValid && p_Element.p_Required)
                         {
-                            MonitoringStub.Message(string.Format("Заполните поле \"Значение из справочника\" элемента {0}", p_Element.p_Name));
+                            MonitoringStub.Message(string.Format("Заполните поле \"Значение\" элемента {0}", p_Element.p_Name));
                             return null;
+                        }
+                        else
+                        {
+                            recordValue.p_ValueUser = ctrl_Values != null ? ctrl_Values.Text : "";
+                            recordValue.p_ValueDopUser = ctrl_DopValues != null ? ctrl_DopValues.Text : "";
                         }
                     }
                 }

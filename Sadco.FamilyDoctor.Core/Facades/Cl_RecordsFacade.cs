@@ -445,6 +445,9 @@ namespace Sadco.FamilyDoctor.Core.Facades
             {
                 if (!string.IsNullOrWhiteSpace(a_RecordValue.p_ValueUser))
                     val = f_GetValWithColorForHtml(a_RecordValue, new string[] { a_RecordValue.p_ValueUser }, a_Min, a_Max);
+                if (!string.IsNullOrWhiteSpace(a_RecordValue.p_ValueDopUser))
+                    val = string.Format("{0}: {1}, {2}: {3}", a_RecordValue.p_Element.p_SymmetryParamLeft, f_GetValWithColorForHtml(a_RecordValue, new string[] { a_RecordValue.p_ValueUser }, a_Min, a_Max),
+                        a_RecordValue.p_Element.p_SymmetryParamRight, f_GetValWithColorForHtml(a_RecordValue, new string[] { a_RecordValue.p_ValueDopUser }, a_Min, a_Max));
             }
             return val;
         }
@@ -453,7 +456,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
         private string f_GetHTML(Cl_Record a_Record, I_RecordValue a_RecordValue, bool a_IsDoctor, bool a_IsTable, decimal? a_Min, decimal? a_Max)
         {
             var html = "";
-            if (a_RecordValue.p_Element != null && a_RecordValue.p_Element.p_Visible && Cl_RecordsFacade.f_GetInstance().f_GetElementVisible(a_Record, a_RecordValue.p_Element.p_VisibilityFormula) && (a_IsDoctor || a_RecordValue.p_Element.p_VisiblePatient))
+            if (a_RecordValue.p_Element != null && a_RecordValue.p_Element.p_Visible && f_GetElementVisible(a_Record, a_RecordValue.p_Element.p_VisibilityFormula) && (a_IsDoctor || a_RecordValue.p_Element.p_VisiblePatient))
             {
                 if (a_IsTable)
                 {

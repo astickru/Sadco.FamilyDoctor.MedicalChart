@@ -24,12 +24,14 @@ namespace Sadco.FamilyDoctor.Core.Controls
         private System.Windows.Forms.ToolStripMenuItem ctrl_TemplateNew;
         private System.Windows.Forms.ToolStripMenuItem ctrl_BlockNew;
         private System.Windows.Forms.ToolStripMenuItem ctrl_TableNew;
+        private System.Windows.Forms.ToolStripMenuItem ctrl_TemplateEditParams;
         private System.Windows.Forms.ToolStripMenuItem ctrl_TemplateEdit;
         private System.Windows.Forms.ToolStripMenuItem ctrl_TemplateDelete;
         public Ctrl_TreeNodeTemplate p_SelectedTemplate {
             get { return SelectedNode as Ctrl_TreeNodeTemplate; }
         }
-        public event TreeViewEventHandler e_EditElement;
+        public event TreeViewEventHandler e_EditTemplateParams;
+        public event TreeViewEventHandler e_EditTemplate;
 
         private void InitializeComponent()
         {
@@ -38,6 +40,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.ctrl_TemplateNew = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_BlockNew = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_TableNew = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctrl_TemplateEditParams = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_TemplateEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_TemplateDelete = new System.Windows.Forms.ToolStripMenuItem();
             // 
@@ -64,6 +67,14 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.ctrl_TableNew.Tag = "ctrl_TableNew";
             this.ctrl_TableNew.Text = "Добавить таблицу";
             this.ctrl_TableNew.Click += new System.EventHandler(this.ctrl_TableNew_Click);
+            // 
+            // ctrl_TemplateEditParams
+            // 
+            this.ctrl_TemplateEditParams.Name = "ctrl_TemplateEditParams";
+            this.ctrl_TemplateEditParams.Size = new System.Drawing.Size(176, 22);
+            this.ctrl_TemplateEditParams.Tag = "TemplateEditParams";
+            this.ctrl_TemplateEditParams.Text = "Изменить параметы шаблона";
+            this.ctrl_TemplateEditParams.Click += new System.EventHandler(this.ctrl_TemplateEditParams_Click);
             // 
             // ctrl_TemplateEdit
             // 
@@ -95,9 +106,10 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.ctrl_Tree.Items.Insert(0, this.ctrl_TemplateNew);
             this.ctrl_Tree.Items.Insert(1, this.ctrl_BlockNew);
             this.ctrl_Tree.Items.Insert(2, this.ctrl_TableNew);
-            this.ctrl_Tree.Items.Insert(3, this.ctrl_TemplateEdit);
-            this.ctrl_Tree.Items.Insert(4, this.ctrl_TemplateDelete);
-            this.ctrl_Tree.Items.Insert(5, this.toolStripSeparator1);
+            this.ctrl_Tree.Items.Insert(3, this.ctrl_TemplateEditParams);
+            this.ctrl_Tree.Items.Insert(4, this.ctrl_TemplateEdit);
+            this.ctrl_Tree.Items.Insert(5, this.ctrl_TemplateDelete);
+            this.ctrl_Tree.Items.Insert(6, this.toolStripSeparator1);
 
             this.ResumeLayout(false);
         }
@@ -258,11 +270,50 @@ namespace Sadco.FamilyDoctor.Core.Controls
             f_TemplateNew(Cl_Template.E_TemplateType.Table);
         }
 
+        private void ctrl_TemplateEditParams_Click(object sender, EventArgs e)
+        {
+            if (p_SelectedTemplate != null)
+            {
+                e_EditTemplateParams?.Invoke(sender, new TreeViewEventArgs(p_SelectedTemplate));
+            }
+            var tpl = Cl_App.m_DataContext.p_Templates.Where(t => t.p_TemplateID == p_SelectedTemplate.p_Template.p_TemplateID && !t.p_IsDelete).OrderByDescending(v => v.p_Version).FirstOrDefault();
+            if (tpl != null)
+            {
+                Dlg_EditorTemplate dlg = new Dlg_EditorTemplate();
+                dlg.ctrlPCategories.Enabled = tpl.p_Type == Cl_Template.E_TemplateType.Template;
+                if (tpl.p_Type == Cl_Template.E_TemplateType.Template)
+                    dlg.Text = "Редактирование параметров шаблона";
+                else if (tpl.p_Type == Cl_Template.E_TemplateType.Block)
+                    dlg.Text = "Редактирование параметров блока";
+                else if (tpl.p_Type == Cl_Template.E_TemplateType.Table)
+                    dlg.Text = "Редактирование параметров таблицы";
+                dlg.ctrl_LGroupValue.Text = tpl.p_ParentGroup.p_Name;
+                dlg.ctrl_TBName.Text = tpl.p_Name;
+                dlg.ctrlTitle.Text = tpl.p_Title;
+                dlg.ctrlCategoriesTotal.SelectedItem = tpl.p_CategoryTotal;
+                dlg.ctrlCategoriesClinic.SelectedItem = tpl.p_CategoryClinic;
+                if (dlg.ShowDialog() != DialogResult.OK) return;
+                tpl.p_Name = dlg.ctrl_TBName.Text;
+                tpl.p_Title = dlg.ctrlTitle.Text;
+                if (tpl.p_Type == Cl_Template.E_TemplateType.Template)
+                {
+                    var catTotal = (Cl_Category)dlg.ctrlCategoriesTotal.SelectedItem;
+                    tpl.p_CategoryTotalID = catTotal.p_ID;
+                    tpl.p_CategoryTotal = catTotal;
+                    var catClinic = (Cl_Category)dlg.ctrlCategoriesClinic.SelectedItem;
+                    tpl.p_CategoryClinicID = catClinic.p_ID;
+                    tpl.p_CategoryClinic = catClinic;
+                }
+                Cl_App.m_DataContext.SaveChanges();
+                SelectedNode.Text = tpl.p_Name;
+            }
+        }
+
         private void ctrl_TemplateEdit_Click(object sender, EventArgs e)
         {
             if (p_SelectedTemplate != null)
             {
-                e_EditElement?.Invoke(sender, new TreeViewEventArgs(p_SelectedTemplate));
+                e_EditTemplate?.Invoke(sender, new TreeViewEventArgs(p_SelectedTemplate));
             }
         }
 

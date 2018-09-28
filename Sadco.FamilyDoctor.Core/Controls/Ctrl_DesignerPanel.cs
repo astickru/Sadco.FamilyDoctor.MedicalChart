@@ -1,4 +1,5 @@
-﻿using Sadco.FamilyDoctor.Core.Controls.DesignerPanel;
+﻿using FD.dat.mon.stb.lib;
+using Sadco.FamilyDoctor.Core.Controls.DesignerPanel;
 using Sadco.FamilyDoctor.Core.Controls.ResizableListBox;
 using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.Facades;
@@ -483,10 +484,46 @@ namespace Sadco.FamilyDoctor.Core.Controls
         protected override void OnDragEnter(DragEventArgs e)
         {
             base.OnDragEnter(e);
-            string[] formats = e.Data.GetFormats();
+            //string[] formats = e.Data.GetFormats();
+            //foreach (string format in formats)
+            //{
+            //    var item = e.Data.GetData(format);
+            //    if (item is Ctrl_TreeNodeElement || item is Ctrl_TreeNodeTemplate)
+            //    {
+            //        if (item is Ctrl_TreeNodeElement)
+            //        {
+            //            Ctrl_TreeNodeElement nodeEl = (Ctrl_TreeNodeElement)item;
+            //            if (f_HasElement(nodeEl.p_Element) || nodeEl.p_Element.p_Version == 0)
+            //            {
+            //                e.Effect = DragDropEffects.None;
+            //                return;
+            //            }
+            //        }
+            //        else if (item is Ctrl_TreeNodeTemplate)
+            //        {
+            //            Ctrl_TreeNodeTemplate nodeTemp = (Ctrl_TreeNodeTemplate)item;
+            //            if (f_HasElement(nodeTemp.p_Template) || nodeTemp.p_Template.p_Version == 0)
+            //            {
+            //                e.Effect = DragDropEffects.None;
+            //                return;
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        e.Effect = DragDropEffects.None;
+            //        return;
+            //    }
+            //}
+            e.Effect = e.AllowedEffect;
+        }
+
+        protected override void OnDragDrop(DragEventArgs drgevent)
+        {
+            string[] formats = drgevent.Data.GetFormats();
             foreach (string format in formats)
             {
-                var item = e.Data.GetData(format);
+                var item = drgevent.Data.GetData(format);
                 if (item is Ctrl_TreeNodeElement || item is Ctrl_TreeNodeTemplate)
                 {
                     if (item is Ctrl_TreeNodeElement)
@@ -494,7 +531,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                         Ctrl_TreeNodeElement nodeEl = (Ctrl_TreeNodeElement)item;
                         if (f_HasElement(nodeEl.p_Element) || nodeEl.p_Element.p_Version == 0)
                         {
-                            e.Effect = DragDropEffects.None;
+                            MonitoringStub.Warning("Элемент уже в шаблоне");
                             return;
                         }
                     }
@@ -503,22 +540,18 @@ namespace Sadco.FamilyDoctor.Core.Controls
                         Ctrl_TreeNodeTemplate nodeTemp = (Ctrl_TreeNodeTemplate)item;
                         if (f_HasElement(nodeTemp.p_Template) || nodeTemp.p_Template.p_Version == 0)
                         {
-                            e.Effect = DragDropEffects.None;
+                            MonitoringStub.Warning("Элемент уже в шаблоне");
                             return;
                         }
                     }
                 }
                 else
                 {
-                    e.Effect = DragDropEffects.None;
+                    MonitoringStub.Warning("Элемент уже в шаблоне");
                     return;
                 }
             }
-            e.Effect = e.AllowedEffect;
-        }
 
-        protected override void OnDragDrop(DragEventArgs drgevent)
-        {
             if (this.IsDragging)
             {
                 try

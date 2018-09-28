@@ -145,6 +145,12 @@
     <Compile Include="Forms\SubForms\Records\Dlg_Record.Designer.cs">
       <DependentUpon>Dlg_Record.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SubForms\Records\Dlg_RecordSelectPattern.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SubForms\Records\Dlg_RecordSelectPattern.Designer.cs">
+      <DependentUpon>Dlg_RecordSelectPattern.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SubForms\Records\Dlg_RecordPatternSelectSource.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -273,6 +279,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SubForms\Records\Dlg_Record.resx">
       <DependentUpon>Dlg_Record.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SubForms\Records\Dlg_RecordSelectPattern.resx">
+      <DependentUpon>Dlg_RecordSelectPattern.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SubForms\Records\Dlg_RecordPatternSelectSource.resx">
       <DependentUpon>Dlg_RecordPatternSelectSource.cs</DependentUpon>

@@ -29,6 +29,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             InitializeComponent();
 
+            ctrlBFormatByPattern.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditAllRecords || Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditSelfRecords;
+
             this.Load += Dlg_Record_Load;
         }
 
@@ -74,7 +76,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
         }
 
-        public event EventHandler e_Save;
+        public event EventHandler<Cl_Record.Cl_EventArgs> e_Save;
 
         private Ctrl_Template m_ControlTemplate = null;
         private UС_RecordByFile m_ControlRecordByFile = null;
@@ -129,6 +131,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         m_Record.p_MedicalCard.p_PatientSex == Core.Permision.Cl_User.E_Sex.Man ? "Мужчина" : m_Record.p_MedicalCard.p_PatientSex == Core.Permision.Cl_User.E_Sex.Female ? "Женьщина" : "Нет данных",
                         m_Record.p_MedicalCard.p_PatientDateBirth.ToShortDateString());
                     ctrlTitle.Text = m_Record.p_Title;
+                    ctrlDTPDateReception.Value = m_Record.p_DateReception.Year >= 1980 ? m_Record.p_DateReception : DateTime.Now;
                     if (m_Record.p_Version == 0)
                         ctrl_Version.Text = "Черновик";
                     else
@@ -182,6 +185,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 MonitoringStub.Message("Заполните поле \"Заголовок\"!");
                 return;
             }
+            if (ctrlDTPDateReception.Value == null)
+            {
+                MonitoringStub.Message("Заполните поле \"Дата и время приема\"!");
+                return;
+            }
             if (m_Record != null)
             {
                 Cl_Record record = null;
@@ -212,6 +220,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             }
 
                             record.p_Title = ctrlTitle.Text;
+                            record.p_DateReception = ctrlDTPDateReception.Value;
                             Cl_App.m_DataContext.p_Records.Add(record);
                             Cl_App.m_DataContext.SaveChanges();
                             record.p_FileType = E_RecordFileType.HTML;
@@ -227,7 +236,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             transaction.Commit();
                             //m_ControlTemplate.f_SetRecord(record);
                             f_SetRecord(record);
-                            e_Save?.Invoke(this, new EventArgs());
+                            e_Save?.Invoke(this, new Cl_Record.Cl_EventArgs() { p_Record = record });
                             //ctrl_Version.Text = record.p_Version.ToString();
                             this.Close();
 
@@ -244,14 +253,13 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         private void ctrlBFormatByPattern_Click(object sender, EventArgs e)
         {
-            var pattern = Cl_RecordsFacade.f_GetInstance().f_GetRecordLastPattern(m_Record);
-            if (pattern != null)
+            var dlg = new Dlg_RecordSelectPattern(p_Record.p_Template);
+            if (dlg.ShowDialog(this) == DialogResult.OK)
             {
-                f_FormatByPattern(pattern);
-            }
-            else
-            {
-                MonitoringStub.Message("Для данной записи паттерн отсутствует");
+                if (dlg.p_SelectedRecordPattern != null)
+                {
+                    f_FormatByPattern(dlg.p_SelectedRecordPattern);
+                }
             }
         }
 

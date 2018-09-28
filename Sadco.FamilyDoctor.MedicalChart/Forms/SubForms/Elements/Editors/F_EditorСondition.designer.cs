@@ -32,36 +32,36 @@
             this.panel_Editor = new System.Windows.Forms.Panel();
             this.ctrlRTBFormula = new System.Windows.Forms.RichTextBox();
             this.panel_Actions = new System.Windows.Forms.Panel();
+            this.ctrlStandartValues = new Sadco.FamilyDoctor.Core.Controls.Ctrl_SeparatorCombobox();
             this.ctrlBDelLastAction = new System.Windows.Forms.Button();
             this.ctrlCBAddElement = new System.Windows.Forms.ComboBox();
             this.ctrlBAddTag = new System.Windows.Forms.Button();
             this.ctrlBClear = new System.Windows.Forms.Button();
             this.panel_Operators = new System.Windows.Forms.Panel();
+            this.ctrlPAddGender = new System.Windows.Forms.Panel();
+            this.ctrlBAddMan = new System.Windows.Forms.Button();
+            this.ctrlBAddFemale = new System.Windows.Forms.Button();
+            this.ctrlPOpers = new System.Windows.Forms.Panel();
             this.ctrlBOperEquals = new System.Windows.Forms.Button();
             this.ctrlBOperNotEquals = new System.Windows.Forms.Button();
-            this.ctrlBOperAnd = new System.Windows.Forms.Button();
             this.ctrlBOperMore = new System.Windows.Forms.Button();
+            this.ctrlBOperLess = new System.Windows.Forms.Button();
+            this.ctrlPAddValue = new System.Windows.Forms.Panel();
             this.ctrlBAddValue = new System.Windows.Forms.Button();
             this.ctrlTBValue = new System.Windows.Forms.TextBox();
-            this.ctrlBOperLess = new System.Windows.Forms.Button();
+            this.ctrlBOperAnd = new System.Windows.Forms.Button();
             this.ctrlBOperOr = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.ctrlBCancel = new System.Windows.Forms.Button();
             this.ctrlBEdit = new System.Windows.Forms.Button();
-            this.ctrlPAddValue = new System.Windows.Forms.Panel();
-            this.ctrlPOpers = new System.Windows.Forms.Panel();
-            this.ctrlPAddGender = new System.Windows.Forms.Panel();
-            this.ctrlBAddMan = new System.Windows.Forms.Button();
-            this.ctrlBAddFemale = new System.Windows.Forms.Button();
-            this.ctrlStandartValues = new Sadco.FamilyDoctor.Core.Controls.Ctrl_SeparatorCombobox();
             this.panel_Main.SuspendLayout();
             this.panel_Editor.SuspendLayout();
             this.panel_Actions.SuspendLayout();
             this.panel_Operators.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
-            this.ctrlPAddValue.SuspendLayout();
-            this.ctrlPOpers.SuspendLayout();
             this.ctrlPAddGender.SuspendLayout();
+            this.ctrlPOpers.SuspendLayout();
+            this.ctrlPAddValue.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel_Main
@@ -109,6 +109,21 @@
             this.panel_Actions.Name = "panel_Actions";
             this.panel_Actions.Size = new System.Drawing.Size(750, 29);
             this.panel_Actions.TabIndex = 2;
+            // 
+            // ctrlStandartValues
+            // 
+            this.ctrlStandartValues.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.ctrlStandartValues.FormattingEnabled = true;
+            this.ctrlStandartValues.Location = new System.Drawing.Point(340, 3);
+            this.ctrlStandartValues.Name = "ctrlStandartValues";
+            this.ctrlStandartValues.p_AutoAdjustItemHeight = false;
+            this.ctrlStandartValues.p_SeparatorColor = System.Drawing.Color.Black;
+            this.ctrlStandartValues.p_SeparatorMargin = 1;
+            this.ctrlStandartValues.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            this.ctrlStandartValues.p_SeparatorWidth = 1;
+            this.ctrlStandartValues.Size = new System.Drawing.Size(192, 22);
+            this.ctrlStandartValues.TabIndex = 80;
+            this.ctrlStandartValues.SelectedIndexChanged += new System.EventHandler(this.ctrlStandartValues_SelectedIndexChanged);
             // 
             // ctrlBDelLastAction
             // 
@@ -163,6 +178,47 @@
             this.panel_Operators.Size = new System.Drawing.Size(750, 30);
             this.panel_Operators.TabIndex = 4;
             // 
+            // ctrlPAddGender
+            // 
+            this.ctrlPAddGender.Controls.Add(this.ctrlBAddMan);
+            this.ctrlPAddGender.Controls.Add(this.ctrlBAddFemale);
+            this.ctrlPAddGender.Location = new System.Drawing.Point(610, 0);
+            this.ctrlPAddGender.Name = "ctrlPAddGender";
+            this.ctrlPAddGender.Size = new System.Drawing.Size(134, 27);
+            this.ctrlPAddGender.TabIndex = 25;
+            this.ctrlPAddGender.Visible = false;
+            // 
+            // ctrlBAddMan
+            // 
+            this.ctrlBAddMan.Location = new System.Drawing.Point(1, 0);
+            this.ctrlBAddMan.Name = "ctrlBAddMan";
+            this.ctrlBAddMan.Size = new System.Drawing.Size(54, 25);
+            this.ctrlBAddMan.TabIndex = 0;
+            this.ctrlBAddMan.Text = "муж";
+            this.ctrlBAddMan.UseVisualStyleBackColor = true;
+            this.ctrlBAddMan.Click += new System.EventHandler(this.ctrlBAddMan_Click);
+            // 
+            // ctrlBAddFemale
+            // 
+            this.ctrlBAddFemale.Location = new System.Drawing.Point(67, 0);
+            this.ctrlBAddFemale.Name = "ctrlBAddFemale";
+            this.ctrlBAddFemale.Size = new System.Drawing.Size(66, 25);
+            this.ctrlBAddFemale.TabIndex = 1;
+            this.ctrlBAddFemale.Text = "жен";
+            this.ctrlBAddFemale.UseVisualStyleBackColor = true;
+            this.ctrlBAddFemale.Click += new System.EventHandler(this.ctrlBAddFemale_Click);
+            // 
+            // ctrlPOpers
+            // 
+            this.ctrlPOpers.Controls.Add(this.ctrlBOperEquals);
+            this.ctrlPOpers.Controls.Add(this.ctrlBOperNotEquals);
+            this.ctrlPOpers.Controls.Add(this.ctrlBOperMore);
+            this.ctrlPOpers.Controls.Add(this.ctrlBOperLess);
+            this.ctrlPOpers.Location = new System.Drawing.Point(0, 0);
+            this.ctrlPOpers.Name = "ctrlPOpers";
+            this.ctrlPOpers.Size = new System.Drawing.Size(384, 26);
+            this.ctrlPOpers.TabIndex = 24;
+            // 
             // ctrlBOperEquals
             // 
             this.ctrlBOperEquals.Location = new System.Drawing.Point(0, 0);
@@ -185,17 +241,6 @@
             this.ctrlBOperNotEquals.UseVisualStyleBackColor = true;
             this.ctrlBOperNotEquals.Click += new System.EventHandler(this.addAction_Click);
             // 
-            // ctrlBOperAnd
-            // 
-            this.ctrlBOperAnd.Location = new System.Drawing.Point(483, 0);
-            this.ctrlBOperAnd.Name = "ctrlBOperAnd";
-            this.ctrlBOperAnd.Size = new System.Drawing.Size(80, 25);
-            this.ctrlBOperAnd.TabIndex = 21;
-            this.ctrlBOperAnd.Tag = "";
-            this.ctrlBOperAnd.Text = "и";
-            this.ctrlBOperAnd.UseVisualStyleBackColor = true;
-            this.ctrlBOperAnd.Click += new System.EventHandler(this.addAction_Click);
-            // 
             // ctrlBOperMore
             // 
             this.ctrlBOperMore.Location = new System.Drawing.Point(288, 0);
@@ -206,6 +251,26 @@
             this.ctrlBOperMore.Text = "больше";
             this.ctrlBOperMore.UseVisualStyleBackColor = true;
             this.ctrlBOperMore.Click += new System.EventHandler(this.addAction_Click);
+            // 
+            // ctrlBOperLess
+            // 
+            this.ctrlBOperLess.Location = new System.Drawing.Point(192, 0);
+            this.ctrlBOperLess.Name = "ctrlBOperLess";
+            this.ctrlBOperLess.Size = new System.Drawing.Size(80, 25);
+            this.ctrlBOperLess.TabIndex = 18;
+            this.ctrlBOperLess.Tag = "";
+            this.ctrlBOperLess.Text = "меньше";
+            this.ctrlBOperLess.UseVisualStyleBackColor = true;
+            this.ctrlBOperLess.Click += new System.EventHandler(this.addAction_Click);
+            // 
+            // ctrlPAddValue
+            // 
+            this.ctrlPAddValue.Controls.Add(this.ctrlBAddValue);
+            this.ctrlPAddValue.Controls.Add(this.ctrlTBValue);
+            this.ctrlPAddValue.Location = new System.Drawing.Point(587, 2);
+            this.ctrlPAddValue.Name = "ctrlPAddValue";
+            this.ctrlPAddValue.Size = new System.Drawing.Size(157, 24);
+            this.ctrlPAddValue.TabIndex = 23;
             // 
             // ctrlBAddValue
             // 
@@ -223,18 +288,17 @@
             this.ctrlTBValue.Name = "ctrlTBValue";
             this.ctrlTBValue.Size = new System.Drawing.Size(52, 21);
             this.ctrlTBValue.TabIndex = 9;
-            this.ctrlTBValue.Text = "10";
             // 
-            // ctrlBOperLess
+            // ctrlBOperAnd
             // 
-            this.ctrlBOperLess.Location = new System.Drawing.Point(192, 0);
-            this.ctrlBOperLess.Name = "ctrlBOperLess";
-            this.ctrlBOperLess.Size = new System.Drawing.Size(80, 25);
-            this.ctrlBOperLess.TabIndex = 18;
-            this.ctrlBOperLess.Tag = "";
-            this.ctrlBOperLess.Text = "меньше";
-            this.ctrlBOperLess.UseVisualStyleBackColor = true;
-            this.ctrlBOperLess.Click += new System.EventHandler(this.addAction_Click);
+            this.ctrlBOperAnd.Location = new System.Drawing.Point(483, 0);
+            this.ctrlBOperAnd.Name = "ctrlBOperAnd";
+            this.ctrlBOperAnd.Size = new System.Drawing.Size(80, 25);
+            this.ctrlBOperAnd.TabIndex = 21;
+            this.ctrlBOperAnd.Tag = "";
+            this.ctrlBOperAnd.Text = "и";
+            this.ctrlBOperAnd.UseVisualStyleBackColor = true;
+            this.ctrlBOperAnd.Click += new System.EventHandler(this.addAction_Click);
             // 
             // ctrlBOperOr
             // 
@@ -283,71 +347,6 @@
             this.ctrlBEdit.Text = "изменить";
             this.ctrlBEdit.UseVisualStyleBackColor = true;
             // 
-            // ctrlPAddValue
-            // 
-            this.ctrlPAddValue.Controls.Add(this.ctrlBAddValue);
-            this.ctrlPAddValue.Controls.Add(this.ctrlTBValue);
-            this.ctrlPAddValue.Location = new System.Drawing.Point(587, 2);
-            this.ctrlPAddValue.Name = "ctrlPAddValue";
-            this.ctrlPAddValue.Size = new System.Drawing.Size(157, 24);
-            this.ctrlPAddValue.TabIndex = 23;
-            // 
-            // ctrlPOpers
-            // 
-            this.ctrlPOpers.Controls.Add(this.ctrlBOperEquals);
-            this.ctrlPOpers.Controls.Add(this.ctrlBOperNotEquals);
-            this.ctrlPOpers.Controls.Add(this.ctrlBOperMore);
-            this.ctrlPOpers.Controls.Add(this.ctrlBOperLess);
-            this.ctrlPOpers.Location = new System.Drawing.Point(0, 0);
-            this.ctrlPOpers.Name = "ctrlPOpers";
-            this.ctrlPOpers.Size = new System.Drawing.Size(384, 26);
-            this.ctrlPOpers.TabIndex = 24;
-            // 
-            // ctrlPAddGender
-            // 
-            this.ctrlPAddGender.Controls.Add(this.ctrlBAddMan);
-            this.ctrlPAddGender.Controls.Add(this.ctrlBAddFemale);
-            this.ctrlPAddGender.Location = new System.Drawing.Point(610, 0);
-            this.ctrlPAddGender.Name = "ctrlPAddGender";
-            this.ctrlPAddGender.Size = new System.Drawing.Size(134, 27);
-            this.ctrlPAddGender.TabIndex = 25;
-            this.ctrlPAddGender.Visible = false;
-            // 
-            // ctrlBAddMan
-            // 
-            this.ctrlBAddMan.Location = new System.Drawing.Point(1, 0);
-            this.ctrlBAddMan.Name = "ctrlBAddMan";
-            this.ctrlBAddMan.Size = new System.Drawing.Size(54, 25);
-            this.ctrlBAddMan.TabIndex = 0;
-            this.ctrlBAddMan.Text = "муж";
-            this.ctrlBAddMan.UseVisualStyleBackColor = true;
-            this.ctrlBAddMan.Click += new System.EventHandler(this.ctrlBAddMan_Click);
-            // 
-            // ctrlBAddFemale
-            // 
-            this.ctrlBAddFemale.Location = new System.Drawing.Point(67, 0);
-            this.ctrlBAddFemale.Name = "ctrlBAddFemale";
-            this.ctrlBAddFemale.Size = new System.Drawing.Size(66, 25);
-            this.ctrlBAddFemale.TabIndex = 1;
-            this.ctrlBAddFemale.Text = "жен";
-            this.ctrlBAddFemale.UseVisualStyleBackColor = true;
-            this.ctrlBAddFemale.Click += new System.EventHandler(this.ctrlBAddFemale_Click);
-            // 
-            // ctrlStandartValues
-            // 
-            this.ctrlStandartValues.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.ctrlStandartValues.FormattingEnabled = true;
-            this.ctrlStandartValues.Location = new System.Drawing.Point(340, 3);
-            this.ctrlStandartValues.Name = "ctrlStandartValues";
-            this.ctrlStandartValues.p_AutoAdjustItemHeight = false;
-            this.ctrlStandartValues.p_SeparatorColor = System.Drawing.Color.Black;
-            this.ctrlStandartValues.p_SeparatorMargin = 1;
-            this.ctrlStandartValues.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            this.ctrlStandartValues.p_SeparatorWidth = 1;
-            this.ctrlStandartValues.Size = new System.Drawing.Size(192, 22);
-            this.ctrlStandartValues.TabIndex = 80;
-            this.ctrlStandartValues.SelectedIndexChanged += new System.EventHandler(this.ctrlStandartValues_SelectedIndexChanged);
-            // 
             // F_EditorСondition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 13F);
@@ -367,11 +366,11 @@
             this.panel_Editor.ResumeLayout(false);
             this.panel_Actions.ResumeLayout(false);
             this.panel_Operators.ResumeLayout(false);
-            this.flowLayoutPanel1.ResumeLayout(false);
+            this.ctrlPAddGender.ResumeLayout(false);
+            this.ctrlPOpers.ResumeLayout(false);
             this.ctrlPAddValue.ResumeLayout(false);
             this.ctrlPAddValue.PerformLayout();
-            this.ctrlPOpers.ResumeLayout(false);
-            this.ctrlPAddGender.ResumeLayout(false);
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

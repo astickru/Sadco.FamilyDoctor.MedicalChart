@@ -427,7 +427,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Является ли значение элемента текстом пользователя</summary>
         public bool p_IsTextUser {
             get {
-                return p_IsChangeNotNormValues || ((p_NormValues == null || p_NormValues.Length == 0) && (p_NormValues == null || p_NormValues.Length == 0));
+                return ((p_NormValues == null || p_NormValues.Length == 0) && (p_NormValues == null || p_NormValues.Length == 0));
             }
         }
 

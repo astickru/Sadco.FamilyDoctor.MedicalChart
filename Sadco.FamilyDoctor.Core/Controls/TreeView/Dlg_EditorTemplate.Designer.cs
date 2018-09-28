@@ -95,18 +95,18 @@
             this.ctrlLCategoriesTotal.AutoSize = true;
             this.ctrlLCategoriesTotal.Location = new System.Drawing.Point(16, 6);
             this.ctrlLCategoriesTotal.Name = "ctrlLCategoriesTotal";
-            this.ctrlLCategoriesTotal.Size = new System.Drawing.Size(91, 13);
+            this.ctrlLCategoriesTotal.Size = new System.Drawing.Size(112, 13);
             this.ctrlLCategoriesTotal.TabIndex = 77;
-            this.ctrlLCategoriesTotal.Text = "Общая группа";
+            this.ctrlLCategoriesTotal.Text = "Общая категория";
             // 
             // ctrlLCategoriesClinic
             // 
             this.ctrlLCategoriesClinic.AutoSize = true;
             this.ctrlLCategoriesClinic.Location = new System.Drawing.Point(16, 30);
             this.ctrlLCategoriesClinic.Name = "ctrlLCategoriesClinic";
-            this.ctrlLCategoriesClinic.Size = new System.Drawing.Size(128, 13);
+            this.ctrlLCategoriesClinic.Size = new System.Drawing.Size(149, 13);
             this.ctrlLCategoriesClinic.TabIndex = 76;
-            this.ctrlLCategoriesClinic.Text = "Клиническая группа";
+            this.ctrlLCategoriesClinic.Text = "Клиническая категория";
             // 
             // ctrlTitle
             // 

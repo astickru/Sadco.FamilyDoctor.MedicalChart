@@ -27,6 +27,7 @@
 		private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.ctrl_B_UpSave = new System.Windows.Forms.Button();
             this.ctrl_B_Save = new System.Windows.Forms.Button();
             this.ctrl_B_History = new System.Windows.Forms.Button();
@@ -34,10 +35,10 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.ctrl_Version = new System.Windows.Forms.Label();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.button1 = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel2
@@ -52,9 +53,23 @@
             this.panel2.Size = new System.Drawing.Size(760, 32);
             this.panel2.TabIndex = 0;
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.Controls.Add(this.button1);
+            this.flowLayoutPanel1.Controls.Add(this.ctrl_B_UpSave);
+            this.flowLayoutPanel1.Controls.Add(this.ctrl_B_Save);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(390, 3);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(367, 26);
+            this.flowLayoutPanel1.TabIndex = 3;
+            this.flowLayoutPanel1.WrapContents = false;
+            // 
             // ctrl_B_UpSave
             // 
-            this.ctrl_B_UpSave.Location = new System.Drawing.Point(0, 0);
+            this.ctrl_B_UpSave.Location = new System.Drawing.Point(93, 0);
             this.ctrl_B_UpSave.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
             this.ctrl_B_UpSave.Name = "ctrl_B_UpSave";
             this.ctrl_B_UpSave.Size = new System.Drawing.Size(160, 25);
@@ -65,7 +80,7 @@
             // 
             // ctrl_B_Save
             // 
-            this.ctrl_B_Save.Location = new System.Drawing.Point(175, 0);
+            this.ctrl_B_Save.Location = new System.Drawing.Point(268, 0);
             this.ctrl_B_Save.Margin = new System.Windows.Forms.Padding(0);
             this.ctrl_B_Save.Name = "ctrl_B_Save";
             this.ctrl_B_Save.Size = new System.Drawing.Size(99, 25);
@@ -139,18 +154,16 @@
             this.ctrl_Version.Text = "0";
             this.ctrl_Version.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // flowLayoutPanel1
+            // button1
             // 
-            this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.Controls.Add(this.ctrl_B_UpSave);
-            this.flowLayoutPanel1.Controls.Add(this.ctrl_B_Save);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(483, 3);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(274, 26);
-            this.flowLayoutPanel1.TabIndex = 3;
-            this.flowLayoutPanel1.WrapContents = false;
+            this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button1.Location = new System.Drawing.Point(0, 0);
+            this.button1.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(78, 25);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "отмена";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // UC_TemplateDesigner
             // 
@@ -164,9 +177,9 @@
             this.Size = new System.Drawing.Size(760, 531);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
 		}
@@ -181,5 +194,6 @@
         private System.Windows.Forms.Button ctrl_B_History;
         private System.Windows.Forms.Button ctrl_B_UpSave;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Button button1;
     }
 }
