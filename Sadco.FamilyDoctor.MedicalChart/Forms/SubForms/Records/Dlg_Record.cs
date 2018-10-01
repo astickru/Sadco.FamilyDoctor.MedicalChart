@@ -144,7 +144,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(m_Record.p_Template);
                         Text = string.Format("Запись \"{0}\" v{1}", m_Record.p_Template.p_Name, ConfigurationManager.AppSettings["Version"]);
                         f_UpdateControls();
-                        m_Log.f_SetEntity(m_Record);
                     }
                     catch (Exception er)
                     {
@@ -163,6 +162,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         MonitoringStub.Error("Error_Editor", "Не удалось установить запись", er, null, null);
                     }
                 }
+
+                m_Log.f_SetEntity(m_Record);
             }
         }
 
