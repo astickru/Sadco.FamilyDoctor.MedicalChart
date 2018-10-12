@@ -105,7 +105,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
                         {
                             var pattern = m_Patterns.FirstOrDefault(p => p.p_ID == pat.p_ID);
 
-                            Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.RecordsPatterns, string.Format("Удален патерн \"{0}\" по шаблону \"{1}\"", pattern.p_Name, pattern.p_Template.p_Name));
+                            Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.RecordsPatterns, string.Format("Удален патерн \"{0}\" по шаблону \"{1}\"", pattern.p_Name, pattern.p_Template.p_Name), pattern.p_Template.p_TemplateID);
 
                             foreach (Cl_RecordPatternValue val in pattern.p_Values)
                             {

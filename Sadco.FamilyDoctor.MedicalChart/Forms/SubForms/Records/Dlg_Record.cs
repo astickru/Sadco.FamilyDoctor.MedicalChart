@@ -308,7 +308,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             try
             {
                 Dlg_RatingViewer viewer = new Dlg_RatingViewer();
-                viewer.f_LoadRating(p_Record.p_RecordID);
+                viewer.f_LoadRating(p_Record);
                 viewer.ShowDialog(this);
             }
             catch (Exception er)
