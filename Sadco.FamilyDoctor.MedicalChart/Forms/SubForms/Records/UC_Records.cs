@@ -27,7 +27,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             m_Permission = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission;
 
             ctrlBReportAddRecordByFile.Visible = !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsDelete && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsArchive
-                    && m_Permission.p_IsEditArchive;
+                    && (m_Permission.p_IsEditAllRecords || m_Permission.p_IsEditSelfRecords || m_Permission.p_IsEditArchive);
             ctrlBReportAddRecord.Visible = ctrlBReportAddPattern.Visible = !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsDelete && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsArchive
                     && (m_Permission.p_IsEditAllRecords || m_Permission.p_IsEditSelfRecords);
 
@@ -341,7 +341,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             if (m_SelectedRecord != null)
             {
-                if (MessageBox.Show($"Удалить запись {m_SelectedRecord.p_Title}?", $"Удаление записи", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+                if (MessageBox.Show($"Удалить запись \"{m_SelectedRecord.p_Title}\"?", $"Удаление записи", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
                 m_SelectedRecord.p_IsDelete = true;
                 Cl_App.m_DataContext.SaveChanges();
                 if (m_SelectedRow != null)
@@ -377,6 +377,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
         }
 
+        private void ctrl_TRecords_SelectionChanged(object sender, EventArgs e)
+        {
+            f_OnSelectRow(ctrl_TRecords.CurrentRow);
+        }
+
         private void f_OnSelectRow(DataGridViewRow row)
         {
             m_SelectedRecord = null;
@@ -397,7 +402,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         ctrlCMViewer.Enabled = true;
                         ctrlBAddRecordFromRecord.Visible = ctrlBReportFormatPattern.Visible = !record.p_IsAutomatic && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsDelete && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsArchive && (m_Permission.p_IsEditAllRecords || m_Permission.p_IsEditSelfRecords);
                         ctrlBReportEdit.Visible = ctrlMIEdit.Visible = f_GetEdited(record);
-                        ctrlBReportDelete.Visible = ctrlMIDelete.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditSelfRecords && record.p_DoctorID == Cl_SessionFacade.f_GetInstance().p_Doctor.p_UserID;
+                        ctrlBReportDelete.Visible = ctrlMIDelete.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditAllRecords || ((m_Permission.p_IsEditArchive || Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditSelfRecords) && record.p_DoctorID == Cl_SessionFacade.f_GetInstance().p_Doctor.p_UserID);
                         ctrlBReportRating.Visible = ctrlMIRating.Visible = m_Permission.p_IsEditAllRatings;
                         ctrlBReportSyncBMK.Visible = ctrlMISyncBMK.Visible = !record.p_IsSyncBMK && record.p_IsPrintDoctor && m_Permission.p_IsEditArchive;
                         ctrlBReportPrintDoctor.Visible = ctrlBReportPrintPatient.Visible = ctrlMIPrint.Visible = m_Permission.p_IsPrint;
@@ -459,11 +464,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 ctrlBReportRating.Visible = false;
                 ctrlBReportPrintDoctor.Visible = ctrlBReportPrintPatient.Visible = false;
             }
-        }
-
-        private void ctrl_TRecords_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            f_OnSelectRow(ctrl_TRecords.CurrentRow);
         }
 
         private void ctrlMIEdit_Click(object sender, EventArgs e)

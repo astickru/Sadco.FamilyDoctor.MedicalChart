@@ -228,15 +228,16 @@ namespace Sadco.FamilyDoctor.Core.Entities
         {
             var template = Properties.Resources.ResourceManager.GetObject("template_report").ToString();
             template = Regex.Replace(template, "<fd\\.document\\.location>.*?<\\/fd\\.document\\.location>", string.Format("<fd.document.location>{0}</fd.document.location>", p_ClinicName));
-            template = Regex.Replace(template, "<fd\\.document\\.patient>.*?<\\/fd\\.document\\.patient>", string.Format("<fd.document.patient>{0} {1} {2} {3} {4} # {5}</fd.document.patient>",
-                p_RecordID, p_MedicalCard.p_PatientSurName, p_MedicalCard.p_PatientName, p_MedicalCard.p_PatientLastName, p_MedicalCard.p_PatientDateBirth.ToString("dd.MM.yyyy"), p_ID));
+            template = Regex.Replace(template, "<fd\\.document\\.patient>.*?<\\/fd\\.document\\.patient>", string.Format("<fd.document.patient>{0} {1} {2} {3} {4} {5} ({6}) # {7}</fd.document.patient>",
+                p_RecordID, p_MedicalCard.p_PatientSurName, p_MedicalCard.p_PatientName, p_MedicalCard.p_PatientLastName,
+                p_MedicalCard.p_PatientSex == Cl_User.E_Sex.Man ? "М" : "Ж", p_MedicalCard.p_PatientDateBirth.ToString("dd.MM.yyyy"), p_MedicalCard.f_GetPatientAgeByMonthText(p_DateCreate), p_ID));
             template = Regex.Replace(template, "<fd\\.document\\.date>.*?<\\/fd\\.document\\.date>", string.Format("<fd.document.date>{0}</fd.document.date>", p_DateReception.ToString("dd.MM.yyyy")));
             template = Regex.Replace(template, "<fd\\.document\\.time>.*?<\\/fd\\.document\\.time>", string.Format("<fd.document.time>{0}</fd.document.time>", p_DateReception.ToString("HH:mm")));
             template = Regex.Replace(template, "<fd\\.document\\.title>.*?<\\/fd\\.document\\.title>", string.Format("<fd.document.title>{0}</fd.document.title>", p_Title));
             string htmlContent = "";
             string htmlTabling = null;
             string htmlFloating = null;
-            byte age = p_MedicalCard.f_GetPatientAge();
+            byte age = p_MedicalCard.f_GetPatientAgeByYear(p_DateCreate);
 
             void f_EndTabling()
             {

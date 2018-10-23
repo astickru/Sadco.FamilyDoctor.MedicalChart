@@ -35,6 +35,8 @@
             this.ctrl_MITemplateDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrlPContent = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.ctrlDTPTimeReception = new System.Windows.Forms.DateTimePicker();
+            this.label6 = new System.Windows.Forms.Label();
             this.ctrlDTPDateReception = new System.Windows.Forms.DateTimePicker();
             this.label4 = new System.Windows.Forms.Label();
             this.ctrlTitle = new System.Windows.Forms.TextBox();
@@ -124,6 +126,8 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel1.Controls.Add(this.ctrlDTPTimeReception);
+            this.panel1.Controls.Add(this.label6);
             this.panel1.Controls.Add(this.ctrlDTPDateReception);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.ctrlTitle);
@@ -140,6 +144,25 @@
             this.panel1.Size = new System.Drawing.Size(1199, 102);
             this.panel1.TabIndex = 2;
             // 
+            // ctrlDTPTimeReception
+            // 
+            this.ctrlDTPTimeReception.CustomFormat = "HH:mm";
+            this.ctrlDTPTimeReception.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.ctrlDTPTimeReception.Location = new System.Drawing.Point(411, 74);
+            this.ctrlDTPTimeReception.Name = "ctrlDTPTimeReception";
+            this.ctrlDTPTimeReception.ShowUpDown = true;
+            this.ctrlDTPTimeReception.Size = new System.Drawing.Size(63, 21);
+            this.ctrlDTPTimeReception.TabIndex = 73;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(353, 77);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(52, 13);
+            this.label6.TabIndex = 72;
+            this.label6.Text = "Время:";
+            // 
             // ctrlDTPDateReception
             // 
             this.ctrlDTPDateReception.Location = new System.Drawing.Point(165, 74);
@@ -152,9 +175,9 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(6, 77);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(151, 13);
+            this.label4.Size = new System.Drawing.Size(43, 13);
             this.label4.TabIndex = 69;
-            this.label4.Text = "Дата и время приема:";
+            this.label4.Text = "Дата:";
             // 
             // ctrlTitle
             // 
@@ -366,5 +389,7 @@
         private System.Windows.Forms.Button ctrlBMKB;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.DateTimePicker ctrlDTPDateReception;
-    }
+		private System.Windows.Forms.DateTimePicker ctrlDTPTimeReception;
+		private System.Windows.Forms.Label label6;
+	}
 }

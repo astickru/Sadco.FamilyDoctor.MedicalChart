@@ -35,37 +35,18 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             try
             {
-                Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Templates && g.p_ParentID == null && !g.p_IsDelete).ToArray();
-                foreach (Cl_Group group in groups)
+                var tpls = Cl_App.m_DataContext.p_Templates.Where(t => t.p_Type == Cl_Template.E_TemplateType.Template && !t.p_IsDelete).GroupBy(t => t.p_TemplateID)
+                    .Select(grp => grp
+                        .OrderByDescending(v => v.p_Version)
+                        .FirstOrDefault());
+                foreach (Cl_Template tpl in tpls)
                 {
-                    f_PopulateTreeGroup(group, ctrl_TreeTemplates.Nodes);
+                    ctrl_TreeTemplates.Nodes.Add(new Ctrl_TreeNodeTemplate(new Cl_Group(), tpl));
                 }
             }
             catch (Exception er)
             {
                 MonitoringStub.Error("Error_Editor", "Не удалось инициализировать дерево шаблонов", er, null, null);
-            }
-        }
-
-        private void f_PopulateTreeGroup(Cl_Group a_Group, TreeNodeCollection a_TreeNodes)
-        {
-            TreeNode node = new Ctrl_TreeNodeGroup(a_Group);
-            a_TreeNodes.Add(node);
-            var tpls = Cl_App.m_DataContext.p_Templates
-                .Where(t => t.p_ParentGroupID == a_Group.p_ID && t.p_Type == Cl_Template.E_TemplateType.Template && !t.p_IsDelete).GroupBy(t => t.p_TemplateID)
-                    .Select(grp => grp
-                        .OrderByDescending(v => v.p_Version)
-                        .FirstOrDefault());
-            foreach (Cl_Template tpl in tpls)
-            {
-                node.Nodes.Add(new Ctrl_TreeNodeTemplate(a_Group, tpl));
-            }
-            var dcGroups = Cl_App.m_DataContext.Entry(a_Group).Collection(g => g.p_SubGroups);
-            if (!dcGroups.IsLoaded) dcGroups.Load();
-            foreach (Cl_Group group in a_Group.p_SubGroups)
-            {
-                if (!group.p_IsDelete)
-                    f_PopulateTreeGroup(group, node.Nodes);
             }
         }
 

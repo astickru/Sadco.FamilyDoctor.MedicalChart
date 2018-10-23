@@ -145,6 +145,7 @@
             this.ctrl_TreeTemplates.SelectedImageKey = "FOLDER_16";
             this.ctrl_TreeTemplates.Size = new System.Drawing.Size(745, 475);
             this.ctrl_TreeTemplates.TabIndex = 4;
+            this.ctrl_TreeTemplates.DoubleClick += new System.EventHandler(this.ctrl_TreeTemplates_DoubleClick);
             // 
             // Dlg_RecordSelectSource
             // 

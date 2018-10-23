@@ -114,7 +114,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
                     if (a_Record is Cl_Record)
                     {
                         var record = (Cl_Record)a_Record;
-                        vals.Add((decimal)record.p_MedicalCard.f_GetPatientAge());
+                        vals.Add((decimal)record.p_MedicalCard.f_GetPatientAgeByYear(record.p_DateCreate));
                     }
                 }
                 else if (el.p_Tag == "gender")
@@ -452,7 +452,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
             return val;
         }
 
-        /// <summary>Получение HTML текста запис</summary>
+        /// <summary>Получение HTML текста записи</summary>
         private string f_GetHTML(Cl_Record a_Record, I_RecordValue a_RecordValue, bool a_IsDoctor, bool a_IsTable, decimal? a_Min, decimal? a_Max)
         {
             var html = "";
@@ -461,7 +461,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 if (a_IsTable)
                 {
                     string val = f_GetValForHTML(a_RecordValue, a_Min, a_Max);
-                    var partNorm = a_RecordValue.p_Element.f_GetPartNormValue(a_Record.p_MedicalCard.p_PatientSex, a_Record.p_MedicalCard.f_GetPatientAge());
+                    var partNorm = a_RecordValue.p_Element.f_GetPartNormValue(a_Record.p_MedicalCard.p_PatientSex, a_Record.p_MedicalCard.f_GetPatientAgeByYear(a_Record.p_DateCreate));
                     html = string.Format("<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td></tr>", a_RecordValue.p_Element.p_PartPre, val, a_RecordValue.p_Element.p_PartPost, partNorm);
                 }
                 else if (a_RecordValue.p_Element.p_IsText)

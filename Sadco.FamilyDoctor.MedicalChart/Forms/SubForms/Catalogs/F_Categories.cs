@@ -190,7 +190,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
             }
             if (cat != null)
             {
-                if (MessageBox.Show($"Удалить категорию {cat.p_Name}?", "Удаление категории", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+                if (MessageBox.Show($"Удалить категорию \"{cat.p_Name}\"?", "Удаление категории", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
                 using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
                 {
                     try

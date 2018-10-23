@@ -332,7 +332,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 typeName = "таблицу";
                 typeNameR = "таблицы";
             }
-            if (MessageBox.Show($"Удалить {typeName} {p_SelectedTemplate.p_Template.p_Name}?", $"Удаление {typeNameR}", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+            if (MessageBox.Show($"Удалить \"{typeName} {p_SelectedTemplate.p_Template.p_Name}\"?", $"Удаление {typeNameR}", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
 
             using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
             {

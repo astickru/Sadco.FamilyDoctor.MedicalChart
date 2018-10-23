@@ -272,7 +272,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
         private void Ctrl_ElementDelete_Click(object sender, EventArgs e)
         {
             if (p_SelectedElement == null && p_SelectedElement.p_Element == null) return;
-            if (MessageBox.Show($"Удалить элемент {p_SelectedElement.p_Element.p_Name}?", "Удаление элемента", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+            if (MessageBox.Show($"Удалить элемент \"{p_SelectedElement.p_Element.p_Name}\"?", "Удаление элемента", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
 
             using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
             {

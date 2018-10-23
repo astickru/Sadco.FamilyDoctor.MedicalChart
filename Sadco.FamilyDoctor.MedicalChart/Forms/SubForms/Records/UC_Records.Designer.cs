@@ -272,8 +272,8 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             this.ctrl_TRecords.ShowRowErrors = false;
             this.ctrl_TRecords.Size = new System.Drawing.Size(695, 261);
             this.ctrl_TRecords.TabIndex = 88;
-            this.ctrl_TRecords.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ctrl_TRecords_CellClick);
             this.ctrl_TRecords.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ctrl_TRecords_CellDoubleClick);
+            this.ctrl_TRecords.SelectionChanged += new System.EventHandler(this.ctrl_TRecords_SelectionChanged);
             // 
             // p_MedicalCardNumber
             // 
@@ -347,7 +347,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             this.ctrlMISyncBMK,
             this.ctrlMIPrint});
             this.ctrlCMViewer.Name = "ctrlCMViewer";
-            this.ctrlCMViewer.Size = new System.Drawing.Size(216, 158);
+            this.ctrlCMViewer.Size = new System.Drawing.Size(216, 136);
             // 
             // ctrlMIEdit
             // 
@@ -462,12 +462,12 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             // 
             // ctrlBReportAddRecordByFile
             // 
-            this.ctrlBReportAddRecordByFile.Location = new System.Drawing.Point(96, 3);
+            this.ctrlBReportAddRecordByFile.Location = new System.Drawing.Point(73, 3);
             this.ctrlBReportAddRecordByFile.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
             this.ctrlBReportAddRecordByFile.Name = "ctrlBReportAddRecordByFile";
-            this.ctrlBReportAddRecordByFile.Size = new System.Drawing.Size(99, 38);
+            this.ctrlBReportAddRecordByFile.Size = new System.Drawing.Size(122, 38);
             this.ctrlBReportAddRecordByFile.TabIndex = 11;
-            this.ctrlBReportAddRecordByFile.Text = "добавить запись";
+            this.ctrlBReportAddRecordByFile.Text = "добавить запись (файл)";
             this.ctrlBReportAddRecordByFile.UseVisualStyleBackColor = true;
             this.ctrlBReportAddRecordByFile.Click += new System.EventHandler(this.ctrlBReportAddRecordByFile_Click);
             // 

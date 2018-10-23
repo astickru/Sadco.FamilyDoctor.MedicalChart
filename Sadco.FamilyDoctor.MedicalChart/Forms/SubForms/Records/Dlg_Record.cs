@@ -127,11 +127,20 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 if (m_Record.p_MedicalCard != null)
                 {
                     ctrlDoctorFIO.Text = m_Record.p_DoctorFIO;
-                    ctrlPatientFIO.Text = string.Format("{0} ({1}, {2})", m_Record.p_MedicalCard.p_PatientFIO,
-                        m_Record.p_MedicalCard.p_PatientSex == Core.Permision.Cl_User.E_Sex.Man ? "Мужчина" : m_Record.p_MedicalCard.p_PatientSex == Core.Permision.Cl_User.E_Sex.Female ? "Женьщина" : "Нет данных",
-                        m_Record.p_MedicalCard.p_PatientDateBirth.ToShortDateString());
+                    ctrlPatientFIO.Text = string.Format("{0}, {1}, {2} ({3})", m_Record.p_MedicalCard.p_PatientFIO,
+                        m_Record.p_MedicalCard.p_PatientSex == Core.Permision.Cl_User.E_Sex.Man ? "М" : m_Record.p_MedicalCard.p_PatientSex == Core.Permision.Cl_User.E_Sex.Female ? "Ж" : "Нет данных",
+                        m_Record.p_MedicalCard.p_PatientDateBirth.ToShortDateString(), m_Record.p_MedicalCard.f_GetPatientAgeByMonthText(m_Record.p_DateCreate));
                     ctrlTitle.Text = m_Record.p_Title;
-                    ctrlDTPDateReception.Value = m_Record.p_DateReception.Year >= 1980 ? m_Record.p_DateReception : DateTime.Now;
+										if (m_Record.p_DateReception.Year >= 1980)
+										{
+											ctrlDTPDateReception.Value = m_Record.p_DateReception;
+											ctrlDTPTimeReception.Value = m_Record.p_DateReception;
+										}
+										else
+										{
+											ctrlDTPDateReception.Value = DateTime.Now;
+											ctrlDTPTimeReception.Value = DateTime.Now;
+										}
                     if (m_Record.p_Version == 0)
                         ctrl_Version.Text = "Черновик";
                     else
@@ -187,7 +196,12 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             }
             if (ctrlDTPDateReception.Value == null)
             {
-                MonitoringStub.Message("Заполните поле \"Дата и время приема\"!");
+                MonitoringStub.Message("Заполните поле \"Дата приема\"!");
+                return;
+            }
+						if (ctrlDTPTimeReception.Value == null)
+            {
+                MonitoringStub.Message("Заполните поле \"Время приема\"!");
                 return;
             }
             if (m_Record != null)
@@ -220,8 +234,13 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             }
 
                             record.p_Title = ctrlTitle.Text;
-                            record.p_DateReception = ctrlDTPDateReception.Value;
-                            Cl_App.m_DataContext.p_Records.Add(record);
+                            record.p_DateReception = new DateTime(ctrlDTPDateReception.Value.Year,
+															ctrlDTPDateReception.Value.Month,
+															ctrlDTPDateReception.Value.Day,
+															ctrlDTPTimeReception.Value.Hour,
+															ctrlDTPTimeReception.Value.Minute,
+															0);
+														Cl_App.m_DataContext.p_Records.Add(record);
                             Cl_App.m_DataContext.SaveChanges();
                             record.p_FileType = E_RecordFileType.HTML;
                             record.p_HTMLDoctor = record.f_GetHTMLDoctor();

@@ -545,11 +545,6 @@ namespace Sadco.FamilyDoctor.Core.Controls
                         }
                     }
                 }
-                else
-                {
-                    MonitoringStub.Warning("Элемент уже в шаблоне");
-                    return;
-                }
             }
 
             if (this.IsDragging)

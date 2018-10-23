@@ -114,18 +114,47 @@ namespace Sadco.FamilyDoctor.Core.Entities
         }
 
         /// <summary>Возвращает возраст пациента</summary>
-        public byte f_GetPatientAge()
+        public byte f_GetPatientAgeByYear(DateTime date)
         {
             byte age = 0;
             if (p_PatientDateBirth != null)
             {
-                DateTime dateNow = DateTime.Now;
-                byte year = (byte)(dateNow.Year - p_PatientDateBirth.Year);
-                if (dateNow.Month < p_PatientDateBirth.Month ||
-                    (dateNow.Month == p_PatientDateBirth.Month && dateNow.Day < p_PatientDateBirth.Day)) year--;
+                byte year = (byte)(date.Year - p_PatientDateBirth.Year);
+                if (date.Month < p_PatientDateBirth.Month ||
+                    (date.Month == p_PatientDateBirth.Month && date.Day < p_PatientDateBirth.Day)) year--;
                 return year;
             }
             return age;
+        }
+
+        /// <summary>Возвращает возраст пациента</summary>
+        public int f_GetPatientAgeByMonth(DateTime date)
+        {
+            int age = 0;
+            if (p_PatientDateBirth != null)
+            {
+                int day = (date.Day - p_PatientDateBirth.Day);
+                int month = (date.Month - p_PatientDateBirth.Month);
+                int year = (date.Year - p_PatientDateBirth.Year);
+                if (month < 0)
+                {
+                    year--;
+                    month = 12 + month;
+                }
+                if (day < 0)
+                {
+                    month--;
+                }
+                return year * 12 + month;
+            }
+            return age;
+        }
+
+        /// <summary>Возвращает возраст пациента</summary>
+        public string f_GetPatientAgeByMonthText(DateTime date)
+        {
+            var months = f_GetPatientAgeByMonth(date);
+            return $"{months / 12} лет, {months % 12} мес.";
         }
 
         /// <summary>Установка пациента</summary>
