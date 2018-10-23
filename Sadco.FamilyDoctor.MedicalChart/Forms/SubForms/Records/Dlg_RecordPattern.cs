@@ -166,9 +166,9 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                 Cl_App.m_DataContext.SaveChanges();
 
                                 if (m_SourceRecord == null)
-                                    Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.RecordsPatterns, string.Format("Создан новый патерн \"{0}\" по шаблону \"{1}\"", recordPattern.p_Name, recordPattern.p_Template.p_Name));
+                                    Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.RecordsPatterns, string.Format("Создан новый патерн \"{0}\" по шаблону \"{1}\"", recordPattern.p_Name, recordPattern.p_Template.p_Name), recordPattern.p_Template.p_TemplateID);
                                 else
-                                    Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.RecordsPatterns, string.Format("Сформирован патерн по записи \"{0}\"", m_SourceRecord.p_Title));
+                                    Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.RecordsPatterns, string.Format("Сформирован патерн по записи \"{0}\"", m_SourceRecord.p_Title), m_SourceRecord.p_RecordID);
 
                                 transaction.Commit();
                                 f_SetRecordPattern(recordPattern);

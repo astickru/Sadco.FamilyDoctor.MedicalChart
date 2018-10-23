@@ -177,9 +177,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             if (m_SelectedRecord != null)
             {
+                Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.UIEvents, string.Format("Экспертиза записи: {0}, дата записи: {1}, клиника: {2}", m_SelectedRecord.p_Title, m_SelectedRecord.p_DateCreate, m_SelectedRecord.p_ClinicName), m_SelectedRecord.p_RecordID);
                 Dlg_RatingViewer viewer = new Dlg_RatingViewer();
-                viewer.f_LoadRating(m_SelectedRecord.p_RecordID);
+                viewer.f_LoadRating(m_SelectedRecord);
                 viewer.ShowDialog(this);
+                Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.UIEvents, "Выход из экспертизы", m_SelectedRecord.p_RecordID);
             }
         }
 

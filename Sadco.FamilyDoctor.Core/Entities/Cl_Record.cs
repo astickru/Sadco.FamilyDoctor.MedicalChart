@@ -153,18 +153,22 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>MKB1</summary>
         [Column("F_MKB1")]
         [MaxLength(50)]
+        [Cl_ELogProperty(p_Description = "MKB1")]
         public string p_MKB1 { get; set; }
         /// <summary>MKB1</summary>
         [Column("F_MKB2")]
         [MaxLength(50)]
+        [Cl_ELogProperty(p_Description = "MKB2")]
         public string p_MKB2 { get; set; }
         /// <summary>MKB1</summary>
         [Column("F_MKB3")]
         [MaxLength(50)]
+        [Cl_ELogProperty(p_Description = "MKB3")]
         public string p_MKB3 { get; set; }
         /// <summary>MKB1</summary>
         [Column("F_MKB4")]
         [MaxLength(50)]
+        [Cl_ELogProperty(p_Description = "MKB4")]
         public string p_MKB4 { get; set; }
 
         /// <summary>HTML текст записи для клиента</summary>
@@ -185,6 +189,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Данные файла</summary>
         [Column("F_FILE")]
         [Description("Данные файла")]
+        [Cl_ELogProperty(p_Description = "Данные файла", p_IgnoreValue = true)]
         public byte[] p_FileBytes { get; set; }
 
         private List<Cl_RecordValue> m_Values = new List<Cl_RecordValue>();

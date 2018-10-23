@@ -1,4 +1,5 @@
 ﻿using Sadco.FamilyDoctor.Core;
+using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.EntityLogs;
 using Sadco.FamilyDoctor.Core.Facades;
 using System;
@@ -12,7 +13,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 {
     public partial class Dlg_RatingViewer : Form
     {
-        int recordID = 0;
+        Cl_Record curRecord = null;
         Cl_Rating firstRating = null;
         Cl_Rating selfRating = null;
 
@@ -28,20 +29,20 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             ctrl_TRatings.AutoGenerateColumns = false;
         }
 
-        public void f_LoadRating(int p_RecordID)
+        public void f_LoadRating(Cl_Record p_Record)
         {
-            recordID = p_RecordID;
+            this.curRecord = p_Record;
 
             int userID = Cl_SessionFacade.f_GetInstance().p_Doctor.p_UserID;
-            selfRating = Cl_App.m_DataContext.p_Ratings.Where(l => l.p_RecordID == p_RecordID && l.p_UserID == userID).OrderByDescending(l => l.p_Time).FirstOrDefault();
-            firstRating = Cl_App.m_DataContext.p_Ratings.Where(l => l.p_RecordID == p_RecordID && l.p_UserID == userID).OrderBy(l => l.p_Time).FirstOrDefault();
+            selfRating = Cl_App.m_DataContext.p_Ratings.Where(l => l.p_RecordID == p_Record.p_RecordID && l.p_UserID == userID).OrderByDescending(l => l.p_Time).FirstOrDefault();
+            firstRating = Cl_App.m_DataContext.p_Ratings.Where(l => l.p_RecordID == p_Record.p_RecordID && l.p_UserID == userID).OrderBy(l => l.p_Time).FirstOrDefault();
 
             // Значения по умолчанию
             ctrlLAuthor.Text = Cl_SessionFacade.f_GetInstance().p_Doctor.f_GetInitials();
             ctrlLDate.Text = DateTime.Now.ToString();
 
             f_FillRating(selfRating);
-            f_LoadRatingTable(p_RecordID);
+            f_LoadRatingTable(p_Record.p_RecordID);
         }
 
         private void Dlg_RatingViewer_Load(object sender, EventArgs e)
@@ -117,7 +118,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             if (ctrlTBComment.Text == "" && MessageBox.Show("Поле \"Комментарий\" не заполенено.\nСохранить оценку без комментария?", "Сохранение оценки", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) != DialogResult.Yes)
                 return;
 
-            if (recordID == 0)
+            if (this.curRecord == null)
             {
                 MessageBox.Show("Запись еще не сохранена!\nУстановка оценки невозможна.", "Оценка записи", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -125,7 +126,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
             Cl_Rating rating = new Cl_Rating();
 
-            rating.p_RecordID = recordID;
+            rating.p_RecordID = this.curRecord.p_RecordID;
             rating.p_Time = DateTime.Now;
             rating.p_Comment = ctrlTBComment.Text;
             rating.p_UserID = Cl_SessionFacade.f_GetInstance().p_Doctor.p_UserID;
@@ -139,6 +140,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
             Cl_App.m_DataContext.p_Ratings.Add(rating);
             Cl_App.m_DataContext.SaveChanges();
+            Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.Rating, string.Format("Выставлена оценка {0} для записи: {1}, дата записи: {2}, клиника: {3}", rating.p_Value, this.curRecord.p_Title, this.curRecord.p_DateCreate, this.curRecord.p_ClinicName), this.curRecord.p_RecordID);
 
             f_LoadRatingTable(rating.p_RecordID);
             selfRating = rating;

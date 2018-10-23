@@ -25,6 +25,10 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
         /// </summary>
         RecordsPatterns = 5,
         /// <summary>
+        /// Оценка записей
+        /// </summary>
+        Rating = 6,
+        /// <summary>
         /// События приложения
         /// </summary>
         AppEvents = 100,
