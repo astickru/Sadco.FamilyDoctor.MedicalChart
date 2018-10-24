@@ -30,13 +30,20 @@
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(F_Welcome));
             this.mainPanel = new System.Windows.Forms.Panel();
-            this.panel7 = new System.Windows.Forms.Panel();
+            this.ctrlPPeriod = new System.Windows.Forms.Panel();
             this.ctrlDateEnd = new System.Windows.Forms.DateTimePicker();
             this.ctrlDateStart = new System.Windows.Forms.DateTimePicker();
             this.label9 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.ctrlMedcardInfo = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.label18 = new System.Windows.Forms.Label();
+            this.ctrlTBPatientID = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.ctrlTBMedCardNumber = new System.Windows.Forms.TextBox();
+            this.ctrlBLoadMedicalCard = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label10 = new System.Windows.Forms.Label();
             this.ctrlUserLastName = new System.Windows.Forms.TextBox();
@@ -57,27 +64,31 @@
             this.clinicPanel = new System.Windows.Forms.Panel();
             this.label14 = new System.Windows.Forms.Label();
             this.ctrlClinikName = new System.Windows.Forms.TextBox();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.ctrlBLoadMedicalCard = new System.Windows.Forms.Button();
-            this.ctrlTBMedCardNumber = new System.Windows.Forms.TextBox();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
-            this.ctrlTBPatientID = new System.Windows.Forms.TextBox();
-            this.ctrlMedcardInfo = new System.Windows.Forms.Label();
+            this.ctrlPParentDoctor = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.ctrlDoctorLastName = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.ctrlDoctorName = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.ctrlDoctorSurName = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.ctrlDoctorID = new System.Windows.Forms.TextBox();
             this.mainPanel.SuspendLayout();
-            this.panel7.SuspendLayout();
+            this.ctrlPPeriod.SuspendLayout();
             this.panel4.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.buttonsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.clinicPanel.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.ctrlPParentDoctor.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainPanel
             // 
             this.mainPanel.BackColor = System.Drawing.SystemColors.Control;
-            this.mainPanel.Controls.Add(this.panel7);
+            this.mainPanel.Controls.Add(this.ctrlPPeriod);
             this.mainPanel.Controls.Add(this.panel4);
             this.mainPanel.Controls.Add(this.panel2);
             this.mainPanel.Controls.Add(this.panel1);
@@ -86,21 +97,21 @@
             this.mainPanel.Margin = new System.Windows.Forms.Padding(0);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Padding = new System.Windows.Forms.Padding(0, 4, 0, 4);
-            this.mainPanel.Size = new System.Drawing.Size(373, 217);
+            this.mainPanel.Size = new System.Drawing.Size(372, 338);
             this.mainPanel.TabIndex = 0;
             // 
-            // panel7
+            // ctrlPPeriod
             // 
-            this.panel7.Controls.Add(this.ctrlDateEnd);
-            this.panel7.Controls.Add(this.ctrlDateStart);
-            this.panel7.Controls.Add(this.label9);
-            this.panel7.Controls.Add(this.label7);
-            this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel7.Location = new System.Drawing.Point(0, 177);
-            this.panel7.Margin = new System.Windows.Forms.Padding(0);
-            this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(373, 25);
-            this.panel7.TabIndex = 3;
+            this.ctrlPPeriod.Controls.Add(this.ctrlDateEnd);
+            this.ctrlPPeriod.Controls.Add(this.ctrlDateStart);
+            this.ctrlPPeriod.Controls.Add(this.label9);
+            this.ctrlPPeriod.Controls.Add(this.label7);
+            this.ctrlPPeriod.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ctrlPPeriod.Location = new System.Drawing.Point(0, 299);
+            this.ctrlPPeriod.Margin = new System.Windows.Forms.Padding(0);
+            this.ctrlPPeriod.Name = "ctrlPPeriod";
+            this.ctrlPPeriod.Size = new System.Drawing.Size(372, 25);
+            this.ctrlPPeriod.TabIndex = 3;
             // 
             // ctrlDateEnd
             // 
@@ -146,11 +157,19 @@
             this.panel4.Controls.Add(this.label15);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel4.Enabled = false;
-            this.panel4.Location = new System.Drawing.Point(0, 146);
+            this.panel4.Location = new System.Drawing.Point(0, 268);
             this.panel4.Margin = new System.Windows.Forms.Padding(0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(373, 31);
+            this.panel4.Size = new System.Drawing.Size(372, 31);
             this.panel4.TabIndex = 1;
+            // 
+            // ctrlMedcardInfo
+            // 
+            this.ctrlMedcardInfo.AutoSize = true;
+            this.ctrlMedcardInfo.Location = new System.Drawing.Point(63, 10);
+            this.ctrlMedcardInfo.Name = "ctrlMedcardInfo";
+            this.ctrlMedcardInfo.Size = new System.Drawing.Size(0, 13);
+            this.ctrlMedcardInfo.TabIndex = 19;
             // 
             // label15
             // 
@@ -163,8 +182,71 @@
             this.label15.TabIndex = 18;
             this.label15.Text = "Медкарта:";
             // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.label18);
+            this.panel2.Controls.Add(this.ctrlTBPatientID);
+            this.panel2.Controls.Add(this.label17);
+            this.panel2.Controls.Add(this.ctrlTBMedCardNumber);
+            this.panel2.Controls.Add(this.ctrlBLoadMedicalCard);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel2.Location = new System.Drawing.Point(0, 220);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(372, 48);
+            this.panel2.TabIndex = 4;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(-1, 28);
+            this.label18.Margin = new System.Windows.Forms.Padding(0);
+            this.label18.Name = "label18";
+            this.label18.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label18.Size = new System.Drawing.Size(68, 13);
+            this.label18.TabIndex = 25;
+            this.label18.Text = "ID пациента";
+            // 
+            // ctrlTBPatientID
+            // 
+            this.ctrlTBPatientID.Location = new System.Drawing.Point(103, 25);
+            this.ctrlTBPatientID.Name = "ctrlTBPatientID";
+            this.ctrlTBPatientID.Size = new System.Drawing.Size(111, 20);
+            this.ctrlTBPatientID.TabIndex = 24;
+            this.ctrlTBPatientID.Text = "201";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(-1, 5);
+            this.label17.Margin = new System.Windows.Forms.Padding(0);
+            this.label17.Name = "label17";
+            this.label17.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label17.Size = new System.Drawing.Size(95, 13);
+            this.label17.TabIndex = 23;
+            this.label17.Text = "Номер медкарты";
+            // 
+            // ctrlTBMedCardNumber
+            // 
+            this.ctrlTBMedCardNumber.Location = new System.Drawing.Point(103, 2);
+            this.ctrlTBMedCardNumber.Name = "ctrlTBMedCardNumber";
+            this.ctrlTBMedCardNumber.Size = new System.Drawing.Size(111, 20);
+            this.ctrlTBMedCardNumber.TabIndex = 1;
+            this.ctrlTBMedCardNumber.Text = "56369";
+            // 
+            // ctrlBLoadMedicalCard
+            // 
+            this.ctrlBLoadMedicalCard.Location = new System.Drawing.Point(220, 1);
+            this.ctrlBLoadMedicalCard.Name = "ctrlBLoadMedicalCard";
+            this.ctrlBLoadMedicalCard.Size = new System.Drawing.Size(149, 44);
+            this.ctrlBLoadMedicalCard.TabIndex = 0;
+            this.ctrlBLoadMedicalCard.Text = "Загрузить медкарту";
+            this.ctrlBLoadMedicalCard.UseVisualStyleBackColor = true;
+            this.ctrlBLoadMedicalCard.Click += new System.EventHandler(this.ctrlBLoadMedicalCard_Click);
+            // 
             // panel1
             // 
+            this.panel1.AutoSize = true;
+            this.panel1.Controls.Add(this.ctrlPParentDoctor);
             this.panel1.Controls.Add(this.label10);
             this.panel1.Controls.Add(this.ctrlUserLastName);
             this.panel1.Controls.Add(this.label8);
@@ -179,7 +261,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 4);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(373, 94);
+            this.panel1.Size = new System.Drawing.Size(372, 216);
             this.panel1.TabIndex = 0;
             // 
             // label10
@@ -292,16 +374,16 @@
             this.buttonsPanel.Controls.Add(this.button1);
             this.buttonsPanel.Controls.Add(this.button2);
             this.buttonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonsPanel.Location = new System.Drawing.Point(5, 306);
+            this.buttonsPanel.Location = new System.Drawing.Point(5, 427);
             this.buttonsPanel.Name = "buttonsPanel";
             this.buttonsPanel.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
-            this.buttonsPanel.Size = new System.Drawing.Size(373, 34);
+            this.buttonsPanel.Size = new System.Drawing.Size(372, 34);
             this.buttonsPanel.TabIndex = 4;
             // 
             // ctrlBAddMK
             // 
             this.ctrlBAddMK.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ctrlBAddMK.Location = new System.Drawing.Point(127, 4);
+            this.ctrlBAddMK.Location = new System.Drawing.Point(126, 4);
             this.ctrlBAddMK.Name = "ctrlBAddMK";
             this.ctrlBAddMK.Size = new System.Drawing.Size(96, 30);
             this.ctrlBAddMK.TabIndex = 3;
@@ -322,7 +404,7 @@
             // button1
             // 
             this.button1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.button1.Location = new System.Drawing.Point(223, 4);
+            this.button1.Location = new System.Drawing.Point(222, 4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 30);
             this.button1.TabIndex = 0;
@@ -333,7 +415,7 @@
             // button2
             // 
             this.button2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.button2.Location = new System.Drawing.Point(298, 4);
+            this.button2.Location = new System.Drawing.Point(297, 4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 30);
             this.button2.TabIndex = 1;
@@ -353,7 +435,7 @@
             this.pictureBox1.Location = new System.Drawing.Point(5, 5);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(373, 56);
+            this.pictureBox1.Size = new System.Drawing.Size(372, 56);
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
@@ -366,7 +448,7 @@
             this.clinicPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.clinicPanel.Location = new System.Drawing.Point(5, 61);
             this.clinicPanel.Name = "clinicPanel";
-            this.clinicPanel.Size = new System.Drawing.Size(373, 28);
+            this.clinicPanel.Size = new System.Drawing.Size(372, 28);
             this.clinicPanel.TabIndex = 4;
             // 
             // label14
@@ -389,81 +471,119 @@
             this.ctrlClinikName.TabIndex = 7;
             this.ctrlClinikName.Text = "Клиника1";
             // 
-            // panel2
+            // ctrlPParentDoctor
             // 
-            this.panel2.Controls.Add(this.label18);
-            this.panel2.Controls.Add(this.ctrlTBPatientID);
-            this.panel2.Controls.Add(this.label17);
-            this.panel2.Controls.Add(this.ctrlTBMedCardNumber);
-            this.panel2.Controls.Add(this.ctrlBLoadMedicalCard);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 98);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(373, 48);
-            this.panel2.TabIndex = 4;
+            this.ctrlPParentDoctor.Controls.Add(this.label12);
+            this.ctrlPParentDoctor.Controls.Add(this.ctrlDoctorID);
+            this.ctrlPParentDoctor.Controls.Add(this.label11);
+            this.ctrlPParentDoctor.Controls.Add(this.label4);
+            this.ctrlPParentDoctor.Controls.Add(this.ctrlDoctorLastName);
+            this.ctrlPParentDoctor.Controls.Add(this.label5);
+            this.ctrlPParentDoctor.Controls.Add(this.ctrlDoctorName);
+            this.ctrlPParentDoctor.Controls.Add(this.label6);
+            this.ctrlPParentDoctor.Controls.Add(this.ctrlDoctorSurName);
+            this.ctrlPParentDoctor.Location = new System.Drawing.Point(-1, 93);
+            this.ctrlPParentDoctor.Name = "ctrlPParentDoctor";
+            this.ctrlPParentDoctor.Size = new System.Drawing.Size(373, 120);
+            this.ctrlPParentDoctor.TabIndex = 16;
             // 
-            // ctrlBLoadMedicalCard
+            // label4
             // 
-            this.ctrlBLoadMedicalCard.Location = new System.Drawing.Point(220, 1);
-            this.ctrlBLoadMedicalCard.Name = "ctrlBLoadMedicalCard";
-            this.ctrlBLoadMedicalCard.Size = new System.Drawing.Size(149, 44);
-            this.ctrlBLoadMedicalCard.TabIndex = 0;
-            this.ctrlBLoadMedicalCard.Text = "Загрузить медкарту";
-            this.ctrlBLoadMedicalCard.UseVisualStyleBackColor = true;
-            this.ctrlBLoadMedicalCard.Click += new System.EventHandler(this.ctrlBLoadMedicalCard_Click);
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(-1, 99);
+            this.label4.Margin = new System.Windows.Forms.Padding(0);
+            this.label4.Name = "label4";
+            this.label4.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label4.Size = new System.Drawing.Size(54, 13);
+            this.label4.TabIndex = 20;
+            this.label4.Text = "Отчество";
             // 
-            // ctrlTBMedCardNumber
+            // ctrlDoctorLastName
             // 
-            this.ctrlTBMedCardNumber.Location = new System.Drawing.Point(103, 2);
-            this.ctrlTBMedCardNumber.Name = "ctrlTBMedCardNumber";
-            this.ctrlTBMedCardNumber.Size = new System.Drawing.Size(111, 20);
-            this.ctrlTBMedCardNumber.TabIndex = 1;
-            this.ctrlTBMedCardNumber.Text = "56369";
+            this.ctrlDoctorLastName.Location = new System.Drawing.Point(104, 95);
+            this.ctrlDoctorLastName.Margin = new System.Windows.Forms.Padding(0);
+            this.ctrlDoctorLastName.Name = "ctrlDoctorLastName";
+            this.ctrlDoctorLastName.Size = new System.Drawing.Size(266, 20);
+            this.ctrlDoctorLastName.TabIndex = 21;
+            this.ctrlDoctorLastName.Text = "Врач_Ассистента_Отчество";
             // 
-            // label17
+            // label5
             // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(-1, 5);
-            this.label17.Margin = new System.Windows.Forms.Padding(0);
-            this.label17.Name = "label17";
-            this.label17.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label17.Size = new System.Drawing.Size(95, 13);
-            this.label17.TabIndex = 23;
-            this.label17.Text = "Номер медкарты";
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(-1, 76);
+            this.label5.Margin = new System.Windows.Forms.Padding(0);
+            this.label5.Name = "label5";
+            this.label5.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label5.Size = new System.Drawing.Size(29, 13);
+            this.label5.TabIndex = 18;
+            this.label5.Text = "Имя";
             // 
-            // label18
+            // ctrlDoctorName
             // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(-1, 28);
-            this.label18.Margin = new System.Windows.Forms.Padding(0);
-            this.label18.Name = "label18";
-            this.label18.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label18.Size = new System.Drawing.Size(68, 13);
-            this.label18.TabIndex = 25;
-            this.label18.Text = "ID пациента";
+            this.ctrlDoctorName.Location = new System.Drawing.Point(104, 72);
+            this.ctrlDoctorName.Margin = new System.Windows.Forms.Padding(0);
+            this.ctrlDoctorName.Name = "ctrlDoctorName";
+            this.ctrlDoctorName.Size = new System.Drawing.Size(266, 20);
+            this.ctrlDoctorName.TabIndex = 19;
+            this.ctrlDoctorName.Text = "Врач_Ассистента_Имя";
             // 
-            // ctrlTBPatientID
+            // label6
             // 
-            this.ctrlTBPatientID.Location = new System.Drawing.Point(103, 25);
-            this.ctrlTBPatientID.Name = "ctrlTBPatientID";
-            this.ctrlTBPatientID.Size = new System.Drawing.Size(111, 20);
-            this.ctrlTBPatientID.TabIndex = 24;
-            this.ctrlTBPatientID.Text = "201";
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(-1, 53);
+            this.label6.Margin = new System.Windows.Forms.Padding(0);
+            this.label6.Name = "label6";
+            this.label6.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label6.Size = new System.Drawing.Size(56, 13);
+            this.label6.TabIndex = 16;
+            this.label6.Text = "Фамилия";
             // 
-            // ctrlMedcardInfo
+            // ctrlDoctorSurName
             // 
-            this.ctrlMedcardInfo.AutoSize = true;
-            this.ctrlMedcardInfo.Location = new System.Drawing.Point(63, 10);
-            this.ctrlMedcardInfo.Name = "ctrlMedcardInfo";
-            this.ctrlMedcardInfo.Size = new System.Drawing.Size(0, 13);
-            this.ctrlMedcardInfo.TabIndex = 19;
+            this.ctrlDoctorSurName.Location = new System.Drawing.Point(104, 49);
+            this.ctrlDoctorSurName.Margin = new System.Windows.Forms.Padding(0);
+            this.ctrlDoctorSurName.Name = "ctrlDoctorSurName";
+            this.ctrlDoctorSurName.Size = new System.Drawing.Size(266, 20);
+            this.ctrlDoctorSurName.TabIndex = 17;
+            this.ctrlDoctorSurName.Text = "Врач_Ассистента_Фамилия";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(-1, 7);
+            this.label11.Margin = new System.Windows.Forms.Padding(0);
+            this.label11.Name = "label11";
+            this.label11.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label11.Size = new System.Drawing.Size(92, 13);
+            this.label11.TabIndex = 22;
+            this.label11.Text = "Врач ассистента";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(-1, 30);
+            this.label12.Margin = new System.Windows.Forms.Padding(0);
+            this.label12.Name = "label12";
+            this.label12.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label12.Size = new System.Drawing.Size(50, 13);
+            this.label12.TabIndex = 23;
+            this.label12.Text = "ID врача";
+            // 
+            // ctrlDoctorID
+            // 
+            this.ctrlDoctorID.Location = new System.Drawing.Point(104, 26);
+            this.ctrlDoctorID.Margin = new System.Windows.Forms.Padding(0);
+            this.ctrlDoctorID.Name = "ctrlDoctorID";
+            this.ctrlDoctorID.Size = new System.Drawing.Size(54, 20);
+            this.ctrlDoctorID.TabIndex = 24;
+            this.ctrlDoctorID.Text = "17";
             // 
             // F_Welcome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(383, 345);
+            this.ClientSize = new System.Drawing.Size(382, 466);
             this.Controls.Add(this.mainPanel);
             this.Controls.Add(this.clinicPanel);
             this.Controls.Add(this.buttonsPanel);
@@ -475,10 +595,13 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Startup Form";
             this.mainPanel.ResumeLayout(false);
-            this.panel7.ResumeLayout(false);
-            this.panel7.PerformLayout();
+            this.mainPanel.PerformLayout();
+            this.ctrlPPeriod.ResumeLayout(false);
+            this.ctrlPPeriod.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.buttonsPanel.ResumeLayout(false);
@@ -486,8 +609,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.clinicPanel.ResumeLayout(false);
             this.clinicPanel.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
+            this.ctrlPParentDoctor.ResumeLayout(false);
+            this.ctrlPParentDoctor.PerformLayout();
             this.ResumeLayout(false);
 
 		}
@@ -502,7 +625,7 @@
 		private System.Windows.Forms.Panel buttonsPanel;
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.Button button2;
-		private System.Windows.Forms.Panel panel7;
+		private System.Windows.Forms.Panel ctrlPPeriod;
 		private System.Windows.Forms.DateTimePicker ctrlDateEnd;
 		private System.Windows.Forms.DateTimePicker ctrlDateStart;
 		private System.Windows.Forms.Label label9;
@@ -514,7 +637,6 @@
 		private System.Windows.Forms.PictureBox pictureBox1;
 		private System.Windows.Forms.CheckBox ctrlIsDebug;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox ctrlUserLastName;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox ctrlUserName;
         private System.Windows.Forms.Panel clinicPanel;
@@ -529,6 +651,17 @@
         private System.Windows.Forms.TextBox ctrlTBPatientID;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label ctrlMedcardInfo;
+        private System.Windows.Forms.Panel ctrlPParentDoctor;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox ctrlDoctorLastName;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox ctrlDoctorName;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox ctrlDoctorSurName;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox ctrlUserLastName;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox ctrlDoctorID;
     }
 }
 

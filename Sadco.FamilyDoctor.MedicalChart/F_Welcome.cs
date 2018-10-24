@@ -82,6 +82,8 @@ namespace Sadco.FamilyDoctor.MedicalChart
 
         private string[] f_AssemblyParams()
         {
+            var role = f_GetSelectedItem<E_Roles>();
+
             bool isNotValid = ctrlClinikName.Text == "";
             isNotValid |= ctrlUserID.Text == "";
             isNotValid |= ctrlUserSurName.Text == "";
@@ -89,15 +91,20 @@ namespace Sadco.FamilyDoctor.MedicalChart
             isNotValid |= ctrlUserLastName.Text == "";
             isNotValid |= _currentMedCard == null;
 
+            isNotValid |= role == E_Roles.Assistant && ctrlUserID.Text == "";
+            isNotValid |= role == E_Roles.Assistant && ctrlDoctorSurName.Text == "";
+            isNotValid |= role == E_Roles.Assistant && ctrlDoctorName.Text == "";
+            isNotValid |= role == E_Roles.Assistant && ctrlDoctorLastName.Text == "";
+
             if (isNotValid) return new string[0];
 
-            string[] startParams = new string[10];
+            string[] startParams = new string[14];
             startParams[0] = ctrlClinikName.Text;
             startParams[1] = ctrlUserID.Text;
             startParams[2] = ctrlUserSurName.Text;
             startParams[3] = ctrlUserName.Text;
             startParams[4] = ctrlUserLastName.Text;
-            startParams[5] = f_GetSelectedItem<E_Roles>().ToString();
+            startParams[5] = role.ToString();
             if (_currentMedCard != null)
             {
                 startParams[6] = _currentMedCard.p_Number;
@@ -107,6 +114,14 @@ namespace Sadco.FamilyDoctor.MedicalChart
                 startParams[8] = ctrlDateStart.Value.ToString("dd.MM.yyyy");
             if (ctrlDateEnd.Value != null)
                 startParams[9] = ctrlDateEnd.Value.ToString("dd.MM.yyyy");
+
+            if (role == E_Roles.Assistant)
+            {
+                startParams[10] = ctrlDoctorID.Text;
+                startParams[11] = ctrlDoctorSurName.Text;
+                startParams[12] = ctrlDoctorName.Text;
+                startParams[13] = ctrlDoctorLastName.Text;
+            }
 
             return startParams;
         }
@@ -147,7 +162,8 @@ namespace Sadco.FamilyDoctor.MedicalChart
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             E_Roles role = f_GetSelectedItem<E_Roles>();
-            panel7.Enabled = role == E_Roles.Inspector;
+            ctrlPParentDoctor.Visible = role == E_Roles.Assistant;
+            ctrlPPeriod.Enabled = role == E_Roles.Inspector;
         }
 
         private void comboBox1_Leave(object sender, EventArgs e)

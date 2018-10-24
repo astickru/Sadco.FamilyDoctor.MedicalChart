@@ -8,8 +8,9 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Sadco.FamilyDoctor.LoaderRecords {
-	enum E_MessageType
+namespace Sadco.FamilyDoctor.LoaderRecords
+{
+    enum E_MessageType
     {
         Error,
         Warning,
@@ -86,6 +87,7 @@ namespace Sadco.FamilyDoctor.LoaderRecords {
 
         static void Main(string[] args)
         {
+            string local = null;
             string path = null;
             string dbConnection = null;
             var medicalCards = new Dictionary<string, Cl_MedicalCard>();
@@ -95,7 +97,11 @@ namespace Sadco.FamilyDoctor.LoaderRecords {
                 for (var i = 0; i < args.Length; i++)
                 {
                     var arg = args[i];
-                    if (arg == "-path" && i + 1 < args.Length)
+                    if (arg == "-local" && i + 1 < args.Length)
+                    {
+                        local = args[i + 1];
+                    }
+                    else if (arg == "-path" && i + 1 < args.Length)
                     {
                         path = args[i + 1];
                     }
@@ -109,7 +115,7 @@ namespace Sadco.FamilyDoctor.LoaderRecords {
                     }
                 }
             }
-            if (path != null && dbConnection != null)
+            if (local != null && path != null && dbConnection != null)
             {
                 if (Directory.Exists(path))
                 {
@@ -121,13 +127,20 @@ namespace Sadco.FamilyDoctor.LoaderRecords {
                         Console.ReadKey(true);
                         return;
                     }
-                    if (!Cl_RecordsFacade.f_GetInstance().f_Init(db))
+                    if (!Cl_MedicalCardsFacade.f_GetInstance().f_Init(db))
+                    {
+                        f_WriteLog("Не удалось инициализировать фасад работы с мед картами");
+                        Console.ReadKey(true);
+                        return;
+                    }
+                    if (!Cl_RecordsFacade.f_GetInstance().f_Init(db, local))
                     {
                         f_WriteLog("Не удалось инициализировать фасад работы с записями");
                         Console.ReadKey(true);
                         return;
                     }
                     var records = new List<Cl_Record>();
+                    DirectoryInfo _dirInfo = new DirectoryInfo(Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath());
                     f_WriteLog(string.Format("Начало формирования записей папки \"{0}\"", path));
                     int iVal = 0;
                     Guid gVal = Guid.Empty;
@@ -180,35 +193,44 @@ namespace Sadco.FamilyDoctor.LoaderRecords {
                                                     if (category != null)
                                                     {
                                                         var curRecords = new Dictionary<string, Cl_Record>();
-                                                        var curImages = new Dictionary<string, List<Cl_ImageFileData>>();
+                                                        //var curImages = new Dictionary<string, List<Cl_ImageFileData>>();
                                                         var filesRecords = Directory.GetFiles(dirCategory);
                                                         foreach (var fileRecord in filesRecords)
                                                         {
                                                             var valsRecord = fileRecord.Replace(dirCategory + "\\", "");
+                                                            var pathRelativeFile = fileRecord.Replace(path, "");
+                                                            var pathRelativeFolder = pathRelativeFile.Replace(valsRecord, "");
                                                             if (DateTime.TryParse(valsRecord.Substring(0, 8), out dtVal))
                                                             {
                                                                 var record = new Cl_Record();
                                                                 record.p_Version = 1;
                                                                 record.p_Type = E_RecordType.FinishedFile;
                                                                 record.p_IsAutomatic = true;
-                                                                record.p_DateCreate = record.p_DateForming = record.p_DateLastChange = dtVal;
-                                                                
+                                                                record.p_DateCreate = record.p_DateLastChange = record.p_DateReception = dtVal;
+
                                                                 string patID = patientUID != Guid.Empty ? patientUID.ToString() : patientID.ToString();
                                                                 string medicalCardKey = $"{medicalNumber}_{patID}";
                                                                 Cl_MedicalCard medicalCard = null;
                                                                 if (!medicalCards.TryGetValue(medicalCardKey, out medicalCard))
                                                                 {
-                                                                    medicalCard = new Cl_MedicalCard();
-                                                                    medicalCard.p_Number = medicalNumber.ToString();
-                                                                    medicalCard.p_DateCreate = record.p_DateCreate;
-                                                                    medicalCard.p_PatientID = patientID;
                                                                     if (patientUID != Guid.Empty)
-                                                                        medicalCard.p_PatientUID = patientUID;
-                                                                    medicalCard.p_PatientSurName = patientSurName;
-                                                                    medicalCard.p_PatientName = patientName;
-                                                                    medicalCard.p_PatientLastName = patientLastName;
-                                                                    medicalCard.p_PatientDateBirth = patientDateBirth;
-                                                                    medicalCards.Add(medicalCardKey, medicalCard);
+                                                                        medicalCard = Cl_MedicalCardsFacade.f_GetInstance().f_GetMedicalCard(medicalNumber.ToString(), patientUID);
+                                                                    else
+                                                                        medicalCard = Cl_MedicalCardsFacade.f_GetInstance().f_GetMedicalCard(medicalNumber.ToString(), patientID);
+                                                                    if (medicalCard == null)
+                                                                    {
+                                                                        medicalCard = new Cl_MedicalCard();
+                                                                        medicalCard.p_Number = medicalNumber.ToString();
+                                                                        medicalCard.p_DateCreate = record.p_DateCreate;
+                                                                        medicalCard.p_PatientID = patientID;
+                                                                        if (patientUID != Guid.Empty)
+                                                                            medicalCard.p_PatientUID = patientUID;
+                                                                        medicalCard.p_PatientSurName = patientSurName;
+                                                                        medicalCard.p_PatientName = patientName;
+                                                                        medicalCard.p_PatientLastName = patientLastName;
+                                                                        medicalCard.p_PatientDateBirth = patientDateBirth;
+                                                                        medicalCards.Add(medicalCardKey, medicalCard);
+                                                                    }
                                                                 }
                                                                 record.p_MedicalCard = medicalCard;
 
@@ -251,26 +273,30 @@ namespace Sadco.FamilyDoctor.LoaderRecords {
                                                                         {
                                                                             if (int.TryParse(valsRecord.Substring(valsRecord.IndexOf("]-") + 2, valsRecord.LastIndexOf(".") - valsRecord.IndexOf("]-") - 2), out iVal))
                                                                             {
-                                                                                var fileStream = File.OpenRead(fileRecord);
-                                                                                MemoryStream ms = new MemoryStream();
-                                                                                fileStream.CopyTo(ms);
-                                                                                Regex rgx = new Regex("]-\\d*?.");
-                                                                                var keyRecord = rgx.Replace(valsRecord.Replace("_", " "), "]");
-                                                                                keyRecord = keyRecord.Substring(0, keyRecord.LastIndexOf("."));
+                                                                                //var fileStream = File.OpenRead(fileRecord);
+                                                                                //MemoryStream ms = new MemoryStream();
+                                                                                //fileStream.CopyTo(ms);
+                                                                                //Regex rgx = new Regex("]-\\d*?.");
+                                                                                //var keyRecord = rgx.Replace(valsRecord.Replace("_", " "), "]");
+                                                                                //keyRecord = keyRecord.Substring(0, keyRecord.LastIndexOf("."));
 
-                                                                                var recordFileType = f_GetFileType(valsRecord);
-                                                                                if (recordFileType != null)
-                                                                                {
-                                                                                    if (curImages.ContainsKey(keyRecord))
-                                                                                    {
-                                                                                        curImages[keyRecord].Add(new Cl_ImageFileData() { m_FileName = valsRecord, m_FileType = (E_RecordFileType)recordFileType, m_FileData = ms.ToArray() });
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        curImages.Add(keyRecord, new List<Cl_ImageFileData>() { new Cl_ImageFileData() { m_FileName = valsRecord, m_FileType = (E_RecordFileType)recordFileType, m_FileData = ms.ToArray() } });
-                                                                                    }
-                                                                                }
-                                                                                ms.Dispose();
+                                                                                //var recordFileType = f_GetFileType(valsRecord);
+                                                                                //if (recordFileType != null)
+                                                                                //{
+                                                                                //    if (curImages.ContainsKey(keyRecord))
+                                                                                //    {
+                                                                                //        curImages[keyRecord].Add(new Cl_ImageFileData() { m_FileName = valsRecord, m_FileType = (E_RecordFileType)recordFileType, m_FileData = ms.ToArray() });
+                                                                                //    }
+                                                                                //    else
+                                                                                //    {
+                                                                                //        curImages.Add(keyRecord, new List<Cl_ImageFileData>() { new Cl_ImageFileData() { m_FileName = valsRecord, m_FileType = (E_RecordFileType)recordFileType, m_FileData = ms.ToArray() } });
+                                                                                //    }
+                                                                                //}
+                                                                                //ms.Dispose();
+
+
+                                                                                
+
                                                                                 continue;
                                                                             }
                                                                             else
@@ -305,7 +331,7 @@ namespace Sadco.FamilyDoctor.LoaderRecords {
                                                                         record.p_DatePrintDoctor = record.p_DatePrintPatient = DateTime.Now;
                                                                     }
 
-                                                                    var fileStream = File.OpenRead(fileRecord);
+                                                                    //var fileStream = File.OpenRead(fileRecord);
 
                                                                     var fileName = "";
                                                                     var extension = Path.GetExtension(fileRecord);
@@ -331,22 +357,28 @@ namespace Sadco.FamilyDoctor.LoaderRecords {
                                                                         f_WriteLog(string.Format("Неизвестный формат файла записи {0}", fileRecord), E_MessageType.Error);
                                                                         continue;
                                                                     }
-                                                                    MemoryStream ms = new MemoryStream();
-                                                                    fileStream.CopyTo(ms);
-                                                                    if (record.p_FileType == E_RecordFileType.HTML)
-                                                                    {
-                                                                        ms.Position = 0;
-                                                                        var sr = new StreamReader(ms);
-                                                                        var htmlText = sr.ReadToEnd();
-                                                                        sr.Dispose();
-                                                                        htmlText = htmlText.Replace(@"img src=\\family-doctor.local\fd$\FD.med\Images\Logo.jpg", @"img class=""record_title_img"" src=""Images/title.jpg""");
-                                                                        record.p_FileBytes = Encoding.UTF8.GetBytes(htmlText);
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        record.p_FileBytes = ms.ToArray();
-                                                                    }
-                                                                    ms.Dispose();
+                                                                    record.p_FilePath = pathRelativeFile;
+                                                                    //MemoryStream ms = new MemoryStream();
+                                                                    //fileStream.CopyTo(ms);
+                                                                    //record.p_FilePath = $"{local}\\{clinik}\\{patID}\\{valsRecord}";
+
+                                                                    //record.p_FilePath = Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesRelativeFilePath(record);
+                                                                    //var filePath = Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "/" + record.p_FilePath;
+
+                                                                    //if (record.p_FileType == E_RecordFileType.HTML)
+                                                                    //{
+                                                                    //    ms.Position = 0;
+                                                                    //    var sr = new StreamReader(ms);
+                                                                    //    var htmlText = sr.ReadToEnd();
+                                                                    //    sr.Dispose();
+                                                                    //    htmlText = htmlText.Replace(@"img src=\\family-doctor.local\fd$\FD.med\Images\Logo.jpg", @"img class=""record_title_img"" src=""Images/title.jpg""");
+                                                                    //    File.WriteAllBytes(filePath, Encoding.UTF8.GetBytes(htmlText));
+                                                                    //}
+                                                                    //else
+                                                                    //{
+                                                                    //    File.WriteAllBytes(filePath, ms.ToArray());
+                                                                    //}
+                                                                    //ms.Dispose();
                                                                     f_WriteLog(string.Format("Сформирована новая запись {0}", fileRecord), E_MessageType.Info);
                                                                     curRecords.Add(valsRecord, record);
                                                                 }
@@ -362,20 +394,22 @@ namespace Sadco.FamilyDoctor.LoaderRecords {
                                                                 continue;
                                                             }
                                                         }
-                                                        foreach (var record in curRecords)
-                                                        {
-                                                            var fileName = record.Key.Substring(0, record.Key.IndexOf("].") + 1);
-                                                            if (curImages.ContainsKey(fileName))
-                                                            {
-                                                                var images = curImages[fileName];
-                                                                var html = Encoding.UTF8.GetString(record.Value.p_FileBytes);
-                                                                foreach (var img in images)
-                                                                {
-                                                                    html = html.Replace(img.m_FileName, string.Format(@"data:image/{0};base64,{1}", Enum.GetName(typeof(E_RecordFileType), img.m_FileType).ToLower(), Convert.ToBase64String(img.m_FileData)));
-                                                                }
-                                                                record.Value.p_FileBytes = Encoding.UTF8.GetBytes(html);
-                                                            }
-                                                        }
+                                                        //foreach (var record in curRecords)
+                                                        //{
+                                                        //    var fileName = record.Key.Substring(0, record.Key.IndexOf("].") + 1);
+                                                        //    var patID = record.Value.p_MedicalCard.p_PatientUID != Guid.Empty ? record.Value.p_MedicalCard.p_PatientUID.ToString() : record.Value.p_MedicalCard.p_PatientID.ToString();
+                                                        //    var folderPath = $"{local}\\{clinik}\\{patID}\\";
+                                                        //    if (curImages.ContainsKey(fileName))
+                                                        //    {
+                                                        //        var images = curImages[fileName];
+                                                        //        var html = Encoding.UTF8.GetString(record.Value.p_FileBytes);
+                                                        //        foreach (var img in images)
+                                                        //        {
+                                                        //            html = html.Replace(img.m_FileName, string.Format(@"data:image/{0};base64,{1}", Enum.GetName(typeof(E_RecordFileType), img.m_FileType).ToLower(), Convert.ToBase64String(img.m_FileData)));
+                                                        //        }
+                                                        //        record.Value.p_FileBytes = Encoding.UTF8.GetBytes(html);
+                                                        //    }
+                                                        //}
                                                         records.AddRange(curRecords.Values);
                                                     }
                                                     else
@@ -414,6 +448,33 @@ namespace Sadco.FamilyDoctor.LoaderRecords {
                     if (Cl_RecordsFacade.f_GetInstance().f_AddRecords(records))
                     {
                         f_WriteLog("Конец сохранения сформированных записей", E_MessageType.Info);
+
+                        f_WriteLog("Начало копирования папки с файлами", E_MessageType.Info);
+                        foreach (string dirPath in Directory.GetDirectories(path, "*", SearchOption.AllDirectories))
+                        {
+                            try
+                            {
+                                Directory.CreateDirectory(dirPath.Replace(path, Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "\\"));
+                            }
+                            catch (Exception e)
+                            {
+                                f_WriteLog("Не удалось создать папку " + dirPath, E_MessageType.Info);
+                            }
+                        }
+                        foreach (string newPath in Directory.GetFiles(path, "*.*", SearchOption.AllDirectories))
+                        {
+                            try
+                            {
+                                File.Copy(newPath, newPath.Replace(path, Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "\\"), true);
+                            }
+                            catch (Exception e)
+                            {
+                                f_WriteLog("Не удалось скопировать файл " + newPath, E_MessageType.Info);
+                            }
+                        }
+                        //_dirInfo.CreateSubdirectory(pathRelativeFolder);
+                        //File.Copy(fileRecord, Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "/" + pathRelativeFile);
+                        f_WriteLog("Конец копирования папки с файлами", E_MessageType.Info);
                     }
                     else
                     {

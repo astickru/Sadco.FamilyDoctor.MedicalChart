@@ -323,6 +323,10 @@
     <Compile Include="Migrations\201809281047309_appRecoprdDateReception.Designer.cs">
       <DependentUpon>201809281047309_appRecoprdDateReception.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810240658252_appFileToLocal.cs" />
+    <Compile Include="Migrations\201810240658252_appFileToLocal.Designer.cs">
+      <DependentUpon>201810240658252_appFileToLocal.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\Cl_AccessLevelAttribute.cs" />
     <Compile Include="Permision\Cl_User.cs" />
@@ -476,6 +480,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809281047309_appRecoprdDateReception.resx">
       <DependentUpon>201809281047309_appRecoprdDateReception.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810240658252_appFileToLocal.resx">
+      <DependentUpon>201810240658252_appFileToLocal.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

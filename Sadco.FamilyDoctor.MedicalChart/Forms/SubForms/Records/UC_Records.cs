@@ -27,9 +27,9 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             m_Permission = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission;
 
             ctrlBReportAddRecordByFile.Visible = !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsDelete && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsArchive
-                    && (m_Permission.p_IsEditAllRecords || m_Permission.p_IsEditSelfRecords || m_Permission.p_IsEditArchive);
+                    && (m_Permission.p_IsEditAllRecords || m_Permission.p_IsEditSelfRecords || m_Permission.p_IsEditArchive || m_Permission.p_IsEditAssistantRecords);
             ctrlBReportAddRecord.Visible = ctrlBReportAddPattern.Visible = !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsDelete && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsArchive
-                    && (m_Permission.p_IsEditAllRecords || m_Permission.p_IsEditSelfRecords);
+                    && (m_Permission.p_IsEditAllRecords || m_Permission.p_IsEditSelfRecords || m_Permission.p_IsEditAssistantRecords);
 
             ctrlBAddRecordFromRecord.Visible = false;
             ctrlBReportFormatPattern.Visible = false;
@@ -54,6 +54,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 var patientID = Cl_SessionFacade.f_GetInstance().p_Patient.p_UserID;
                 var patientUID = Cl_SessionFacade.f_GetInstance().p_Patient.p_UserUID;
+                var selectedRecord = m_SelectedRecord;
 
                 var records = Cl_App.m_DataContext.p_Records.Include(r => r.p_MedicalCard).AsQueryable();
                 if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsReadSelectedRecords)
@@ -94,11 +95,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 ctrl_TRecords.GroupTemplate.Column = ctrl_TRecords.Columns[0];
                 ctrl_TRecords.Sort(ctrl_TRecords.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
 
-                if (m_SelectedRecord != null)
+                if (selectedRecord != null)
                 {
                     foreach (DataGridViewRow row in ctrl_TRecords.Rows)
                     {
-                        if (((Cl_Record)row.Tag).p_ID == m_SelectedRecord.p_ID)
+                        if (((Cl_Record)row.Tag).p_ID == selectedRecord.p_ID)
                         {
                             row.Selected = true;
                             f_OnSelectRow(row);
@@ -134,7 +135,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 var perm = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission;
                 return !a_Record.p_IsAutomatic && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsDelete && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsArchive
-                    && ((a_Record.p_Type == E_RecordType.ByTemplate && (perm.p_IsEditAllRecords || (perm.p_IsEditSelfRecords && a_Record.p_DoctorID == Cl_SessionFacade.f_GetInstance().p_Doctor.p_UserID)))
+                    && ((perm.p_IsEditAllRecords || (perm.p_IsEditSelfRecords && a_Record.p_DoctorID == Cl_SessionFacade.f_GetInstance().p_Doctor.p_UserID) || (perm.p_IsEditAssistantRecords && a_Record.p_DoctorID == Cl_SessionFacade.f_GetInstance().p_Doctor.p_ParentUser?.p_UserID))
                         || (perm.p_IsEditArchive && a_Record.p_Type == E_RecordType.FinishedFile));
             }
             else
@@ -244,7 +245,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             Cl_Record record = new Cl_Record();
             record.p_DateCreate = DateTime.Now;
             record.p_Type = E_RecordType.FinishedFile;
-            record.p_DateLastChange = record.p_DateForming = record.p_DateCreate;
+            record.p_DateLastChange = record.p_DateCreate;
             record.p_MedicalCard = Cl_SessionFacade.f_GetInstance().p_MedicalCard;
             record.p_MedicalCardID = record.p_MedicalCard.p_ID;
             record.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
@@ -272,7 +273,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     {
                         Cl_Record record = new Cl_Record();
                         record.p_DateCreate = DateTime.Now;
-                        record.p_DateLastChange = record.p_DateForming = record.p_DateCreate;
+                        record.p_DateLastChange = record.p_DateCreate;
                         record.f_SetTemplate(dlg.p_SelectedTemplate);
                         record.p_MedicalCard = Cl_SessionFacade.f_GetInstance().p_MedicalCard;
                         record.p_MedicalCardID = record.p_MedicalCard.p_ID;
@@ -408,37 +409,36 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         ctrlBReportRating.Visible = ctrlMIRating.Visible = m_Permission.p_IsEditAllRatings;
                         ctrlBReportSyncBMK.Visible = ctrlMISyncBMK.Visible = !record.p_IsSyncBMK && record.p_IsPrintDoctor && m_Permission.p_IsEditArchive;
                         ctrlBReportPrintDoctor.Visible = ctrlBReportPrintPatient.Visible = ctrlMIPrint.Visible = m_Permission.p_IsPrint;
-                        if (record.p_HTMLDoctor != null)
+
+                        if (record.p_Type == E_RecordType.FinishedFile)
                         {
-                            ctrlHTMLViewer.DocumentText = record.f_GetDocumentTextDoctor(Application.StartupPath);
-                            ctrlHTMLViewer.Visible = true;
-                            ctrlPDFViewer.Visible = false;
+                            if (record.p_FileType == E_RecordFileType.HTML)
+                            {
+                                ctrlHTMLViewer.DocumentText = record.f_GetDocumentTextDoctor(Application.StartupPath);
+                                ctrlHTMLViewer.Visible = true;
+                                ctrlPDFViewer.Visible = false;
+                            }
+                            else if (record.p_FileType == E_RecordFileType.PDF)
+                            {
+                                ctrlPDFViewer.src = Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "/" + record.p_FilePath;
+                                ctrlHTMLViewer.Visible = false;
+                                ctrlPDFViewer.Visible = true;
+                            }
+                            else if (record.p_FileType == E_RecordFileType.JFIF || record.p_FileType == E_RecordFileType.JIF || record.p_FileType == E_RecordFileType.JPE ||
+                                record.p_FileType == E_RecordFileType.JPEG || record.p_FileType == E_RecordFileType.JPG || record.p_FileType == E_RecordFileType.PNG || record.p_FileType == E_RecordFileType.GIF)
+                            {
+                                ctrlHTMLViewer.DocumentText = record.f_GetDocumentTextDoctor(Application.StartupPath);
+                                ctrlHTMLViewer.Visible = true;
+                                ctrlPDFViewer.Visible = false;
+                            }
                         }
                         else
                         {
-                            if (record.p_Type == E_RecordType.FinishedFile)
+                            if (record.p_HTMLDoctor != null)
                             {
-                                if (record.p_FileType == E_RecordFileType.HTML)
-                                {
-                                    ctrlHTMLViewer.DocumentText = record.f_GetDocumentTextDoctor(Application.StartupPath);
-                                    ctrlHTMLViewer.Visible = true;
-                                    ctrlPDFViewer.Visible = false;
-                                }
-                                else if (record.p_FileType == E_RecordFileType.PDF)
-                                {
-                                    var path = string.Format("{0}medicalChartTemp.pdf", Path.GetTempPath());
-                                    File.WriteAllBytes(path, record.p_FileBytes);
-                                    ctrlPDFViewer.src = path;
-                                    ctrlHTMLViewer.Visible = false;
-                                    ctrlPDFViewer.Visible = true;
-                                }
-                                else if (record.p_FileType == E_RecordFileType.JFIF || record.p_FileType == E_RecordFileType.JIF || record.p_FileType == E_RecordFileType.JPE ||
-                                    record.p_FileType == E_RecordFileType.JPEG || record.p_FileType == E_RecordFileType.JPG || record.p_FileType == E_RecordFileType.PNG)
-                                {
-                                    ctrlHTMLViewer.DocumentText = record.f_GetDocumentTextDoctor(Application.StartupPath);
-                                    ctrlHTMLViewer.Visible = true;
-                                    ctrlPDFViewer.Visible = false;
-                                }
+                                ctrlHTMLViewer.DocumentText = record.f_GetDocumentTextDoctor(Application.StartupPath);
+                                ctrlHTMLViewer.Visible = true;
+                                ctrlPDFViewer.Visible = false;
                             }
                             else
                             {
@@ -446,6 +446,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                 ctrlPDFViewer.Visible = false;
                             }
                         }
+
                     }
                     else
                     {

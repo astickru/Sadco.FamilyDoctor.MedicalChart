@@ -342,7 +342,6 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             record.p_DoctorLastName = m_Record.p_DoctorLastName;
             record.p_MedicalCard = m_Record.p_MedicalCard;
             record.p_DateCreate = m_Record.p_DateCreate;
-            record.p_DateForming = m_Record.p_DateForming;
             record.p_Version = m_Record.p_Version + 1;
             record.p_MKB1 = m_Record.p_MKB1;
             record.p_MKB2 = m_Record.p_MKB2;

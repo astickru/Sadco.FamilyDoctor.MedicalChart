@@ -135,6 +135,18 @@ namespace Sadco.FamilyDoctor.Core.Facades
             return tmpl;
         }
 
+        /// <summary>
+        /// Возвращает шаблон
+        /// </summary>
+        /// <param name="a_TemplateName">Название шаблона</param>
+        /// <returns></returns>
+        public Cl_Template f_GetTemplateByName(string a_TemplateName)
+        {
+            Cl_Template tmpl = m_DataContextMegaTemplate.p_Templates.FirstOrDefault(t => t.p_Name == a_TemplateName);
+            if (tmpl != null) f_LoadTemplatesElements(tmpl);
+            return tmpl;
+        }
+
         internal bool f_IsActualElementsOnTemplate(Cl_Template template)
         {
             bool defNewElements = false;
@@ -174,7 +186,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
         /// <param name="items">Новый список элементов в сохраняемом шаблоне</param>
         /// <param name="m_Log">Объект логгера</param>
         /// <returns></returns>
-        public Cl_Template f_SaveTemplate(Cl_Template curTemplate, I_Element[] elements, Cl_EntityLog m_Log)
+        public Cl_Template f_SaveTemplate(Cl_Template curTemplate, I_Element[] elements, Cl_EntityLog m_Log = null)
         {
             using (var transaction = m_DataContextMegaTemplate.Database.BeginTransaction())
             {
@@ -232,7 +244,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
 
                     m_DataContextMegaTemplate.SaveChanges();
 
-                    if (m_Log.f_IsChanged(newTemplate) == false)
+                    if (m_Log != null && m_Log.f_IsChanged(newTemplate) == false)
                     {
                         if (newTemplate.Equals(curTemplate) && newTemplate.p_Version == 1)
                         {

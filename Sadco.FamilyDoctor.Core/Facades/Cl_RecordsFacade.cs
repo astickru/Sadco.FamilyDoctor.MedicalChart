@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 
 namespace Sadco.FamilyDoctor.Core.Facades
@@ -24,14 +25,147 @@ namespace Sadco.FamilyDoctor.Core.Facades
 
         private bool m_IsInit = false;
         private Cl_DataContextMegaTemplate m_DataContextMegaTemplate = null;
+        private string m_LocalResourcesPath = "";
         private string m_SeparatorMulti = ", ";
 
         /// <summary>Инициализация фасада</summary>
-        public bool f_Init(Cl_DataContextMegaTemplate a_DataContextMegaTemplate)
+        public bool f_Init(Cl_DataContextMegaTemplate a_DataContextMegaTemplate, string a_LocalResourcesPath)
         {
             m_DataContextMegaTemplate = a_DataContextMegaTemplate;
+            m_LocalResourcesPath = a_LocalResourcesPath;
             m_IsInit = m_DataContextMegaTemplate != null;
             return m_IsInit;
+        }
+
+        /// <summary>Получение локального пути к общим ресурсам</summary>
+        public string f_GetLocalResourcesPath()
+        {
+            return m_LocalResourcesPath;
+        }
+
+        /// <summary>Получение относительного пути к ресурсам записи</summary>
+        public string f_GetLocalResourcesRelativePath(Cl_Record a_Record)
+        {
+            return $"{a_Record.p_ClinicName}/{a_Record.p_MedicalCard.p_PatientID}/{a_Record.p_ID}";
+        }
+
+        /// <summary>Получение относительного пути к файлу записи</summary>
+        public string f_GetLocalResourcesRelativeFilePath(Cl_Record a_Record)
+        {
+            return $"{a_Record.p_ClinicName}/{a_Record.p_MedicalCard.p_PatientID}/{a_Record.p_ID}/file{f_GetFileExtension(a_Record.p_FileType)}";
+        }
+
+        /// <summary>Получение абсолютного пути к ресурсам записи</summary>
+        public string f_GetLocalResourcesAbsolutePath(Cl_Record a_Record)
+        {
+            return $"{m_LocalResourcesPath}/{f_GetLocalResourcesRelativePath(a_Record)}";
+        }
+
+        /// <summary>Получение типа файла</summary>
+        public E_RecordFileType? f_GetFileType(string a_FileName)
+        {
+            var extension = Path.GetExtension(a_FileName).ToLower();
+            if (extension == ".x")
+            {
+                extension = Path.GetExtension(a_FileName.Substring(0, a_FileName.Length - 2)).ToLower();
+            }
+            else if (extension == ".tag")
+            {
+                extension = Path.GetExtension(a_FileName.Substring(0, a_FileName.Length - 4)).ToLower();
+            }
+            if (extension == ".htm" || extension == ".html")
+            {
+                return E_RecordFileType.HTML;
+            }
+            else if (extension == ".pdf")
+            {
+                return E_RecordFileType.PDF;
+            }
+            else if (extension == ".jpg")
+            {
+                return E_RecordFileType.JPG;
+            }
+            else if (extension == ".jpeg")
+            {
+                return E_RecordFileType.JPEG;
+            }
+            else if (extension == ".jpe")
+            {
+                return E_RecordFileType.JPE;
+            }
+            else if (extension == ".jfif")
+            {
+                return E_RecordFileType.JFIF;
+            }
+            else if (extension == ".jif")
+            {
+                return E_RecordFileType.JIF;
+            }
+            else if (extension == ".png")
+            {
+                return E_RecordFileType.PNG;
+            }
+            else if (extension == ".gif")
+            {
+                return E_RecordFileType.GIF;
+            }
+            else if (extension == ".xml")
+            {
+                return E_RecordFileType.XML;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>Получение типа файла</summary>
+        public string f_GetFileExtension(E_RecordFileType fileType)
+        {
+            if (fileType == E_RecordFileType.HTML)
+            {
+                return ".html";
+            }
+            else if (fileType == E_RecordFileType.PDF)
+            {
+                return ".pdf";
+            }
+            else if (fileType == E_RecordFileType.JPG)
+            {
+                return ".jpg";
+            }
+            else if (fileType == E_RecordFileType.JPEG)
+            {
+                return ".jpeg";
+            }
+            else if (fileType == E_RecordFileType.JPE)
+            {
+                return ".jpe";
+            }
+            else if (fileType == E_RecordFileType.JFIF)
+            {
+                return ".jfif";
+            }
+            else if (fileType == E_RecordFileType.JIF)
+            {
+                return ".jif";
+            }
+            else if (fileType == E_RecordFileType.PNG)
+            {
+                return ".png";
+            }
+            else if (fileType == E_RecordFileType.PNG)
+            {
+                return ".gif";
+            }
+            else if (fileType == E_RecordFileType.XML)
+            {
+                return ".xml";
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>Получение элемента возраста</summary>
@@ -679,7 +813,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
             {
                 record = new Cl_Record();
                 record.p_DateCreate = DateTime.Now;
-                record.p_DateLastChange = record.p_DateForming = record.p_DateCreate;
+                record.p_DateLastChange = record.p_DateCreate;
                 record.p_MedicalCard = Cl_SessionFacade.f_GetInstance().p_MedicalCard;
                 record.p_MedicalCardID = record.p_MedicalCard.p_ID;
                 record.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
@@ -719,7 +853,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
             if (a_RecordPattern != null)
             {
                 a_Record.p_DateCreate = DateTime.Now;
-                a_Record.p_DateLastChange = a_Record.p_DateForming = a_Record.p_DateCreate;
+                a_Record.p_DateLastChange = a_Record.p_DateCreate;
                 a_Record.p_MedicalCard = Cl_SessionFacade.f_GetInstance().p_MedicalCard;
                 a_Record.p_MedicalCardID = a_Record.p_MedicalCard.p_ID;
                 a_Record.p_ClinicName = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicName;
@@ -799,7 +933,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
         {
             Cl_Record record = new Cl_Record();
             record.p_Version = 1;
-            record.p_DateCreate = record.p_DateForming = record.p_DateLastChange = DateTime.Now;
+            record.p_DateCreate = record.p_DateLastChange = record.p_DateReception = DateTime.Now;
             if (a_CategoryTotal != null)
             {
                 record.p_CategoryTotalID = a_CategoryTotal.p_ID;
@@ -962,7 +1096,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 MonitoringStub.Error("Error_RecordFacade", "Шаблон записи пустой", null, null, null);
                 return false;
             }
-            if (a_Record.f_IsValid())
+            if (!a_Record.f_IsValid())
             {
                 MonitoringStub.Error("Error_RecordFacade", "Некорректная запись", null, null, null);
                 return false;
@@ -1010,14 +1144,22 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 {
                     try
                     {
-                        a_Record.p_Version = 1; a_Record.p_Type = E_RecordType.FinishedFile;
-                        a_Record.p_IsAutomatic = true;
                         a_Record.p_FileType = a_RecordFileType;
-                        a_Record.p_FileBytes = a_FileBytes;
+                        a_Record.p_Version = 1;
+                        a_Record.p_Type = E_RecordType.FinishedFile;
+                        a_Record.p_IsAutomatic = true;
                         m_DataContextMegaTemplate.p_Records.Add(a_Record);
                         m_DataContextMegaTemplate.SaveChanges();
                         a_Record.p_RecordID = a_Record.p_ID;
                         m_DataContextMegaTemplate.SaveChanges();
+                        a_Record.p_FilePath = f_GetLocalResourcesRelativeFilePath(a_Record);
+                        m_DataContextMegaTemplate.SaveChanges();
+
+                        a_Record.p_FilePath = Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesRelativeFilePath(a_Record);
+                        DirectoryInfo DirInfo = new DirectoryInfo(Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath());
+                        DirInfo.CreateSubdirectory(Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesRelativePath(a_Record));
+                        File.WriteAllBytes(Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "/" + a_Record.p_FilePath, a_FileBytes);
+
                         transaction.Commit();
                         return true;
                     }

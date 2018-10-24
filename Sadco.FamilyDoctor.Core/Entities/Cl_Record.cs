@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -75,11 +76,6 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Column("F_DATERECEPTION")]
         [Description("Время приема")]
         public DateTime p_DateReception { get; set; }
-
-        /// <summary>Время формирования записи</summary>
-        [Column("F_DATEFORMING")]
-        [Description("Время формирования записи")]
-        public DateTime p_DateForming { get; set; }
 
         /// <summary>Время создания записи</summary>
         [Column("F_DATECREATE")]
@@ -186,8 +182,14 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Description("Тип файла")]
         public E_RecordFileType p_FileType { get; set; }
 
-        /// <summary>Данные файла</summary>
-        [Column("F_FILE")]
+        /// <summary>Путь к файлу</summary>
+        [Column("F_PATHFILE")]
+        [Description("Путь к файлу")]
+        [Cl_ELogProperty(p_Description = "Путь к файлу", p_IgnoreValue = true)]
+        public string p_FilePath { get; set; }
+
+        /// <summary>Бинарные данные файла</summary>
+        [NotMapped]
         [Description("Данные файла")]
         [Cl_ELogProperty(p_Description = "Данные файла", p_IgnoreValue = true)]
         public byte[] p_FileBytes { get; set; }
@@ -211,7 +213,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
         public bool f_IsValid()
         {
             return (!string.IsNullOrWhiteSpace(p_Title) && !string.IsNullOrWhiteSpace(p_ClinicName)
-                 && p_DateCreate != null && p_DateForming != null && p_DateLastChange != null
+                 && p_DateCreate != null && p_DateLastChange != null && p_DateReception != null
                  && !string.IsNullOrWhiteSpace(p_DoctorSurName) && !string.IsNullOrWhiteSpace(p_DoctorName) && !string.IsNullOrWhiteSpace(p_DoctorLastName)
                  && p_MedicalCard != null);
         }
@@ -240,79 +242,88 @@ namespace Sadco.FamilyDoctor.Core.Entities
             template = Regex.Replace(template, "<fd\\.document\\.time>.*?<\\/fd\\.document\\.time>", string.Format("<fd.document.time>{0}</fd.document.time>", p_DateReception.ToString("HH:mm")));
             template = Regex.Replace(template, "<fd\\.document\\.title>.*?<\\/fd\\.document\\.title>", string.Format("<fd.document.title>{0}</fd.document.title>", p_Title));
             string htmlContent = "";
-            string htmlTabling = null;
-            string htmlFloating = null;
-            byte age = p_MedicalCard.f_GetPatientAgeByYear(p_DateCreate);
 
-            void f_EndTabling()
+            if (p_Type == E_RecordType.FinishedFile)
             {
-                if (htmlTabling != null)
-                {
-                    htmlTabling += "</tbody></table>";
-                    htmlContent += htmlTabling;
-                    htmlTabling = null;
-                }
+                htmlContent += $"<div><img src=\"{Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesRelativeFilePath(this)}\" /></div>";
             }
-
-            void f_EndFloating()
+            else
             {
-                if (htmlFloating != null)
+                string htmlTabling = null;
+                string htmlFloating = null;
+                byte age = p_MedicalCard.f_GetPatientAgeByYear(p_DateCreate);
+
+                void f_EndTabling()
                 {
-                    if (htmlFloating.Length > 0)
+                    if (htmlTabling != null)
                     {
-                        if (htmlFloating[htmlFloating.Length - 1] != '.')
-                            htmlFloating += ".";
-                        htmlFloating += "</p>";
-                        htmlContent += htmlFloating;
+                        htmlTabling += "</tbody></table>";
+                        htmlContent += htmlTabling;
+                        htmlTabling = null;
                     }
-                    htmlFloating = null;
                 }
-            }
 
-            foreach (var value in p_Values)
-            {
-                var te = Cl_RecordsFacade.f_GetInstance().f_GetTemplateElement(value);
-                if (te != null && te.p_Template != null)
+                void f_EndFloating()
                 {
-                    decimal? min = 0;
-                    decimal? max = 0;
-                    var partNorm = value.p_Element.f_GetPartNormValue(p_MedicalCard.p_PatientSex, age, out min, out max);
-                    string htmlBlock = "";
-                    if (a_IsDoctor)
-                        htmlBlock = Cl_RecordsFacade.f_GetInstance().f_GetHTMLDoctor(this, value, te.p_Template.p_Type == Cl_Template.E_TemplateType.Table, min, max);
-                    else
-                        htmlBlock = Cl_RecordsFacade.f_GetInstance().f_GetHTMLPatient(this, value, te.p_Template.p_Type == Cl_Template.E_TemplateType.Table, min, max);
-                    if (!string.IsNullOrWhiteSpace(htmlBlock))
+                    if (htmlFloating != null)
                     {
-                        if (te.p_Template.p_Type == Cl_Template.E_TemplateType.Table)
+                        if (htmlFloating.Length > 0)
                         {
-                            f_EndFloating();
-                            if (htmlTabling == null)
-                                htmlTabling = "<table border=\"1\" cellpadding=\"4\" bordercolor=\"black\" width=\"100%\" style=\"border-collapse:collapse;font-family:Verdana;font-size:11px;\"><thead><tr><td>Показатель</td><td>Значение</td><td>Ед. изм.</td><td>Нормa</td></tr></thead><tbody>";
-                            htmlTabling += htmlBlock;
+                            if (htmlFloating[htmlFloating.Length - 1] != '.')
+                                htmlFloating += ".";
+                            htmlFloating += "</p>";
+                            htmlContent += htmlFloating;
                         }
-                        else if (value.p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Float)
-                        {
-                            f_EndTabling();
-                            if (htmlFloating == null)
-                                htmlFloating = "<p>" + htmlBlock;
-                            else
-                                htmlFloating += " " + htmlBlock;
-                        }
+                        htmlFloating = null;
+                    }
+                }
+
+                foreach (var value in p_Values)
+                {
+                    var te = Cl_RecordsFacade.f_GetInstance().f_GetTemplateElement(value);
+                    if (te != null && te.p_Template != null)
+                    {
+                        decimal? min = 0;
+                        decimal? max = 0;
+                        var partNorm = value.p_Element.f_GetPartNormValue(p_MedicalCard.p_PatientSex, age, out min, out max);
+                        string htmlBlock = "";
+                        if (a_IsDoctor)
+                            htmlBlock = Cl_RecordsFacade.f_GetInstance().f_GetHTMLDoctor(this, value, te.p_Template.p_Type == Cl_Template.E_TemplateType.Table, min, max);
                         else
+                            htmlBlock = Cl_RecordsFacade.f_GetInstance().f_GetHTMLPatient(this, value, te.p_Template.p_Type == Cl_Template.E_TemplateType.Table, min, max);
+                        if (!string.IsNullOrWhiteSpace(htmlBlock))
                         {
-                            f_EndTabling();
-                            f_EndFloating();
-                            if (a_IsDoctor)
-                                htmlContent += htmlBlock;
+                            if (te.p_Template.p_Type == Cl_Template.E_TemplateType.Table)
+                            {
+                                f_EndFloating();
+                                if (htmlTabling == null)
+                                    htmlTabling = "<table border=\"1\" cellpadding=\"4\" bordercolor=\"black\" width=\"100%\" style=\"border-collapse:collapse;font-family:Verdana;font-size:11px;\"><thead><tr><td>Показатель</td><td>Значение</td><td>Ед. изм.</td><td>Нормa</td></tr></thead><tbody>";
+                                htmlTabling += htmlBlock;
+                            }
+                            else if (value.p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Float)
+                            {
+                                f_EndTabling();
+                                if (htmlFloating == null)
+                                    htmlFloating = "<p>" + htmlBlock;
+                                else
+                                    htmlFloating += " " + htmlBlock;
+                            }
                             else
-                                htmlContent += htmlBlock;
+                            {
+                                f_EndTabling();
+                                f_EndFloating();
+                                if (a_IsDoctor)
+                                    htmlContent += htmlBlock;
+                                else
+                                    htmlContent += htmlBlock;
+                            }
                         }
                     }
                 }
+                f_EndTabling();
+                f_EndFloating();
             }
-            f_EndTabling();
-            f_EndFloating();
+
             htmlContent += $"<p>MKБ: {p_MKB1} - {p_MKB2} - {p_MKB3} - {p_MKB4}</p>";
             template = Regex.Replace(template, "<fd\\.document\\.content>.*?<\\/fd\\.document\\.content>", string.Format("<fd.document.content>{0}</fd.document.content>", htmlContent));
             template = Regex.Replace(template, "<fd\\.document\\.doctor>.*?<\\/fd\\.document\\.doctor>", string.Format("<fd.document.doctor>{0}</fd.document.doctor>", p_DoctorFIO));
@@ -334,7 +345,28 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Получение конечного текста записи</summary>
         private string f_GetDocumentText(string a_AppStartupPath, bool a_IsDoctor)
         {
-            if (a_IsDoctor && p_HTMLDoctor != null)
+            if (p_Type == E_RecordType.FinishedFile)
+            {
+                if (p_FileType == E_RecordFileType.HTML)
+                {
+                    var stream = File.OpenText(Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "/" + p_FilePath);
+                    var res = stream.ReadToEnd();
+                    //.Replace("img class=\"record_title_img\" src=\"", "img class=\"record_title_img\" src=\"file:///" + a_AppStartupPath + "/");
+                    //res = res.Replace("src=\"", "src=\"file:///" + Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "/");
+                    return res;
+                    //var res = p_HTMLDoctor.Replace("class=\"record_title_img\" src=\"", "class=\"record_title_img\" src=\"file:///" + a_AppStartupPath + "/");
+                    //res = p_HTMLDoctor.Replace("class=record_title_img src=", "class=record_title_img src=file:///" + a_AppStartupPath + "/");
+                    //res = p_HTMLDoctor.Replace("src=\"", "src=\"file:///" + Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "/");
+                    //return res;
+                    //return Encoding.UTF8.GetString(p_FileBytes).Replace("src=\"", "src=\"file:///" + a_AppStartupPath + "/");
+                }
+                else if (p_FileType == E_RecordFileType.JFIF || p_FileType == E_RecordFileType.JIF || p_FileType == E_RecordFileType.JPE ||
+                    p_FileType == E_RecordFileType.JPEG || p_FileType == E_RecordFileType.JPG || p_FileType == E_RecordFileType.PNG || p_FileType == E_RecordFileType.GIF)
+                {
+                    return string.Format(@"<img src=""{0}/{1}"" />", Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath(), p_FilePath);
+                }
+            }
+            else if (a_IsDoctor && p_HTMLDoctor != null)
             {
                 var res = p_HTMLDoctor.Replace("class=\"record_title_img\" src=\"", "class=\"record_title_img\" src=\"file:///" + a_AppStartupPath + "/");
                 res = p_HTMLDoctor.Replace("class=record_title_img src=", "class=record_title_img src=file:///" + a_AppStartupPath + "/");
@@ -345,25 +377,6 @@ namespace Sadco.FamilyDoctor.Core.Entities
                 var res = p_HTMLPatient.Replace("class=\"record_title_img\" src=\"", "class=\"record_title_img\" src=\"file:///" + a_AppStartupPath + "/");
                 res = p_HTMLPatient.Replace("class=record_title_img src=", "class=record_title_img src=file:///" + a_AppStartupPath + "/");
                 return res;
-            }
-            else
-            {
-                if (p_Type == E_RecordType.FinishedFile)
-                {
-                    if (p_FileType == E_RecordFileType.HTML)
-                    {
-                        return Encoding.UTF8.GetString(p_FileBytes).Replace("src=\"", "src=\"file:///" + a_AppStartupPath + "/");
-                    }
-                    else if (p_FileType == E_RecordFileType.JFIF || p_FileType == E_RecordFileType.JIF || p_FileType == E_RecordFileType.JPE ||
-                        p_FileType == E_RecordFileType.JPEG || p_FileType == E_RecordFileType.JPG || p_FileType == E_RecordFileType.PNG)
-                    {
-                        return string.Format(@"<img src=""data:image/{0};base64,{1}"" />", Enum.GetName(typeof(E_RecordFileType), p_FileType).ToLower(), Convert.ToBase64String(p_FileBytes));
-                    }
-                }
-                else
-                {
-                    return null;
-                }
             }
             return null;
         }

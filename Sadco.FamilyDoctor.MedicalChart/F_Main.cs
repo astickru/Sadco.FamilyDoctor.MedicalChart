@@ -95,7 +95,17 @@ namespace Sadco.FamilyDoctor.MedicalChart
                 var medCard = Cl_MedicalCardsFacade.f_GetInstance().f_GetMedicalCard(args[6], patientId);
                 if (medCard != null)
                 {
-                    if (args.Length == 10)
+                    if (user.p_Permission.p_Role == E_Roles.Assistant)
+                    {
+                        user.p_ParentUser = new Cl_User();
+                        user.p_ParentUser.p_ClinicName = user.p_ClinicName;
+                        user.p_ParentUser.p_UserID = int.Parse(args[10]);
+                        user.p_ParentUser.p_UserSurName = args[11];
+                        user.p_ParentUser.p_UserName = args[12];
+                        user.p_ParentUser.p_UserLastName = args[13];
+                    }
+
+                    if (user.p_Permission.p_Role == E_Roles.Inspector)
                         return Cl_SessionFacade.f_GetInstance().f_Init(user, medCard, DateTime.Parse(args[8]), DateTime.Parse(args[9]));
                     else
                         return Cl_SessionFacade.f_GetInstance().f_Init(user, medCard);

@@ -19,10 +19,12 @@ namespace Sadco.FamilyDoctor.Core
         {
             if (!_IsInit)
             {
+                string localResourcesPath = "";
                 try
                 {
                     Configuration config = ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location);
                     var con = config.ConnectionStrings.ConnectionStrings["MedicalChartDatabase"];
+                    localResourcesPath = config.AppSettings.Settings["LocalResourcesPath"].Value;
                     if (con == null)
                     {
                         MonitoringStub.Error("Error_AppInit", "Отсутствует настройка подключения к БД MedicalChartDatabase в конфигурационном фале", null, null, null);
@@ -44,7 +46,7 @@ namespace Sadco.FamilyDoctor.Core
                     MonitoringStub.Error("Error_AppInit", "Не удалось инициализировать фасад работы с шаблонами", null, null, null);
                     return false;
                 }
-                if (!Cl_RecordsFacade.f_GetInstance().f_Init(m_DataContext))
+                if (!Cl_RecordsFacade.f_GetInstance().f_Init(m_DataContext, localResourcesPath))
                 {
                     MonitoringStub.Error("Error_AppInit", "Не удалось инициализировать фасад работы с записями", null, null, null);
                     return false;

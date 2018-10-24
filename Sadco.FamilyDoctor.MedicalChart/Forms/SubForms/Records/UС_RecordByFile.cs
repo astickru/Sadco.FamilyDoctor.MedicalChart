@@ -1,5 +1,6 @@
 ﻿using FD.dat.mon.stb.lib;
 using Sadco.FamilyDoctor.Core.Entities;
+using Sadco.FamilyDoctor.Core.Facades;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -16,63 +17,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         private E_RecordFileType m_FileType = E_RecordFileType.GIF;
         private byte[] m_FileBytes = null;
         private Cl_Record m_Record = null;
-
-        private static E_RecordFileType? f_GetFileType(string a_FileName)
-        {
-            var extension = Path.GetExtension(a_FileName).ToLower();
-            if (extension == ".x")
-            {
-                extension = Path.GetExtension(a_FileName.Substring(0, a_FileName.Length - 2)).ToLower();
-            }
-            else if (extension == ".tag")
-            {
-                extension = Path.GetExtension(a_FileName.Substring(0, a_FileName.Length - 4)).ToLower();
-            }
-            if (extension == ".htm" || extension == ".html")
-            {
-                return E_RecordFileType.HTML;
-            }
-            else if (extension == ".pdf")
-            {
-                return E_RecordFileType.PDF;
-            }
-            else if (extension == ".jpg")
-            {
-                return E_RecordFileType.JPG;
-            }
-            else if (extension == ".jpeg")
-            {
-                return E_RecordFileType.JPEG;
-            }
-            else if (extension == ".jpe")
-            {
-                return E_RecordFileType.JPE;
-            }
-            else if (extension == ".jfif")
-            {
-                return E_RecordFileType.JFIF;
-            }
-            else if (extension == ".jif")
-            {
-                return E_RecordFileType.JIF;
-            }
-            else if (extension == ".png")
-            {
-                return E_RecordFileType.PNG;
-            }
-            else if (extension == ".gif")
-            {
-                return E_RecordFileType.GIF;
-            }
-            else if (extension == ".xml")
-            {
-                return E_RecordFileType.XML;
-            }
-            else
-            {
-                return null;
-            }
-        }
 
         /// <summary>Установка записи</summary>
         public void f_SetRecord(Cl_Record a_Record)
@@ -103,7 +47,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             record.p_DoctorLastName = m_Record.p_DoctorLastName;
             record.p_MedicalCard = m_Record.p_MedicalCard;
             record.p_DateCreate = m_Record.p_DateCreate;
-            record.p_DateForming = m_Record.p_DateForming;
             record.p_Version = m_Record.p_Version + 1;
             record.p_FileType = m_FileType;
             record.p_FileBytes = m_FileBytes;
@@ -130,9 +73,10 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         private void ctrlBAdd_Click(object sender, System.EventArgs e)
         {
             OpenFileDialog openFile = new OpenFileDialog();
+            openFile.Filter = "Файлы изображений (.bmp, .jpg, .png)|*.bmp;*.jpg;*.png|PDF файл (.pdf)|*.pdf|Веб страницы (.htm, .html)|*.htm;*.html";
             if (openFile.ShowDialog() != DialogResult.OK)
                 return;
-            var recordFileType = f_GetFileType(openFile.FileName);
+            var recordFileType = Cl_RecordsFacade.f_GetInstance().f_GetFileType(openFile.FileName);
             if (recordFileType != null)
             {
                 m_FileType = (E_RecordFileType)recordFileType;

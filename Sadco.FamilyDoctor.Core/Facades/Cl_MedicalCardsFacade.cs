@@ -174,7 +174,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
         {
             if (m_DataContextMegaTemplate != null)
             {
-                var medicalCards = m_DataContextMegaTemplate.p_MedicalCards.Where(m => !m.p_IsArchive && m.p_PatientID == a_PatientID).ToList();
+                var medicalCards = m_DataContextMegaTemplate.p_MedicalCards.Where(m => m.p_DateArchive == null && m.p_PatientID == a_PatientID).ToList();
                 if (medicalCards != null && medicalCards.Count > 0)
                 {
                     if (medicalCards.Count > 1)

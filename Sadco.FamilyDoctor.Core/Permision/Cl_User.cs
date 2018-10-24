@@ -48,6 +48,9 @@ namespace Sadco.FamilyDoctor.Core.Permision
         /// <summary>Уровень доступа пользователя</summary>
 		public Cl_UserPermission p_Permission { get; set; }
 
+        /// <summary>Руководитель</summary>
+        public Cl_User p_ParentUser { get; set; }
+
         /// <summary>Инициалы пользователя</summary>
         public string p_FIO { get { return f_GetInitials(); } }
         /// <summary>Возвращает инициалы пользователя</summary>

@@ -12,9 +12,14 @@ namespace Sadco.FamilyDoctor.UnitTestProject
     [TestClass]
     public class Cl_TestRecords
     {
+        private string f_GetLocalResourcesPath()
+        {
+            return "c:/temp/MedicalChart/Resources";
+        }
+
         private string f_GetConnectionString()
         {
-            return @"Server=(localdb)\mssqllocaldb;Database=FamilyDoctor.InMemory;Trusted_Connection=True;ConnectRetryCount=0";
+            return @"Server=(localdb)\mssqllocaldb;Database=MedicalChart;Trusted_Connection=True;ConnectRetryCount=0";
         }
 
         [TestMethod]
@@ -233,21 +238,111 @@ namespace Sadco.FamilyDoctor.UnitTestProject
         [TestMethod]
         public void f_TestCreateRecord()
         {
+            var temlName = "Тест проверки создания API работы с записями";
             var dc = new Cl_DataContextMegaTemplate(f_GetConnectionString());
             dc.f_Init();
-            var result = Cl_TemplatesFacade.f_GetInstance().f_Init(dc);
+            var result = Cl_MedicalCardsFacade.f_GetInstance().f_Init(dc);
             Assert.AreEqual(true, result);
-            result = Cl_RecordsFacade.f_GetInstance().f_Init(dc);
+            result = Cl_TemplatesFacade.f_GetInstance().f_Init(dc);
+            Assert.AreEqual(true, result);
+            result = Cl_RecordsFacade.f_GetInstance().f_Init(dc, f_GetLocalResourcesPath());
             Assert.AreEqual(true, result);
             result = Cl_CatalogsFacade.f_GetInstance().f_Init(dc);
             Assert.AreEqual(true, result);
+
+            var groupTpl = dc.p_Groups.FirstOrDefault(g => g.p_Type == Cl_Group.E_Type.Templates && g.p_Name == "test");
+            if (groupTpl == null)
+            {
+                groupTpl = new Cl_Group() { p_Name = "test", p_Type = Cl_Group.E_Type.Elements };
+                dc.p_Groups.Add(groupTpl);
+                dc.SaveChanges();
+            }
+            var groupEl = dc.p_Groups.FirstOrDefault(g => g.p_Type == Cl_Group.E_Type.Templates && g.p_Name == "test");
+            if (groupEl == null)
+            {
+                groupEl = new Cl_Group() { p_Name = "test", p_Type = Cl_Group.E_Type.Elements };
+                dc.p_Groups.Add(groupEl);
+                dc.SaveChanges();
+            }
+
+            if (!Cl_CatalogsFacade.f_GetInstance().f_HasCategory("Осмотр"))
+                Cl_CatalogsFacade.f_GetInstance().f_AddCategory(Cl_Category.E_CategoriesTypes.Total, "Осмотр");
+            if (!Cl_CatalogsFacade.f_GetInstance().f_HasCategory("Клиническая 1"))
+                Cl_CatalogsFacade.f_GetInstance().f_AddCategory(Cl_Category.E_CategoriesTypes.Clinic, "Клиническая 1");
 
             var catTotal = Cl_CatalogsFacade.f_GetInstance().f_GetCategory("Осмотр");
             Assert.AreNotEqual(null, catTotal);
             var catClinic = Cl_CatalogsFacade.f_GetInstance().f_GetCategory("Клиническая 1");
             Assert.AreNotEqual(null, catClinic);
-            var tmpl = Cl_TemplatesFacade.f_GetInstance().f_GetTemplate(80);
+
+            var tmpl = Cl_TemplatesFacade.f_GetInstance().f_GetTemplateByName(temlName);
+            if (tmpl == null)
+            {
+                tmpl = new Cl_Template() { p_Name = temlName, p_Type = Cl_Template.E_TemplateType.Template };
+                var elements = new List<Cl_TemplateElement>();
+
+                var element = new Cl_Element()
+                {
+                    p_ParentGroupID = groupEl.p_ID,
+                    p_ParentGroup = groupEl,
+                    p_Name = "Формула 1",
+                    p_Tag = "one",
+                    p_IsNumber = true,
+                    p_NumberRound = 3
+                };
+                element.p_ParamsValues = new List<Cl_ElementParam>();
+                for (int i = 1; i < 4; i++)
+                {
+                    element.p_ParamsValues.Add(new Cl_ElementParam() { p_Element = element, p_TypeParam = Cl_ElementParam.E_TypeParam.NormValues, p_Value = i.ToString() });
+                    element.p_ParamsValues.Add(new Cl_ElementParam() { p_Element = element, p_TypeParam = Cl_ElementParam.E_TypeParam.PatValues, p_Value = i.ToString() });
+                }
+                elements.Add(new Cl_TemplateElement() { p_Template = tmpl, p_ChildElement = element, p_Index = 0 });
+
+                element = new Cl_Element()
+                {
+                    p_ParentGroupID = groupEl.p_ID,
+                    p_ParentGroup = groupEl,
+                    p_Name = "Формула 2",
+                    p_Tag = "dva",
+                    p_IsNumber = true,
+                    p_NumberRound = 2
+                };
+                element.p_ParamsValues = new List<Cl_ElementParam>();
+                for (int i = 1; i < 4; i++)
+                {
+                    element.p_ParamsValues.Add(new Cl_ElementParam() { p_Element = element, p_TypeParam = Cl_ElementParam.E_TypeParam.NormValues, p_Value = i.ToString() });
+                    element.p_ParamsValues.Add(new Cl_ElementParam() { p_Element = element, p_TypeParam = Cl_ElementParam.E_TypeParam.PatValues, p_Value = i.ToString() });
+                }
+                elements.Add(new Cl_TemplateElement() { p_Template = tmpl, p_ChildElement = element, p_Index = 1 });
+                element = new Cl_Element()
+                {
+                    p_ParentGroupID = groupEl.p_ID,
+                    p_ParentGroup = groupEl,
+                    p_Name = "Формула 3",
+                    p_Tag = "tri",
+                    p_IsNumber = true,
+                    p_NumberRound = 2
+                };
+                element.p_ParamsValues = new List<Cl_ElementParam>();
+                for (int i = 1; i < 4; i++)
+                {
+                    element.p_ParamsValues.Add(new Cl_ElementParam() { p_Element = element, p_TypeParam = Cl_ElementParam.E_TypeParam.NormValues, p_Value = i.ToString() });
+                    element.p_ParamsValues.Add(new Cl_ElementParam() { p_Element = element, p_TypeParam = Cl_ElementParam.E_TypeParam.PatValues, p_Value = i.ToString() });
+                }
+                elements.Add(new Cl_TemplateElement() { p_Template = tmpl, p_ChildElement = element, p_Index = 2 });
+                tmpl.p_ParentGroupID = groupTpl.p_ID;
+                tmpl.p_ParentGroup = groupTpl;
+                tmpl.p_TemplateElements = elements;
+                tmpl.p_CategoryTotalID = catTotal.p_ID;
+                tmpl.p_CategoryTotal = catTotal;
+                tmpl.p_CategoryClinicID = catClinic.p_ID;
+                tmpl.p_CategoryClinic = catClinic;
+
+                dc.p_Templates.Add(tmpl);
+                dc.SaveChanges();
+            }
             Assert.AreNotEqual(null, tmpl);
+
             var elts = Cl_TemplatesFacade.f_GetInstance().f_GetElements(tmpl);
             Assert.AreNotEqual(null, elts);
             var vals = new List<Cl_RecordValue>();
@@ -255,15 +350,16 @@ namespace Sadco.FamilyDoctor.UnitTestProject
             {
                 vals.Add(new Cl_RecordValue() { p_ElementID = el.p_ID, p_Element = el, p_ValueUser = "5" });
             }
-            var medicalCard1 = Cl_MedicalCardsFacade.f_GetInstance().f_CreateMedicalCard("777", 1, Core.Permision.Cl_User.E_Sex.Man, "Иванов", "Иван", "Иванович", new DateTime(1996, 3, 11), "Медкарта API тест 777");
+            var medicalCard1 = Cl_MedicalCardsFacade.f_GetInstance().f_GetMedicalCard("777", 1);
+            if (medicalCard1 == null)
+                medicalCard1 = Cl_MedicalCardsFacade.f_GetInstance().f_CreateMedicalCard("777", 1, Core.Permision.Cl_User.E_Sex.Man, "Иванов", "Иван", "Иванович", new DateTime(1996, 3, 11), "Медкарта API тест 777");
             Assert.IsNotNull(medicalCard1);
-            result = Cl_RecordsFacade.f_GetInstance().f_CreateRecord(medicalCard1, catTotal, catClinic, "Заголовок API тест - значения", "Клиника API тест значения", 56369, 10,
+            result = Cl_RecordsFacade.f_GetInstance().f_CreateRecord(medicalCard1, catTotal, catClinic, "Заголовок API тест - значения", "Клиника API тест значения", 56369,
                 "Доктор_Фамилия", "Доктор_Имя", "Доктор_Отчество",
-                201, Core.Permision.Cl_User.E_Sex.Man, "Пациент_Фамилия", "Пациент_Имя", "Пациент_Отчество", new DateTime(1983, 3, 21), tmpl, vals);
+                 tmpl, vals);
             Assert.AreEqual(true, result);
-            result = Cl_RecordsFacade.f_GetInstance().f_CreateRecord(medicalCard1, catTotal, catClinic, "Заголовок API тест - файл", "Клиника API тест файл", 56369, 10,
+            result = Cl_RecordsFacade.f_GetInstance().f_CreateRecord(medicalCard1, catTotal, catClinic, "Заголовок API тест - файл", "Клиника API тест файл", 56369,
                 "Доктор_Фамилия", "Доктор_Имя", "Доктор_Отчество",
-                201, Core.Permision.Cl_User.E_Sex.Man, "Пациент_Фамилия", "Пациент_Имя", "Пациент_Отчество", new DateTime(1983, 3, 21),
                 E_RecordFileType.HTML, Encoding.UTF8.GetBytes("<h1>API тест файл<h1>"));
             Assert.AreEqual(true, result);
         }
@@ -334,7 +430,8 @@ namespace Sadco.FamilyDoctor.UnitTestProject
                     result = Cl_MedicalCardsFacade.f_GetInstance().f_MergeMedicalCards(5);
                     Assert.AreEqual(true, result);
                     transaction.Commit();
-                } catch (Exception er)
+                }
+                catch (Exception er)
                 {
                     transaction.Rollback();
                     throw er;

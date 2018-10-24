@@ -12,7 +12,10 @@ using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Drawing.Printing;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
@@ -126,21 +129,20 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 if (m_Record.p_MedicalCard != null)
                 {
-                    ctrlDoctorFIO.Text = m_Record.p_DoctorFIO;
                     ctrlPatientFIO.Text = string.Format("{0}, {1}, {2} ({3})", m_Record.p_MedicalCard.p_PatientFIO,
                         m_Record.p_MedicalCard.p_PatientSex == Core.Permision.Cl_User.E_Sex.Man ? "М" : m_Record.p_MedicalCard.p_PatientSex == Core.Permision.Cl_User.E_Sex.Female ? "Ж" : "Нет данных",
                         m_Record.p_MedicalCard.p_PatientDateBirth.ToShortDateString(), m_Record.p_MedicalCard.f_GetPatientAgeByMonthText(m_Record.p_DateCreate));
                     ctrlTitle.Text = m_Record.p_Title;
-										if (m_Record.p_DateReception.Year >= 1980)
-										{
-											ctrlDTPDateReception.Value = m_Record.p_DateReception;
-											ctrlDTPTimeReception.Value = m_Record.p_DateReception;
-										}
-										else
-										{
-											ctrlDTPDateReception.Value = DateTime.Now;
-											ctrlDTPTimeReception.Value = DateTime.Now;
-										}
+                    if (m_Record.p_DateReception.Year >= 1980)
+                    {
+                        ctrlDTPDateReception.Value = m_Record.p_DateReception;
+                        ctrlDTPTimeReception.Value = m_Record.p_DateReception;
+                    }
+                    else
+                    {
+                        ctrlDTPDateReception.Value = DateTime.Now;
+                        ctrlDTPTimeReception.Value = DateTime.Now;
+                    }
                     if (m_Record.p_Version == 0)
                         ctrl_Version.Text = "Черновик";
                     else
@@ -180,7 +182,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             if (a_Pattern != null)
             {
-                ctrlDoctorFIO.Text = a_Pattern.p_DoctorFIO;
                 ctrlTitle.Text = a_Pattern.p_Title;
                 Cl_RecordsFacade.f_GetInstance().f_EditRecordFromPattern(m_Record, a_Pattern);
                 f_UpdateControls();
@@ -200,7 +201,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 MonitoringStub.Message("Заполните поле \"Дата приема\"!");
                 return;
             }
-						if (ctrlDTPTimeReception.Value == null)
+            if (ctrlDTPTimeReception.Value == null)
             {
                 MonitoringStub.Message("Заполните поле \"Время приема\"!");
                 return;
@@ -236,16 +237,44 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
                             record.p_Title = ctrlTitle.Text;
                             record.p_DateReception = new DateTime(ctrlDTPDateReception.Value.Year,
-															ctrlDTPDateReception.Value.Month,
-															ctrlDTPDateReception.Value.Day,
-															ctrlDTPTimeReception.Value.Hour,
-															ctrlDTPTimeReception.Value.Minute,
-															0);
-														Cl_App.m_DataContext.p_Records.Add(record);
+                                                            ctrlDTPDateReception.Value.Month,
+                                                            ctrlDTPDateReception.Value.Day,
+                                                            ctrlDTPTimeReception.Value.Hour,
+                                                            ctrlDTPTimeReception.Value.Minute,
+                                                            0);
+
+                            if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_Role == Core.Permision.E_Roles.Assistant)
+                            {
+                                record.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor.p_ParentUser);
+                            }
+
+                            Cl_App.m_DataContext.p_Records.Add(record);
                             Cl_App.m_DataContext.SaveChanges();
-                            record.p_FileType = E_RecordFileType.HTML;
-                            record.p_HTMLDoctor = record.f_GetHTMLDoctor();
-                            record.p_HTMLPatient = record.f_GetHTMLPatient();
+                            
+                            if (m_Record.p_Type == E_RecordType.FinishedFile)
+                            {
+                                record.p_FilePath = Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesRelativeFilePath(record);
+                                DirectoryInfo dirInfo = new DirectoryInfo(Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath());
+                                dirInfo.CreateSubdirectory(Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesRelativePath(record));
+                                File.WriteAllBytes(Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "/" + record.p_FilePath, record.p_FileBytes);
+                                //if (m_Record.p_FileType == E_RecordFileType.HTML)
+                                //{
+                                //    Regex regex = new Regex(@"src=(?<source>.*?\.gif)|src=(?<source>.*?\.jpeg)|src=(?<source>.*?\.jpeg)|src=(?<source>.*?\.png)");
+                                //    var html = Encoding.UTF8.GetString(record.p_FileBytes);
+                                //    var matches = regex.Matches(html);
+                                //    foreach (Match match in matches)
+                                //    {
+                                //        var filePath =  match.Groups["source"].Value
+                                //        File.WriteAllBytes(Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "/" + record.p_FilePath, record.p_FileBytes);
+                                //    }
+                                //}
+                            } else
+                            {
+                                record.p_HTMLDoctor = record.f_GetHTMLDoctor();
+                                record.p_HTMLPatient = record.f_GetHTMLPatient();
+                            }
+
+                            //record.p_FileType = E_RecordFileType.HTML;
                             if (record.p_Version == 1)
                             {
                                 record.p_RecordID = record.p_ID;
@@ -253,17 +282,21 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             Cl_App.m_DataContext.SaveChanges();
                             Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.UIEvents, string.Format("Сохранение записи: {0}, дата записи: {1}, клиника: {2}", record.p_Title, record.p_DateCreate, record.p_ClinicName), record.p_RecordID);
                             m_Log.f_SaveEntity(record);
+
                             transaction.Commit();
-                            //m_ControlTemplate.f_SetRecord(record);
                             f_SetRecord(record);
                             e_Save?.Invoke(this, new Cl_Record.Cl_EventArgs() { p_Record = record });
-                            //ctrl_Version.Text = record.p_Version.ToString();
                             this.Close();
 
                         }
                         catch (Exception ex)
                         {
                             transaction.Rollback();
+                            try
+                            {
+                                File.Delete(record.p_FilePath);
+                            }
+                            catch { };
                             MonitoringStub.Error("Error_Editor", "При сохранении изменений записи произошла ошибка", ex, null, null);
                         }
                     }
