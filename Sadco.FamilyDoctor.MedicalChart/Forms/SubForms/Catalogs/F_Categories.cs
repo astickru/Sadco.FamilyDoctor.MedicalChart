@@ -26,6 +26,9 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
             f_RefreshClinik();
         }
 
+        private Cl_Category m_SelectedTotal = null;
+        private Cl_Category m_SelectedClinik = null;
+
         private void f_RefreshTotal()
         {
             try
@@ -48,7 +51,17 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
                 }
                 if (ctrlCategoriesTotal.Rows.Count > 0)
                 {
-                    ctrlCategoriesTotal.Rows[ctrlCategoriesTotal.Rows.Count - 1].Selected = true;
+                    if (m_SelectedTotal != null)
+                    {
+                        foreach (DataGridViewRow row in ctrlCategoriesTotal.Rows)
+                        {
+                            if (((Cl_Category)row.DataBoundItem).p_ID == m_SelectedTotal.p_ID)
+                            {
+                                row.Selected = true;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception er)
@@ -79,7 +92,17 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
                 }
                 if (ctrlCategoriesClinik.Rows.Count > 0)
                 {
-                    ctrlCategoriesClinik.Rows[ctrlCategoriesClinik.Rows.Count - 1].Selected = true;
+                    if (m_SelectedClinik != null)
+                    {
+                        foreach (DataGridViewRow row in ctrlCategoriesClinik.Rows)
+                        {
+                            if (((Cl_Category)row.DataBoundItem).p_ID == m_SelectedClinik.p_ID)
+                            {
+                                row.Selected = true;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
             else
@@ -104,6 +127,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
                         cat.p_Name = wEdit.ctrlCategotyName.Text;
                         Cl_App.m_DataContext.p_Categories.Add(cat);
                         Cl_App.m_DataContext.SaveChanges();
+                        m_SelectedTotal = cat;
                         f_RefreshTotal();
                     }
                 }
@@ -117,6 +141,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
                         cat.p_Name = wEdit.ctrlCategotyName.Text;
                         Cl_App.m_DataContext.p_Categories.Add(cat);
                         Cl_App.m_DataContext.SaveChanges();
+                        m_SelectedClinik = cat;
                         f_RefreshClinik();
                     }
                 }
@@ -146,6 +171,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
                             {
                                 cat.p_Name = wEdit.ctrlCategotyName.Text;
                                 Cl_App.m_DataContext.SaveChanges();
+                                m_SelectedTotal = cat;
                                 f_RefreshTotal();
                             }
                         }
@@ -165,6 +191,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
                             {
                                 cat.p_Name = wEdit.ctrlCategotyName.Text;
                                 Cl_App.m_DataContext.SaveChanges();
+                                m_SelectedClinik = cat;
                                 f_RefreshClinik();
                             }
                         }

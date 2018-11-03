@@ -17,10 +17,6 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Column("F_ID")]
         public int p_ID { get; set; }
 
-        /// <summary>Заголовок записи</summary>
-        [Column("F_TITLE")]
-        public string p_Title { get; set; }
-
         /// <summary>Название клиники</summary>
         [Column("F_CLINICNAME")]
         public string p_ClinicName { get; set; }
@@ -98,13 +94,12 @@ namespace Sadco.FamilyDoctor.Core.Entities
         public Cl_Template p_Template { get; set; }
 
         /// <summary>Установка шаблона</summary>
-        public void f_SetTemplate(Cl_Template a_Template)
+        public virtual void f_SetTemplate(Cl_Template a_Template)
         {
             p_Template = a_Template;
             if (a_Template != null)
             {
                 p_TemplateID = a_Template.p_ID;
-                p_Title = a_Template.p_Title;
                 p_CategoryTotalID = a_Template.p_CategoryTotalID;
                 p_CategoryTotal = a_Template.p_CategoryTotal;
                 p_CategoryClinicID = a_Template.p_CategoryClinicID;

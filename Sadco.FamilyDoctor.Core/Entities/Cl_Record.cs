@@ -53,6 +53,9 @@ namespace Sadco.FamilyDoctor.Core.Entities
             public Cl_Record p_Record { get; set; }
         }
 
+        [NotMapped]
+        public Cl_Record p_ParentRecord { get; set; }
+
         /// <summary>ID записи для всех версий</summary>
         [Column("F_RECORD_ID")]
         [Description("ID записи для всех версий")]
@@ -62,6 +65,10 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Column("F_VERSION")]
         [Description("Версия записи")]
         public int p_Version { get; set; }
+
+        /// <summary>Заголовок записи</summary>
+        [Column("F_TITLE")]
+        public string p_Title { get; set; }
 
         /// <summary>Флаг нахождения записи в удалении</summary>
         [Column("F_ISDEL")]
@@ -202,6 +209,15 @@ namespace Sadco.FamilyDoctor.Core.Entities
         public List<Cl_RecordValue> p_Values {
             get { return m_Values; }
             set { m_Values = value; }
+        }
+
+        public override void f_SetTemplate(Cl_Template a_Template)
+        {
+            base.f_SetTemplate(a_Template);
+            if (a_Template != null)
+            {
+                p_Title = a_Template.p_Title;
+            }
         }
 
         public override IEnumerable<I_RecordValue> f_GetRecordsValues()
@@ -347,23 +363,26 @@ namespace Sadco.FamilyDoctor.Core.Entities
         {
             if (p_Type == E_RecordType.FinishedFile)
             {
-                if (p_FileType == E_RecordFileType.HTML)
+                p_FileBytes = Cl_RecordsFacade.f_GetInstance().f_GetFileFromSql(this);
+                if (p_FileBytes != null)
                 {
-                    var stream = File.OpenText(Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "/" + p_FilePath);
-                    var res = stream.ReadToEnd();
-                    //.Replace("img class=\"record_title_img\" src=\"", "img class=\"record_title_img\" src=\"file:///" + a_AppStartupPath + "/");
-                    //res = res.Replace("src=\"", "src=\"file:///" + Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "/");
-                    return res;
-                    //var res = p_HTMLDoctor.Replace("class=\"record_title_img\" src=\"", "class=\"record_title_img\" src=\"file:///" + a_AppStartupPath + "/");
-                    //res = p_HTMLDoctor.Replace("class=record_title_img src=", "class=record_title_img src=file:///" + a_AppStartupPath + "/");
-                    //res = p_HTMLDoctor.Replace("src=\"", "src=\"file:///" + Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "/");
-                    //return res;
-                    //return Encoding.UTF8.GetString(p_FileBytes).Replace("src=\"", "src=\"file:///" + a_AppStartupPath + "/");
+                    if (p_FileType == E_RecordFileType.HTML)
+                    {
+                        return Encoding.UTF8.GetString(p_FileBytes).Replace("src=\"", "src=\"file:///" + a_AppStartupPath + "/");
+                    }
+                    else if (p_FileType == E_RecordFileType.PDF)
+                    {
+                        return Encoding.UTF8.GetString(p_FileBytes);
+                    }
+                    else if (p_FileType == E_RecordFileType.JFIF || p_FileType == E_RecordFileType.JIF || p_FileType == E_RecordFileType.JPE ||
+                        p_FileType == E_RecordFileType.JPEG || p_FileType == E_RecordFileType.JPG || p_FileType == E_RecordFileType.PNG || p_FileType == E_RecordFileType.GIF)
+                    {
+                        return string.Format(@"<img src=""data:image/{0};base64,{1}"" />", Enum.GetName(typeof(E_RecordFileType), p_FileType).ToLower(), Convert.ToBase64String(p_FileBytes));
+                    }
                 }
-                else if (p_FileType == E_RecordFileType.JFIF || p_FileType == E_RecordFileType.JIF || p_FileType == E_RecordFileType.JPE ||
-                    p_FileType == E_RecordFileType.JPEG || p_FileType == E_RecordFileType.JPG || p_FileType == E_RecordFileType.PNG || p_FileType == E_RecordFileType.GIF)
+                else
                 {
-                    return string.Format(@"<img src=""{0}/{1}"" />", Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath(), p_FilePath);
+                    MonitoringStub.Warning("Файл отсутствует");
                 }
             }
             else if (a_IsDoctor && p_HTMLDoctor != null)

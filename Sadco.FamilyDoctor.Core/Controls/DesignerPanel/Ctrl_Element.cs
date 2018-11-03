@@ -156,7 +156,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         public void f_SetRecordElementValues(Cl_RecordValue a_RecordValue, TableLayoutPanel a_Table, int a_RowIndex)
         {
             if (a_RecordValue == null || a_RecordValue.p_Record == null || p_Element == null) return;
-            Visible = Cl_RecordsFacade.f_GetInstance().f_GetElementVisible(a_RecordValue.p_Record, p_Element.p_VisibilityFormula);
+            Visible = p_Element.p_Visible && Cl_RecordsFacade.f_GetInstance().f_GetElementVisible(a_RecordValue.p_Record, p_Element.p_VisibilityFormula);
 
             m_Record = a_RecordValue.p_Record;
             ctrl_PartLocations = null;

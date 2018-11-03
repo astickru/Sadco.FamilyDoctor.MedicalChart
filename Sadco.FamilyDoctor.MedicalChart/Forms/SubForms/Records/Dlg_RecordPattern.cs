@@ -99,7 +99,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 {
                     Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(m_RecordPattern.p_Template);
                     ctrlDoctorFIO.Text = m_RecordPattern.p_DoctorFIO;
-                    ctrlTitle.Text = m_RecordPattern.p_Title;
                     ctrlName.Text = m_RecordPattern.p_Name;
                     Text = string.Format("Паттерн записей по шаблону \"{0}\" v{1}", m_RecordPattern.p_Template.p_Name, ConfigurationManager.AppSettings["Version"]);
                     m_Record = Cl_RecordsFacade.f_GetInstance().f_GetNewRecord(m_RecordPattern);
@@ -133,11 +132,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         private void ctrlBSave_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(ctrlTitle.Text))
-            {
-                MonitoringStub.Message("Заполните поле \"Заголовок\"!");
-                return;
-            }
             if (string.IsNullOrWhiteSpace(ctrlName.Text))
             {
                 MonitoringStub.Message("Заполните поле \"Название\"!");
@@ -152,13 +146,12 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         var record = m_ControlTemplate.f_GetNewRecord(false);
                         if (record != null)
                         {
-                            if (m_SourceRecord == null && m_Log.f_IsChanged(record) == false && record.p_Title == ctrlTitle.Text)
+                            if (m_SourceRecord == null && m_Log.f_IsChanged(record) == false)
                             {
                                 MonitoringStub.Message("Паттерн не изменялся!");
                                 transaction.Rollback();
                                 return;
                             }
-                            record.p_Title = ctrlTitle.Text;
                             var recordPattern = Cl_RecordsFacade.f_GetInstance().f_GetNewRecordPattern(ctrlName.Text, record);
                             if (recordPattern != null)
                             {

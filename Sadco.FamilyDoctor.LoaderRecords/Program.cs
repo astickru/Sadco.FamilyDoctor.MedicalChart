@@ -450,30 +450,21 @@ namespace Sadco.FamilyDoctor.LoaderRecords
                         f_WriteLog("Конец сохранения сформированных записей", E_MessageType.Info);
 
                         f_WriteLog("Начало копирования папки с файлами", E_MessageType.Info);
-                        foreach (string dirPath in Directory.GetDirectories(path, "*", SearchOption.AllDirectories))
+
+                        foreach (string _path in Directory.GetFiles(path, "*.*", SearchOption.AllDirectories))
                         {
                             try
                             {
-                                Directory.CreateDirectory(dirPath.Replace(path, Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "\\"));
+                                var fileName = Path.GetFileName(_path);
+                                var relativePath = _path.Replace(path, "").Replace("\\" + fileName, "");
+                                Cl_RecordsFacade.f_GetInstance().f_SaveFileFromSql(relativePath, fileName, File.ReadAllBytes(_path));
                             }
                             catch (Exception e)
                             {
-                                f_WriteLog("Не удалось создать папку " + dirPath, E_MessageType.Info);
+                                f_WriteLog("Не удалось скопировать файл " + _path, E_MessageType.Info);
                             }
                         }
-                        foreach (string newPath in Directory.GetFiles(path, "*.*", SearchOption.AllDirectories))
-                        {
-                            try
-                            {
-                                File.Copy(newPath, newPath.Replace(path, Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "\\"), true);
-                            }
-                            catch (Exception e)
-                            {
-                                f_WriteLog("Не удалось скопировать файл " + newPath, E_MessageType.Info);
-                            }
-                        }
-                        //_dirInfo.CreateSubdirectory(pathRelativeFolder);
-                        //File.Copy(fileRecord, Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "/" + pathRelativeFile);
+
                         f_WriteLog("Конец копирования папки с файлами", E_MessageType.Info);
                     }
                     else

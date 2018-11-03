@@ -64,7 +64,7 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
         /// Вызывается после сохранения элемента, что бы определить какие изменения были сделаны
         /// </summary>
         /// <param name="obj"></param>
-        public void f_SaveEntity(I_ELog obj)
+        public void f_SaveEntity(I_ELog obj, string textNew = null)
         {
             if (obj == null) return;
 
@@ -78,7 +78,14 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
                 StringBuilder sbAction = new StringBuilder();
 
                 if (f_IsNew(obj))
-                    sbAction.AppendLine("Создан новый элемент");
+                {
+                    if (!string.IsNullOrWhiteSpace(textNew))
+                    {
+                        sbAction.AppendLine(textNew);
+                    }
+                    else
+                        sbAction.AppendLine("Создан новый элемент");
+                }
                 else
                 {
                     Dictionary<PropertyInfo, object> changedValues = f_GetChangedValues(obj);

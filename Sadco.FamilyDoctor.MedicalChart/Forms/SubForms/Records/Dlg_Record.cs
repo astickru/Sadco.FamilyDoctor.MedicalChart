@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
@@ -33,6 +34,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             InitializeComponent();
 
             ctrlBFormatByPattern.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditAllRecords || Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditSelfRecords;
+            ctrlBMKB.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_Role != Core.Permision.E_Roles.Archivarius;
 
             this.Load += Dlg_Record_Load;
         }
@@ -182,7 +184,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             if (a_Pattern != null)
             {
-                ctrlTitle.Text = a_Pattern.p_Title;
                 Cl_RecordsFacade.f_GetInstance().f_EditRecordFromPattern(m_Record, a_Pattern);
                 f_UpdateControls();
                 m_Log.f_SetEntity(m_Record);
@@ -254,34 +255,20 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             if (m_Record.p_Type == E_RecordType.FinishedFile)
                             {
                                 record.p_FilePath = Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesRelativeFilePath(record);
-                                DirectoryInfo dirInfo = new DirectoryInfo(Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath());
-                                dirInfo.CreateSubdirectory(Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesRelativePath(record));
-                                File.WriteAllBytes(Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "/" + record.p_FilePath, record.p_FileBytes);
-                                //if (m_Record.p_FileType == E_RecordFileType.HTML)
-                                //{
-                                //    Regex regex = new Regex(@"src=(?<source>.*?\.gif)|src=(?<source>.*?\.jpeg)|src=(?<source>.*?\.jpeg)|src=(?<source>.*?\.png)");
-                                //    var html = Encoding.UTF8.GetString(record.p_FileBytes);
-                                //    var matches = regex.Matches(html);
-                                //    foreach (Match match in matches)
-                                //    {
-                                //        var filePath =  match.Groups["source"].Value
-                                //        File.WriteAllBytes(Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "/" + record.p_FilePath, record.p_FileBytes);
-                                //    }
-                                //}
+                                Cl_RecordsFacade.f_GetInstance().f_SaveFileFromSql(record);
                             } else
                             {
                                 record.p_HTMLDoctor = record.f_GetHTMLDoctor();
                                 record.p_HTMLPatient = record.f_GetHTMLPatient();
                             }
-
-                            //record.p_FileType = E_RecordFileType.HTML;
                             if (record.p_Version == 1)
                             {
                                 record.p_RecordID = record.p_ID;
                             }
                             Cl_App.m_DataContext.SaveChanges();
                             Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.UIEvents, string.Format("Сохранение записи: {0}, дата записи: {1}, клиника: {2}", record.p_Title, record.p_DateCreate, record.p_ClinicName), record.p_RecordID);
-                            m_Log.f_SaveEntity(record);
+
+                            m_Log.f_SaveEntity(record, record.p_ParentRecord != null ? $"Создана новая запись на основе {record.p_ParentRecord.p_Title}" : "Создана новая запись");
 
                             transaction.Commit();
                             f_SetRecord(record);
@@ -294,7 +281,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             transaction.Rollback();
                             try
                             {
-                                File.Delete(record.p_FilePath);
+                                Cl_RecordsFacade.f_GetInstance().f_DeleteFileFromSql(record);
                             }
                             catch { };
                             MonitoringStub.Error("Error_Editor", "При сохранении изменений записи произошла ошибка", ex, null, null);

@@ -6,6 +6,7 @@ using Sadco.FamilyDoctor.Core.EntityLogs;
 using Sadco.FamilyDoctor.Core.Facades;
 using Sadco.FamilyDoctor.Core.Permision;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity;
@@ -21,6 +22,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             Tag = string.Format("Записи клиента v{0}", ConfigurationManager.AppSettings["Version"]);
             InitializeComponent();
+
+            ctrlPDFViewer.setShowToolbar(false);
+            ctrlPDFViewer.setPageMode("none");
+            ctrlPDFViewer.setView("FitH");
+            ctrlPDFViewer.Dock = DockStyle.Fill;
 
             p_DateForming.ValueType = typeof(DateTime);
             ctrlLPatientName.Text = Cl_SessionFacade.f_GetInstance().p_Patient.p_FIO;
@@ -43,18 +49,18 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         public bool p_IsShowDeleted { get; set; }
 
         private Cl_Record[] m_Records = null;
+        private bool m_SelectedRecordBlock = false;
         private Cl_Record m_SelectedRecord = null;
         private DataGridViewRow m_SelectedRow = null;
         private Cl_UserPermission m_Permission = null;
         private WebBrowser m_WebBrowserPrint = new WebBrowser();
 
-        private void f_UpdateRecords()
+        private void f_UpdateRecords(Cl_Record selectedRecord = null)
         {
             try
             {
                 var patientID = Cl_SessionFacade.f_GetInstance().p_Patient.p_UserID;
                 var patientUID = Cl_SessionFacade.f_GetInstance().p_Patient.p_UserUID;
-                var selectedRecord = m_SelectedRecord;
 
                 var records = Cl_App.m_DataContext.p_Records.Include(r => r.p_MedicalCard).AsQueryable();
                 if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsReadSelectedRecords)
@@ -75,9 +81,9 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     .OrderByDescending(v => v.p_Version).FirstOrDefault())
                     .Include(r => r.p_CategoryTotal).Include(r => r.p_CategoryClinic).Include(r => r.p_Values).Include(r => r.p_Template).Include(r => r.p_Values.Select(v => v.p_Params)).ToArray();
 
+                m_SelectedRecordBlock = true;
                 ctrl_TRecords.BindData(null, null);
                 ctrl_TRecords.Columns.AddRange(p_MedicalCardNumber, p_ClinikName, p_DateForming, p_CategoryTotal, p_Title, p_DoctorFIO);
-
                 foreach (var record in m_Records)
                 {
                     OutlookGridRow row = new OutlookGridRow();
@@ -93,16 +99,17 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 }
                 ctrl_TRecords.Columns[0].Visible = false;
                 ctrl_TRecords.GroupTemplate.Column = ctrl_TRecords.Columns[0];
-                ctrl_TRecords.Sort(ctrl_TRecords.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+
+                ctrl_TRecords.Sort(ctrl_TRecords.Columns[2], System.ComponentModel.ListSortDirection.Descending);
+                m_SelectedRecordBlock = false;
 
                 if (selectedRecord != null)
                 {
-                    foreach (DataGridViewRow row in ctrl_TRecords.Rows)
+                    foreach (OutlookGridRow row in ctrl_TRecords.Rows)
                     {
-                        if (((Cl_Record)row.Tag).p_ID == selectedRecord.p_ID)
+                        if (!row.IsGroupRow && ((Cl_Record)row.Tag).p_ID == selectedRecord.p_ID)
                         {
                             row.Selected = true;
-                            f_OnSelectRow(row);
                             break;
                         }
                     }
@@ -150,6 +157,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(a_Record.p_Template);
                 Cl_Record record = Cl_RecordsFacade.f_GetInstance().f_GetNewRecord(a_Record);
+                record.p_ParentRecord = a_Record;
                 if (record != null)
                 {
                     var dlgRecord = new Dlg_Record();
@@ -330,8 +338,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         private void DlgRecord_e_Save(object sender, Cl_Record.Cl_EventArgs e)
         {
-            m_SelectedRecord = e.p_Record;
-            f_UpdateRecords();
+            f_UpdateRecords(e.p_Record);
         }
 
         private void ctrlBReportEdit_Click(object sender, EventArgs e)
@@ -382,7 +389,26 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
         private void ctrl_TRecords_SelectionChanged(object sender, EventArgs e)
         {
-            f_OnSelectRow(ctrl_TRecords.CurrentRow);
+            if (!m_SelectedRecordBlock && ctrl_TRecords.CurrentRow != null && ctrl_TRecords.CurrentRow is OutlookGridRow)
+            {
+                var row = (OutlookGridRow)ctrl_TRecords.CurrentRow;
+                if (row.IsGroupRow)
+                {
+                    for (var i = 1; i < ctrl_TRecords.Rows.Count; i++)
+                    {
+                        OutlookGridRow _row = (OutlookGridRow)ctrl_TRecords.Rows[i];
+                        if (_row.IsGroupRow)
+                            return;
+                        if (_row.Selected)
+                        {
+                            row = _row;
+                            break;
+                        }
+                    }
+                }
+                if (row != null && row.Selected && (m_SelectedRecord == null || m_SelectedRecord.p_ID != ((Cl_Record)row.Tag).p_ID))
+                    f_OnSelectRow(row);
+            }
         }
 
         private void f_OnSelectRow(DataGridViewRow row)
@@ -420,7 +446,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                             }
                             else if (record.p_FileType == E_RecordFileType.PDF)
                             {
-                                ctrlPDFViewer.src = Cl_RecordsFacade.f_GetInstance().f_GetLocalResourcesPath() + "/" + record.p_FilePath;
+                                var path = string.Format("{0}medicalChartTemp.pdf", Path.GetTempPath());
+                                record.p_FileBytes = Cl_RecordsFacade.f_GetInstance().f_GetFileFromSql(record);
+                                File.WriteAllBytes(path, record.p_FileBytes);
+                                ctrlPDFViewer.src = path;
+                                ctrlPDFViewer.Show();
                                 ctrlHTMLViewer.Visible = false;
                                 ctrlPDFViewer.Visible = true;
                             }

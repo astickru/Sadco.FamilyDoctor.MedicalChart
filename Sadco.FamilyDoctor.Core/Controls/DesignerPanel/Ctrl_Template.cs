@@ -324,6 +324,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         {
             if (m_Template == null || m_Record == null) return null;
             var record = new Cl_Record();
+            record.p_ParentRecord = m_Record.p_ParentRecord;
             record.p_Type = E_RecordType.ByTemplate;
             record.p_RecordID = m_Record.p_RecordID;
             record.p_MedicalCardID = m_Record.p_MedicalCardID;

@@ -8,9 +8,6 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Ключ записи</summary>
         int p_ID { get; set; }
 
-        /// <summary>Заголовок записи</summary>
-        string p_Title { get; set; }
-
         /// <summary>Название клиники</summary>
         string p_ClinicName { get; set; }
 

@@ -210,6 +210,19 @@ namespace Sadco.FamilyDoctor.UnitTestProject
             }
             record.p_Values.Add(new Cl_RecordValue() { p_ElementID = element.p_ID, p_Element = element, p_ValueUser = "5" });
             elements.Add(new Cl_TemplateElement() { p_Template = template, p_ChildElement = element, p_Index = 2 });
+
+            element = new Cl_Element()
+            {
+                p_ID = 4,
+                p_Name = "Формула 4",
+                p_Tag = "chet",
+                p_IsNumber = true,
+                p_NumberRound = 2,
+                p_NumberFormula = "tag_dva - 100"
+            };
+            //record.p_Values.Add(new Cl_RecordValue() { p_ElementID = element.p_ID, p_Element = element });
+            elements.Add(new Cl_TemplateElement() { p_Template = template, p_ChildElement = element, p_Index = 4 });
+
             template.p_TemplateElements = elements;
             record.f_SetTemplate(template);
 
@@ -233,6 +246,9 @@ namespace Sadco.FamilyDoctor.UnitTestProject
             Assert.AreEqual(20, result);
             result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_one * tag_dva / tag_tri");
             Assert.AreEqual((decimal)30.8, result);
+
+            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_one / tag_chet / tag_chet");
+            Assert.AreEqual((decimal)0.001767, Math.Round(result.Value, 6));
         }
 
         [TestMethod]

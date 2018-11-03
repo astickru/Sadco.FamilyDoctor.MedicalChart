@@ -36,8 +36,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.ctrlName = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.ctrlTitle = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.ctrlDoctorFIO = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -104,10 +102,10 @@
             // ctrlPContent
             // 
             this.ctrlPContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ctrlPContent.Location = new System.Drawing.Point(14, 87);
+            this.ctrlPContent.Location = new System.Drawing.Point(14, 66);
             this.ctrlPContent.Name = "ctrlPContent";
             this.ctrlPContent.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.ctrlPContent.Size = new System.Drawing.Size(1199, 451);
+            this.ctrlPContent.Size = new System.Drawing.Size(1199, 472);
             this.ctrlPContent.TabIndex = 1;
             // 
             // panel1
@@ -115,14 +113,12 @@
             this.panel1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.panel1.Controls.Add(this.ctrlName);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Controls.Add(this.ctrlTitle);
-            this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.ctrlDoctorFIO);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(14, 10);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1199, 77);
+            this.panel1.Size = new System.Drawing.Size(1199, 56);
             this.panel1.TabIndex = 2;
             // 
             // ctrlName
@@ -140,22 +136,6 @@
             this.label2.Size = new System.Drawing.Size(74, 13);
             this.label2.TabIndex = 69;
             this.label2.Text = "Название:";
-            // 
-            // ctrlTitle
-            // 
-            this.ctrlTitle.Location = new System.Drawing.Point(121, 50);
-            this.ctrlTitle.Name = "ctrlTitle";
-            this.ctrlTitle.Size = new System.Drawing.Size(347, 21);
-            this.ctrlTitle.TabIndex = 68;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 53);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(81, 13);
-            this.label5.TabIndex = 66;
-            this.label5.Text = "Заголовок:";
             // 
             // ctrlDoctorFIO
             // 
@@ -233,8 +213,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button ctrlBSave;
         private System.Windows.Forms.Label ctrlDoctorFIO;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox ctrlTitle;
         private System.Windows.Forms.TextBox ctrlName;
         private System.Windows.Forms.Label label2;
     }

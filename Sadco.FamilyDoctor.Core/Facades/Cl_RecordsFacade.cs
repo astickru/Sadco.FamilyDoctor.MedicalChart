@@ -7,8 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Sadco.FamilyDoctor.Core.Facades
 {
@@ -50,9 +52,15 @@ namespace Sadco.FamilyDoctor.Core.Facades
         }
 
         /// <summary>Получение относительного пути к файлу записи</summary>
+        public string f_GetFileName(Cl_Record a_Record)
+        {
+            return $"file{f_GetFileExtension(a_Record.p_FileType)}";
+        }
+
+        /// <summary>Получение относительного пути к файлу записи</summary>
         public string f_GetLocalResourcesRelativeFilePath(Cl_Record a_Record)
         {
-            return $"{a_Record.p_ClinicName}/{a_Record.p_MedicalCard.p_PatientID}/{a_Record.p_ID}/file{f_GetFileExtension(a_Record.p_FileType)}";
+            return $"{a_Record.p_ClinicName}/{a_Record.p_MedicalCard.p_PatientID}/{a_Record.p_ID}/{f_GetFileName(a_Record)}";
         }
 
         /// <summary>Получение абсолютного пути к ресурсам записи</summary>
@@ -226,6 +234,53 @@ namespace Sadco.FamilyDoctor.Core.Facades
             return null;
         }
 
+        /// <summary>Получение файла из сервер через БД</summary>
+        public byte[] f_GetFileFromSql(Cl_Record record)
+        {
+            if (record != null && !string.IsNullOrWhiteSpace(record.p_FilePath))
+            {
+                var prm_path = new SqlParameter("@path", f_GetLocalResourcesPath() + "/" + record.p_FilePath);
+                var prm_binaryout = new SqlParameter("@binaryout", SqlDbType.VarBinary, -1);
+                prm_binaryout.Direction = ParameterDirection.Output;
+                var dbResult = m_DataContextMegaTemplate.Database.ExecuteSqlCommand("GetFile @path, @binaryout out", prm_path, prm_binaryout);
+                return prm_binaryout.Value as byte[];
+            } else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>Сохранение файла на сервер через БД</summary>
+        public void f_SaveFileFromSql(Cl_Record record)
+        {
+            if (record != null && record.p_FileBytes != null && !string.IsNullOrWhiteSpace(record.p_FilePath))
+            {
+                f_SaveFileFromSql(f_GetLocalResourcesRelativePath(record), f_GetFileName(record), record.p_FileBytes);
+            }
+        }
+
+        /// <summary>Сохранение файла на сервер через БД</summary>
+        public void f_SaveFileFromSql(string relativePath, string fileName, byte[] data)
+        {
+            if (!string.IsNullOrWhiteSpace(relativePath) && !string.IsNullOrWhiteSpace(fileName) && data != null && data.Length > 0)
+            {
+                var prm_root_path = new SqlParameter("@root_path", f_GetLocalResourcesPath());
+                var prm_path = new SqlParameter("@path", relativePath);
+                var prm_file_name = new SqlParameter("@file_name", fileName);
+                var prm_var = new SqlParameter("@var", data);
+                m_DataContextMegaTemplate.Database.ExecuteSqlCommand("CreateFile @root_path, @path, @file_name, @var", prm_root_path, prm_path, prm_file_name, prm_var);
+            }
+        }
+
+        /// <summary>Удаление файла с сервера через БД</summary>
+        public void f_DeleteFileFromSql(Cl_Record record)
+        {
+            if (record != null && !string.IsNullOrWhiteSpace(record.p_FilePath))
+            {
+                var prm_path = new SqlParameter("@path", f_GetLocalResourcesPath() + "/" + record.p_FilePath);
+                m_DataContextMegaTemplate.Database.ExecuteSqlCommand("RemoveFile @path", prm_path);
+            }
+        }
 
         /// <summary>Получение элемента шаблона</summary>
         public Cl_TemplateElement f_GetTemplateElement(Cl_RecordValue a_RecordValue)
@@ -319,28 +374,36 @@ namespace Sadco.FamilyDoctor.Core.Facades
         {
             if (!a_Block.p_IsOperand && a_Block.p_Object is Cl_Element)
             {
-                var recValue = a_Record.p_Values.FirstOrDefault(v => v.p_ElementID == ((Cl_Element)a_Block.p_Object).p_ID);
-                if (recValue != null)
+                var element = (Cl_Element)a_Block.p_Object;
+                if (element.p_IsNumber && !string.IsNullOrWhiteSpace(element.p_NumberFormula))
                 {
-                    if (recValue.p_ValuesCatalog != null && recValue.p_ValuesCatalog.Length > 0)
+                    return f_GetElementMathematicValue(a_Record, element.p_NumberFormula);
+                }
+                else
+                {
+                    var recValue = a_Record.p_Values.FirstOrDefault(v => v.p_ElementID == element.p_ID);
+                    if (recValue != null)
                     {
-                        return null;
-                    }
-                    else
-                    {
-                        if (recValue.p_Element != null && recValue.p_Element.p_IsNumber)
-                        {
-                            decimal dVal = 0;
-                            if (decimal.TryParse(recValue.p_ValueUser, out dVal)) return dVal;
-                            else return null;
-                        }
-                        else
+                        if (recValue.p_ValuesCatalog != null && recValue.p_ValuesCatalog.Length > 0)
                         {
                             return null;
                         }
+                        else
+                        {
+                            if (recValue.p_Element != null && recValue.p_Element.p_IsNumber)
+                            {
+                                decimal dVal = 0;
+                                if (decimal.TryParse(recValue.p_ValueUser, out dVal)) return dVal;
+                                else return null;
+                            }
+                            else
+                            {
+                                return null;
+                            }
+                        }
                     }
+                    else return null;
                 }
-                else return null;
             }
             else if (a_Block.p_Object is int)
             {
@@ -462,7 +525,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
             return false;
         }
 
-        /// <summary>Получает видимость элемента по формуле</summary>
+        /// <summary>Получает результат элемента по формуле</summary>
         public decimal? f_GetElementMathematicValue(Cl_Record a_Record, string a_Formula)
         {
             if (a_Record == null || a_Record.p_Template == null) return null;
@@ -797,7 +860,6 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 pattern.p_CategoryTotalID = a_Record.p_CategoryTotalID;
                 pattern.p_CategoryTotal = a_Record.p_CategoryTotal;
                 pattern.f_SetTemplate(a_Record.p_Template);
-                pattern.p_Title = a_Record.p_Title;
                 pattern.p_Values = a_Record.f_GetRecordsValues().Select(v => f_GetRecordPatternValue(pattern, v)).ToList();
             }
             return pattern;
@@ -822,7 +884,6 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 record.p_CategoryClinic = a_RecordPattern.p_CategoryClinic;
                 record.p_CategoryTotalID = a_RecordPattern.p_CategoryTotalID;
                 record.p_CategoryTotal = a_RecordPattern.p_CategoryTotal;
-                record.p_Title = a_RecordPattern.p_Title;
 
                 var template = Cl_TemplatesFacade.f_GetInstance().f_GetActualTemplate(a_RecordPattern.p_Template);
                 Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(template);
@@ -862,7 +923,6 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 a_Record.p_CategoryClinic = a_RecordPattern.p_CategoryClinic;
                 a_Record.p_CategoryTotalID = a_RecordPattern.p_CategoryTotalID;
                 a_Record.p_CategoryTotal = a_RecordPattern.p_CategoryTotal;
-                a_Record.p_Title = a_RecordPattern.p_Title;
 
                 var els = Cl_TemplatesFacade.f_GetInstance().f_GetElements(a_Record.p_Template);
                 var values = a_RecordPattern.f_GetRecordsValues().Select(v => f_GetRecordValue(a_Record, v)).ToList();
