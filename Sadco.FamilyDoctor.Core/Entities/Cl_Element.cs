@@ -32,7 +32,10 @@ namespace Sadco.FamilyDoctor.Core.Entities
             Bigbox,
             /// <summary>Рисунок</summary>
             [Description("Рисунок")]
-            Image
+            Image,
+            /// <summary>Вкладка</summary>
+            [Description("Вкладка")]
+            Tab
         }
 
         /// <summary>
@@ -119,6 +122,10 @@ namespace Sadco.FamilyDoctor.Core.Entities
                         break;
                     case E_ElementsTypes.Image:
                         p_IconName = "IMAGE_16";
+                        p_IsMulti = false;
+                        break;
+                    case E_ElementsTypes.Tab:
+                        p_IconName = "TAB_16";
                         p_IsMulti = false;
                         break;
                     default:
