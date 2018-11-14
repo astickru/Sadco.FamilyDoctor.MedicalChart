@@ -126,6 +126,12 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Cl_ELogProperty("Шаблон удален", p_IsCustomDescription = true, p_IgnoreValue = true)]
         public bool p_IsDelete { get; set; }
 
+        /// <summary>Количество столбцов</summary>
+        /// <summary>Версия шаблона</summary>
+        [Column("F_COUNTCOLUMN")]
+        [Cl_ELogProperty("Количество столбцов")]
+        public int p_CountColumn { get; set; } = 2;
+
         /// <summary>Системное наименование иконки</summary>
         public string p_IconName {
             get {

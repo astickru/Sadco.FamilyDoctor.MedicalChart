@@ -17,6 +17,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         string p_Name { get; }
         /// <summary>Флаг только чтения</summary>
         bool p_ReadOnly { get; set; }
+        /// <summary>Возвращает является ли вкладкой</summary>
+        bool f_IsTab();
         /// <summary>Прорисовка контрола</summary>
         void f_Draw(Graphics a_Graphics, Rectangle a_Bounds);
         /// <summary>Прорисовка контрола</summary>

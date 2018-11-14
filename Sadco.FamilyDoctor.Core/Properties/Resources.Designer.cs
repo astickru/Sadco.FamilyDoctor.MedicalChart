@@ -213,6 +213,16 @@ namespace Sadco.FamilyDoctor.Core.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap TAB_16 {
+            get {
+                object obj = ResourceManager.GetObject("TAB_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap TABLE_16 {
             get {
                 object obj = ResourceManager.GetObject("TABLE_16", resourceCulture);

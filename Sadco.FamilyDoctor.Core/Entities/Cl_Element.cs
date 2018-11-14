@@ -149,6 +149,12 @@ namespace Sadco.FamilyDoctor.Core.Entities
             return p_ElementType == E_ElementsTypes.Image;
         }
 
+        /// <summary>Возвращает является ли вкладкой</summary>
+        public bool f_IsTab()
+        {
+            return p_ElementType == E_ElementsTypes.Tab;
+        }
+
         /// <summary>Версия элемента шаблона</summary>
         [Column("F_VERSION")]
         public int p_Version { get; set; }
@@ -456,6 +462,13 @@ namespace Sadco.FamilyDoctor.Core.Entities
         public bool p_IsImage {
             get {
                 return p_ElementType == E_ElementsTypes.Image;
+            }
+        }
+
+        /// <summary>Является ли значение элемента вкладкой</summary>
+        public bool p_IsTab {
+            get {
+                return p_ElementType == E_ElementsTypes.Tab;
             }
         }
     }

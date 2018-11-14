@@ -104,34 +104,10 @@ namespace Sadco.FamilyDoctor.Core.Controls
         /// </summary>
         [Category("Property Changed")]
         public event EventHandler e_AllowItemDragChanged;
-
-        ///// <summary>
-        ///// Occurs when the InsertionLineColor property value changes.
-        ///// </summary>
-        //[Category("Property Changed")]
-        //public event EventHandler InsertionLineColorChanged;
-
-        ///// <summary>
-        ///// Occurs when the user begins dragging an item.
-        ///// </summary>
-        //[Category("Drag Drop")]
-        //public event EventHandler<ListBoxItemDragEventArgs> ItemDrag;
-
-        ///// <summary>
-        ///// Occurs when a drag-and-drop operation for an item is completed.
-        ///// </summary>
-        //[Category("Drag Drop")]
-        //public event EventHandler<CancelListBoxItemDragEventArgs> ItemDragging;
         #endregion
 
 
-        private Ctrl_TreeElements m_ToolboxService = null;
-        public Ctrl_TreeElements p_ToolboxService {
-            get { return m_ToolboxService; }
-            set {
-                m_ToolboxService = value;
-            }
-        }
+        public Ctrl_TreeElements p_ToolboxService { get; set; }
 
         #region Name
         public string f_CreateName(System.Type a_DataType)
@@ -171,6 +147,12 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 {
                     var ctrl = new Ctrl_Template();
                     ctrl.p_Template = te.p_ChildTemplate;
+                    Items.Add(ctrl);
+                }
+                else if (te.p_Bookmark != null)
+                {
+                    var ctrl = new Ctrl_Bookmark();
+                    ctrl.p_Bookmark = te.p_Bookmark;
                     Items.Add(ctrl);
                 }
             }

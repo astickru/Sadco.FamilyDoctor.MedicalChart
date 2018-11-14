@@ -20,6 +20,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
         private ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem ctrl_ElementNew;
         private System.Windows.Forms.ToolStripMenuItem ctrl_ImageNew;
+        private System.Windows.Forms.ToolStripMenuItem ctrl_TabNew;
         private System.Windows.Forms.ToolStripMenuItem ctrl_ElementDelete;
 
         public Ctrl_TreeNodeElement p_SelectedElement {
@@ -33,6 +34,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ctrl_ElementNew = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_ImageNew = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctrl_TabNew = new System.Windows.Forms.ToolStripMenuItem();
             this.ctrl_ElementDelete = new System.Windows.Forms.ToolStripMenuItem();
             // 
             // ctrl_ElementNew
@@ -50,6 +52,14 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.ctrl_ImageNew.Tag = "ImageNew";
             this.ctrl_ImageNew.Text = "Добавить рисунок";
             this.ctrl_ImageNew.Click += Ctrl_ImageNew_Click;
+            // 
+            // ctrl_TabNew
+            // 
+            this.ctrl_TabNew.Name = "ctrl_TabNew";
+            this.ctrl_TabNew.Size = new System.Drawing.Size(175, 22);
+            this.ctrl_TabNew.Tag = "TabNew";
+            this.ctrl_TabNew.Text = "Добавить вкладку";
+            this.ctrl_TabNew.Click += ctrl_TabNew_Click;
             // 
             // ctrl_ElementDelete
             // 
@@ -77,12 +87,14 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.ImageList.Images.Add("LINE_16_DEL", Properties.Resources.LINE_16_DEL);
             this.ImageList.Images.Add("BIGBOX_16_DEL", Properties.Resources.BIGBOX_16_DEL);
             this.ImageList.Images.Add("IMAGE_16_DEL", Properties.Resources.IMAGE_16_DEL);
+            this.ImageList.Images.Add("TAB_16", Properties.Resources.TAB_16);
 
 
             this.ctrl_Tree.Items.Insert(0, this.ctrl_ElementNew);
             this.ctrl_Tree.Items.Insert(1, this.ctrl_ImageNew);
-            this.ctrl_Tree.Items.Insert(2, this.ctrl_ElementDelete);
-            this.ctrl_Tree.Items.Insert(3, this.toolStripSeparator1);
+            this.ctrl_Tree.Items.Insert(2, this.ctrl_TabNew);
+            this.ctrl_Tree.Items.Insert(3, this.ctrl_ElementDelete);
+            this.ctrl_Tree.Items.Insert(4, this.toolStripSeparator1);
 
 
             this.ResumeLayout(false);
@@ -97,6 +109,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             {
                 ctrl_ElementNew.Visible = false;
                 ctrl_ImageNew.Visible = false;
+                ctrl_TabNew.Visible = false;
                 ctrl_ElementDelete.Visible = true;
                 ctrl_ElementDelete.Enabled = !p_SelectedElement.p_Element.p_IsDelete;
             }
@@ -104,6 +117,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             {
                 ctrl_ElementNew.Visible = true;
                 ctrl_ImageNew.Visible = true;
+                ctrl_TabNew.Visible = true;
                 ctrl_ElementDelete.Visible = false;
             }
 
@@ -111,6 +125,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             {
                 ctrl_ElementNew.Enabled = !p_SelectedGroup.p_Group.p_IsDelete;
                 ctrl_ImageNew.Enabled = !p_SelectedGroup.p_Group.p_IsDelete;
+                ctrl_TabNew.Enabled = !p_SelectedGroup.p_Group.p_IsDelete;
                 ctrl_ElementDelete.Enabled = !p_SelectedGroup.p_Group.p_IsDelete;
             }
         }
@@ -259,6 +274,52 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     SelectedNode.Nodes.Add(newNode);
                     SelectedNode = newNode;
                     e_AfterCreateElement?.Invoke(this, new TreeViewEventArgs(newNode));
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    MonitoringStub.Error("Error_Tree", "При создании нового элемента произошла ошибка", ex, null, null);
+                    return;
+                }
+            }
+        }
+
+        private void ctrl_TabNew_Click(object sender, EventArgs e)
+        {
+            using (var transaction = Cl_App.m_DataContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    Cl_EntityLog eLog = new Cl_EntityLog();
+
+                    Cl_Element newElement = (Cl_Element)Activator.CreateInstance(typeof(Cl_Element));
+                    eLog.f_SetEntity(newElement);
+                    Cl_Group group = null;
+                    if (p_SelectedGroup != null && p_SelectedGroup.p_Group != null)
+                    {
+                        group = p_SelectedGroup.p_Group;
+                    }
+                    Dlg_EditorImage dlg = new Dlg_EditorImage();
+                    dlg.Text = "Новая вкладка";
+                    if (group != null)
+                    {
+                        newElement.p_ParentGroup = p_SelectedGroup.p_Group;
+                        dlg.ctrl_LGroupValue.Text = p_SelectedGroup.p_Group.p_Name;
+                    }
+                    if (dlg.ShowDialog() != DialogResult.OK) return;
+                    newElement.p_Name = dlg.ctrl_TBName.Text;
+                    newElement.p_Comment = dlg.ctrl_TBDecs.Text;
+                    newElement.p_ElementType = Cl_Element.E_ElementsTypes.Tab;
+                    Cl_App.m_DataContext.p_Elements.Add(newElement);
+                    Cl_App.m_DataContext.SaveChanges();
+                    newElement.p_ElementID = newElement.p_ID;
+                    Cl_App.m_DataContext.SaveChanges();
+                    eLog.f_SaveEntity(newElement);
+                    Ctrl_TreeNodeElement newNode = new Ctrl_TreeNodeElement(group, newElement);
+                    SelectedNode.Nodes.Add(newNode);
+                    SelectedNode = newNode;
+                    e_AfterCreateElement?.Invoke(this, new TreeViewEventArgs(newNode));
+                    transaction.Commit();
                 }
                 catch (Exception ex)
                 {

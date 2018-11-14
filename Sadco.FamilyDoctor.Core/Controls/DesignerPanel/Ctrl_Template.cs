@@ -42,6 +42,12 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
         }
 
+        /// <summary>Возвращает является ли вкладкой</summary>
+        public bool f_IsTab()
+        {
+            return false;
+        }
+
         /// <summary>ID элемента</summary>
         public int p_ID {
             get {

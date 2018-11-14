@@ -28,6 +28,9 @@ namespace Sadco.FamilyDoctor.Core.Controls
             ctrlCategoriesClinic.Items.AddRange(catsClinic);
         }
 
+        /// <summary>Количество столбцов</summary>
+        public int p_CountColumn { get; private set; }
+
         private void Dlg_EditorTemplate_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (DialogResult == DialogResult.OK)
@@ -56,6 +59,11 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     e.Cancel = true;
                     return;
                 }
+
+                if (ctrlCountColumn1.Checked)
+                    p_CountColumn = 1;
+                else
+                    p_CountColumn = 2;
             }
         }
     }

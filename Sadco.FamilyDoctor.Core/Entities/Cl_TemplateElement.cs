@@ -35,6 +35,10 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Элемент</summary>
         public Cl_Template p_ChildTemplate { get; set; }
 
+        /// <summary>Закладка</summary>
+        [NotMapped]
+        public Cl_Bookmark p_Bookmark { get; set; }
+
         /// <summary>Индекс позиции элемента в шаблоне</summary>
         [Column("F_INDEX")]
         public int p_Index { get; set; }
@@ -43,13 +47,13 @@ namespace Sadco.FamilyDoctor.Core.Entities
         {
             if (a_Value == null || !(a_Value.GetType() == this.GetType()))
                 return false;
-
             Cl_TemplateElement elm = (Cl_TemplateElement)a_Value;
-
-            if (this.p_ChildElement != null && elm.p_ChildElement != null)
-                return this.p_ChildElementID == elm.p_ChildElementID;
-            else if ((this.p_ChildElement != null) == false && (elm.p_ChildElement != null) == false)
-                return this.p_ChildTemplateID == elm.p_ChildTemplateID;
+            if (p_ChildElement != null && elm.p_ChildElement != null)
+                return p_ChildElementID == elm.p_ChildElementID;
+            else if ((p_ChildElement != null) == false && (elm.p_ChildElement != null) == false)
+                return p_ChildTemplateID == elm.p_ChildTemplateID;
+            else if (p_Bookmark != null && elm.p_Bookmark != null)
+                return p_Bookmark == elm.p_Bookmark;
             else
                 return false;
         }

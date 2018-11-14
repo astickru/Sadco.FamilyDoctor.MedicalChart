@@ -303,6 +303,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     var catClinic = (Cl_Category)dlg.ctrlCategoriesClinic.SelectedItem;
                     tpl.p_CategoryClinicID = catClinic.p_ID;
                     tpl.p_CategoryClinic = catClinic;
+                    tpl.p_CountColumn = dlg.p_CountColumn;
                 }
                 Cl_App.m_DataContext.SaveChanges();
                 SelectedNode.Text = tpl.p_Name;
