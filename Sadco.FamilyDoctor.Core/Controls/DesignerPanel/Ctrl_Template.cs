@@ -48,6 +48,18 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             return false;
         }
 
+        /// <summary>Возвращает является ли заголовком</summary>
+        public bool f_IsHeader()
+        {
+            return false;
+        }
+
+        /// <summary>Возвращает уровень заголовка</summary>
+        public int f_GetHeaderLevel()
+        {
+            return -1;
+        }
+
         /// <summary>ID элемента</summary>
         public int p_ID {
             get {
@@ -464,6 +476,35 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     }
                 }
             }
+        }
+
+        private I_Element[] f_GetElements(Cl_Template a_Template)
+        {
+            var elements = new List<I_Element>();
+            if (a_Template != null)
+            {
+                if (a_Template.p_TemplateElements != null && a_Template.p_TemplateElements.Count > 0)
+                {
+                    for (int i = 0; i < a_Template.p_TemplateElements.Count; i++)
+                    {
+                        var te = a_Template.p_TemplateElements.ElementAt(i);
+                        if (te.p_ChildTemplate != null)
+                        {
+                            elements.AddRange(f_GetElements(te.p_ChildTemplate));
+                        }
+                        else if (te.p_ChildElement != null)
+                        {
+                            elements.Add(new Ctrl_Element() { p_Element = te.p_ChildElement });
+                        }
+                    }
+                }
+            }
+            return elements.ToArray();
+        }
+
+        public I_Element[] f_GetElements()
+        {
+            return f_GetElements(this.p_Template);
         }
     }
 }

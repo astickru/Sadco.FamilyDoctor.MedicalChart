@@ -88,6 +88,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             this.ImageList.Images.Add("BIGBOX_16_DEL", Properties.Resources.BIGBOX_16_DEL);
             this.ImageList.Images.Add("IMAGE_16_DEL", Properties.Resources.IMAGE_16_DEL);
             this.ImageList.Images.Add("TAB_16", Properties.Resources.TAB_16);
+            this.ImageList.Images.Add("HEADER_16", Properties.Resources.HEADER_16);
 
 
             this.ctrl_Tree.Items.Insert(0, this.ctrl_ElementNew);

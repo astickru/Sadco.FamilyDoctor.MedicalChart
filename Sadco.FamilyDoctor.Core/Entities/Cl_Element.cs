@@ -35,7 +35,10 @@ namespace Sadco.FamilyDoctor.Core.Entities
             Image,
             /// <summary>Вкладка</summary>
             [Description("Вкладка")]
-            Tab
+            Tab,
+            /// <summary>Заголовок</summary>
+            [Description("Заголовок")]
+            Header
         }
 
         /// <summary>
@@ -79,7 +82,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
         /// <summary>Системное имя элемента</summary>
         [Column("F_NAME", TypeName = "varchar")]
-        [MaxLength(100)]
+        [MaxLength(1000)]
         [Cl_ELogProperty("Название элемента")]
         public string p_Name { get; set; }
 
@@ -128,6 +131,10 @@ namespace Sadco.FamilyDoctor.Core.Entities
                         p_IconName = "TAB_16";
                         p_IsMulti = false;
                         break;
+                    case E_ElementsTypes.Header:
+                        p_IconName = "HEADER_16";
+                        p_IsMulti = false;
+                        break;
                     default:
                         p_ElementType = E_ElementsTypes.Float;
                         p_IconName = "FLOAT_16";
@@ -153,6 +160,12 @@ namespace Sadco.FamilyDoctor.Core.Entities
         public bool f_IsTab()
         {
             return p_ElementType == E_ElementsTypes.Tab;
+        }
+
+        /// <summary>Возвращает является ли заголовком</summary>
+        public bool f_IsHeader()
+        {
+            return p_ElementType == E_ElementsTypes.Header;
         }
 
         /// <summary>Версия элемента шаблона</summary>
@@ -469,6 +482,13 @@ namespace Sadco.FamilyDoctor.Core.Entities
         public bool p_IsTab {
             get {
                 return p_ElementType == E_ElementsTypes.Tab;
+            }
+        }
+
+        /// <summary>Является ли значение элемента заголовком</summary>
+        public bool p_IsHeader {
+            get {
+                return p_ElementType == E_ElementsTypes.Header;
             }
         }
     }

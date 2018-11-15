@@ -103,12 +103,6 @@
     <Compile Include="Controls\Ctrl_SeparatorCombobox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\DesignerPanel\Ctrl_Bookmark.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\DesignerPanel\Ctrl_Bookmark.Designer.cs">
-      <DependentUpon>Ctrl_Bookmark.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\DesignerPanel\Ctrl_Template.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -122,6 +116,12 @@
       <DependentUpon>Ctrl_Element.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\DesignerPanel\I_Element.cs" />
+    <Compile Include="Controls\Dlg_EditorHeader.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Dlg_EditorHeader.Designer.cs">
+      <DependentUpon>Dlg_EditorHeader.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ResizableListBox\ItemInfo.cs" />
     <Compile Include="Controls\ResizableListBox\ListBoxList.cs" />
     <Compile Include="Controls\ResizableListBox\Cl_ResizableListBox.cs">
@@ -136,7 +136,6 @@
     </Compile>
     <Compile Include="Controls\OutlookGrid\OutlookGridGroup.cs" />
     <Compile Include="Controls\OutlookGrid\OutlookGridRow.cs" />
-    <Compile Include="Controls\TreeView\Ctrl_TreeNodeBookmark.cs" />
     <Compile Include="Controls\TreeView\Ctrl_TreeNodeTemplate.cs" />
     <Compile Include="Controls\TreeView\Ctrl_TreeElements.cs">
       <SubType>Component</SubType>
@@ -183,7 +182,6 @@
       <DependentUpon>Dlg_EditorGroup.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\TreeView\I_TreeNode.cs" />
-    <Compile Include="Entities\Cl_Bookmark.cs" />
     <Compile Include="Entities\Cl_Category.cs" />
     <Compile Include="Entities\Cl_Rating.cs" />
     <Compile Include="Entities\Cl_MedicalCard.cs" />
@@ -199,12 +197,11 @@
     <Compile Include="Entities\Cl_AgeNorms.cs" />
     <Compile Include="Entities\Cl_ElementParam.cs" />
     <Compile Include="Entities\Cl_Group.cs" />
-    <Compile Include="Entities\Cl_TemplateBookmark.cs" />
     <Compile Include="Entities\Cl_TemplateElement.cs" />
     <Compile Include="Entities\Cl_Template.cs" />
     <Compile Include="Data\Cl_DataContextMegaTemplate.cs" />
     <Compile Include="Entities\Cl_Element.cs" />
-    <Compile Include="Entities\E_Bookmarks.cs" />
+    <Compile Include="Entities\E_Headers.cs" />
     <Compile Include="Entities\I_Comparable.cs" />
     <Compile Include="Entities\I_Delete.cs" />
     <Compile Include="Entities\I_Record.cs" />
@@ -350,6 +347,14 @@
     <Compile Include="Migrations\201811010911517_appRemoveTitleFromPattern.Designer.cs">
       <DependentUpon>201811010911517_appRemoveTitleFromPattern.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201811141350155_appInitMaket.cs" />
+    <Compile Include="Migrations\201811141350155_appInitMaket.Designer.cs">
+      <DependentUpon>201811141350155_appInitMaket.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811150755306_appInitMaketTempVal.cs" />
+    <Compile Include="Migrations\201811150755306_appInitMaketTempVal.Designer.cs">
+      <DependentUpon>201811150755306_appInitMaketTempVal.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Permision\Cl_AccessLevelAttribute.cs" />
     <Compile Include="Permision\Cl_User.cs" />
@@ -393,14 +398,14 @@
     <EmbeddedResource Include="Controls\Ctrl_SeparatorCombobox.resx">
       <DependentUpon>Ctrl_SeparatorCombobox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\DesignerPanel\Ctrl_Bookmark.resx">
-      <DependentUpon>Ctrl_Bookmark.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\DesignerPanel\Ctrl_Template.resx">
       <DependentUpon>Ctrl_Template.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\DesignerPanel\Ctrl_Element.resx">
       <DependentUpon>Ctrl_Element.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Dlg_EditorHeader.resx">
+      <DependentUpon>Dlg_EditorHeader.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ResizableListBox\Cl_ResizableListBox.resx">
       <DependentUpon>Cl_ResizableListBox.cs</DependentUpon>
@@ -513,6 +518,12 @@
     <EmbeddedResource Include="Migrations\201811010911517_appRemoveTitleFromPattern.resx">
       <DependentUpon>201811010911517_appRemoveTitleFromPattern.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811141350155_appInitMaket.resx">
+      <DependentUpon>201811141350155_appInitMaket.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811150755306_appInitMaketTempVal.resx">
+      <DependentUpon>201811150755306_appInitMaketTempVal.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
@@ -533,6 +544,7 @@
     <Content Include="Data\init.sql" />
     <Content Include="Data\manual.txt" />
     <Content Include="Libs\FD.dat.mon.stb.lib_v1.0.0.dll" />
+    <None Include="Resources\Header_16x16.png" />
     <None Include="Resources\Tab_16x16.png" />
     <None Include="Resources\template_report.htm" />
     <None Include="Resources\Image_16x16.png" />

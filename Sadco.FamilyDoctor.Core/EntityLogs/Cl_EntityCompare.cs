@@ -28,6 +28,8 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             }
             else if (type == typeof(String))
                 outResult = f_String(val1, val2);
+            else if (type == typeof(Int16) || type == typeof(Int32) || type == typeof(Int64))
+                outResult = f_Object(val1, val2);
             else if (type == typeof(Byte))
                 outResult = f_Byte(val1, val2);
             else if (type == typeof(Boolean))
@@ -73,6 +75,22 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             bool b2 = (bool)val2;
 
             return b1 == b2;
+        }
+
+        /// <summary>
+        /// Сравнение объектов с неопределенным типом
+        /// </summary>
+        /// <param name="val1">Сравниваемый объект</param>
+        /// <param name="val2">Сравниваемый объект</param>
+        /// <returns></returns>
+        public static bool f_Object(object val1, object val2)
+        {
+            if (val1 != null)
+                return val1.Equals(val2);
+            else if (val2 != null)
+                return val2.Equals(val1);
+            else
+                return true;
         }
 
         /// <summary>

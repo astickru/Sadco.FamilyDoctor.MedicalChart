@@ -188,6 +188,43 @@ namespace Sadco.FamilyDoctor.Core.Facades
         /// <returns></returns>
         public Cl_Template f_SaveTemplate(Cl_Template curTemplate, I_Element[] elements, Cl_EntityLog m_Log = null)
         {
+            if (elements.Length > 0)
+            {
+                if (elements.Any(el => el.f_IsTab()) && !elements[0].f_IsTab())
+                {
+                    MonitoringStub.Warning("При наличии хотя бы одного элемента «Вкладка» такой элемент должен идти первым.");
+                    return null;
+                }
+
+                var elHeaders = new List<I_Element>();
+                foreach (var element in elements)
+                {
+                    if (element is Ctrl_Template)
+                    {
+                        var templ = (Ctrl_Template)element;
+                        elHeaders.AddRange(templ.f_GetElements().Where(el => el.f_IsHeader()));
+                    }
+                    if (element.f_IsHeader())
+                    {
+                        elHeaders.Add(element);
+                    }
+                }
+                if (elHeaders.Count > 1)
+                {
+                    int prevHeaderLevel = elHeaders[0].f_GetHeaderLevel();
+                    for (int i = 1; i < elHeaders.Count(); i++)
+                    {
+                        var elHeader = elHeaders[i];
+                        var headerLevel = elHeader.f_GetHeaderLevel();
+                        if (prevHeaderLevel < headerLevel - 1)
+                        {
+                            MonitoringStub.Warning("Каждый следующий заголовок может быть либо одним или несколькими уровнями выше, либо одним уровнем ниже.");
+                            return null;
+                        }
+                        prevHeaderLevel = headerLevel;
+                    }
+                }
+            }
             using (var transaction = m_DataContextMegaTemplate.Database.BeginTransaction())
             {
                 try
@@ -221,18 +258,22 @@ namespace Sadco.FamilyDoctor.Core.Facades
 
                     foreach (I_Element item in elements)
                     {
-                        Cl_TemplateElement tplEl = new Cl_TemplateElement();
+                        var tplEl = new Cl_TemplateElement();
                         tplEl.p_TemplateID = newTemplate.p_ID;
                         tplEl.p_Template = newTemplate;
                         if (item is Ctrl_Element)
                         {
-                            Ctrl_Element block = (Ctrl_Element)item;
+                            var block = (Ctrl_Element)item;
                             tplEl.p_ChildElementID = block.p_ID;
                             tplEl.p_ChildElement = block.p_Element;
+                            if (block.f_IsHeader())
+                            {
+                                tplEl.p_Value = block.p_Value;
+                            }
                         }
                         else if (item is Ctrl_Template)
                         {
-                            Ctrl_Template block = (Ctrl_Template)item;
+                            var block = (Ctrl_Template)item;
                             tplEl.p_ChildTemplateID = block.p_ID;
                             tplEl.p_ChildTemplate = block.p_Template;
                         }
@@ -274,7 +315,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
 
         public Cl_Template f_UpSaveTemplate(Cl_Template curTemplate, I_Element[] elements, Cl_EntityLog m_Log)
         {
-            Cl_Template newTemplate = curTemplate;
+            var newTemplate = curTemplate;
 
             if (this.f_IsActualElementsOnTemplate(curTemplate))
                 return f_SaveTemplate(curTemplate, elements, m_Log);

@@ -29,7 +29,20 @@ namespace Sadco.FamilyDoctor.Core.Controls
         }
 
         /// <summary>Количество столбцов</summary>
-        public int p_CountColumn { get; private set; }
+        public int p_CountColumn {
+            get {
+                if (ctrlCountColumn1.Checked)
+                    return 1;
+                else
+                    return 2;
+            }
+            set {
+                if (value == 1)
+                    ctrlCountColumn1.Checked = true;
+                else
+                    ctrlCountColumn2.Checked = true;
+            }
+        }
 
         private void Dlg_EditorTemplate_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -59,11 +72,6 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     e.Cancel = true;
                     return;
                 }
-
-                if (ctrlCountColumn1.Checked)
-                    p_CountColumn = 1;
-                else
-                    p_CountColumn = 2;
             }
         }
     }

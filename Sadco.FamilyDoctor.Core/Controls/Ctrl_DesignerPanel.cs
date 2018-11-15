@@ -4,6 +4,7 @@ using Sadco.FamilyDoctor.Core.Controls.ResizableListBox;
 using Sadco.FamilyDoctor.Core.Entities;
 using Sadco.FamilyDoctor.Core.Facades;
 using System;
+using System.Linq;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -141,18 +142,13 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 {
                     var ctrl = new Ctrl_Element();
                     ctrl.p_Element = te.p_ChildElement;
+                    ctrl.p_Value = te.p_Value;
                     Items.Add(ctrl);
                 }
                 else if (te.p_ChildTemplate != null)
                 {
                     var ctrl = new Ctrl_Template();
                     ctrl.p_Template = te.p_ChildTemplate;
-                    Items.Add(ctrl);
-                }
-                else if (te.p_Bookmark != null)
-                {
-                    var ctrl = new Ctrl_Bookmark();
-                    ctrl.p_Bookmark = te.p_Bookmark;
                     Items.Add(ctrl);
                 }
             }
@@ -430,7 +426,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 if (item is Ctrl_Element)
                 {
                     var el = (Ctrl_Element)item;
-                    if (el.p_Element.Equals(a_Element) || el.p_Element.p_ElementID == a_Element.p_ElementID)
+                    if (!el.p_Element.p_IsHeader && (el.p_Element.Equals(a_Element) || el.p_Element.p_ElementID == a_Element.p_ElementID))
                         return true;
                 }
                 else if (item is Ctrl_Template)
@@ -503,7 +499,8 @@ namespace Sadco.FamilyDoctor.Core.Controls
         protected override void OnDragDrop(DragEventArgs drgevent)
         {
             string[] formats = drgevent.Data.GetFormats();
-            foreach (string format in formats)
+            string format = formats.FirstOrDefault(f => f.Contains("Ctrl_TreeNodeElement") || f.Contains("Ctrl_TreeNodeTemplate"));
+            if (!string.IsNullOrWhiteSpace(format))
             {
                 var item = drgevent.Data.GetData(format);
                 if (item is Ctrl_TreeNodeElement || item is Ctrl_TreeNodeTemplate)
@@ -598,6 +595,24 @@ namespace Sadco.FamilyDoctor.Core.Controls
 
             Ctrl_Element ctrlEl = new Ctrl_Element();
             ctrlEl.p_Element = a_NodeElement.p_Element;
+            if (ctrlEl.p_Element.p_IsHeader)
+            {
+                var dlgHeader = new Dlg_EditorHeader();
+                if (dlgHeader.ShowDialog() == DialogResult.OK)
+                {
+                    if (!string.IsNullOrWhiteSpace(dlgHeader.ctrl_TBName.Text))
+                        ctrlEl.p_Value = dlgHeader.ctrl_TBName.Text;
+                    else
+                    {
+                        MonitoringStub.Warning("Название заголовка пустое");
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
             ctrlEl.Name = f_CreateName(ctrlEl.p_Name);
             this.InsertionIndex = Items.Count - 1;
             Items.Add(ctrlEl);

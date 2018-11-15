@@ -40,7 +40,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             try
             {
-                Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Elements && g.p_ParentID == null && (p_IsShowDeleted ? true : !g.p_IsDelete)).ToArray();
+                Cl_Group[] groups = Cl_App.m_DataContext.p_Groups.Include(g => g.p_SubGroups).Where(g => g.p_Type == Cl_Group.E_Type.Elements && g.p_ParentID == null && g.p_Name != "Заголовки" && (p_IsShowDeleted ? true : !g.p_IsDelete)).ToArray();
                 foreach (Cl_Group group in groups)
                 {
                     f_PopulateTreeGroup(group, ctrl_TreeElements.Nodes);

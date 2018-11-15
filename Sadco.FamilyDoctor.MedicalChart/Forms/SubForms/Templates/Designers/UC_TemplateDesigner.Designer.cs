@@ -28,7 +28,6 @@
             this.components = new System.ComponentModel.Container();
             this.panel2 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.button1 = new System.Windows.Forms.Button();
             this.ctrl_B_UpSave = new System.Windows.Forms.Button();
             this.ctrl_B_Save = new System.Windows.Forms.Button();
             this.ctrl_B_History = new System.Windows.Forms.Button();
@@ -36,6 +35,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.ctrl_Version = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -66,17 +66,6 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(367, 26);
             this.flowLayoutPanel1.TabIndex = 3;
             this.flowLayoutPanel1.WrapContents = false;
-            // 
-            // button1
-            // 
-            this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button1.Location = new System.Drawing.Point(0, 0);
-            this.button1.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(78, 25);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "отмена";
-            this.button1.UseVisualStyleBackColor = true;
             // 
             // ctrl_B_UpSave
             // 
@@ -164,6 +153,17 @@
             this.ctrl_Version.TabIndex = 66;
             this.ctrl_Version.Text = "0";
             this.ctrl_Version.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // button1
+            // 
+            this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button1.Location = new System.Drawing.Point(0, 0);
+            this.button1.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(78, 25);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "отмена";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // UC_TemplateDesigner
             // 

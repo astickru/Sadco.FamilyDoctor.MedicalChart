@@ -51,14 +51,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             if (p_EditingTemplate == null) return;
             I_Element[] elements = new I_Element[ctrl_EditorPanel.Items.Count];
             ctrl_EditorPanel.Items.CopyTo(elements, 0);
-            if (elements.Length > 0)
-            {
-                if (elements.Any(el => el.f_IsTab()) && !elements[0].f_IsTab())
-                {
-                    MonitoringStub.Warning("При наличии хотя бы одно элемента «Вкладка» такой элемент должен идти первым");
-                    return;
-                }
-            }
             Cl_Template tpl = Cl_TemplatesFacade.f_GetInstance().f_SaveTemplate(p_EditingTemplate, elements, m_Log);
             f_SetTemplate(tpl);
         }

@@ -213,6 +213,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     }
                     Dlg_EditorTemplate dlg = new Dlg_EditorTemplate();
                     dlg.ctrlPCategories.Enabled = a_TemplateType == Cl_Template.E_TemplateType.Template;
+                    dlg.p_CountColumn = 2;
                     if (a_TemplateType == Cl_Template.E_TemplateType.Template)
                         dlg.Text = "Новый шаблон";
                     else if (a_TemplateType == Cl_Template.E_TemplateType.Block)
@@ -281,6 +282,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             {
                 Dlg_EditorTemplate dlg = new Dlg_EditorTemplate();
                 dlg.ctrlPCategories.Enabled = tpl.p_Type == Cl_Template.E_TemplateType.Template;
+                dlg.p_CountColumn = tpl.p_CountColumn;
                 if (tpl.p_Type == Cl_Template.E_TemplateType.Template)
                     dlg.Text = "Редактирование параметров шаблона";
                 else if (tpl.p_Type == Cl_Template.E_TemplateType.Block)

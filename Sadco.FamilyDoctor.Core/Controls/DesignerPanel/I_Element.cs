@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using System.Drawing;
 
 namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
 {
@@ -19,6 +15,10 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         bool p_ReadOnly { get; set; }
         /// <summary>Возвращает является ли вкладкой</summary>
         bool f_IsTab();
+        /// <summary>Возвращает является ли заголовком</summary>
+        bool f_IsHeader();
+        /// <summary>Возвращает уровень заголовка</summary>
+        int f_GetHeaderLevel();
         /// <summary>Прорисовка контрола</summary>
         void f_Draw(Graphics a_Graphics, Rectangle a_Bounds);
         /// <summary>Прорисовка контрола</summary>

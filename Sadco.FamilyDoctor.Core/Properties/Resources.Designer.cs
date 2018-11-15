@@ -153,6 +153,16 @@ namespace Sadco.FamilyDoctor.Core.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap HEADER_16 {
+            get {
+                object obj = ResourceManager.GetObject("HEADER_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap IMAGE_16 {
             get {
                 object obj = ResourceManager.GetObject("IMAGE_16", resourceCulture);

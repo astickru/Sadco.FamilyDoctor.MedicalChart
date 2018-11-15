@@ -35,13 +35,13 @@ namespace Sadco.FamilyDoctor.Core.Entities
         /// <summary>Элемент</summary>
         public Cl_Template p_ChildTemplate { get; set; }
 
-        /// <summary>Закладка</summary>
-        [NotMapped]
-        public Cl_Bookmark p_Bookmark { get; set; }
-
         /// <summary>Индекс позиции элемента в шаблоне</summary>
         [Column("F_INDEX")]
         public int p_Index { get; set; }
+
+        /// <summary>Значение элемента в шаблоне</summary>
+        [Column("F_VALUE")]
+        public string p_Value { get; set; }
 
         public bool f_Equals(object a_Value)
         {
@@ -49,11 +49,9 @@ namespace Sadco.FamilyDoctor.Core.Entities
                 return false;
             Cl_TemplateElement elm = (Cl_TemplateElement)a_Value;
             if (p_ChildElement != null && elm.p_ChildElement != null)
-                return p_ChildElementID == elm.p_ChildElementID;
+                return p_ChildElementID == elm.p_ChildElementID && p_Value == elm.p_Value;
             else if ((p_ChildElement != null) == false && (elm.p_ChildElement != null) == false)
                 return p_ChildTemplateID == elm.p_ChildTemplateID;
-            else if (p_Bookmark != null && elm.p_Bookmark != null)
-                return p_Bookmark == elm.p_Bookmark;
             else
                 return false;
         }

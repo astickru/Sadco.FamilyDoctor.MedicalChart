@@ -37,10 +37,25 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
         }
 
+        /// <summary>Значение элемента</summary>
+        public string p_Value { get; set; }
+
         /// <summary>Возвращает является ли вкладкой</summary>
         public bool f_IsTab()
         {
             return p_Element != null ? p_Element.p_IsTab : false;
+        }
+
+        /// <summary>Возвращает является ли заголовком</summary>
+        public bool f_IsHeader()
+        {
+            return p_Element != null ? p_Element.p_IsHeader : false;
+        }
+
+        /// <summary>Возвращает уровень заголовка</summary>
+        public int f_GetHeaderLevel()
+        {
+            return p_Element?.p_IsHeader == true ? int.Parse(p_Element.p_Name.Substring(10)) : 0;
         }
 
         /// <summary>ID элемента</summary>
@@ -104,7 +119,16 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 Rectangle imageBounds = new Rectangle(a_Bounds.Left + 4, a_Bounds.Top + a_Bounds.Height / 2 - p_ImageIcon.Height / 2, p_ImageIcon.Width, p_ImageIcon.Height);
                 Rectangle textBounds = new Rectangle(imageBounds.Right + 5, imageBounds.Top, a_Bounds.Width - (imageBounds.Right + 10), imageBounds.Height);
                 a_Graphics.DrawImage(p_ImageIcon, imageBounds);
-                TextRenderer.DrawText(a_Graphics, string.Format("{0} ({1})", p_Name, p_Element.p_Version == 0 ? "Черновик" : "v" + p_Element.p_Version), a_Font, textBounds, a_ForeColor, TextFormatFlags.ExpandTabs | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter);
+                string text = "";
+                if (p_Element.p_IsHeader)
+                {
+                    text = $"h{p_Element.p_Name.Substring(10)}: {p_Value}";
+                }
+                else
+                {
+                    text = string.Format("{0} ({1})", p_Name, p_Element.p_Version == 0 ? "Черновик" : "v" + p_Element.p_Version);
+                }
+                TextRenderer.DrawText(a_Graphics, text, a_Font, textBounds, a_ForeColor, TextFormatFlags.ExpandTabs | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter);
             }
         }
 

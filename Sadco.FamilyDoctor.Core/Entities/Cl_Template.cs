@@ -155,7 +155,7 @@ namespace Sadco.FamilyDoctor.Core.Entities
             {
                 foreach (var te in a_TemplateElements)
                 {
-                    if (te.p_ChildElement == a_Element)
+                    if (!te.p_ChildElement.p_IsHeader && te.p_ChildElement == a_Element)
                         return true;
                     if (te.p_ChildTemplate != null)
                     {
