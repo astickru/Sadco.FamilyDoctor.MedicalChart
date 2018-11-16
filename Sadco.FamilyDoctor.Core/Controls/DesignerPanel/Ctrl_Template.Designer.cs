@@ -30,7 +30,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         /// </summary>
         private void InitializeComponent()
         {
-            this.ctrlContent = new System.Windows.Forms.FlowLayoutPanel();
+            this.ctrlContent = new System.Windows.Forms.TabControl();
             this.SuspendLayout();
             // 
             // ctrlContent
@@ -38,11 +38,9 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             this.ctrlContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ctrlContent.Location = new System.Drawing.Point(0, 0);
             this.ctrlContent.Name = "ctrlContent";
+            this.ctrlContent.SelectedIndex = 0;
             this.ctrlContent.Size = new System.Drawing.Size(354, 260);
             this.ctrlContent.TabIndex = 0;
-            this.ctrlContent.FlowDirection = FlowDirection.TopDown;
-            this.ctrlContent.WrapContents = false;
-            this.ctrlContent.AutoScroll = true;
             // 
             // Ctrl_Template
             // 
@@ -56,6 +54,6 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
 
         #endregion
 
-        private System.Windows.Forms.FlowLayoutPanel ctrlContent;
+        private TabControl ctrlContent;
     }
 }

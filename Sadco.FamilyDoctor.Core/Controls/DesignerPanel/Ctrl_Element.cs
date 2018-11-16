@@ -202,6 +202,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             ctrl_DopValueBox = null;
             ctrl_Image = null;
 
+            Label l = null;
             FlowLayoutPanel panel = null;
             if (a_Table == null)
             {
@@ -211,8 +212,19 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 panel.AutoSize = true;
                 Controls.Add(panel);
             }
-            Label l = null;
-            if (p_Element.p_IsText)
+            if (p_Element.p_IsHeader)
+            {
+                l = new Label() { Text = p_Value };
+                l.TextAlign = ContentAlignment.MiddleCenter;
+
+                //l.AutoSize = true;
+                //l.Width = 300;
+                //l.Height = 200;
+                l.Dock = DockStyle.Top;
+                Controls.Add(l);
+                return;
+            }
+            else if (p_Element.p_IsText)
             {
                 byte age = a_RecordValue.p_Record.p_MedicalCard.f_GetPatientAgeByYear(a_RecordValue.p_Record.p_DateCreate);
                 var partNorm = p_Element.f_GetPartNormValue(a_RecordValue.p_Record.p_MedicalCard.p_PatientSex, age, out m_Min, out m_Max);
@@ -556,7 +568,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 rowPanel.Controls.Add(l);
                 ctrl_Image = new Ctrl_Paint();
                 ctrl_Image.Size = new Size(250, 200);
-                ctrl_Image.SizeMode = PictureBoxSizeMode.AutoSize;
+                ctrl_Image.SizeMode = PictureBoxSizeMode.Normal;
                 rowPanel.Controls.Add(ctrl_Image);
 
                 if (p_Element.p_Image == null)
