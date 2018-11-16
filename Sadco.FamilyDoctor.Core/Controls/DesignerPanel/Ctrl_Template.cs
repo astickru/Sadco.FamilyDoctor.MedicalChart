@@ -161,8 +161,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             ctrlTable.ColumnCount = 4;
             ctrlTable.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             ctrlTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            ctrlTable.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            ctrlTable.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            ctrlTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40));
+            ctrlTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40));
             ctrlTable.RowCount = 0;
             return ctrlTable;
         }
@@ -230,7 +230,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         splitPanel.AutoScroll = true;
                         splitPanel.AutoSize = true;
                         splitPanel.Dock = DockStyle.Fill;
-                        splitPanel.ColumnCount = p_Template.p_CountColumn;
+                        splitPanel.ColumnCount = p_Template.p_CountColumn > 0 ? p_Template.p_CountColumn : 1;
                         for (int colIndex = 0; colIndex < splitPanel.ColumnCount; colIndex++)
                         {
                             splitPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F / splitPanel.ColumnCount));
@@ -262,7 +262,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                     splitPanel.AutoScroll = true;
                                     splitPanel.AutoSize = true;
                                     splitPanel.Dock = DockStyle.Fill;
-                                    splitPanel.ColumnCount = p_Template.p_CountColumn;
+                                    splitPanel.ColumnCount = p_Template.p_CountColumn > 0 ? p_Template.p_CountColumn : 1;
                                     for (int colIndex = 0; colIndex < splitPanel.ColumnCount; colIndex++)
                                     {
                                         splitPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F / splitPanel.ColumnCount));
@@ -316,8 +316,13 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 ctrlGroup.Dock = DockStyle.Bottom;
                                 ctrlGroup.Text = te.p_ChildTemplate.p_Name;
                                 ctrlGroup.AutoSize = true;
+                                var ctrlTable = f_GetControlTable();
+                                ctrlTable.Dock = DockStyle.Top;
+                                ctrlTable.AutoSize = true;
+                                ctrlTable.RowCount = 1;
+                                ctrlGroup.Controls.Add(ctrlTable);
                                 controls.Add(ctrlGroup);
-                                f_AddControlsTemplate(te.p_ChildTemplate, ctrlGroup.Controls);
+                                f_AddControlsTemplate(te.p_ChildTemplate, ctrlTable.Controls);
                             }
                             else if (te.p_ChildTemplate.p_Type == Cl_Template.E_TemplateType.Table)
                             {

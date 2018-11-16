@@ -204,6 +204,23 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
 
             Label l = null;
             FlowLayoutPanel panel = null;
+            
+            if (p_Element.p_IsHeader)
+            {
+                l = new Label() { Text = p_Value };
+                l.TextAlign = ContentAlignment.MiddleCenter;
+                l.Dock = DockStyle.Top;
+                if (a_Table != null)
+                {
+                    a_Table.Controls.Add(l, 0, a_RowIndex);
+                    a_Table.SetColumnSpan(l, a_Table.ColumnCount);
+                }
+                else
+                {
+                    Controls.Add(l);
+                }
+                return;
+            }
             if (a_Table == null)
             {
                 panel = new FlowLayoutPanel();
@@ -212,19 +229,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 panel.AutoSize = true;
                 Controls.Add(panel);
             }
-            if (p_Element.p_IsHeader)
-            {
-                l = new Label() { Text = p_Value };
-                l.TextAlign = ContentAlignment.MiddleCenter;
-
-                //l.AutoSize = true;
-                //l.Width = 300;
-                //l.Height = 200;
-                l.Dock = DockStyle.Top;
-                Controls.Add(l);
-                return;
-            }
-            else if (p_Element.p_IsText)
+            if (p_Element.p_IsText)
             {
                 byte age = a_RecordValue.p_Record.p_MedicalCard.f_GetPatientAgeByYear(a_RecordValue.p_Record.p_DateCreate);
                 var partNorm = p_Element.f_GetPartNormValue(a_RecordValue.p_Record.p_MedicalCard.p_PatientSex, age, out m_Min, out m_Max);
@@ -288,6 +293,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     if (p_Element.p_IsMultiSelect)
                     {
                         ctrl_ValuesMulti = new Ctrl_CheckedComboBox();
+                        ctrl_ValuesMulti.Dock = DockStyle.Top;
                         ctrl_ValuesMulti.Enabled = p_Element.p_Editing;
                         ctrl_ValuesMulti.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Dash;
                         ctrl_ValuesMulti.ValueSeparator = m_SeparatorMulti;
@@ -298,6 +304,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         if (p_Element.p_Symmetrical)
                         {
                             ctrl_DopValuesMulti = new Ctrl_CheckedComboBox();
+                            ctrl_DopValuesMulti.Dock = DockStyle.Top;
                             ctrl_DopValuesMulti.Enabled = p_Element.p_Editing;
                             ctrl_DopValuesMulti.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Dash;
                             ctrl_DopValuesMulti.ValueSeparator = m_SeparatorMulti;
@@ -379,6 +386,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     else
                     {
                         ctrl_Values = new Ctrl_SeparatorCombobox();
+                        ctrl_Values.Dock = DockStyle.Top;
                         ctrl_Values.Enabled = p_Element.p_Editing;
                         ctrl_Values.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                         ctrl_Values.AutoCompleteSource = AutoCompleteSource.CustomSource;
@@ -391,6 +399,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         if (p_Element.p_Symmetrical)
                         {
                             ctrl_DopValues = new Ctrl_SeparatorCombobox();
+                            ctrl_DopValues.Dock = DockStyle.Top;
                             ctrl_DopValues.Enabled = p_Element.p_Editing;
                             ctrl_DopValues.AutoCompleteMode = ctrl_Values.AutoCompleteMode;
                             ctrl_DopValues.AutoCompleteSource = ctrl_Values.AutoCompleteSource;
@@ -468,6 +477,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     {
                         ctrl_Value = new TextBox();
                         ctrl_Value.Enabled = p_Element.p_Editing;
+                        ctrl_Value.Dock = DockStyle.Top;
                         ctrl_Value.Width = 400;
                         ctrl_Value.Text = a_RecordValue.p_ValueUser;
                         f_UpdateColor(ctrl_Value);
@@ -477,6 +487,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         {
                             ctrl_DopValue = new TextBox();
                             ctrl_DopValue.Enabled = p_Element.p_Editing;
+                            ctrl_DopValue.Dock = DockStyle.Top;
                             ctrl_DopValue.Width = ctrl_Value.Width;
                             ctrl_DopValue.Text = a_RecordValue.p_ValueDopUser;
                             f_UpdateColor(ctrl_DopValue);
@@ -499,6 +510,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     else
                     {
                         ctrl_ValueBox = new Ctrl_TextBoxAutoHeight() { p_MinLines = 3 };
+                        ctrl_ValueBox.Dock = DockStyle.Top;
                         ctrl_ValueBox.Enabled = p_Element.p_Editing;
                         ctrl_ValueBox.Width = 400;
                         ctrl_ValueBox.Text = a_RecordValue.p_ValueUser;
@@ -508,6 +520,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         if (p_Element.p_Symmetrical)
                         {
                             ctrl_DopValueBox = new Ctrl_TextBoxAutoHeight() { p_MinLines = 3 };
+                            ctrl_DopValueBox.Dock = DockStyle.Top;
                             ctrl_DopValueBox.Width = ctrl_ValueBox.Width;
                             ctrl_DopValueBox.Text = a_RecordValue.p_ValueDopUser;
                             f_UpdateColor(ctrl_DopValueBox);
