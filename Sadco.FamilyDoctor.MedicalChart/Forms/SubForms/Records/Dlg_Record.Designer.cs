@@ -118,7 +118,7 @@
             this.ctrlPContent.Location = new System.Drawing.Point(14, 92);
             this.ctrlPContent.Name = "ctrlPContent";
             this.ctrlPContent.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.ctrlPContent.Size = new System.Drawing.Size(1199, 446);
+            this.ctrlPContent.Size = new System.Drawing.Size(1556, 927);
             this.ctrlPContent.TabIndex = 1;
             // 
             // panel1
@@ -137,7 +137,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(14, 10);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1199, 82);
+            this.panel1.Size = new System.Drawing.Size(1556, 82);
             this.panel1.TabIndex = 2;
             // 
             // ctrlTitle
@@ -197,7 +197,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Dock = System.Windows.Forms.DockStyle.Right;
-            this.label3.Location = new System.Drawing.Point(1113, 0);
+            this.label3.Location = new System.Drawing.Point(1470, 0);
             this.label3.Name = "label3";
             this.label3.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.label3.Size = new System.Drawing.Size(57, 18);
@@ -209,7 +209,7 @@
             // 
             this.ctrl_Version.AutoSize = true;
             this.ctrl_Version.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ctrl_Version.Location = new System.Drawing.Point(1170, 0);
+            this.ctrl_Version.Location = new System.Drawing.Point(1527, 0);
             this.ctrl_Version.Margin = new System.Windows.Forms.Padding(3, 0, 40, 0);
             this.ctrl_Version.Name = "ctrl_Version";
             this.ctrl_Version.Padding = new System.Windows.Forms.Padding(0, 5, 14, 0);
@@ -242,10 +242,10 @@
             this.panel2.Controls.Add(this.ctrlBRating);
             this.panel2.Controls.Add(this.flowLayoutPanel1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(14, 538);
+            this.panel2.Location = new System.Drawing.Point(14, 1019);
             this.panel2.Name = "panel2";
             this.panel2.Padding = new System.Windows.Forms.Padding(3);
-            this.panel2.Size = new System.Drawing.Size(1199, 32);
+            this.panel2.Size = new System.Drawing.Size(1556, 32);
             this.panel2.TabIndex = 0;
             // 
             // ctrlBMKB
@@ -277,7 +277,7 @@
             this.flowLayoutPanel1.Controls.Add(this.ctrlBFormatByPattern);
             this.flowLayoutPanel1.Controls.Add(this.ctrlBSave);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(780, 3);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(1137, 3);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(416, 26);
@@ -323,12 +323,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1227, 580);
+            this.ClientSize = new System.Drawing.Size(1584, 1061);
             this.Controls.Add(this.ctrlPContent);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel2);
             this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.MaximumSize = new System.Drawing.Size(1600, 1000);
+            this.MaximumSize = new System.Drawing.Size(1600, 1200);
             this.Name = "Dlg_Record";
             this.Padding = new System.Windows.Forms.Padding(14, 10, 14, 10);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

@@ -100,7 +100,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 ctrl_TRecords.Columns[0].Visible = false;
                 ctrl_TRecords.GroupTemplate.Column = ctrl_TRecords.Columns[0];
 
-                ctrl_TRecords.Sort(ctrl_TRecords.Columns[2], System.ComponentModel.ListSortDirection.Descending);
+                ctrl_TRecords.Sort(ctrl_TRecords.Columns[2], System.ComponentModel.ListSortDirection.Ascending);
                 m_SelectedRecordBlock = false;
 
                 if (selectedRecord != null)
@@ -173,7 +173,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             if (f_GetEdited(a_Record))
             {
                 Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.UIEvents, string.Format("Редактирование записи: {0}, дата записи: {1}, клиника: {2}", a_Record.p_Title, a_Record.p_DateCreate, a_Record.p_ClinicName), a_Record.p_RecordID);
-
                 var dlgRecord = new Dlg_Record();
                 dlgRecord.e_Save += DlgRecord_e_Save;
                 dlgRecord.p_Record = a_Record;

@@ -67,6 +67,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
         }
 
+        public int p_ElementID {
+            get {
+                if (p_Element != null)
+                    return p_Element.p_ElementID;
+                return -1;
+            }
+        }
+
         /// <summary>Наименование элемента</summary>
         public string p_Name {
             get {
@@ -122,7 +130,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 string text = "";
                 if (p_Element.p_IsHeader)
                 {
-                    text = $"h{p_Element.p_Name.Substring(10)}: {p_Value}";
+                    text = $"h{p_Element.p_HeaderLevel}: {p_Value}";
                 }
                 else
                 {
@@ -143,7 +151,6 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         private string m_SeparatorMulti = ", ";
         private Cl_Record m_Record = null;
         private ComboBox ctrl_PartLocations;
-        private ComboBox ctrl_ValuesChangeNotNormValues;
         private Ctrl_CheckedComboBox ctrl_PartLocationsMulti;
         private Ctrl_SeparatorCombobox ctrl_Values;
         private Ctrl_CheckedComboBox ctrl_ValuesMulti;
@@ -160,26 +167,117 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
         private Panel f_GetSymmetricalPanel(Control a_LeftControl, Control a_RightControl, string a_LeftText, string a_RightText)
         {
             var cellPanel = new TableLayoutPanel();
+            cellPanel.Dock = DockStyle.Top;
             cellPanel.AutoSize = true;
             cellPanel.Margin = new Padding(0);
+            cellPanel.ColumnCount = 4;
+            cellPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            cellPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
 
             var title = new Label();
+            title.Font = new Font(title.Font.FontFamily, title.Font.Size, p_Element.p_Required ? FontStyle.Bold : FontStyle.Italic);
             title.Text = a_LeftText;
             title.RightToLeft = RightToLeft.Yes;
             title.AutoSize = true;
             title.Margin = new Padding(0, 6, 0, 0);
             cellPanel.Controls.Add(title, 0, 0);
+            a_LeftControl.Dock = DockStyle.Top;
             cellPanel.Controls.Add(a_LeftControl, 1, 0);
 
             title = new Label();
+            title.Font = new Font(title.Font.FontFamily, title.Font.Size, p_Element.p_Required ? FontStyle.Bold : FontStyle.Italic);
             title.Text = a_RightText;
             title.RightToLeft = RightToLeft.Yes;
             title.AutoSize = true;
             title.Margin = new Padding(0, 6, 0, 0);
             cellPanel.Controls.Add(title, 0, 1);
+            a_RightControl.Dock = DockStyle.Top;
             cellPanel.Controls.Add(a_RightControl, 1, 1);
 
             return cellPanel;
+        }
+
+        private void f_ResizeImage(Image img)
+        {
+            if (img == null) return;
+            var panel = (Ctrl_BorderedPanel)ctrl_Image.Parent;
+            if ((img.Height > panel.Height | img.Width > panel.Width))
+            {
+                int height = panel.Size.Height - panel.p_BorderWidth * 2 + 1;
+                int width = panel.Size.Width - panel.p_BorderWidth * 2 + 1;
+
+                if (img.Height > img.Width)
+                {
+                    var _width = (height * img.Width) / (double)img.Height;
+                    if (_width < panel.Width)
+                        width = (int)_width;
+                    else
+                    {
+                        height = (int)((width * img.Height) / (double)img.Width);
+                    }
+                }
+                else
+                {
+                    var _height = (width * img.Height) / (double)img.Width;
+                    if (_height < panel.Height)
+                        height = (int)_height;
+                    else
+                    {
+                        width = (int)((height * img.Width) / (double)img.Height);
+                    }
+                }
+                ctrl_Image.Size = new Size(width, height);
+                ctrl_Image.SizeMode = PictureBoxSizeMode.Zoom;
+            }
+            else
+            {
+                ctrl_Image.Size = img.Size;
+                ctrl_Image.SizeMode = PictureBoxSizeMode.Normal;
+            }
+        }
+
+        private void f_InitControlValue(Control a_Control)
+        {
+            a_Control.Font = new Font(a_Control.Font.FontFamily, a_Control.Font.Size, FontStyle.Bold);
+            a_Control.GotFocus += Ctrl_GotFocus;
+            a_Control.LostFocus += Ctrl_LostFocus;
+            a_Control.KeyUp += ControlValue_KeyUp;
+            a_Control.Dock = DockStyle.Top;
+            a_Control.Enabled = p_Element.p_Editing;
+            if (!a_Control.Enabled)
+                a_Control.BackColor = Cl_App.f_GetRecordSetting().p_RecordReadOnlyBackColor;
+            if (a_Control is ComboBox && !(a_Control is Ctrl_CheckedComboBox))
+            {
+                {
+                    var comboBox = (ComboBox)a_Control;
+                    comboBox.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
+                    if (!p_Element.p_IsChangeNotNormValues)
+                    {
+                        comboBox.AutoCompleteMode = AutoCompleteMode.None;
+                        comboBox.AutoCompleteSource = AutoCompleteSource.None;
+                        comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+                    }
+                    else
+                    {
+                        ctrl_Values.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                        ctrl_Values.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                    }
+                }
+            }
+        }
+
+        private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SendKeys.Send("{TAB}");
+        }
+
+        private void ControlValue_KeyUp(object sender, KeyEventArgs e)
+        {
+            var control = (Control)sender;
+            if (e.KeyCode == Keys.Enter)
+            {
+                SendKeys.Send("{TAB}");
+            }
         }
 
         /// <summary>Инициализация пользовательских контролов для записи</summary>
@@ -191,7 +289,6 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             m_Record = a_RecordValue.p_Record;
             ctrl_PartLocations = null;
             ctrl_PartLocationsMulti = null;
-            ctrl_ValuesChangeNotNormValues = null;
             ctrl_Values = null;
             ctrl_ValuesMulti = null;
             ctrl_Value = null;
@@ -203,13 +300,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             ctrl_Image = null;
 
             Label l = null;
-            FlowLayoutPanel panel = null;
-            
+
             if (p_Element.p_IsHeader)
             {
                 l = new Label() { Text = p_Value };
                 l.TextAlign = ContentAlignment.MiddleCenter;
+                l.Font = new Font(l.Font.FontFamily, Cl_App.f_GetRecordSetting().p_SizeH1 - 2 * (p_Element.p_HeaderLevel - 1));
                 l.Dock = DockStyle.Top;
+                l.Height = l.Font.Height + 6;
                 if (a_Table != null)
                 {
                     a_Table.Controls.Add(l, 0, a_RowIndex);
@@ -221,37 +319,57 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 }
                 return;
             }
-            if (a_Table == null)
-            {
-                panel = new FlowLayoutPanel();
-                panel.WrapContents = false;
-                panel.Height = 20;
-                panel.AutoSize = true;
-                Controls.Add(panel);
-            }
             if (p_Element.p_IsText)
             {
+                bool isLocation = p_Element.p_IsPartLocations && p_Element.p_PartLocations != null && p_Element.p_PartLocations.Length > 0 && a_Table == null;
+                bool isPartPost = p_Element.p_IsPartPost && !string.IsNullOrWhiteSpace(p_Element.p_PartPost);
                 byte age = a_RecordValue.p_Record.p_MedicalCard.f_GetPatientAgeByYear(a_RecordValue.p_Record.p_DateCreate);
                 var partNorm = p_Element.f_GetPartNormValue(a_RecordValue.p_Record.p_MedicalCard.p_PatientSex, age, out m_Min, out m_Max);
+                bool isNorm = !string.IsNullOrWhiteSpace(partNorm);
+                TableLayoutPanel tablePanel = a_Table;
+                if (tablePanel == null)
+                {
+                    tablePanel = new TableLayoutPanel();
+                    int colCount = 5;
+                    if (!isLocation)
+                        colCount--;
+                    if (!isPartPost)
+                        colCount--;
+                    if (!isNorm)
+                        colCount--;
+
+                    tablePanel.ColumnCount = colCount;
+                    tablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+                    if (isLocation)
+                        tablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+                    tablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+                    if (isPartPost)
+                        tablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40));
+                    if (isNorm)
+                        tablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+                    tablePanel.RowCount = 0;
+
+                    tablePanel.Dock = DockStyle.Top;
+                    tablePanel.Height = 20;
+                    tablePanel.AutoSize = true;
+                    Controls.Add(tablePanel);
+                }
                 if (p_Element.p_IsPartPre)
                 {
                     l = new Label() { Text = p_Element.p_PartPre };
+                    l.Font = new Font(l.Font.FontFamily, l.Font.Size, p_Element.p_Required ? FontStyle.Bold : FontStyle.Italic);
                     l.AutoSize = true;
                     l.Margin = new Padding(0, 6, 0, 0);
-                    if (a_Table != null)
-                        a_Table.Controls.Add(l, 0, a_RowIndex);
-                    else
-                        panel.Controls.Add(l);
+                    tablePanel.Controls.Add(l, 0, a_RowIndex);
                 }
-                if (p_Element.p_IsPartLocations && p_Element.p_PartLocations != null && p_Element.p_PartLocations.Length > 0 && a_Table == null)
+                if (isLocation)
                 {
                     if (p_Element.p_IsPartLocationsMulti)
                     {
                         ctrl_PartLocationsMulti = new Ctrl_CheckedComboBox();
-                        ctrl_PartLocationsMulti.Enabled = p_Element.p_Editing;
+                        f_InitControlValue(ctrl_PartLocationsMulti);
                         ctrl_PartLocationsMulti.DisplayMember = "p_Value";
                         ctrl_PartLocationsMulti.ValueMember = "p_ID";
-                        ctrl_PartLocationsMulti.Width = 300;
                         ctrl_PartLocationsMulti.MaxDropDownItems = 10;
                         ctrl_PartLocationsMulti.ValueSeparator = m_SeparatorMulti;
                         for (int i = 0; i < p_Element.p_PartLocations.Length; i++)
@@ -264,14 +382,12 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                     ctrl_PartLocationsMulti.SetItemChecked(i, true);
                             }
                         }
-                        panel.Controls.Add(ctrl_PartLocationsMulti);
+                        tablePanel.Controls.Add(ctrl_PartLocationsMulti, 1, a_RowIndex);
                     }
                     else
                     {
                         ctrl_PartLocations = new ComboBox();
-                        ctrl_PartLocations.Enabled = p_Element.p_Editing;
-                        ctrl_PartLocations.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                        ctrl_PartLocations.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                        f_InitControlValue(ctrl_PartLocations);
                         ctrl_PartLocations.AutoCompleteCustomSource.AddRange(p_Element.p_PartLocations.Select(e => e.p_Value).ToArray());
                         foreach (var pLoc in p_Element.p_PartLocations)
                         {
@@ -279,11 +395,10 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         }
                         ctrl_PartLocations.DisplayMember = "p_Value";
                         ctrl_PartLocations.ValueMember = "p_ID";
-                        ctrl_PartLocations.Width = 300;
                         var lParam = a_RecordValue.p_PartLocations.FirstOrDefault();
                         if (lParam != null)
                             ctrl_PartLocations.SelectedItem = p_Element.p_PartLocations.FirstOrDefault(pl => pl.p_ID == lParam.p_ElementParamID);
-                        panel.Controls.Add(ctrl_PartLocations);
+                        tablePanel.Controls.Add(ctrl_PartLocations, 1, a_RowIndex);
                     }
                 }
                 if (p_Element.p_IsTextFromCatalog)
@@ -293,24 +408,20 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     if (p_Element.p_IsMultiSelect)
                     {
                         ctrl_ValuesMulti = new Ctrl_CheckedComboBox();
-                        ctrl_ValuesMulti.Dock = DockStyle.Top;
-                        ctrl_ValuesMulti.Enabled = p_Element.p_Editing;
+                        f_InitControlValue(ctrl_ValuesMulti);
                         ctrl_ValuesMulti.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Dash;
                         ctrl_ValuesMulti.ValueSeparator = m_SeparatorMulti;
                         ctrl_ValuesMulti.DisplayMember = "p_Value";
                         ctrl_ValuesMulti.ValueMember = "p_ID";
-                        ctrl_ValuesMulti.Width = 300;
                         ctrl_ValuesMulti.ItemCheck += Ctrl_ValueChanged;
                         if (p_Element.p_Symmetrical)
                         {
                             ctrl_DopValuesMulti = new Ctrl_CheckedComboBox();
-                            ctrl_DopValuesMulti.Dock = DockStyle.Top;
-                            ctrl_DopValuesMulti.Enabled = p_Element.p_Editing;
+                            f_InitControlValue(ctrl_DopValuesMulti);
                             ctrl_DopValuesMulti.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Dash;
                             ctrl_DopValuesMulti.ValueSeparator = m_SeparatorMulti;
                             ctrl_DopValuesMulti.DisplayMember = "p_Value";
                             ctrl_DopValuesMulti.ValueMember = "p_ID";
-                            ctrl_DopValuesMulti.Width = 300;
                             ctrl_DopValuesMulti.ItemCheck += Ctrl_ValueChanged;
                         }
                         for (int i = 0; i < p_Element.p_NormValues.Length; i++)
@@ -370,37 +481,24 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         if (p_Element.p_Symmetrical)
                         {
                             var cellPanel = f_GetSymmetricalPanel(ctrl_ValuesMulti, ctrl_DopValuesMulti, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
-                            if (a_Table != null)
-                                a_Table.Controls.Add(cellPanel, 1, a_RowIndex);
-                            else
-                                panel.Controls.Add(cellPanel);
+                            tablePanel.Controls.Add(cellPanel, isLocation ? 2 : 1, a_RowIndex);
                         }
                         else
-                        {
-                            if (a_Table != null)
-                                a_Table.Controls.Add(ctrl_ValuesMulti, 1, a_RowIndex);
-                            else
-                                panel.Controls.Add(ctrl_ValuesMulti);
-                        }
+                            tablePanel.Controls.Add(ctrl_ValuesMulti, isLocation ? 2 : 1, a_RowIndex);
                     }
                     else
                     {
                         ctrl_Values = new Ctrl_SeparatorCombobox();
-                        ctrl_Values.Dock = DockStyle.Top;
-                        ctrl_Values.Enabled = p_Element.p_Editing;
-                        ctrl_Values.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                        ctrl_Values.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                        f_InitControlValue(ctrl_Values);
                         ctrl_Values.FormattingEnabled = true;
                         ctrl_Values.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-                        ctrl_Values.Width = 300;
                         ctrl_Values.AutoCompleteCustomSource.AddRange(normValues);
                         ctrl_Values.AutoCompleteCustomSource.AddRange(patValues);
                         ctrl_Values.SelectedValueChanged += Ctrl_ValueChanged;
                         if (p_Element.p_Symmetrical)
                         {
                             ctrl_DopValues = new Ctrl_SeparatorCombobox();
-                            ctrl_DopValues.Dock = DockStyle.Top;
-                            ctrl_DopValues.Enabled = p_Element.p_Editing;
+                            f_InitControlValue(ctrl_DopValues);
                             ctrl_DopValues.AutoCompleteMode = ctrl_Values.AutoCompleteMode;
                             ctrl_DopValues.AutoCompleteSource = ctrl_Values.AutoCompleteSource;
                             ctrl_DopValues.FormattingEnabled = ctrl_Values.FormattingEnabled;
@@ -457,18 +555,10 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         if (p_Element.p_Symmetrical)
                         {
                             var cellPanel = f_GetSymmetricalPanel(ctrl_Values, ctrl_DopValues, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
-                            if (a_Table != null)
-                                a_Table.Controls.Add(cellPanel, 1, a_RowIndex);
-                            else
-                                panel.Controls.Add(cellPanel);
+                            tablePanel.Controls.Add(cellPanel, isLocation ? 2 : 1, a_RowIndex);
                         }
                         else
-                        {
-                            if (a_Table != null)
-                                a_Table.Controls.Add(ctrl_Values, 1, a_RowIndex);
-                            else
-                                panel.Controls.Add(ctrl_Values);
-                        }
+                            tablePanel.Controls.Add(ctrl_Values, isLocation ? 2 : 1, a_RowIndex);
                     }
                 }
                 else
@@ -476,9 +566,25 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     if (p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Float || p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Line)
                     {
                         ctrl_Value = new TextBox();
-                        ctrl_Value.Enabled = p_Element.p_Editing;
-                        ctrl_Value.Dock = DockStyle.Top;
-                        ctrl_Value.Width = 400;
+                        f_InitControlValue(ctrl_Value);
+
+
+
+                        Panel panelBorder = null;
+                        if (p_Element.p_VisiblePatient)
+                        {
+                            panelBorder = new Panel();
+                            panelBorder.Dock = DockStyle.Top;
+                            panelBorder.BackColor = Cl_App.f_GetRecordSetting().p_RecordPatientControlBorderColor;
+                            panelBorder.AutoSize = true;
+                            panelBorder.Padding = new Padding(Cl_App.f_GetRecordSetting().p_RecordPatientControlBorderWidth);
+                            panelBorder.Controls.Add(ctrl_Value);
+                        }
+                        var ctrl = panelBorder != null ? (Control)panelBorder : ctrl_Value;
+
+
+
+
                         ctrl_Value.Text = a_RecordValue.p_ValueUser;
                         f_UpdateColor(ctrl_Value);
                         ctrl_Value.TextChanged += Ctrl_ValueChanged;
@@ -486,33 +592,24 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         if (p_Element.p_Symmetrical)
                         {
                             ctrl_DopValue = new TextBox();
-                            ctrl_DopValue.Enabled = p_Element.p_Editing;
-                            ctrl_DopValue.Dock = DockStyle.Top;
+                            f_InitControlValue(ctrl_DopValue);
                             ctrl_DopValue.Width = ctrl_Value.Width;
                             ctrl_DopValue.Text = a_RecordValue.p_ValueDopUser;
                             f_UpdateColor(ctrl_DopValue);
                             ctrl_DopValue.TextChanged += Ctrl_ValueChanged;
                             if (p_Element.p_IsNumber) ctrl_DopValue.KeyPress += ctrl_ValidNumber_KeyPress;
                             var cellPanel = f_GetSymmetricalPanel(ctrl_Value, ctrl_DopValue, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
-                            if (a_Table != null)
-                                a_Table.Controls.Add(cellPanel, 1, a_RowIndex);
-                            else
-                                panel.Controls.Add(cellPanel);
+                            tablePanel.Controls.Add(cellPanel, isLocation ? 2 : 1, a_RowIndex);
                         }
                         else
                         {
-                            if (a_Table != null)
-                                a_Table.Controls.Add(ctrl_Value, 1, a_RowIndex);
-                            else
-                                panel.Controls.Add(ctrl_Value);
+                            tablePanel.Controls.Add(ctrl, isLocation ? 2 : 1, a_RowIndex);
                         }
                     }
                     else
                     {
                         ctrl_ValueBox = new Ctrl_TextBoxAutoHeight() { p_MinLines = 3 };
-                        ctrl_ValueBox.Dock = DockStyle.Top;
-                        ctrl_ValueBox.Enabled = p_Element.p_Editing;
-                        ctrl_ValueBox.Width = 400;
+                        f_InitControlValue(ctrl_ValueBox);
                         ctrl_ValueBox.Text = a_RecordValue.p_ValueUser;
                         f_UpdateColor(ctrl_ValueBox);
                         ctrl_ValueBox.TextChanged += Ctrl_ValueChanged;
@@ -520,90 +617,95 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         if (p_Element.p_Symmetrical)
                         {
                             ctrl_DopValueBox = new Ctrl_TextBoxAutoHeight() { p_MinLines = 3 };
-                            ctrl_DopValueBox.Dock = DockStyle.Top;
+                            f_InitControlValue(ctrl_DopValueBox);
                             ctrl_DopValueBox.Width = ctrl_ValueBox.Width;
                             ctrl_DopValueBox.Text = a_RecordValue.p_ValueDopUser;
                             f_UpdateColor(ctrl_DopValueBox);
                             ctrl_DopValueBox.TextChanged += Ctrl_ValueChanged;
                             if (p_Element.p_IsNumber) ctrl_DopValueBox.KeyPress += ctrl_ValidNumber_KeyPress;
                             var cellPanel = f_GetSymmetricalPanel(ctrl_ValueBox, ctrl_DopValueBox, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
-                            if (a_Table != null)
-                                a_Table.Controls.Add(cellPanel, 1, a_RowIndex);
-                            else
-                                panel.Controls.Add(cellPanel);
+                            tablePanel.Controls.Add(cellPanel, isLocation ? 2 : 1, a_RowIndex);
                         }
                         else
                         {
-                            if (a_Table != null)
-                                a_Table.Controls.Add(ctrl_ValueBox, 1, a_RowIndex);
-                            else
-                                panel.Controls.Add(ctrl_ValueBox);
+                            tablePanel.Controls.Add(ctrl_ValueBox, isLocation ? 2 : 1, a_RowIndex);
                         }
                     }
                 }
-                if (p_Element.p_IsPartPost)
+                if (isPartPost)
                 {
                     l = new Label() { Text = p_Element.p_PartPost };
+                    l.Font = new Font(l.Font.FontFamily, l.Font.Size, p_Element.p_Required ? FontStyle.Bold : FontStyle.Italic);
                     l.AutoSize = true;
                     l.Margin = new Padding(0, 6, 0, 0);
-                    if (a_Table != null)
-                        a_Table.Controls.Add(l, 2, a_RowIndex);
-                    else
-                        panel.Controls.Add(l);
+                    tablePanel.Controls.Add(l, isLocation ? 3 : 2, a_RowIndex);
                 }
-                if (!string.IsNullOrWhiteSpace(partNorm))
+                if (isNorm)
                 {
                     l = new Label() { Text = partNorm };
+                    l.Font = new Font(l.Font.FontFamily, l.Font.Size, p_Element.p_Required ? FontStyle.Bold : FontStyle.Italic);
                     l.AutoSize = true;
                     l.Margin = new Padding(0, 6, 0, 0);
-                    if (a_Table != null)
-                        a_Table.Controls.Add(l, 3, a_RowIndex);
-                    else
-                        panel.Controls.Add(l);
+                    tablePanel.Controls.Add(l, isLocation ? 4 : 3, a_RowIndex);
                 }
             }
             else if (p_Element.p_IsImage)
             {
-                var rowPanel = new FlowLayoutPanel();
-                rowPanel.WrapContents = false;
-                rowPanel.AutoSize = true;
+                var elImgPanel = new Panel();
+                elImgPanel.Dock = DockStyle.Top;
+                elImgPanel.AutoSize = true;
                 if (a_Table != null)
                 {
-                    rowPanel.Dock = DockStyle.Fill;
-                    rowPanel.Margin = new Padding(0);
-                    a_Table.Controls.Add(rowPanel, 0, a_RowIndex);
-                    a_Table.SetColumnSpan(rowPanel, a_Table.ColumnCount);
+                    elImgPanel.Dock = DockStyle.Fill;
+                    elImgPanel.Margin = new Padding(0);
+                    a_Table.Controls.Add(elImgPanel, 0, a_RowIndex);
+                    a_Table.SetColumnSpan(elImgPanel, a_Table.ColumnCount);
                 }
                 else
-                    panel.Controls.Add(rowPanel);
-                l = new Label() { Text = p_Element.p_Name };
-                l.Margin = new Padding(0, 6, 0, 0);
-                rowPanel.Controls.Add(l);
+                    Controls.Add(elImgPanel);
+                var imgPanel = new Ctrl_BorderedPanel();
+                imgPanel.p_BorderWidth = 1;
+                imgPanel.p_BorderColor = Color.Black;
+                imgPanel.Height = 250;
+                imgPanel.Dock = DockStyle.Top;
+                imgPanel.Resize += ImgPanel_Resize;
+
                 ctrl_Image = new Ctrl_Paint();
-                ctrl_Image.Size = new Size(250, 200);
-                ctrl_Image.SizeMode = PictureBoxSizeMode.Normal;
-                rowPanel.Controls.Add(ctrl_Image);
+                ctrl_Image.Left = imgPanel.p_BorderWidth;
+                ctrl_Image.Top = imgPanel.p_BorderWidth;
+                imgPanel.Controls.Add(ctrl_Image);
+
+                var buttonsPanel = new FlowLayoutPanel();
+                buttonsPanel.Dock = DockStyle.Top;
+                buttonsPanel.WrapContents = false;
+                buttonsPanel.AutoSize = true;
+                buttonsPanel.FlowDirection = FlowDirection.RightToLeft;
+                elImgPanel.Controls.Add(buttonsPanel);
+                elImgPanel.Controls.Add(imgPanel);
 
                 if (p_Element.p_Image == null)
                 {
+                    f_ResizeImage(a_RecordValue.p_Image);
                     ctrl_Image.Image = a_RecordValue.p_Image;
                     ctrl_Image.p_ReadOnly = true;
                     var bImageLoad = new Button();
                     bImageLoad.AutoSize = true;
                     bImageLoad.Text = "загрузить";
                     bImageLoad.Click += BImageLoad_Click;
-                    rowPanel.Controls.Add(bImageLoad);
+                    buttonsPanel.Controls.Add(bImageLoad);
                 }
                 else
                 {
                     var bReset = new Button();
                     if (a_RecordValue.p_Image != null)
                     {
+                        f_ResizeImage(a_RecordValue.p_Image);
                         ctrl_Image.Image = a_RecordValue.p_Image;
                         bReset.Tag = a_RecordValue.p_Image;
                     }
                     else
                     {
+                        f_ResizeImage(p_Element.p_Image);
                         ctrl_Image.Image = p_Element.p_Image;
                         bReset.Tag = p_Element.p_Image;
                     }
@@ -611,14 +713,24 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     bReset.AutoSize = true;
                     bReset.Text = "сбросить";
                     bReset.Click += BReset_Click;
-                    rowPanel.Controls.Add(bReset);
+                    buttonsPanel.Controls.Add(bReset);
                     var bClear = new Button();
                     bClear.AutoSize = true;
                     bClear.Text = "очистить";
                     bClear.Click += BClear_Click;
-                    rowPanel.Controls.Add(bClear);
+                    buttonsPanel.Controls.Add(bClear);
                 }
             }
+        }
+
+        private void Ctrl_GotFocus(object sender, EventArgs e)
+        {
+            ((Control)sender).BackColor = Cl_App.f_GetRecordSetting().p_RecordCurrentEditColor;
+        }
+
+        private void Ctrl_LostFocus(object sender, EventArgs e)
+        {
+            ((Control)sender).BackColor = Color.White;
         }
 
         private bool f_ValidNumber(string[] a_Texts, bool isKeyPass = false)
@@ -726,7 +838,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 }
                 if (isBeyondNorm)
                 {
-                    a_Control.ForeColor = Color.Red;
+                    a_Control.Font = new Font(a_Control.Font.FontFamily, a_Control.Font.Size, FontStyle.Bold);
+                    a_Control.ForeColor = Cl_App.f_GetRecordSetting().p_RecordOutRangeColor;
                 }
                 else
                 {
@@ -1035,6 +1148,11 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
         }
 
+        private void ImgPanel_Resize(object sender, EventArgs e)
+        {
+            f_ResizeImage(ctrl_Image.Image);
+        }
+
         private void BImageLoad_Click(object sender, System.EventArgs e)
         {
             OpenFileDialog openFile = new OpenFileDialog();
@@ -1052,6 +1170,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 MonitoringStub.Problem("Problem_Record", "Выбранный файл не является изображением", ex, null, null);
                 return;
             }
+            f_ResizeImage(result);
             ctrl_Image.Image = result;
         }
 

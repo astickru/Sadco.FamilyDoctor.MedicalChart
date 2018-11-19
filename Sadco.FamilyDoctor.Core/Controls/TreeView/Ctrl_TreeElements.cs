@@ -308,6 +308,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                         dlg.ctrl_LGroupValue.Text = p_SelectedGroup.p_Group.p_Name;
                     }
                     if (dlg.ShowDialog() != DialogResult.OK) return;
+                    newElement.p_Version = 1;
                     newElement.p_Name = dlg.ctrl_TBName.Text;
                     newElement.p_Comment = dlg.ctrl_TBDecs.Text;
                     newElement.p_ElementType = Cl_Element.E_ElementsTypes.Tab;

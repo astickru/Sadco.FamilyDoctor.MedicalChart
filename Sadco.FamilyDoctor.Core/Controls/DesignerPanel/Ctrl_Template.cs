@@ -69,6 +69,14 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
         }
 
+        public int p_ElementID {
+            get {
+                if (p_Template != null)
+                    return p_Template.p_TemplateID;
+                return -1;
+            }
+        }
+
         /// <summary>Наименование элемента</summary>
         public string p_Name {
             get {
@@ -162,9 +170,63 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             ctrlTable.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             ctrlTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             ctrlTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40));
-            ctrlTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40));
+            ctrlTable.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             ctrlTable.RowCount = 0;
             return ctrlTable;
+        }
+
+        private void f_FormatingControlTable(TableLayoutPanel table, bool isHeader)
+        {
+            bool isPartPost = false;
+            bool isPartNorm = false;
+            for (int i = isHeader ? 1 : 0; i < table.RowCount; i++)
+            {
+                if (isPartPost && isPartNorm)
+                    break;
+                var ctrl = table.GetControlFromPosition(2, i);
+                if (!isPartPost && ctrl != null && table.GetColumnSpan(ctrl) < 4)
+                    isPartPost = true;
+                ctrl = table.GetControlFromPosition(3, i);
+                if (!isPartNorm && ctrl != null && table.GetColumnSpan(ctrl) < 4)
+                    isPartNorm = true;
+            }
+            if (!isPartNorm)
+            {
+                if (isHeader)
+                {
+                    table.Controls.Remove(table.GetControlFromPosition(3, 0));
+                }
+                table.ColumnStyles.RemoveAt(3);
+                table.ColumnCount--;
+            }
+            if (!isPartPost)
+            {
+                if (isPartNorm)
+                {
+                    if (isHeader)
+                    {
+                        var delControl = table.GetControlFromPosition(2, 0);
+                        table.Controls.Remove(delControl);
+                    }
+                    for (int i = 0; i < table.RowCount; i++)
+                    {
+                        var moveControl = table.GetControlFromPosition(3, i);
+                        if (moveControl != null)
+                            table.SetColumn(moveControl, 2);
+                    }
+                    table.ColumnStyles.RemoveAt(2);
+                    table.ColumnCount--;
+                }
+                else
+                {
+                    if (isHeader)
+                    {
+                        table.Controls.Remove(table.GetControlFromPosition(2, 0));
+                    }
+                    table.ColumnStyles.RemoveAt(2);
+                    table.ColumnCount--;
+                }
+            }
         }
 
         private List<Ctrl_Element> m_Elements = new List<Ctrl_Element>();
@@ -213,35 +275,36 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     var cTe = Cl_App.m_DataContext.Entry(a_Template).Collection(g => g.p_TemplateElements).Query().Include(te => te.p_ChildElement).Include(te => te.p_ChildElement.p_Default).Include(te => te.p_ChildElement.p_ParamsValues).Include(te => te.p_ChildElement.p_PartAgeNorms).Include(te => te.p_ChildTemplate);
                     cTe.Load();
                 }
+                ControlCollection controls = null;
+                if (a_Controls != null)
+                {
+                    controls = a_Controls;
+                }
+                else
+                {
+                    var tab = new TabPage();
+                    tab.Text = "Главная";
+                    tab.BackColor = Cl_App.f_GetRecordSetting().p_RecordBackColor;
+                    ctrlContent.TabPages.Add(tab);
+
+                    var splitPanel = new TableLayoutPanel();
+                    splitPanel.AutoScroll = true;
+                    splitPanel.AutoSize = true;
+                    splitPanel.Dock = DockStyle.Fill;
+                    splitPanel.ColumnCount = p_Template.p_CountColumn > 0 ? p_Template.p_CountColumn : 1;
+                    for (int colIndex = 0; colIndex < splitPanel.ColumnCount; colIndex++)
+                    {
+                        splitPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F / splitPanel.ColumnCount));
+                        var panel = new Panel();
+                        panel.AutoSize = true;
+                        panel.Dock = DockStyle.Top;
+                        splitPanel.Controls.Add(panel, colIndex, 0);
+                    }
+                    tab.Controls.Add(splitPanel);
+                    controls = splitPanel.GetControlFromPosition(0, 0).Controls;
+                }
                 if (a_Template.p_TemplateElements != null && a_Template.p_TemplateElements.Count > 0)
                 {
-                    ControlCollection controls = null;
-                    if (a_Controls != null)
-                    {
-                        controls = a_Controls;
-                    }
-                    else
-                    {
-                        var tab = new TabPage();
-                        tab.Text = "Главная";
-                        ctrlContent.TabPages.Add(tab);
-
-                        var splitPanel = new TableLayoutPanel();
-                        splitPanel.AutoScroll = true;
-                        splitPanel.AutoSize = true;
-                        splitPanel.Dock = DockStyle.Fill;
-                        splitPanel.ColumnCount = p_Template.p_CountColumn > 0 ? p_Template.p_CountColumn : 1;
-                        for (int colIndex = 0; colIndex < splitPanel.ColumnCount; colIndex++)
-                        {
-                            splitPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F / splitPanel.ColumnCount));
-                            var panel = new Panel();
-                            panel.AutoSize = true;
-                            panel.Dock = DockStyle.Top;
-                            splitPanel.Controls.Add(panel, colIndex, 0);
-                        }
-                        tab.Controls.Add(splitPanel);
-                        controls = splitPanel.GetControlFromPosition(0, 0).Controls;
-                    }
                     for (int i = 0; i < a_Template.p_TemplateElements.Count; i++)
                     {
                         var te = a_Template.p_TemplateElements.ElementAt(i);
@@ -257,6 +320,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 {
                                     var tab = new TabPage();
                                     tab.Text = te.p_ChildElement.p_Name;
+                                    tab.BackColor = Cl_App.f_GetRecordSetting().p_RecordBackColor;
                                     ctrlContent.TabPages.Add(tab);
                                     var splitPanel = new TableLayoutPanel();
                                     splitPanel.AutoScroll = true;
@@ -314,7 +378,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             {
                                 var ctrlGroup = new GroupBox();
                                 ctrlGroup.Dock = DockStyle.Bottom;
-                                ctrlGroup.Text = te.p_ChildTemplate.p_Name;
+                                ctrlGroup.Font = new Font(ctrlGroup.Font.FontFamily, ctrlGroup.Font.Size, FontStyle.Bold);
+                                ctrlGroup.Text = te.p_ChildTemplate.p_Name.ToUpper();
                                 ctrlGroup.AutoSize = true;
                                 var ctrlTable = f_GetControlTable();
                                 ctrlTable.Dock = DockStyle.Top;
@@ -323,6 +388,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 ctrlGroup.Controls.Add(ctrlTable);
                                 controls.Add(ctrlGroup);
                                 f_AddControlsTemplate(te.p_ChildTemplate, ctrlTable.Controls);
+                                f_FormatingControlTable(ctrlTable, false);
                             }
                             else if (te.p_ChildTemplate.p_Type == Cl_Template.E_TemplateType.Table)
                             {
@@ -335,9 +401,9 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 ctrlTable.Controls.Add(new Label() { Text = "Значение", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 1, 0);
                                 ctrlTable.Controls.Add(new Label() { Text = "Ед. изм.", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 2, 0);
                                 ctrlTable.Controls.Add(new Label() { Text = "Нормa", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 3, 0);
-
                                 controls.Add(ctrlTable);
                                 f_AddControlsTemplate(te.p_ChildTemplate, ctrlTable.Controls);
+                                f_FormatingControlTable(ctrlTable, true);
                             }
                         }
                     }
@@ -369,12 +435,16 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             el.Visible = Cl_RecordsFacade.f_GetInstance().f_GetElementVisible(record, el.p_Element.p_VisibilityFormula);
                             if (el.p_Element.p_IsNumber && !string.IsNullOrWhiteSpace(el.p_Element.p_NumberFormula))
                             {
-                                var val = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, el.p_Element.p_NumberFormula);
+                                var val = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, el.p_Element);
                                 if (val != null)
                                 {
                                     var dVal = (decimal)val;
                                     dVal = Math.Round(dVal, el.p_Element.p_NumberRound);
                                     el.f_SetValue(record, dVal);
+                                }
+                                else
+                                {
+                                    break;
                                 }
                             }
                         }

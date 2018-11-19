@@ -100,7 +100,6 @@ namespace Sadco.FamilyDoctor.Core.Facades
         /// <param name="a_PatientID">ID пациента</param>
         public Cl_MedicalCard f_GetMedicalCard(string a_Number, int a_PatientID)
         {
-            Cl_MedicalCard medicalCard = null;
             if (m_DataContextMegaTemplate != null)
             {
                 return m_DataContextMegaTemplate.p_MedicalCards.FirstOrDefault(m => m.p_Number == a_Number && m.p_PatientID == a_PatientID);
@@ -117,7 +116,6 @@ namespace Sadco.FamilyDoctor.Core.Facades
         /// <param name="a_PatientUID">UID пациента</param>
         public Cl_MedicalCard f_GetMedicalCard(string a_Number, Guid a_PatientUID)
         {
-            Cl_MedicalCard medicalCard = null;
             if (m_DataContextMegaTemplate != null)
             {
                 return m_DataContextMegaTemplate.p_MedicalCards.FirstOrDefault(m => m.p_Number == a_Number && m.p_PatientUID == a_PatientUID);

@@ -6,14 +6,32 @@ using System;
 using System.Configuration;
 using System.Reflection;
 using System.Data.Entity.Migrations;
+using Sadco.FamilyDoctor.Core.Settings;
 
 namespace Sadco.FamilyDoctor.Core
 {
     public static class Cl_App
     {
+        private static Cl_RecordSetting m_RecordSetting = new Cl_RecordSetting();
         public static Cl_DataContextMegaTemplate m_DataContext;
 
         private static bool _IsInit = false;
+
+        public static Cl_RecordSetting f_GetRecordSetting()
+        {
+            return m_RecordSetting;
+        }
+
+        public static bool f_SetRecordSetting(Cl_RecordSetting recordSetting)
+        {
+            if (recordSetting == null)
+            {
+                MonitoringStub.Error("Error_AppInit", "Не указаны настройки макета записи", null, null, null);
+                return false;
+            }
+            m_RecordSetting = recordSetting;
+            return true;
+        }
 
         public static bool Initialize()
         {

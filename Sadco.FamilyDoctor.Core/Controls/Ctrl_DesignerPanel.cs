@@ -153,6 +153,9 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 }
             }
             ctrlMenuDel.Visible = Items.Count > 0;
+
+            for (int i = 0; i < Items.Count; i++)
+                Items.Info(i).HeightValid = false;
             this.Invalidate();
         }
 
@@ -419,7 +422,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             return !dragZone.Contains(location);
         }
 
-        protected bool f_HasElement(Cl_Element a_Element)
+        protected Cl_Element f_HasElement(Cl_Element a_Element)
         {
             foreach (I_Element item in Items)
             {
@@ -427,72 +430,43 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 {
                     var el = (Ctrl_Element)item;
                     if (!el.p_Element.p_IsHeader && (el.p_Element.Equals(a_Element) || el.p_Element.p_ElementID == a_Element.p_ElementID))
-                        return true;
+                        return a_Element;
                 }
                 else if (item is Ctrl_Template)
                 {
                     var tpl = (Ctrl_Template)item;
-                    if (tpl.p_Template.f_HasElement(a_Element))
-                        return true;
+                    var el = tpl.p_Template.f_HasElement(a_Element);
+                    if (el != null)
+                        return el;
                 }
             }
-            return false;
+            return null;
         }
 
-        protected bool f_HasElement(Cl_Template a_Template)
+        protected Cl_Element f_HasElement(Cl_Template a_Template)
         {
             foreach (I_Element item in Items)
             {
                 if (item is Ctrl_Element)
                 {
                     var el = (Ctrl_Element)item;
-                    if (a_Template.f_HasElement(el.p_Element))
-                        return true;
+                    if (a_Template.f_HasElement(el.p_Element) != null)
+                        return el.p_Element;
                 }
                 else if (item is Ctrl_Template)
                 {
                     var tpl = (Ctrl_Template)item;
-                    if (a_Template.f_HasElement(tpl.p_Template) || tpl.p_Template.p_TemplateID == a_Template.p_TemplateID)
-                        return true;
+                    var el = a_Template.f_HasElement(tpl.p_Template);
+                    if (el != null)
+                        return el;
                 }
             }
-            return false;
+            return null;
         }
 
         protected override void OnDragEnter(DragEventArgs e)
         {
             base.OnDragEnter(e);
-            //string[] formats = e.Data.GetFormats();
-            //foreach (string format in formats)
-            //{
-            //    var item = e.Data.GetData(format);
-            //    if (item is Ctrl_TreeNodeElement || item is Ctrl_TreeNodeTemplate)
-            //    {
-            //        if (item is Ctrl_TreeNodeElement)
-            //        {
-            //            Ctrl_TreeNodeElement nodeEl = (Ctrl_TreeNodeElement)item;
-            //            if (f_HasElement(nodeEl.p_Element) || nodeEl.p_Element.p_Version == 0)
-            //            {
-            //                e.Effect = DragDropEffects.None;
-            //                return;
-            //            }
-            //        }
-            //        else if (item is Ctrl_TreeNodeTemplate)
-            //        {
-            //            Ctrl_TreeNodeTemplate nodeTemp = (Ctrl_TreeNodeTemplate)item;
-            //            if (f_HasElement(nodeTemp.p_Template) || nodeTemp.p_Template.p_Version == 0)
-            //            {
-            //                e.Effect = DragDropEffects.None;
-            //                return;
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        e.Effect = DragDropEffects.None;
-            //        return;
-            //    }
-            //}
             e.Effect = e.AllowedEffect;
         }
 
@@ -508,18 +482,30 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     if (item is Ctrl_TreeNodeElement)
                     {
                         Ctrl_TreeNodeElement nodeEl = (Ctrl_TreeNodeElement)item;
-                        if (f_HasElement(nodeEl.p_Element) || nodeEl.p_Element.p_Version == 0)
+                        if (nodeEl.p_Element.p_Version == 0)
                         {
-                            MonitoringStub.Warning("Элемент уже в шаблоне");
+                            MonitoringStub.Warning($"Версия элемента '{nodeEl.p_Element.p_Name}' равна 0");
+                            return;
+                        }
+                        var el = f_HasElement(nodeEl.p_Element);
+                        if (el != null)
+                        {
+                            MonitoringStub.Warning($"Элемент '{el.p_Name}' уже имеется в шаблоне");
                             return;
                         }
                     }
                     else if (item is Ctrl_TreeNodeTemplate)
                     {
                         Ctrl_TreeNodeTemplate nodeTemp = (Ctrl_TreeNodeTemplate)item;
-                        if (f_HasElement(nodeTemp.p_Template) || nodeTemp.p_Template.p_Version == 0)
+                        if (nodeTemp.p_Template.p_Version == 0)
                         {
-                            MonitoringStub.Warning("Элемент уже в шаблоне");
+                            MonitoringStub.Warning($"Версия шаблона '{nodeTemp.p_Template.p_Name}' равна 0");
+                            return;
+                        }
+                        var el = f_HasElement(nodeTemp.p_Template);
+                        if (el != null)
+                        {
+                            MonitoringStub.Warning($"Элемент '{el.p_Name}' уже имеется в шаблоне");
                             return;
                         }
                     }
@@ -646,6 +632,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 if (SelectedItem is I_Element)
                 {
                     I_Element el = (I_Element)SelectedItem;
+                    SelectedIndex = -1;
                     Items.Remove(el);
                     this.Invalidate(this.InsertionIndex);
                     ctrlMenuDel.Visible = Items.Count > 0;

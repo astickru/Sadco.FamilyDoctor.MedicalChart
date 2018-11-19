@@ -137,6 +137,10 @@ namespace Sadco.FamilyDoctor.Core.EntityLogs
             {
                 sBuild.Append("Картинка \"" + baseElement.p_Name + "\" изменилась");
             }
+            else if (baseElement.p_IsHeader || baseElement.p_IsTab)
+            {
+                return "";
+            }
             else
                 throw new NotImplementedException();
 

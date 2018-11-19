@@ -33,6 +33,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             InitializeComponent();
 
+            this.KeyPreview = true;
             ctrlBFormatByPattern.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditAllRecords || Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditSelfRecords;
             ctrlBMKB.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_Role != Core.Permision.E_Roles.Archivarius;
 
@@ -244,11 +245,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                                             ctrlDTPTimeReception.Value.Minute,
                                                             0);
 
-                            if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_Role == Core.Permision.E_Roles.Assistant)
-                            {
-                                record.f_SetDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor.p_ParentUser);
-                            }
-
                             Cl_App.m_DataContext.p_Records.Add(record);
                             Cl_App.m_DataContext.SaveChanges();
                             
@@ -258,8 +254,16 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                                 Cl_RecordsFacade.f_GetInstance().f_SaveFileFromSql(record);
                             } else
                             {
-                                record.p_HTMLDoctor = record.f_GetHTMLDoctor();
-                                record.p_HTMLPatient = record.f_GetHTMLPatient();
+                                if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_Role == Core.Permision.E_Roles.Assistant)
+                                {
+                                    record.p_HTMLDoctor = record.f_GetHTMLDoctor(Cl_SessionFacade.f_GetInstance().p_Doctor.p_ParentUser);
+                                    record.p_HTMLPatient = record.f_GetHTMLPatient(Cl_SessionFacade.f_GetInstance().p_Doctor.p_ParentUser);
+                                }
+                                else
+                                {
+                                    record.p_HTMLDoctor = record.f_GetHTMLDoctor();
+                                    record.p_HTMLPatient = record.f_GetHTMLPatient();
+                                }
                             }
                             if (record.p_Version == 1)
                             {

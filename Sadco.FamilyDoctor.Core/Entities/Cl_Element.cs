@@ -403,6 +403,13 @@ namespace Sadco.FamilyDoctor.Core.Entities
         [Cl_ELogProperty("Элемент удален", p_IsCustomDescription = true, p_IgnoreValue = true)]
         public bool p_IsDelete { get; set; }
 
+        /// <summary>Возвращает уровень заголовка</summary>
+        public int p_HeaderLevel {
+            get {
+                return p_IsHeader == true ? int.Parse(p_Name.Substring(10)) : 0;
+            }
+        }
+
         /// <summary>Данные рисунка</summary>
         [Column("F_IMAGE")]
         [Cl_ELogProperty("Изменился рисунок", p_IsCustomDescription = true, p_IgnoreValue = true)]

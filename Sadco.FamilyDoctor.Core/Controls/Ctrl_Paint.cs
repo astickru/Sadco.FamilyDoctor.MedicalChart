@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.Core.Controls
@@ -75,7 +71,15 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 if (e.Button == MouseButtons.Left)
                 {
                     Graphics grImg = Graphics.FromImage(Image);
-                    grImg.DrawEllipse(new Pen(Color.Red, 2) { DashStyle = System.Drawing.Drawing2D.DashStyle.Solid }, new Rectangle(m_SelectRect.X, m_SelectRect.Y, m_SelectRect.Width, m_SelectRect.Height));
+
+                    var _h = (double)Image.Height / Height;
+                    var _w = (double)Image.Width / Width;
+                    var height = m_SelectRect.Height * _h;
+                    var width = m_SelectRect.Width * _w;
+                    var x = m_SelectRect.X * _w;
+                    var y = m_SelectRect.Y * _h;
+
+                    grImg.DrawEllipse(new Pen(Color.Red, 2) { DashStyle = DashStyle.Solid }, new Rectangle((int)x, (int)y, (int)width, (int)height));
                 }
                 m_SelectRect.Width = 0;
                 m_SelectRect.Height = 0;
@@ -90,7 +94,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             {
                 if (m_SelectRect.Width > 0 && m_SelectRect.Height > 0)
                 {
-                    pe.Graphics.DrawEllipse(new Pen(Color.Blue, 2) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash }, m_SelectRect);
+                    pe.Graphics.DrawEllipse(new Pen(Color.Blue, 2) { DashStyle = DashStyle.Dash }, m_SelectRect);
                 }
             }
         }

@@ -235,19 +235,19 @@ namespace Sadco.FamilyDoctor.Core.Entities
         }
 
         /// <summary>Получение HTML текста записи для пациента</summary>
-        public string f_GetHTMLPatient()
+        public string f_GetHTMLPatient(Cl_User user = null)
         {
-            return f_GetHTML(false);
+            return f_GetHTML(false, user);
         }
 
         /// <summary>Получение HTML текста записи для пользователя</summary>
-        public string f_GetHTMLDoctor()
+        public string f_GetHTMLDoctor(Cl_User user = null)
         {
-            return f_GetHTML(true);
+            return f_GetHTML(true, user);
         }
 
         /// <summary>Получение HTML текста записи</summary>
-        private string f_GetHTML(bool a_IsDoctor)
+        private string f_GetHTML(bool a_IsDoctor, Cl_User user)
         {
             var template = Properties.Resources.ResourceManager.GetObject("template_report").ToString();
             template = Regex.Replace(template, "<fd\\.document\\.location>.*?<\\/fd\\.document\\.location>", string.Format("<fd.document.location>{0}</fd.document.location>", p_ClinicName));
@@ -303,10 +303,17 @@ namespace Sadco.FamilyDoctor.Core.Entities
                         decimal? max = 0;
                         var partNorm = value.p_Element.f_GetPartNormValue(p_MedicalCard.p_PatientSex, age, out min, out max);
                         string htmlBlock = "";
-                        if (a_IsDoctor)
-                            htmlBlock = Cl_RecordsFacade.f_GetInstance().f_GetHTMLDoctor(this, value, te.p_Template.p_Type == Cl_Template.E_TemplateType.Table, min, max);
+                        if (value.p_Element.p_IsHeader)
+                        {
+                            htmlBlock = Cl_RecordsFacade.f_GetInstance().f_GetHTMLHeader(te);
+                        }
                         else
-                            htmlBlock = Cl_RecordsFacade.f_GetInstance().f_GetHTMLPatient(this, value, te.p_Template.p_Type == Cl_Template.E_TemplateType.Table, min, max);
+                        {
+                            if (a_IsDoctor)
+                                htmlBlock = Cl_RecordsFacade.f_GetInstance().f_GetHTMLDoctor(this, value, te.p_Template.p_Type == Cl_Template.E_TemplateType.Table, min, max);
+                            else
+                                htmlBlock = Cl_RecordsFacade.f_GetInstance().f_GetHTMLPatient(this, value, te.p_Template.p_Type == Cl_Template.E_TemplateType.Table, min, max);
+                        }
                         if (!string.IsNullOrWhiteSpace(htmlBlock))
                         {
                             if (te.p_Template.p_Type == Cl_Template.E_TemplateType.Table)
@@ -342,7 +349,10 @@ namespace Sadco.FamilyDoctor.Core.Entities
 
             htmlContent += $"<p>MKБ: {p_MKB1} - {p_MKB2} - {p_MKB3} - {p_MKB4}</p>";
             template = Regex.Replace(template, "<fd\\.document\\.content>.*?<\\/fd\\.document\\.content>", string.Format("<fd.document.content>{0}</fd.document.content>", htmlContent));
-            template = Regex.Replace(template, "<fd\\.document\\.doctor>.*?<\\/fd\\.document\\.doctor>", string.Format("<fd.document.doctor>{0}</fd.document.doctor>", p_DoctorFIO));
+            var doctorFio = p_DoctorFIO;
+            if (user != null)
+                doctorFio = user.p_FIO;
+            template = Regex.Replace(template, "<fd\\.document\\.doctor>.*?<\\/fd\\.document\\.doctor>", string.Format("<fd.document.doctor>{0}</fd.document.doctor>", doctorFio));
             return template;
         }
 

@@ -149,55 +149,56 @@ namespace Sadco.FamilyDoctor.Core.Entities
         int I_ELog.p_GetLogEntityID => this.p_TemplateID;
 
         /// <summary>Проверка наличия элемента</summary>
-        private bool f_HasElement(ICollection<Cl_TemplateElement> a_TemplateElements, Cl_Element a_Element)
+        private Cl_Element f_HasElement(ICollection<Cl_TemplateElement> a_TemplateElements, Cl_Element a_Element)
         {
             if (a_TemplateElements != null)
             {
                 foreach (var te in a_TemplateElements)
                 {
                     if (!te.p_ChildElement.p_IsHeader && te.p_ChildElement == a_Element)
-                        return true;
+                        return a_Element;
                     if (te.p_ChildTemplate != null)
                     {
-                        if (f_HasElement(te.p_ChildTemplate.p_TemplateElements, a_Element))
+                        if (f_HasElement(te.p_ChildTemplate.p_TemplateElements, a_Element) != null)
                         {
-                            return true;
+                            return a_Element;
                         }
                     }
                 }
             }
-            return false;
+            return null;
         }
 
         /// <summary>Проверка наличия элемента</summary>
-        private bool f_HasElement(ICollection<Cl_TemplateElement> a_TemplateElements, Cl_Template a_Template)
+        private Cl_Element f_HasElement(ICollection<Cl_TemplateElement> a_TemplateElements, Cl_Template a_Template)
         {
             if (a_TemplateElements != null)
             {
                 foreach (var te in a_TemplateElements)
                 {
-                    if (a_Template.f_HasElement(te.p_ChildElement))
-                        return true;
+                    if (a_Template.f_HasElement(te.p_ChildElement) != null)
+                        return te.p_ChildElement;
                     if (te.p_ChildTemplate != null)
                     {
-                        if (f_HasElement(te.p_ChildTemplate.p_TemplateElements, a_Template))
+                        var el = f_HasElement(te.p_ChildTemplate.p_TemplateElements, a_Template);
+                        if (el != null)
                         {
-                            return true;
+                            return el;
                         }
                     }
                 }
             }
-            return false;
+            return null;
         }
 
         /// <summary>Проверка наличия элемента</summary>
-        public bool f_HasElement(Cl_Element a_Element)
+        public Cl_Element f_HasElement(Cl_Element a_Element)
         {
             return f_HasElement(p_TemplateElements, a_Element);
         }
 
         /// <summary>Проверка наличия элемента</summary>
-        public bool f_HasElement(Cl_Template a_Template)
+        public Cl_Element f_HasElement(Cl_Template a_Template)
         {
             return f_HasElement(p_TemplateElements, a_Template);
         }

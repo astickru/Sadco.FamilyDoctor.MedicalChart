@@ -125,6 +125,10 @@ namespace Sadco.FamilyDoctor.Core.Entities
             {
                 return Cl_EntityCompare.f_Array_Byte(p_ImageBytes, elm.p_ImageBytes);
             }
+            else if (baseElement.p_IsHeader || baseElement.p_IsTab)
+            {
+                return true;
+            }
             else
                 throw new NotImplementedException("Не реализованный метод сравнения для объекта Cl_RecordValue");
 

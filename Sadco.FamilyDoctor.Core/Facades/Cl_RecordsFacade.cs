@@ -244,7 +244,8 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 prm_binaryout.Direction = ParameterDirection.Output;
                 var dbResult = m_DataContextMegaTemplate.Database.ExecuteSqlCommand("GetFile @path, @binaryout out", prm_path, prm_binaryout);
                 return prm_binaryout.Value as byte[];
-            } else
+            }
+            else
             {
                 return null;
             }
@@ -377,7 +378,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 var element = (Cl_Element)a_Block.p_Object;
                 if (element.p_IsNumber && !string.IsNullOrWhiteSpace(element.p_NumberFormula))
                 {
-                    return f_GetElementMathematicValue(a_Record, element.p_NumberFormula);
+                    return f_GetElementMathematicValue(a_Record, element);
                 }
                 else
                 {
@@ -526,20 +527,23 @@ namespace Sadco.FamilyDoctor.Core.Facades
         }
 
         /// <summary>Получает результат элемента по формуле</summary>
-        public decimal? f_GetElementMathematicValue(Cl_Record a_Record, string a_Formula)
+        public decimal? f_GetElementMathematicValue(Cl_Record a_Record, Cl_Element a_Element)
         {
-            if (a_Record == null || a_Record.p_Template == null) return null;
-            if (string.IsNullOrWhiteSpace(a_Formula)) return 0;
+            if (a_Record == null || a_Record.p_Template == null || a_Element == null) return null;
+            if (string.IsNullOrWhiteSpace(a_Element.p_NumberFormula)) return 0;
             var elements = Cl_TemplatesFacade.f_GetInstance().f_GetElements(a_Record.p_Template);
             if (elements != null && elements.Length > 0)
             {
-                var blocks = Cl_FormulaFacade.f_GetInstance().f_GetMathematicalsBlocks(elements, a_Formula);
+                var blocks = Cl_FormulaFacade.f_GetInstance().f_GetMathematicalsBlocks(elements, a_Element.p_NumberFormula);
                 if (blocks != null)
                 {
                     if (blocks.Length == 0) return 0;
                     if (blocks[0].p_IsOperand) return null;
-
-
+                    if ("tag_" + a_Element.p_Tag == blocks[0].f_GetTextFromBlock())
+                    {
+                        MonitoringStub.Warning("В формуле имеется зацикливание.");
+                        return null;
+                    }
                     decimal? dVal = f_GetValuesProperty(a_Record, blocks[0]);
                     if (dVal != null)
                     {
@@ -552,6 +556,11 @@ namespace Sadco.FamilyDoctor.Core.Facades
                                 if (oldOper != null && oldOper.p_Object is Cl_FormulaMathematicalBlock.E_Opers)
                                 {
                                     var oper = (Cl_FormulaMathematicalBlock.E_Opers)oldOper.p_Object;
+                                    if ("tag_" + a_Element.p_Tag == blocks[i].f_GetTextFromBlock())
+                                    {
+                                        MonitoringStub.Warning("В формуле имеется зацикливание.");
+                                        return null;
+                                    }
                                     dVal = f_GetValuesProperty(a_Record, blocks[i]);
                                     if (dVal != null)
                                     {
@@ -594,6 +603,15 @@ namespace Sadco.FamilyDoctor.Core.Facades
         public string f_GetHTMLDoctor(Cl_Record a_Record, I_RecordValue a_RecordValue, bool a_IsTable, decimal? a_Min, decimal? a_Max)
         {
             return f_GetHTML(a_Record, a_RecordValue, true, a_IsTable, a_Min, a_Max);
+        }
+
+        public string f_GetHTMLHeader(Cl_TemplateElement a_TemplateElement)
+        {
+            if (a_TemplateElement.p_ChildElement != null && a_TemplateElement.p_ChildElement.p_IsHeader)
+            {
+                return $"<p style='text-align:center;font-size:{Cl_App.f_GetRecordSetting().p_SizeH1 - 2 * (a_TemplateElement.p_ChildElement.p_HeaderLevel - 1)}'>{a_TemplateElement.p_Value}</p>";
+            }
+            return null;
         }
 
         private string f_GetValWithColorForHtml(I_RecordValue a_RecordValue, IEnumerable<string> a_Vals, decimal? a_Min, decimal? a_Max)

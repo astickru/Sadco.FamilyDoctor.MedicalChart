@@ -85,6 +85,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cl_App.cs" />
+    <Compile Include="Controls\Ctrl_BorderedPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Ctrl_BorderedPanel.Designer.cs">
+      <DependentUpon>Ctrl_BorderedPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Ctrl_BorderedTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\Ctrl_CheckedComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -122,6 +131,7 @@
     <Compile Include="Controls\Dlg_EditorHeader.Designer.cs">
       <DependentUpon>Dlg_EditorHeader.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\I_CtrlBordered.cs" />
     <Compile Include="Controls\ResizableListBox\ItemInfo.cs" />
     <Compile Include="Controls\ResizableListBox\ListBoxList.cs" />
     <Compile Include="Controls\ResizableListBox\Cl_ResizableListBox.cs">
@@ -372,6 +382,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Settings\Cl_RecordSetting.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -391,6 +402,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Ctrl_BorderedPanel.resx">
+      <DependentUpon>Ctrl_BorderedPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\Ctrl_DesignerPanel.resx">
       <DependentUpon>Ctrl_DesignerPanel.cs</DependentUpon>
       <SubType>Designer</SubType>

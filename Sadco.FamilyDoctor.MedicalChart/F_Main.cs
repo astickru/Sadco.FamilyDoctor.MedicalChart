@@ -3,11 +3,13 @@ using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.EntityLogs;
 using Sadco.FamilyDoctor.Core.Facades;
 using Sadco.FamilyDoctor.Core.Permision;
+using Sadco.FamilyDoctor.Core.Settings;
 using Sadco.FamilyDoctor.MedicalChart.Forms.SubForms;
 using Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs;
 using System;
 using System.ComponentModel;
 using System.Configuration;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.MedicalChart
@@ -26,6 +28,8 @@ namespace Sadco.FamilyDoctor.MedicalChart
                 {
                     if (f_InitSession(args))
                     {
+                        Cl_App.f_SetRecordSetting(f_GetRecordSetting());
+
                         Cl_SessionFacade sess = Cl_SessionFacade.f_GetInstance();
                         Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.AppEvents, string.Format("Запуск ЭМК. Пользователь: {0}/({1}). Пациент: {2}/({3})", sess.p_Doctor.f_GetInitials(), sess.p_Doctor.p_UserID, sess.p_Patient.f_GetInitials(), sess.p_Patient.p_UserID));
 
@@ -69,10 +73,26 @@ namespace Sadco.FamilyDoctor.MedicalChart
                 {
                     Application.Exit();
                 }
-            } catch (Exception er)
+            }
+            catch (Exception er)
             {
                 MonitoringStub.Error("Error_App", "В приложении возникла ошибка", er, null, null);
             }
+        }
+
+        private Cl_RecordSetting f_GetRecordSetting()
+        {
+            var recordSetting = new Cl_RecordSetting();
+            if (int.TryParse(ConfigurationManager.AppSettings["RecordSizeH1"], out int sizeH1))
+                recordSetting.p_SizeH1 = sizeH1;
+            recordSetting.p_RecordBackColor = Color.FromName(ConfigurationManager.AppSettings["RecordBackColor"]);
+            recordSetting.p_RecordReadOnlyBackColor = Color.FromName(ConfigurationManager.AppSettings["RecordReadOnlyBackColor"]);
+            recordSetting.p_RecordCurrentEditColor = Color.FromName(ConfigurationManager.AppSettings["RecordCurrentEditColor"]);
+            recordSetting.p_RecordOutRangeColor = Color.FromName(ConfigurationManager.AppSettings["RecordOutRangeColor"]);
+            recordSetting.p_RecordPatientControlBorderColor = Color.FromName(ConfigurationManager.AppSettings["RecordPatientControlBorderColor"]);
+            if (int.TryParse(ConfigurationManager.AppSettings["RecordPatientControlBorderWidth"], out int borderWidth))
+                recordSetting.p_RecordPatientControlBorderWidth = borderWidth;
+            return recordSetting;
         }
 
         private void F_Main_FormClosing(object sender, FormClosingEventArgs e)

@@ -7,8 +7,10 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
     /// </summary>
     public interface I_Element
     {
-        /// <summary>ID элемента</summary>
+        /// <summary>ID элемента версии</summary>
         int p_ID { get; }
+        /// <summary>ID элемента</summary>
+        int p_ElementID { get; }
         /// <summary>Наименование элемента</summary>
         string p_Name { get; }
         /// <summary>Флаг только чтения</summary>

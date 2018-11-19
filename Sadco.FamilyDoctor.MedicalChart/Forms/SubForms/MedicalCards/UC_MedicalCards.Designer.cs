@@ -407,7 +407,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.DataGridView ctrl_TMedicalCards;
-        private System.Windows.Forms.DataGridViewTextBoxColumn p_MedicalCardID;
         private System.Windows.Forms.Panel ctrlPRecordInfo;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_Number;
         private System.Windows.Forms.DataGridViewTextBoxColumn p_DateCreate;

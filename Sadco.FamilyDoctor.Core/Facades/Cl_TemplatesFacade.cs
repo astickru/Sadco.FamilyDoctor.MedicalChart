@@ -84,43 +84,34 @@ namespace Sadco.FamilyDoctor.Core.Facades
             return elements.ToArray();
         }
 
-        /// <summary>
-        /// Возвращает последнюю версию переданного элемента
-        /// </summary>
-        /// <param name="p_ChildElement">Элемент шаблона</param>
-        /// <returns></returns>
-        internal Cl_Element f_GetActualElement(Cl_Element p_ChildElement)
+        /// <summary>Возвращает последнюю версию переданного элемента</summary>
+        /// <param name="a_Element">Элемент шаблона</param>
+        internal Cl_Element f_GetActualElement(Cl_Element a_Element)
         {
-            if (p_ChildElement == null) return null;
-
-            Cl_Element els = m_DataContextMegaTemplate.p_Elements
-            .Where(e => e.p_ElementID == p_ChildElement.p_ElementID).OrderByDescending(d => d.p_Version).FirstOrDefault();
-
-            if (p_ChildElement.p_ID != els.p_ID)
-                return els;
-
-            return p_ChildElement;
+            if (a_Element == null) return null;
+            var el = m_DataContextMegaTemplate.p_Elements.Where(e => e.p_ElementID == a_Element.p_ElementID).OrderByDescending(d => d.p_Version).FirstOrDefault();
+            if (a_Element.p_ID != el.p_ID)
+                return el;
+            return a_Element;
         }
+
+        /// <summary>Возвращает последнюю версию переданного шаблона</summary>
+        /// <param name="a_Template">Шаблон</param>
+        internal Cl_Template f_GetActualTemplate(Cl_Template a_Template)
+        {
+            if (a_Template == null) return null;
+            var templ = m_DataContextMegaTemplate.p_Templates.Where(e => e.p_TemplateID == a_Template.p_TemplateID).OrderByDescending(d => d.p_Version).FirstOrDefault();
+            if (a_Template.p_ID != templ.p_ID)
+                return templ;
+            return a_Template;
+        }
+
         internal bool f_IsActualElement(Cl_Element element)
         {
             if (element == null) return false;
 
             Cl_Element actElement = this.f_GetActualElement(element);
             return actElement.p_ID == element.p_ID;
-        }
-
-        /// <summary>
-        /// Возвращает последнюю версию переданного шаблона
-        /// </summary>
-        /// <param name="p_ChildTemplate">Шаблон</param>
-        /// <returns></returns>
-        internal Cl_Template f_GetActualTemplate(Cl_Template p_ChildTemplate)
-        {
-            if (p_ChildTemplate == null) return null;
-            Cl_Template tmpl = m_DataContextMegaTemplate.p_Templates.Where(e => e.p_TemplateID == p_ChildTemplate.p_TemplateID).OrderByDescending(d => d.p_Version).FirstOrDefault();
-            if (tmpl != null && p_ChildTemplate.p_ID != tmpl.p_ID)
-                return tmpl;
-            return p_ChildTemplate;
         }
 
         /// <summary>
@@ -172,21 +163,73 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 }
 
                 if (item.p_ChildTemplate != null)
-                    return this.f_IsActualElementsOnTemplate(item.p_ChildTemplate);
+                {
+                    if (!this.f_IsActualElementsOnTemplate(item.p_ChildTemplate))
+                        return false;
+                }
             }
 
             return defNewTemplate == false && defNewElements == false;
         }
 
+        /// <summary>
+        /// Проверка наличия элемента в коллекции элементов
+        /// </summary>
+        /// <param name="a_Items">Коллекции элементов</param>
+        /// <param name="a_Element">Элемент</param>
+        public Cl_Element f_HasElement(IEnumerable<I_Element> a_Items, Cl_Element a_Element)
+        {
+            foreach (var item in a_Items)
+            {
+                if (item is Ctrl_Element)
+                {
+                    var el = (Ctrl_Element)item;
+                    if (!el.p_Element.p_IsHeader && (el.p_Element.Equals(a_Element) || el.p_Element.p_ElementID == a_Element.p_ElementID))
+                        return a_Element;
+                }
+                else if (item is Ctrl_Template)
+                {
+                    var tpl = (Ctrl_Template)item;
+                    if (tpl.p_Template.f_HasElement(a_Element) != null)
+                        return a_Element;
+                }
+            }
+            return null;
+        }
 
         /// <summary>
-        /// Сохранение шаблона
+        /// Проверка наличия элемента в коллекции элементов
         /// </summary>
+        /// <param name="a_Items">Коллекции элементов</param>
+        /// <param name="a_Element">Шаблон</param>
+        public Cl_Element f_HasElement(IEnumerable<I_Element> a_Items, Cl_Template a_Template)
+        {
+            foreach (var item in a_Items)
+            {
+                if (item is Ctrl_Element)
+                {
+                    var el = (Ctrl_Element)item;
+                    if (a_Template.f_HasElement(el.p_Element) != null)
+                        return el.p_Element;
+                }
+                else if (item is Ctrl_Template)
+                {
+                    var tpl = (Ctrl_Template)item;
+                    var el = a_Template.f_HasElement(tpl.p_Template);
+                    if (el != null)
+                        return el;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>Сохранение шаблона</summary>
         /// <param name="curTemplate">Сохраняемый шаблон</param>
-        /// <param name="items">Новый список элементов в сохраняемом шаблоне</param>
+        /// <param name="elements">Новый список элементов в сохраняемом шаблоне</param>
+        /// <param name="isUpSave">Флаг необходимости актуализации версий элментов</param>
         /// <param name="m_Log">Объект логгера</param>
         /// <returns></returns>
-        public Cl_Template f_SaveTemplate(Cl_Template curTemplate, I_Element[] elements, Cl_EntityLog m_Log = null)
+        public Cl_Template f_SaveTemplate(Cl_Template curTemplate, I_Element[] elements, bool isUpSave, Cl_EntityLog m_Log = null)
         {
             if (elements.Length > 0)
             {
@@ -222,6 +265,27 @@ namespace Sadco.FamilyDoctor.Core.Facades
                             return null;
                         }
                         prevHeaderLevel = headerLevel;
+                    }
+                }
+            }
+            if (isUpSave)
+            {
+                foreach (I_Element item in elements)
+                {
+                    if (item is Ctrl_Template)
+                    {
+                        var block = (Ctrl_Template)item;
+                        var templ = f_GetActualTemplate(block.p_Template);
+                        if (templ.p_ID != block.p_Template.p_ID)
+                        {
+                            var els = elements.Where(e => e.p_ElementID != block.p_Template.p_TemplateID);
+                            var el = f_HasElement(els, templ);
+                            if (el != null)
+                            {
+                                MonitoringStub.Warning($"В последней версии '{templ.p_Version}' шаблона '{templ.p_Name}' имеется элемент '{el.p_Name}'!");
+                                return curTemplate;
+                            }
+                        }
                     }
                 }
             }
@@ -264,8 +328,25 @@ namespace Sadco.FamilyDoctor.Core.Facades
                         if (item is Ctrl_Element)
                         {
                             var block = (Ctrl_Element)item;
-                            tplEl.p_ChildElementID = block.p_ID;
-                            tplEl.p_ChildElement = block.p_Element;
+                            if (isUpSave)
+                            {
+                                var el = f_GetActualElement(block.p_Element);
+                                if (el.p_ID != block.p_Element.p_ID)
+                                {
+                                    tplEl.p_ChildElementID = el.p_ID;
+                                    tplEl.p_ChildElement = el;
+                                }
+                                else
+                                {
+                                    tplEl.p_ChildElementID = block.p_ID;
+                                    tplEl.p_ChildElement = block.p_Element;
+                                }
+                            }
+                            else
+                            {
+                                tplEl.p_ChildElementID = block.p_ID;
+                                tplEl.p_ChildElement = block.p_Element;
+                            }
                             if (block.f_IsHeader())
                             {
                                 tplEl.p_Value = block.p_Value;
@@ -274,8 +355,25 @@ namespace Sadco.FamilyDoctor.Core.Facades
                         else if (item is Ctrl_Template)
                         {
                             var block = (Ctrl_Template)item;
-                            tplEl.p_ChildTemplateID = block.p_ID;
-                            tplEl.p_ChildTemplate = block.p_Template;
+                            if (isUpSave)
+                            {
+                                var templ = f_GetActualTemplate(block.p_Template);
+                                if (templ.p_ID != block.p_Template.p_ID)
+                                {
+                                    tplEl.p_ChildTemplateID = templ.p_ID;
+                                    tplEl.p_ChildTemplate = templ;
+                                }
+                                else
+                                {
+                                    tplEl.p_ChildTemplateID = block.p_ID;
+                                    tplEl.p_ChildTemplate = block.p_Template;
+                                }
+                            }
+                            else
+                            {
+                                tplEl.p_ChildTemplateID = block.p_ID;
+                                tplEl.p_ChildTemplate = block.p_Template;
+                            }
                         }
 
                         tplEl.p_Index = Array.IndexOf(elements, item) + 1;
@@ -311,87 +409,6 @@ namespace Sadco.FamilyDoctor.Core.Facades
 
                 return curTemplate;
             }
-        }
-
-        public Cl_Template f_UpSaveTemplate(Cl_Template curTemplate, I_Element[] elements, Cl_EntityLog m_Log)
-        {
-            var newTemplate = curTemplate;
-
-            if (this.f_IsActualElementsOnTemplate(curTemplate))
-                return f_SaveTemplate(curTemplate, elements, m_Log);
-
-            using (var transaction = m_DataContextMegaTemplate.Database.BeginTransaction())
-            {
-                try
-                {
-                    newTemplate = f_UpdateTemplate(newTemplate);
-
-                    m_Log.f_SaveEntity(newTemplate);
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    MonitoringStub.Error("Error_Editor", "При сохранении изменений произошла ошибка", ex, null, null);
-                }
-            }
-
-            return newTemplate;
-        }
-
-        private Cl_Template f_UpdateTemplate(Cl_Template template)
-        {
-            Cl_Template defNewTemplate = this.f_GetActualTemplate(template);
-            if (defNewTemplate.p_Version > template.p_Version)
-                return defNewTemplate;
-
-            if (template.p_TemplateElements == null || template.p_TemplateElements.Count == 0)
-                return template;
-
-            Cl_Template newTemplate = new Cl_Template();
-            newTemplate.p_TemplateID = template.p_TemplateID;
-            newTemplate.p_Title = template.p_Title;
-            newTemplate.p_CategoryTotalID = template.p_CategoryTotalID;
-            newTemplate.p_CategoryTotal = template.p_CategoryTotal;
-            newTemplate.p_CategoryClinicID = template.p_CategoryClinicID;
-            newTemplate.p_CategoryClinic = template.p_CategoryClinic;
-            newTemplate.p_Type = template.p_Type;
-            newTemplate.p_Name = template.p_Name;
-            newTemplate.p_Version = template.p_Version + 1;
-            newTemplate.p_ParentGroupID = template.p_ParentGroupID;
-            newTemplate.p_ParentGroup = template.p_ParentGroup;
-            newTemplate.p_Description = template.p_Description;
-
-            m_DataContextMegaTemplate.p_Templates.Add(newTemplate);
-            m_DataContextMegaTemplate.SaveChanges();
-
-            int i = 0;
-            foreach (Cl_TemplateElement item in template.p_TemplateElements)
-            {
-                Cl_TemplateElement tplEl = new Cl_TemplateElement();
-                tplEl.p_Template = newTemplate;
-
-                if (item.p_ChildElement != null)
-                {
-                    tplEl.p_ChildElement = this.f_GetActualElement(item.p_ChildElement);
-                }
-                else if (item.p_ChildTemplate != null)
-                {
-                    tplEl.p_ChildTemplate = this.f_UpdateTemplate(item.p_ChildTemplate);
-
-                    if (this.f_IsActualElementsOnTemplate(item.p_ChildTemplate) == false)
-                    {
-                        tplEl.p_ChildTemplate = this.f_UpdateTemplate(tplEl.p_ChildTemplate);
-                    }
-                }
-
-                tplEl.p_Index = i = ++i;
-                m_DataContextMegaTemplate.p_TemplatesElements.Add(tplEl);
-            }
-
-            m_DataContextMegaTemplate.SaveChanges();
-
-            return newTemplate;
         }
     }
 }

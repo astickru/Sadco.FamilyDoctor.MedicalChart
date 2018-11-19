@@ -51,16 +51,17 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             if (p_EditingTemplate == null) return;
             I_Element[] elements = new I_Element[ctrl_EditorPanel.Items.Count];
             ctrl_EditorPanel.Items.CopyTo(elements, 0);
-            Cl_Template tpl = Cl_TemplatesFacade.f_GetInstance().f_SaveTemplate(p_EditingTemplate, elements, m_Log);
+            Cl_Template tpl = Cl_TemplatesFacade.f_GetInstance().f_SaveTemplate(p_EditingTemplate, elements, false, m_Log);
             f_SetTemplate(tpl);
         }
 
         private void ctrl_B_UpSave_Click(object sender, EventArgs e)
         {
+            if (p_EditingTemplate == null) return;
             I_Element[] templates = new I_Element[ctrl_EditorPanel.Items.Count];
             ctrl_EditorPanel.Items.CopyTo(templates, 0);
 
-            Cl_Template tpl = Cl_TemplatesFacade.f_GetInstance().f_UpSaveTemplate(p_EditingTemplate, templates, m_Log);
+            Cl_Template tpl = Cl_TemplatesFacade.f_GetInstance().f_SaveTemplate(p_EditingTemplate, templates, true, m_Log);
             f_SetTemplate(tpl);
         }
 
