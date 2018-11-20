@@ -40,7 +40,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 ctrl_Version.Text = "Черновик";
             else
                 ctrl_Version.Text = p_EditingTemplate.p_Version.ToString();
-            Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(a_Template);
+            Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(a_Template, true);
             m_Log.f_SetEntity(a_Template);
             if (a_Template.p_TemplateElements != null)
                 ctrl_EditorPanel.f_SetTemplatesElements(a_Template.p_TemplateElements.ToArray());
@@ -58,10 +58,10 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         private void ctrl_B_UpSave_Click(object sender, EventArgs e)
         {
             if (p_EditingTemplate == null) return;
-            I_Element[] templates = new I_Element[ctrl_EditorPanel.Items.Count];
-            ctrl_EditorPanel.Items.CopyTo(templates, 0);
+            I_Element[] elements = new I_Element[ctrl_EditorPanel.Items.Count];
+            ctrl_EditorPanel.Items.CopyTo(elements, 0);
 
-            Cl_Template tpl = Cl_TemplatesFacade.f_GetInstance().f_SaveTemplate(p_EditingTemplate, templates, true, m_Log);
+            Cl_Template tpl = Cl_TemplatesFacade.f_GetInstance().f_SaveTemplate(p_EditingTemplate, elements, true, m_Log);
             f_SetTemplate(tpl);
         }
 

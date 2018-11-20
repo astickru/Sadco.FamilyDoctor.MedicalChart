@@ -28,7 +28,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
         /// <summary>Обновление части дерева</summary>
         public void f_Update()
         {
-            m_Template = Cl_TemplatesFacade.f_GetInstance().f_GetActualTemplate(m_Template);
+            m_Template = Cl_TemplatesFacade.f_GetInstance().f_GetLastVersionTemplate(m_Template);
             f_ReDraw();
         }
 

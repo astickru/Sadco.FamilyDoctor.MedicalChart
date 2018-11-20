@@ -236,7 +236,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
         }
 
-        private void f_InitControlValue(Control a_Control)
+        private Control f_UpdateControlValue(Control a_Control)
         {
             a_Control.Font = new Font(a_Control.Font.FontFamily, a_Control.Font.Size, FontStyle.Bold);
             a_Control.GotFocus += Ctrl_GotFocus;
@@ -264,6 +264,18 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     }
                 }
             }
+            Panel panelBorder = null;
+            if (p_Element.p_VisiblePatient)
+            {
+                panelBorder = new Panel();
+                panelBorder.Dock = DockStyle.Top;
+                panelBorder.BackColor = Cl_App.f_GetRecordSetting().p_RecordPatientControlBorderColor;
+                panelBorder.AutoSize = true;
+                panelBorder.Padding = new Padding(Cl_App.f_GetRecordSetting().p_RecordPatientControlBorderWidth);
+                panelBorder.Controls.Add(a_Control);
+            }
+            var ctrl = panelBorder != null ? panelBorder : a_Control;
+            return ctrl;
         }
 
         private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -367,7 +379,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     if (p_Element.p_IsPartLocationsMulti)
                     {
                         ctrl_PartLocationsMulti = new Ctrl_CheckedComboBox();
-                        f_InitControlValue(ctrl_PartLocationsMulti);
+                        f_UpdateControlValue(ctrl_PartLocationsMulti);
                         ctrl_PartLocationsMulti.DisplayMember = "p_Value";
                         ctrl_PartLocationsMulti.ValueMember = "p_ID";
                         ctrl_PartLocationsMulti.MaxDropDownItems = 10;
@@ -387,7 +399,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     else
                     {
                         ctrl_PartLocations = new ComboBox();
-                        f_InitControlValue(ctrl_PartLocations);
+                        f_UpdateControlValue(ctrl_PartLocations);
                         ctrl_PartLocations.AutoCompleteCustomSource.AddRange(p_Element.p_PartLocations.Select(e => e.p_Value).ToArray());
                         foreach (var pLoc in p_Element.p_PartLocations)
                         {
@@ -408,7 +420,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     if (p_Element.p_IsMultiSelect)
                     {
                         ctrl_ValuesMulti = new Ctrl_CheckedComboBox();
-                        f_InitControlValue(ctrl_ValuesMulti);
+                        var ctrlVal = f_UpdateControlValue(ctrl_ValuesMulti);
+                        Control ctrlDop = null;
                         ctrl_ValuesMulti.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Dash;
                         ctrl_ValuesMulti.ValueSeparator = m_SeparatorMulti;
                         ctrl_ValuesMulti.DisplayMember = "p_Value";
@@ -417,7 +430,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         if (p_Element.p_Symmetrical)
                         {
                             ctrl_DopValuesMulti = new Ctrl_CheckedComboBox();
-                            f_InitControlValue(ctrl_DopValuesMulti);
+                            ctrlDop = f_UpdateControlValue(ctrl_DopValuesMulti);
                             ctrl_DopValuesMulti.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Dash;
                             ctrl_DopValuesMulti.ValueSeparator = m_SeparatorMulti;
                             ctrl_DopValuesMulti.DisplayMember = "p_Value";
@@ -480,16 +493,17 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         f_UpdateColor(ctrl_DopValuesMulti);
                         if (p_Element.p_Symmetrical)
                         {
-                            var cellPanel = f_GetSymmetricalPanel(ctrl_ValuesMulti, ctrl_DopValuesMulti, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
+                            var cellPanel = f_GetSymmetricalPanel(ctrlVal, ctrlDop, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
                             tablePanel.Controls.Add(cellPanel, isLocation ? 2 : 1, a_RowIndex);
                         }
                         else
-                            tablePanel.Controls.Add(ctrl_ValuesMulti, isLocation ? 2 : 1, a_RowIndex);
+                            tablePanel.Controls.Add(ctrlVal, isLocation ? 2 : 1, a_RowIndex);
                     }
                     else
                     {
                         ctrl_Values = new Ctrl_SeparatorCombobox();
-                        f_InitControlValue(ctrl_Values);
+                        var ctrlVal = f_UpdateControlValue(ctrl_Values);
+                        Control ctrlDop = null;
                         ctrl_Values.FormattingEnabled = true;
                         ctrl_Values.p_SeparatorStyle = System.Drawing.Drawing2D.DashStyle.Dash;
                         ctrl_Values.AutoCompleteCustomSource.AddRange(normValues);
@@ -498,7 +512,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         if (p_Element.p_Symmetrical)
                         {
                             ctrl_DopValues = new Ctrl_SeparatorCombobox();
-                            f_InitControlValue(ctrl_DopValues);
+                            ctrlDop = f_UpdateControlValue(ctrl_DopValues);
                             ctrl_DopValues.AutoCompleteMode = ctrl_Values.AutoCompleteMode;
                             ctrl_DopValues.AutoCompleteSource = ctrl_Values.AutoCompleteSource;
                             ctrl_DopValues.FormattingEnabled = ctrl_Values.FormattingEnabled;
@@ -554,11 +568,11 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         f_UpdateColor(ctrl_DopValues);
                         if (p_Element.p_Symmetrical)
                         {
-                            var cellPanel = f_GetSymmetricalPanel(ctrl_Values, ctrl_DopValues, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
+                            var cellPanel = f_GetSymmetricalPanel(ctrlVal, ctrlDop, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
                             tablePanel.Controls.Add(cellPanel, isLocation ? 2 : 1, a_RowIndex);
                         }
                         else
-                            tablePanel.Controls.Add(ctrl_Values, isLocation ? 2 : 1, a_RowIndex);
+                            tablePanel.Controls.Add(ctrlVal, isLocation ? 2 : 1, a_RowIndex);
                     }
                 }
                 else
@@ -566,25 +580,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     if (p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Float || p_Element.p_ElementType == Cl_Element.E_ElementsTypes.Line)
                     {
                         ctrl_Value = new TextBox();
-                        f_InitControlValue(ctrl_Value);
-
-
-
-                        Panel panelBorder = null;
-                        if (p_Element.p_VisiblePatient)
-                        {
-                            panelBorder = new Panel();
-                            panelBorder.Dock = DockStyle.Top;
-                            panelBorder.BackColor = Cl_App.f_GetRecordSetting().p_RecordPatientControlBorderColor;
-                            panelBorder.AutoSize = true;
-                            panelBorder.Padding = new Padding(Cl_App.f_GetRecordSetting().p_RecordPatientControlBorderWidth);
-                            panelBorder.Controls.Add(ctrl_Value);
-                        }
-                        var ctrl = panelBorder != null ? (Control)panelBorder : ctrl_Value;
-
-
-
-
+                        var ctrlVal = f_UpdateControlValue(ctrl_Value);
                         ctrl_Value.Text = a_RecordValue.p_ValueUser;
                         f_UpdateColor(ctrl_Value);
                         ctrl_Value.TextChanged += Ctrl_ValueChanged;
@@ -592,24 +588,24 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         if (p_Element.p_Symmetrical)
                         {
                             ctrl_DopValue = new TextBox();
-                            f_InitControlValue(ctrl_DopValue);
+                            var ctrlDop = f_UpdateControlValue(ctrl_DopValue);
                             ctrl_DopValue.Width = ctrl_Value.Width;
                             ctrl_DopValue.Text = a_RecordValue.p_ValueDopUser;
                             f_UpdateColor(ctrl_DopValue);
                             ctrl_DopValue.TextChanged += Ctrl_ValueChanged;
                             if (p_Element.p_IsNumber) ctrl_DopValue.KeyPress += ctrl_ValidNumber_KeyPress;
-                            var cellPanel = f_GetSymmetricalPanel(ctrl_Value, ctrl_DopValue, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
+                            var cellPanel = f_GetSymmetricalPanel(ctrlVal, ctrlDop, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
                             tablePanel.Controls.Add(cellPanel, isLocation ? 2 : 1, a_RowIndex);
                         }
                         else
                         {
-                            tablePanel.Controls.Add(ctrl, isLocation ? 2 : 1, a_RowIndex);
+                            tablePanel.Controls.Add(ctrlVal, isLocation ? 2 : 1, a_RowIndex);
                         }
                     }
                     else
                     {
                         ctrl_ValueBox = new Ctrl_TextBoxAutoHeight() { p_MinLines = 3 };
-                        f_InitControlValue(ctrl_ValueBox);
+                        var ctrlVal = f_UpdateControlValue(ctrl_ValueBox);
                         ctrl_ValueBox.Text = a_RecordValue.p_ValueUser;
                         f_UpdateColor(ctrl_ValueBox);
                         ctrl_ValueBox.TextChanged += Ctrl_ValueChanged;
@@ -617,18 +613,18 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         if (p_Element.p_Symmetrical)
                         {
                             ctrl_DopValueBox = new Ctrl_TextBoxAutoHeight() { p_MinLines = 3 };
-                            f_InitControlValue(ctrl_DopValueBox);
+                            var ctrlDop = f_UpdateControlValue(ctrl_DopValueBox);
                             ctrl_DopValueBox.Width = ctrl_ValueBox.Width;
                             ctrl_DopValueBox.Text = a_RecordValue.p_ValueDopUser;
                             f_UpdateColor(ctrl_DopValueBox);
                             ctrl_DopValueBox.TextChanged += Ctrl_ValueChanged;
                             if (p_Element.p_IsNumber) ctrl_DopValueBox.KeyPress += ctrl_ValidNumber_KeyPress;
-                            var cellPanel = f_GetSymmetricalPanel(ctrl_ValueBox, ctrl_DopValueBox, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
+                            var cellPanel = f_GetSymmetricalPanel(ctrlVal, ctrlDop, p_Element.p_SymmetryParamLeft, p_Element.p_SymmetryParamRight);
                             tablePanel.Controls.Add(cellPanel, isLocation ? 2 : 1, a_RowIndex);
                         }
                         else
                         {
-                            tablePanel.Controls.Add(ctrl_ValueBox, isLocation ? 2 : 1, a_RowIndex);
+                            tablePanel.Controls.Add(ctrlVal, isLocation ? 2 : 1, a_RowIndex);
                         }
                     }
                 }

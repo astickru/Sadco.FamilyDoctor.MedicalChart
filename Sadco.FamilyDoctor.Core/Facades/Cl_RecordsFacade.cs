@@ -903,7 +903,7 @@ namespace Sadco.FamilyDoctor.Core.Facades
                 record.p_CategoryTotalID = a_RecordPattern.p_CategoryTotalID;
                 record.p_CategoryTotal = a_RecordPattern.p_CategoryTotal;
 
-                var template = Cl_TemplatesFacade.f_GetInstance().f_GetActualTemplate(a_RecordPattern.p_Template);
+                var template = Cl_TemplatesFacade.f_GetInstance().f_GetLastVersionTemplate(a_RecordPattern.p_Template);
                 Cl_TemplatesFacade.f_GetInstance().f_LoadTemplatesElements(template);
                 var els = Cl_TemplatesFacade.f_GetInstance().f_GetElements(template);
                 record.f_SetTemplate(template);
