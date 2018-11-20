@@ -137,6 +137,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             if (ctrlRBValue_3.Checked) rating.p_Value = 3;
             if (ctrlRBValue_4.Checked) rating.p_Value = 4;
             if (ctrlRBValue_5.Checked) rating.p_Value = 5;
+            rating.p_Value = 0;
 
             Cl_App.m_DataContext.p_Ratings.Add(rating);
             Cl_App.m_DataContext.SaveChanges();

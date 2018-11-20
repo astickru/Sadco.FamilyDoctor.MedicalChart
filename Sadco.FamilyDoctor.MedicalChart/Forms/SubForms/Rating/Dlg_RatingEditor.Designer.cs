@@ -31,10 +31,6 @@
             this.ctrlBSave = new System.Windows.Forms.Button();
             this.p_Elements = new System.Windows.Forms.Panel();
             this.ctrl_TRatings = new System.Windows.Forms.DataGridView();
-            this.p_Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.p_Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.p_Comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.p_UserName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ctrlTBComment = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -52,6 +48,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.ctrlLAuthor = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.p_Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p_Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p_Comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p_UserName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel2.SuspendLayout();
             this.p_Buttons.SuspendLayout();
             this.p_Elements.SuspendLayout();
@@ -84,7 +84,7 @@
             // ctrlBReRate
             // 
             this.ctrlBReRate.Location = new System.Drawing.Point(475, 3);
-            this.ctrlBReRate.Margin = new System.Windows.Forms.Padding(0);
+            this.ctrlBReRate.Margin = new System.Windows.Forms.Padding(15, 0, 0, 0);
             this.ctrlBReRate.Name = "ctrlBReRate";
             this.ctrlBReRate.Size = new System.Drawing.Size(90, 25);
             this.ctrlBReRate.TabIndex = 18;
@@ -95,7 +95,7 @@
             // ctrlBSave
             // 
             this.ctrlBSave.Location = new System.Drawing.Point(370, 3);
-            this.ctrlBSave.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
+            this.ctrlBSave.Margin = new System.Windows.Forms.Padding(0);
             this.ctrlBSave.Name = "ctrlBSave";
             this.ctrlBSave.Size = new System.Drawing.Size(90, 25);
             this.ctrlBSave.TabIndex = 17;
@@ -154,56 +154,19 @@
             this.ctrl_TRatings.TabIndex = 17;
             this.ctrl_TRatings.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ctrl_TRatings_CellDoubleClick);
             // 
-            // p_Value
-            // 
-            this.p_Value.DataPropertyName = "p_Value";
-            this.p_Value.HeaderText = "Экспертиза";
-            this.p_Value.Name = "p_Value";
-            this.p_Value.ReadOnly = true;
-            this.p_Value.Width = 95;
-            // 
-            // p_Time
-            // 
-            this.p_Time.DataPropertyName = "p_Time";
-            this.p_Time.HeaderText = "Дата";
-            this.p_Time.Name = "p_Time";
-            this.p_Time.ReadOnly = true;
-            this.p_Time.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.p_Time.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // p_Comment
-            // 
-            this.p_Comment.DataPropertyName = "p_Comment";
-            this.p_Comment.HeaderText = "Комментарий";
-            this.p_Comment.Name = "p_Comment";
-            this.p_Comment.ReadOnly = true;
-            this.p_Comment.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.p_Comment.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.p_Comment.Width = 227;
-            // 
-            // p_UserName
-            // 
-            this.p_UserName.DataPropertyName = "p_UserName";
-            this.p_UserName.HeaderText = "Автор";
-            this.p_UserName.Name = "p_UserName";
-            this.p_UserName.ReadOnly = true;
-            this.p_UserName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.p_UserName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.p_UserName.Width = 140;
-            // 
             // ctrlTBComment
             // 
-            this.ctrlTBComment.Location = new System.Drawing.Point(3, 99);
+            this.ctrlTBComment.Location = new System.Drawing.Point(3, 74);
             this.ctrlTBComment.Multiline = true;
             this.ctrlTBComment.Name = "ctrlTBComment";
             this.ctrlTBComment.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.ctrlTBComment.Size = new System.Drawing.Size(566, 115);
+            this.ctrlTBComment.Size = new System.Drawing.Size(566, 140);
             this.ctrlTBComment.TabIndex = 6;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(1, 84);
+            this.label4.Location = new System.Drawing.Point(1, 58);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(93, 13);
             this.label4.TabIndex = 4;
@@ -212,106 +175,117 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(78, 60);
+            this.label5.Location = new System.Drawing.Point(465, 25);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(15, 13);
             this.label5.TabIndex = 12;
             this.label5.Text = "1";
+            this.label5.Visible = false;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(98, 60);
+            this.label6.Location = new System.Drawing.Point(485, 25);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(15, 13);
             this.label6.TabIndex = 13;
             this.label6.Text = "2";
+            this.label6.Visible = false;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(118, 60);
+            this.label7.Location = new System.Drawing.Point(505, 25);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(15, 13);
             this.label7.TabIndex = 14;
             this.label7.Text = "3";
+            this.label7.Visible = false;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(138, 60);
+            this.label8.Location = new System.Drawing.Point(525, 25);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(15, 13);
             this.label8.TabIndex = 15;
             this.label8.Text = "4";
+            this.label8.Visible = false;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(158, 60);
+            this.label9.Location = new System.Drawing.Point(545, 25);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(15, 13);
             this.label9.TabIndex = 16;
             this.label9.Text = "5";
+            this.label9.Visible = false;
             // 
             // ctrlRBValue_1
             // 
             this.ctrlRBValue_1.AutoSize = true;
-            this.ctrlRBValue_1.Location = new System.Drawing.Point(79, 44);
+            this.ctrlRBValue_1.Location = new System.Drawing.Point(466, 9);
             this.ctrlRBValue_1.Name = "ctrlRBValue_1";
             this.ctrlRBValue_1.Size = new System.Drawing.Size(14, 13);
             this.ctrlRBValue_1.TabIndex = 7;
             this.ctrlRBValue_1.TabStop = true;
             this.ctrlRBValue_1.UseVisualStyleBackColor = true;
+            this.ctrlRBValue_1.Visible = false;
             // 
             // ctrlRBValue_2
             // 
             this.ctrlRBValue_2.AutoSize = true;
-            this.ctrlRBValue_2.Location = new System.Drawing.Point(99, 44);
+            this.ctrlRBValue_2.Location = new System.Drawing.Point(486, 9);
             this.ctrlRBValue_2.Name = "ctrlRBValue_2";
             this.ctrlRBValue_2.Size = new System.Drawing.Size(14, 13);
             this.ctrlRBValue_2.TabIndex = 8;
             this.ctrlRBValue_2.TabStop = true;
             this.ctrlRBValue_2.UseVisualStyleBackColor = true;
+            this.ctrlRBValue_2.Visible = false;
             // 
             // ctrlRBValue_3
             // 
             this.ctrlRBValue_3.AutoSize = true;
-            this.ctrlRBValue_3.Location = new System.Drawing.Point(119, 44);
+            this.ctrlRBValue_3.Location = new System.Drawing.Point(506, 9);
             this.ctrlRBValue_3.Name = "ctrlRBValue_3";
             this.ctrlRBValue_3.Size = new System.Drawing.Size(14, 13);
             this.ctrlRBValue_3.TabIndex = 9;
             this.ctrlRBValue_3.TabStop = true;
             this.ctrlRBValue_3.UseVisualStyleBackColor = true;
+            this.ctrlRBValue_3.Visible = false;
             // 
             // ctrlRBValue_4
             // 
             this.ctrlRBValue_4.AutoSize = true;
-            this.ctrlRBValue_4.Location = new System.Drawing.Point(139, 44);
+            this.ctrlRBValue_4.Location = new System.Drawing.Point(526, 9);
             this.ctrlRBValue_4.Name = "ctrlRBValue_4";
             this.ctrlRBValue_4.Size = new System.Drawing.Size(14, 13);
             this.ctrlRBValue_4.TabIndex = 10;
             this.ctrlRBValue_4.TabStop = true;
             this.ctrlRBValue_4.UseVisualStyleBackColor = true;
+            this.ctrlRBValue_4.Visible = false;
             // 
             // ctrlRBValue_5
             // 
             this.ctrlRBValue_5.AutoSize = true;
-            this.ctrlRBValue_5.Location = new System.Drawing.Point(159, 44);
+            this.ctrlRBValue_5.Location = new System.Drawing.Point(546, 9);
             this.ctrlRBValue_5.Name = "ctrlRBValue_5";
             this.ctrlRBValue_5.Size = new System.Drawing.Size(14, 13);
             this.ctrlRBValue_5.TabIndex = 11;
             this.ctrlRBValue_5.TabStop = true;
             this.ctrlRBValue_5.UseVisualStyleBackColor = true;
+            this.ctrlRBValue_5.Visible = false;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(-1, 44);
+            this.label3.Location = new System.Drawing.Point(386, 9);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(61, 13);
             this.label3.TabIndex = 3;
             this.label3.Text = "Оценка:";
+            this.label3.Visible = false;
             // 
             // ctrlLDate
             // 
@@ -324,7 +298,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(-1, 27);
+            this.label2.Location = new System.Drawing.Point(-1, 29);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(43, 13);
             this.label2.TabIndex = 2;
@@ -346,6 +320,44 @@
             this.label1.Size = new System.Drawing.Size(50, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Автор:";
+            // 
+            // p_Value
+            // 
+            this.p_Value.DataPropertyName = "p_Value";
+            this.p_Value.HeaderText = "Экспертиза";
+            this.p_Value.Name = "p_Value";
+            this.p_Value.ReadOnly = true;
+            this.p_Value.Visible = false;
+            this.p_Value.Width = 95;
+            // 
+            // p_Time
+            // 
+            this.p_Time.DataPropertyName = "p_Time";
+            this.p_Time.HeaderText = "Дата";
+            this.p_Time.Name = "p_Time";
+            this.p_Time.ReadOnly = true;
+            this.p_Time.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.p_Time.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // p_Comment
+            // 
+            this.p_Comment.DataPropertyName = "p_Comment";
+            this.p_Comment.HeaderText = "Комментарий";
+            this.p_Comment.Name = "p_Comment";
+            this.p_Comment.ReadOnly = true;
+            this.p_Comment.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.p_Comment.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.p_Comment.Width = 303;
+            // 
+            // p_UserName
+            // 
+            this.p_UserName.DataPropertyName = "p_UserName";
+            this.p_UserName.HeaderText = "Автор";
+            this.p_UserName.Name = "p_UserName";
+            this.p_UserName.ReadOnly = true;
+            this.p_UserName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.p_UserName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.p_UserName.Width = 160;
             // 
             // Dlg_RatingViewer
             // 
@@ -395,10 +407,10 @@
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label ctrlLAuthor;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn p_Value;
-		private System.Windows.Forms.DataGridViewTextBoxColumn p_Time;
-		private System.Windows.Forms.DataGridViewTextBoxColumn p_Comment;
-		private System.Windows.Forms.DataGridViewTextBoxColumn p_UserName;
         private System.Windows.Forms.FlowLayoutPanel p_Buttons;
+        private System.Windows.Forms.DataGridViewTextBoxColumn p_Value;
+        private System.Windows.Forms.DataGridViewTextBoxColumn p_Time;
+        private System.Windows.Forms.DataGridViewTextBoxColumn p_Comment;
+        private System.Windows.Forms.DataGridViewTextBoxColumn p_UserName;
     }
 }
