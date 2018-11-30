@@ -134,16 +134,19 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 {
                     ctrl_TemplateEdit.Text = "Изменить шаблон";
                     ctrl_TemplateDelete.Text = "Удалить шаблон";
+                    ctrl_TemplateEditParams.Text = "Изменить параметы шаблона";
                 }
                 else if (p_SelectedTemplate.p_Template.p_Type == Cl_Template.E_TemplateType.Block)
                 {
                     ctrl_TemplateEdit.Text = "Изменить блок";
                     ctrl_TemplateDelete.Text = "Удалить блок";
+                    ctrl_TemplateEditParams.Text = "Изменить параметы блокa";
                 }
                 else if (p_SelectedTemplate.p_Template.p_Type == Cl_Template.E_TemplateType.Table)
                 {
                     ctrl_TemplateEdit.Text = "Изменить таблицу";
                     ctrl_TemplateDelete.Text = "Удалить таблицу";
+                    ctrl_TemplateEditParams.Text = "Изменить параметы таблицы";
                 }
             }
         }
@@ -281,7 +284,7 @@ namespace Sadco.FamilyDoctor.Core.Controls
             if (tpl != null)
             {
                 Dlg_EditorTemplate dlg = new Dlg_EditorTemplate();
-                dlg.ctrlPCategories.Enabled = tpl.p_Type == Cl_Template.E_TemplateType.Template;
+                dlg.ctrlPCategories.Enabled = dlg.ctrlPCountColumns.Enabled = tpl.p_Type == Cl_Template.E_TemplateType.Template;
                 dlg.p_CountColumn = tpl.p_CountColumn;
                 if (tpl.p_Type == Cl_Template.E_TemplateType.Template)
                     dlg.Text = "Редактирование параметров шаблона";

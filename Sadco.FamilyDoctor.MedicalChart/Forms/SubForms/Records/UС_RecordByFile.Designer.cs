@@ -28,22 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ctrlBDel = new System.Windows.Forms.Button();
             this.ctrlBAdd = new System.Windows.Forms.Button();
             this.ctrlLFilePath = new System.Windows.Forms.Label();
             this.ctrlLMKB = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // ctrlBDel
-            // 
-            this.ctrlBDel.Location = new System.Drawing.Point(189, 8);
-            this.ctrlBDel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.ctrlBDel.Name = "ctrlBDel";
-            this.ctrlBDel.Size = new System.Drawing.Size(159, 22);
-            this.ctrlBDel.TabIndex = 98;
-            this.ctrlBDel.Text = "удалить файл";
-            this.ctrlBDel.UseVisualStyleBackColor = true;
-            this.ctrlBDel.Click += new System.EventHandler(this.ctrlBDel_Click);
             // 
             // ctrlBAdd
             // 
@@ -80,7 +68,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.ctrlLMKB);
-            this.Controls.Add(this.ctrlBDel);
             this.Controls.Add(this.ctrlBAdd);
             this.Controls.Add(this.ctrlLFilePath);
             this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold);
@@ -93,8 +80,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button ctrlBDel;
         private System.Windows.Forms.Button ctrlBAdd;
         private System.Windows.Forms.Label ctrlLFilePath;
         private System.Windows.Forms.Label ctrlLMKB;

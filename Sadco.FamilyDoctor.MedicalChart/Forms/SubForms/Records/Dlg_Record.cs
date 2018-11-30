@@ -34,7 +34,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             InitializeComponent();
 
             this.KeyPreview = true;
-            ctrlBFormatByPattern.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditAllRecords || Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditSelfRecords;
             ctrlBMKB.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_Role != Core.Permision.E_Roles.Archivarius;
 
             this.Load += Dlg_Record_Load;
@@ -177,7 +176,12 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     }
                 }
 
+                ctrlBFormatByPattern.Visible = m_Record.p_Type != E_RecordType.FinishedFile && (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditAllRecords || Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditSelfRecords);
+
                 m_Log.f_SetEntity(m_Record);
+            } else
+            {
+                ctrlBFormatByPattern.Visible = false;
             }
         }
 

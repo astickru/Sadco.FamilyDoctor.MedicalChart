@@ -2,6 +2,7 @@
 using Sadco.FamilyDoctor.Core;
 using Sadco.FamilyDoctor.Core.Controls;
 using Sadco.FamilyDoctor.Core.Entities;
+using Sadco.FamilyDoctor.Core.Facades;
 using System;
 using System.Configuration;
 using System.Data;
@@ -35,7 +36,10 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             try
             {
-                var tpls = Cl_App.m_DataContext.p_Templates.Where(t => t.p_Type == Cl_Template.E_TemplateType.Template && !t.p_IsDelete).GroupBy(t => t.p_TemplateID)
+                var clinicCat = Cl_SessionFacade.f_GetInstance().p_Doctor.p_ClinicCat.ToLower();
+                var tpls = Cl_App.m_DataContext.p_Templates.Include(t => t.p_CategoryClinic)
+                    .Where(t => t.p_Type == Cl_Template.E_TemplateType.Template && !t.p_IsDelete && t.p_CategoryClinic != null && t.p_CategoryClinic.p_Name.ToLower() == clinicCat)
+                    .GroupBy(t => t.p_TemplateID)
                     .Select(grp => grp
                         .OrderByDescending(v => v.p_Version)
                         .FirstOrDefault());

@@ -304,6 +304,7 @@
             this.ctrlBFormatByPattern.TabIndex = 2;
             this.ctrlBFormatByPattern.Text = "заполнить по патерну";
             this.ctrlBFormatByPattern.UseVisualStyleBackColor = true;
+            this.ctrlBFormatByPattern.Visible = false;
             this.ctrlBFormatByPattern.Click += new System.EventHandler(this.ctrlBFormatByPattern_Click);
             // 
             // ctrlBSave

@@ -98,29 +98,30 @@ namespace Sadco.FamilyDoctor.MedicalChart
 
             if (isNotValid) return new string[0];
 
-            string[] startParams = new string[14];
+            string[] startParams = new string[15];
             startParams[0] = ctrlClinikName.Text;
             startParams[1] = ctrlUserID.Text;
             startParams[2] = ctrlUserSurName.Text;
             startParams[3] = ctrlUserName.Text;
             startParams[4] = ctrlUserLastName.Text;
-            startParams[5] = role.ToString();
+            startParams[5] = ctrlUserClinicCat.Text;
+            startParams[6] = role.ToString();
             if (_currentMedCard != null)
             {
-                startParams[6] = _currentMedCard.p_Number;
-                startParams[7] = _currentMedCard.p_PatientID.ToString();
+                startParams[7] = _currentMedCard.p_Number;
+                startParams[8] = _currentMedCard.p_PatientID.ToString();
             }
             if (ctrlDateStart.Value != null)
-                startParams[8] = ctrlDateStart.Value.ToString("dd.MM.yyyy");
+                startParams[9] = ctrlDateStart.Value.ToString("dd.MM.yyyy");
             if (ctrlDateEnd.Value != null)
-                startParams[9] = ctrlDateEnd.Value.ToString("dd.MM.yyyy");
+                startParams[10] = ctrlDateEnd.Value.ToString("dd.MM.yyyy");
 
             if (role == E_Roles.Assistant)
             {
-                startParams[10] = ctrlDoctorID.Text;
-                startParams[11] = ctrlDoctorSurName.Text;
-                startParams[12] = ctrlDoctorName.Text;
-                startParams[13] = ctrlDoctorLastName.Text;
+                startParams[11] = ctrlDoctorID.Text;
+                startParams[12] = ctrlDoctorSurName.Text;
+                startParams[13] = ctrlDoctorName.Text;
+                startParams[14] = ctrlDoctorLastName.Text;
             }
 
             return startParams;

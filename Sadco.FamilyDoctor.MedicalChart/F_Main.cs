@@ -108,25 +108,27 @@ namespace Sadco.FamilyDoctor.MedicalChart
             user.p_UserSurName = args[2];
             user.p_UserName = args[3];
             user.p_UserLastName = args[4];
-            user.p_Permission = new Cl_UserPermission(args[5]);
+            user.p_ClinicCat = args[5];
+            user.p_Permission = new Cl_UserPermission(args[6]);
             int patientId = 0;
-            if (int.TryParse(args[7], out patientId))
+            if (int.TryParse(args[8], out patientId))
             {
-                var medCard = Cl_MedicalCardsFacade.f_GetInstance().f_GetMedicalCard(args[6], patientId);
+                var medCard = Cl_MedicalCardsFacade.f_GetInstance().f_GetMedicalCard(args[7], patientId);
                 if (medCard != null)
                 {
                     if (user.p_Permission.p_Role == E_Roles.Assistant)
                     {
                         user.p_ParentUser = new Cl_User();
                         user.p_ParentUser.p_ClinicName = user.p_ClinicName;
-                        user.p_ParentUser.p_UserID = int.Parse(args[10]);
-                        user.p_ParentUser.p_UserSurName = args[11];
-                        user.p_ParentUser.p_UserName = args[12];
-                        user.p_ParentUser.p_UserLastName = args[13];
+                        user.p_ParentUser.p_ClinicCat = user.p_ClinicCat;
+                        user.p_ParentUser.p_UserID = int.Parse(args[11]);
+                        user.p_ParentUser.p_UserSurName = args[12];
+                        user.p_ParentUser.p_UserName = args[13];
+                        user.p_ParentUser.p_UserLastName = args[14];
                     }
 
                     if (user.p_Permission.p_Role == E_Roles.Inspector)
-                        return Cl_SessionFacade.f_GetInstance().f_Init(user, medCard, DateTime.Parse(args[8]), DateTime.Parse(args[9]));
+                        return Cl_SessionFacade.f_GetInstance().f_Init(user, medCard, DateTime.Parse(args[9]), DateTime.Parse(args[10]));
                     else
                         return Cl_SessionFacade.f_GetInstance().f_Init(user, medCard);
                 }

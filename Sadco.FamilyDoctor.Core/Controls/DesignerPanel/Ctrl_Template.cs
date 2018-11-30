@@ -42,6 +42,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
         }
 
+        public int p_Padding { get; set; } = 5;
+
         /// <summary>Возвращает является ли вкладкой</summary>
         public bool f_IsTab()
         {
@@ -341,8 +343,13 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             }
                             else
                             {
+                                var pnl = new Panel();
+                                pnl.AutoSize = true;
+                                pnl.Dock = DockStyle.Bottom;
+                                if (te.p_ChildElement.p_IsImage)
+                                    pnl.Padding = new Padding(0, p_Padding, 0, p_Padding);
                                 var ctrlEl = new Ctrl_Element();
-                                ctrlEl.Dock = DockStyle.Bottom;
+                                ctrlEl.Dock = DockStyle.Top;
                                 ctrlEl.p_Element = te.p_ChildElement;
                                 ctrlEl.p_Value = te.p_Value;
                                 ctrlEl.e_ValueChanged += CtrlEl_e_ValueChanged;
@@ -367,7 +374,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 else
                                 {
                                     ctrlEl.f_SetRecordElementValues(recval);
-                                    controls.Add(ctrlEl);
+                                    pnl.Controls.Add(ctrlEl);
+                                    controls.Add(pnl);
                                 }
                                 m_Elements.Add(ctrlEl);
                             }
@@ -376,8 +384,12 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         {
                             if (te.p_ChildTemplate.p_Type == Cl_Template.E_TemplateType.Block)
                             {
+                                var pnl = new Panel();
+                                pnl.AutoSize = true;
+                                pnl.Dock = DockStyle.Bottom;
+                                pnl.Padding = new Padding(0, p_Padding, 0, p_Padding);
                                 var ctrlGroup = new GroupBox();
-                                ctrlGroup.Dock = DockStyle.Bottom;
+                                ctrlGroup.Dock = DockStyle.Top;
                                 ctrlGroup.Font = new Font(ctrlGroup.Font.FontFamily, ctrlGroup.Font.Size, FontStyle.Bold);
                                 ctrlGroup.Text = te.p_ChildTemplate.p_Name.ToUpper();
                                 ctrlGroup.AutoSize = true;
@@ -386,14 +398,19 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 ctrlTable.AutoSize = true;
                                 ctrlTable.RowCount = 1;
                                 ctrlGroup.Controls.Add(ctrlTable);
-                                controls.Add(ctrlGroup);
+                                pnl.Controls.Add(ctrlGroup);
+                                controls.Add(pnl);
                                 f_AddControlsTemplate(te.p_ChildTemplate, ctrlTable.Controls);
                                 f_FormatingControlTable(ctrlTable, false);
                             }
                             else if (te.p_ChildTemplate.p_Type == Cl_Template.E_TemplateType.Table)
                             {
+                                var pnl = new Panel();
+                                pnl.AutoSize = true;
+                                pnl.Dock = DockStyle.Bottom;
+                                pnl.Padding = new Padding(0, p_Padding, 0, p_Padding);
                                 var ctrlTable = f_GetControlTable();
-                                ctrlTable.Dock = DockStyle.Bottom;
+                                ctrlTable.Dock = DockStyle.Top;
                                 ctrlTable.AutoSize = true;
                                 ctrlTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.InsetDouble;
                                 ctrlTable.RowCount = 1;
@@ -401,7 +418,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 ctrlTable.Controls.Add(new Label() { Text = "Значение", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 1, 0);
                                 ctrlTable.Controls.Add(new Label() { Text = "Ед. изм.", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 2, 0);
                                 ctrlTable.Controls.Add(new Label() { Text = "Нормa", TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 3, 0);
-                                controls.Add(ctrlTable);
+                                pnl.Controls.Add(ctrlTable);
+                                controls.Add(pnl);
                                 f_AddControlsTemplate(te.p_ChildTemplate, ctrlTable.Controls);
                                 f_FormatingControlTable(ctrlTable, true);
                             }

@@ -142,13 +142,34 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 var perm = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission;
                 return !a_Record.p_IsAutomatic && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsDelete && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsArchive
-                    && ((perm.p_IsEditAllRecords || (perm.p_IsEditSelfRecords && a_Record.p_DoctorID == Cl_SessionFacade.f_GetInstance().p_Doctor.p_UserID) || (perm.p_IsEditAssistantRecords && a_Record.p_DoctorID == Cl_SessionFacade.f_GetInstance().p_Doctor.p_ParentUser?.p_UserID))
+                    && (((perm.p_IsEditSelfRecords && a_Record.p_DoctorID == Cl_SessionFacade.f_GetInstance().p_Doctor.p_UserID) 
+                        || (perm.p_IsEditAssistantRecords && a_Record.p_DoctorID == Cl_SessionFacade.f_GetInstance().p_Doctor.p_ParentUser?.p_UserID))
                         || (perm.p_IsEditArchive && a_Record.p_Type == E_RecordType.FinishedFile));
             }
             else
             {
                 return false;
             }
+        }
+
+        private bool f_GetDeleted(Cl_Record a_Record)
+        {
+            if (a_Record != null)
+            {
+                var perm = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission;
+                return (!a_Record.p_IsSyncBMK && ((perm.p_IsEditSelfRecords && a_Record.p_DoctorID == Cl_SessionFacade.f_GetInstance().p_Doctor.p_UserID)
+                        || (perm.p_IsEditAssistantRecords && a_Record.p_DoctorID == Cl_SessionFacade.f_GetInstance().p_Doctor.p_ParentUser?.p_UserID)))
+                        || perm.p_IsEditArchive;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool f_GetHistory(Cl_Record a_Record)
+        {
+            return f_GetEdited(a_Record);
         }
 
         private void f_AddRecordFromRecord(Cl_Record a_Record)
@@ -378,6 +399,23 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             f_PrintPatient();
         }
 
+        private void ctrlBReportHistory_Click(object sender, EventArgs e)
+        {
+            if (m_SelectedRecord != null)
+            {
+                try
+                {
+                    Dlg_HistoryViewer viewer = new Dlg_HistoryViewer();
+                    viewer.LoadHistory(false, E_EntityTypes.Records, m_SelectedRecord.p_RecordID);
+                    viewer.ShowDialog(this);
+                }
+                catch (Exception er)
+                {
+                    MonitoringStub.Error("Error_Editor", "Не удалось открыть истории", er, null, null);
+                }
+            }
+        }
+
         private void ctrl_TRecords_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (ctrl_TRecords.CurrentRow != null && ctrl_TRecords.CurrentRow is OutlookGridRow && !((OutlookGridRow)ctrl_TRecords.CurrentRow).IsGroupRow && ctrl_TRecords.CurrentRow.Tag != null)
@@ -397,7 +435,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     {
                         OutlookGridRow _row = (OutlookGridRow)ctrl_TRecords.Rows[i];
                         if (_row.IsGroupRow)
-                            return;
+                            continue;
                         if (_row.Selected)
                         {
                             row = _row;
@@ -428,9 +466,10 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         ctrlRecordInfo.Text = string.Format("{0} {1} [{2}, {3}]", record.p_DateCreate.ToShortDateString(), record.p_Title, record.p_DateLastChange, record.p_DoctorFIO);
 
                         ctrlCMViewer.Enabled = true;
-                        ctrlBAddRecordFromRecord.Visible = ctrlBReportFormatPattern.Visible = !record.p_IsAutomatic && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsDelete && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsArchive && (m_Permission.p_IsEditAllRecords || m_Permission.p_IsEditSelfRecords);
+                        ctrlBAddRecordFromRecord.Visible = ctrlBReportFormatPattern.Visible = !record.p_IsAutomatic && record.p_Type != E_RecordType.FinishedFile && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsDelete && !Cl_SessionFacade.f_GetInstance().p_MedicalCard.p_IsArchive && (m_Permission.p_IsEditAllRecords || m_Permission.p_IsEditSelfRecords);
                         ctrlBReportEdit.Visible = ctrlMIEdit.Visible = f_GetEdited(record);
-                        ctrlBReportDelete.Visible = ctrlMIDelete.Visible = Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditAllRecords || ((m_Permission.p_IsEditArchive || Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsEditSelfRecords) && record.p_DoctorID == Cl_SessionFacade.f_GetInstance().p_Doctor.p_UserID);
+                        ctrlBReportDelete.Visible = ctrlMIDelete.Visible = f_GetDeleted(record);
+                        ctrlBReportHistory.Visible = f_GetHistory(record);
                         ctrlBReportRating.Visible = ctrlMIRating.Visible = m_Permission.p_IsEditAllRatings;
                         ctrlBReportSyncBMK.Visible = ctrlMISyncBMK.Visible = !record.p_IsSyncBMK && record.p_IsPrintDoctor && m_Permission.p_IsEditArchive;
                         ctrlBReportPrintDoctor.Visible = ctrlBReportPrintPatient.Visible = ctrlMIPrint.Visible = m_Permission.p_IsPrint;
@@ -521,6 +560,11 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         private void ctrlMIPrintPatient_Click(object sender, EventArgs e)
         {
             f_PrintPatient();
+        }
+
+        private void ctrlMIRefreshList_Click(object sender, EventArgs e)
+        {
+            f_UpdateRecords();
         }
 
         private void M_WebBrowserPrint_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)

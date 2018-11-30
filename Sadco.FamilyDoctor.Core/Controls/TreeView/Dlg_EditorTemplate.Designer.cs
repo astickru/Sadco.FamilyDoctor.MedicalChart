@@ -42,19 +42,20 @@
             this.ctrl_LTitleName = new System.Windows.Forms.Label();
             this.ctrl_BCancel = new System.Windows.Forms.Button();
             this.ctrl_BOk = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.ctrlPCountColumns = new System.Windows.Forms.Panel();
+            this.ctrlPCountColumnsVals = new System.Windows.Forms.Panel();
             this.ctrlCountColumn2 = new System.Windows.Forms.RadioButton();
             this.ctrlCountColumn1 = new System.Windows.Forms.RadioButton();
+            this.label1 = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
             this.ctrlPCategories.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.ctrlPCountColumns.SuspendLayout();
+            this.ctrlPCountColumnsVals.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.panel1);
-            this.panel2.Controls.Add(this.label1);
+            this.panel2.Controls.Add(this.ctrlPCountColumns);
             this.panel2.Controls.Add(this.ctrlPCategories);
             this.panel2.Controls.Add(this.ctrlTitle);
             this.panel2.Controls.Add(this.label3);
@@ -185,23 +186,23 @@
             this.ctrl_BOk.Text = "ОК";
             this.ctrl_BOk.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // ctrlPCountColumns
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(17, 144);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(135, 13);
-            this.label1.TabIndex = 80;
-            this.label1.Text = "Количество столбцов";
+            this.ctrlPCountColumns.Controls.Add(this.ctrlPCountColumnsVals);
+            this.ctrlPCountColumns.Controls.Add(this.label1);
+            this.ctrlPCountColumns.Location = new System.Drawing.Point(14, 139);
+            this.ctrlPCountColumns.Name = "ctrlPCountColumns";
+            this.ctrlPCountColumns.Size = new System.Drawing.Size(381, 29);
+            this.ctrlPCountColumns.TabIndex = 86;
             // 
-            // panel1
+            // ctrlPCountColumnsVals
             // 
-            this.panel1.Controls.Add(this.ctrlCountColumn2);
-            this.panel1.Controls.Add(this.ctrlCountColumn1);
-            this.panel1.Location = new System.Drawing.Point(190, 138);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(88, 25);
-            this.panel1.TabIndex = 85;
+            this.ctrlPCountColumnsVals.Controls.Add(this.ctrlCountColumn2);
+            this.ctrlPCountColumnsVals.Controls.Add(this.ctrlCountColumn1);
+            this.ctrlPCountColumnsVals.Location = new System.Drawing.Point(177, 0);
+            this.ctrlPCountColumnsVals.Name = "ctrlPCountColumnsVals";
+            this.ctrlPCountColumnsVals.Size = new System.Drawing.Size(88, 25);
+            this.ctrlPCountColumnsVals.TabIndex = 87;
             // 
             // ctrlCountColumn2
             // 
@@ -225,6 +226,15 @@
             this.ctrlCountColumn1.Text = "1";
             this.ctrlCountColumn1.UseVisualStyleBackColor = true;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 6);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(135, 13);
+            this.label1.TabIndex = 86;
+            this.label1.Text = "Количество столбцов";
+            // 
             // Dlg_EditorTemplate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
@@ -243,8 +253,10 @@
             this.panel2.PerformLayout();
             this.ctrlPCategories.ResumeLayout(false);
             this.ctrlPCategories.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.ctrlPCountColumns.ResumeLayout(false);
+            this.ctrlPCountColumns.PerformLayout();
+            this.ctrlPCountColumnsVals.ResumeLayout(false);
+            this.ctrlPCountColumnsVals.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -264,9 +276,10 @@
         private System.Windows.Forms.Label ctrlLCategoriesTotal;
         private System.Windows.Forms.Label ctrlLCategoriesClinic;
         public System.Windows.Forms.Panel ctrlPCategories;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel panel1;
+        public System.Windows.Forms.Panel ctrlPCountColumns;
+        private System.Windows.Forms.Panel ctrlPCountColumnsVals;
         private System.Windows.Forms.RadioButton ctrlCountColumn2;
         private System.Windows.Forms.RadioButton ctrlCountColumn1;
+        private System.Windows.Forms.Label label1;
     }
 }
