@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -61,7 +62,9 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             {
                 var patientID = Cl_SessionFacade.f_GetInstance().p_Patient.p_UserID;
                 var patientUID = Cl_SessionFacade.f_GetInstance().p_Patient.p_UserUID;
+                m_Records = null;
 
+                //Cl_App.m_DataContext.p_Records.Load();
                 var records = Cl_App.m_DataContext.p_Records.Include(r => r.p_MedicalCard).AsQueryable();
                 if (Cl_SessionFacade.f_GetInstance().p_Doctor.p_Permission.p_IsReadSelectedRecords)
                 {
@@ -75,11 +78,10 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                         MonitoringStub.Error("Error_Editor", "Для проверяющего С/К не указан период", null, null, null);
                 }
 
-                records = records.Where(r => p_IsShowDeleted ? true : !r.p_IsDelete && r.p_MedicalCard != null && (r.p_MedicalCard.p_PatientUID == patientUID || r.p_MedicalCard.p_PatientID == patientID));
+                records = records.GroupBy(e => e.p_RecordID).Select(grp => grp
+                    .OrderByDescending(v => v.p_Version).FirstOrDefault()).Where(r => p_IsShowDeleted ? true : !r.p_IsDelete && r.p_MedicalCard != null && (r.p_MedicalCard.p_PatientUID == patientUID || r.p_MedicalCard.p_PatientID == patientID));
 
-                m_Records = records.GroupBy(e => e.p_RecordID).Select(grp => grp
-                    .OrderByDescending(v => v.p_Version).FirstOrDefault())
-                    .Include(r => r.p_CategoryTotal).Include(r => r.p_CategoryClinic).Include(r => r.p_Values).Include(r => r.p_Template).Include(r => r.p_Values.Select(v => v.p_Params)).ToArray();
+                m_Records = records.Include(r => r.p_CategoryTotal).Include(r => r.p_CategoryClinic).Include(r => r.p_Values).Include(r => r.p_Template).Include(r => r.p_Values.Select(v => v.p_Params)).ToArray();
 
                 m_SelectedRecordBlock = true;
                 ctrl_TRecords.BindData(null, null);
@@ -242,16 +244,43 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         }
 
         private bool p_IsPrintDoctor = false;
+        private void printFile()
+        {
+            if (m_SelectedRecord != null)
+            {
+                if (m_SelectedRecord.p_FileType == E_RecordFileType.GIF || m_SelectedRecord.p_FileType == E_RecordFileType.JPE || m_SelectedRecord.p_FileType == E_RecordFileType.JPEG
+                    || m_SelectedRecord.p_FileType == E_RecordFileType.JPG || m_SelectedRecord.p_FileType == E_RecordFileType.PNG)
+                {
+                    m_WebBrowserPrint.DocumentText = m_SelectedRecord.f_GetDocumentTextDoctor(Application.StartupPath);
+                }
+                else if (m_SelectedRecord.p_FileType == E_RecordFileType.PDF)
+                {
+                    var path = string.Format("{0}medicalChartTemp.pdf", Path.GetTempPath());
+                    File.WriteAllBytes(path, Cl_RecordsFacade.f_GetInstance().f_GetFileFromSql(m_SelectedRecord));
+                    ctrlPDFViewer.src = path;
+                    ctrlPDFViewer.Show();
+                    if (Cl_SessionFacade.f_GetInstance().p_SettingsPrintWithParams)
+                        ctrlPDFViewer.printWithDialog();
+                    else
+                        ctrlPDFViewer.Print();
+                }
+            }
+        }
+
         private void f_PrintDoctor()
         {
             if (m_SelectedRecord != null)
             {
+                p_IsPrintDoctor = true;
                 if (m_SelectedRecord.p_FileType == E_RecordFileType.HTML)
                 {
-                    p_IsPrintDoctor = true;
                     m_WebBrowserPrint.DocumentText = m_SelectedRecord.f_GetDocumentTextDoctor(Application.StartupPath);
-                    Cl_EntityLog.f_CustomMessageLog(m_SelectedRecord, "Печать карточки для доктора" + (!m_SelectedRecord.p_IsPrintDoctor ? " (первая печать)" : ""));
                 }
+                else 
+                {
+                    printFile();
+                }
+                Cl_EntityLog.f_CustomMessageLog(m_SelectedRecord, "Печать карточки для доктора" + (!m_SelectedRecord.p_IsPrintDoctor ? " (первая печать)" : ""));
             }
         }
 
@@ -259,12 +288,17 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
         {
             if (m_SelectedRecord != null)
             {
+                p_IsPrintDoctor = false;
                 if (m_SelectedRecord.p_FileType == E_RecordFileType.HTML)
                 {
-                    p_IsPrintDoctor = false;
+                   
                     m_WebBrowserPrint.DocumentText = m_SelectedRecord.f_GetDocumentTextPatient(Application.StartupPath);
-                    Cl_EntityLog.f_CustomMessageLog(m_SelectedRecord, "Печать карточки для пациента" + (!m_SelectedRecord.p_IsPrintPatient ? " (первая печать)" : ""));
                 }
+                else
+                {
+                    printFile();
+                }
+                Cl_EntityLog.f_CustomMessageLog(m_SelectedRecord, "Печать карточки для пациента" + (!m_SelectedRecord.p_IsPrintPatient ? " (первая печать)" : ""));
             }
         }
 
@@ -374,6 +408,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                 if (MessageBox.Show($"Удалить запись \"{m_SelectedRecord.p_Title}\"?", $"Удаление записи", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
                 m_SelectedRecord.p_IsDelete = true;
                 Cl_App.m_DataContext.SaveChanges();
+                var sdsa = Cl_App.m_DataContext.p_Records.FirstOrDefault(r => r.p_ID == m_SelectedRecord.p_ID);
                 if (m_SelectedRow != null)
                     ctrl_TRecords.Rows.Remove(m_SelectedRow);
             }
@@ -572,7 +607,9 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             if (m_SelectedRecord != null)
             {
                 if (Cl_SessionFacade.f_GetInstance().p_SettingsPrintWithParams)
+                {
                     m_WebBrowserPrint.ShowPrintPreviewDialog();
+                }
                 else
                     m_WebBrowserPrint.Print();
                 if (p_IsPrintDoctor)

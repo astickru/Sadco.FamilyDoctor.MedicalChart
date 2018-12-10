@@ -241,7 +241,8 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             a_Control.Font = new Font(a_Control.Font.FontFamily, a_Control.Font.Size, FontStyle.Bold);
             a_Control.GotFocus += Ctrl_GotFocus;
             a_Control.LostFocus += Ctrl_LostFocus;
-            a_Control.KeyUp += ControlValue_KeyUp;
+            if (!(a_Control is Ctrl_TextBoxAutoHeight))
+                a_Control.KeyUp += ControlValue_KeyUp;
             a_Control.Dock = DockStyle.Top;
             a_Control.Enabled = p_Element.p_Editing;
             if (!a_Control.Enabled)

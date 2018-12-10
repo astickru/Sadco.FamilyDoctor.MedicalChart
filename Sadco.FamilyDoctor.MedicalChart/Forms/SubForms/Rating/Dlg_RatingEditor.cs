@@ -60,7 +60,6 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
 
             ctrlLAuthor.Text = rating.p_UserName;
             ctrlLDate.Text = rating.p_Time.ToString();
-            ctrlTBComment.Text = rating.p_Comment;
 
             ctrlRBValue_1.Checked = rating.p_Value == 1;
             ctrlRBValue_2.Checked = rating.p_Value == 2;
@@ -143,6 +142,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
             Cl_App.m_DataContext.SaveChanges();
             Cl_EntityLog.f_CustomMessageLog(E_EntityTypes.Rating, string.Format("Выставлена оценка {0} для записи: {1}, дата записи: {2}, клиника: {3}", rating.p_Value, this.curRecord.p_Title, this.curRecord.p_DateCreate, this.curRecord.p_ClinicName), this.curRecord.p_RecordID);
 
+            ctrlTBComment.Text = "";
             f_LoadRatingTable(rating.p_RecordID);
             selfRating = rating;
             if (firstRating == null) firstRating = rating;
