@@ -1,10 +1,11 @@
 ﻿using Sadco.FamilyDoctor.Core.Entities;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace Sadco.FamilyDoctor.Core.Controls
 {
-    public class Ctrl_TreeNodeElement : TreeNode, I_TreeNode
+    public class Ctrl_TreeNodeElement : TreeNode, I_TreeNode, IComparable
     {
         public Ctrl_TreeNodeElement(Cl_Group a_Group, Cl_Element a_Element)
         {
@@ -42,6 +43,15 @@ namespace Sadco.FamilyDoctor.Core.Controls
                 this.NodeFont = new Font(this.NodeFont, FontStyle.Bold);
                 ForeColor = Color.Red;
             }
+        }
+
+        public int CompareTo(object element)
+        {
+            Ctrl_TreeNodeElement node = element as Ctrl_TreeNodeElement;
+            if (p_Element != null && node != null && node.p_Element != null)
+                return p_Element.p_Name.CompareTo(node.p_Element.p_Name);
+            else
+                return -1;
         }
     }
 }

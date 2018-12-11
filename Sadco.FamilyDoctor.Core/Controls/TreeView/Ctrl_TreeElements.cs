@@ -6,6 +6,8 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
+using Sadco.FamilyDoctor.Core.Extensions;
+using System.Collections;
 
 namespace Sadco.FamilyDoctor.Core.Controls
 {
@@ -225,7 +227,19 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     transaction.Commit();
 
                     Ctrl_TreeNodeElement newNode = new Ctrl_TreeNodeElement(group, newElement);
-                    SelectedNode.Nodes.Add(newNode);
+                    bool inserted = false;
+                    for (var i = 0; i < SelectedNode.Nodes.Count; i++)
+                    {
+                        Ctrl_TreeNodeElement tn = (Ctrl_TreeNodeElement)SelectedNode.Nodes[i];
+                        if (tn.CompareTo(newNode) > -1)
+                        {
+                            SelectedNode.Nodes.Insert(i, newNode);
+                            inserted = true;
+                            break;
+                        }
+                    }
+                    if (!inserted)
+                        SelectedNode.Nodes.Add(newNode);
                     SelectedNode = newNode;
                     e_AfterCreateElement?.Invoke(this, new TreeViewEventArgs(newNode));
                 }

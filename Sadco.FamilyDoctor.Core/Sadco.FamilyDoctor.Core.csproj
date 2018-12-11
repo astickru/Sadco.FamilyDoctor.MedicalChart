@@ -225,6 +225,7 @@
     <Compile Include="Entities\I_ELog.cs" />
     <Compile Include="Entities\I_Version.cs" />
     <Compile Include="EntityLogs\Cl_EntityValue.cs" />
+    <Compile Include="Extensions\CollectionExtension.cs" />
     <Compile Include="Facades\Cl_CatalogsFacade.cs" />
     <Compile Include="Facades\Cl_FormulaFacade.cs" />
     <Compile Include="Facades\Cl_MedicalCardsFacade.cs" />

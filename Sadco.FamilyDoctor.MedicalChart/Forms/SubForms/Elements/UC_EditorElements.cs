@@ -61,6 +61,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms
                     .Select(grp => grp
                         .OrderByDescending(v => v.p_Version).FirstOrDefault())
                         .Include(e => e.p_ParamsValues);
+            els = els.OrderBy(el => el.p_Name);
             foreach (Cl_Element el in els)
             {
                 node.Nodes.Add(new Ctrl_TreeNodeElement(a_Group, el));
