@@ -33,7 +33,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
         {
             try
             {
-                var categories = Cl_App.m_DataContext.p_Categories.Local.ToBindingList().Where(c => c.p_Type == Cl_Category.E_CategoriesTypes.Total);
+                var categories = Cl_App.m_DataContext.p_Categories.Local.ToBindingList().Where(c => c.p_Type == Cl_Category.E_CategoriesTypes.Total).OrderBy(c => c.p_Name);
                 if (categories.Count() > 0)
                 {
                     BindingSource bs = new BindingSource();
@@ -72,7 +72,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
 
         private void f_RefreshClinik()
         {
-            var categories = Cl_App.m_DataContext.p_Categories.Local.ToBindingList().Where(c => c.p_Type == Cl_Category.E_CategoriesTypes.Clinic);
+            var categories = Cl_App.m_DataContext.p_Categories.Local.ToBindingList().Where(c => c.p_Type == Cl_Category.E_CategoriesTypes.Clinic).OrderBy(c => c.p_Name);
             if (categories.Count() > 0)
             {
                 try
@@ -228,6 +228,16 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
                             {
                                 if (cat != null)
                                 {
+                                    if (Cl_App.m_DataContext.p_Records.Any(r => r.p_CategoryTotalID == cat.p_ID))
+                                    {
+                                        MonitoringStub.Warning("Нельзя удалить категорию, связанную с записями");
+                                        return;
+                                    }
+                                    if (Cl_App.m_DataContext.p_RecordsPatterns.Any(r => r.p_CategoryTotalID == cat.p_ID))
+                                    {
+                                        MonitoringStub.Warning("Нельзя удалить категорию, связанную с патернами");
+                                        return;
+                                    }
                                     Cl_App.m_DataContext.p_Categories.Remove(cat);
                                     Cl_App.m_DataContext.SaveChanges();
                                     transaction.Commit();
@@ -241,6 +251,16 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
                             {
                                 if (cat != null)
                                 {
+                                    if (Cl_App.m_DataContext.p_Records.Any(r => r.p_CategoryClinicID == cat.p_ID))
+                                    {
+                                        MonitoringStub.Warning("Нельзя удалить категорию, связанную с записями");
+                                        return;
+                                    }
+                                    if (Cl_App.m_DataContext.p_RecordsPatterns.Any(r => r.p_CategoryClinicID == cat.p_ID))
+                                    {
+                                        MonitoringStub.Warning("Нельзя удалить категорию, связанную с патернами");
+                                        return;
+                                    }
                                     Cl_App.m_DataContext.p_Categories.Remove(cat);
                                     Cl_App.m_DataContext.SaveChanges();
                                     transaction.Commit();
@@ -252,6 +272,7 @@ namespace Sadco.FamilyDoctor.MedicalChart.Forms.SubForms.Catalogs
                     catch
                     {
                         transaction.Rollback();
+                        Cl_App.m_DataContext.Entry(cat).Reload();
                         MonitoringStub.Error("Error_Tree", "Нельзя удалить категорию", null, null, null);
                     }
                 }

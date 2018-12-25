@@ -285,13 +285,13 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 else
                 {
                     var tab = new TabPage();
+                    tab.AutoScroll = true;
                     tab.Text = "Главная";
                     tab.BackColor = Cl_App.f_GetRecordSetting().p_RecordBackColor;
                     ctrlContent.TabPages.Add(tab);
 
                     var splitPanel = new TableLayoutPanel();
                     splitPanel.SuspendLayout();
-                    splitPanel.AutoScroll = true;
                     splitPanel.AutoSize = true;
                     splitPanel.Dock = DockStyle.Top;
                     splitPanel.ColumnCount = p_Template.p_CountColumn > 0 ? p_Template.p_CountColumn : 1;
@@ -323,12 +323,12 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                 else
                                 {
                                     var tab = new TabPage();
+                                    tab.AutoScroll = true;
                                     tab.Text = te.p_ChildElement.p_Name;
                                     tab.BackColor = Cl_App.f_GetRecordSetting().p_RecordBackColor;
                                     ctrlContent.TabPages.Add(tab);
                                     var splitPanel = new TableLayoutPanel();
                                     splitPanel.SuspendLayout();
-                                    splitPanel.AutoScroll = true;
                                     splitPanel.AutoSize = true;
                                     splitPanel.Dock = DockStyle.Top;
                                     splitPanel.ColumnCount = p_Template.p_CountColumn > 0 ? p_Template.p_CountColumn : 1;

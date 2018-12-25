@@ -357,7 +357,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                         tablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
                     tablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
                     if (isPartPost)
-                        tablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40));
+                        tablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
                     if (isNorm)
                         tablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
                     tablePanel.RowCount = 0;

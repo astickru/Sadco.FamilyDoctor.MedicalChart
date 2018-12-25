@@ -65,7 +65,7 @@ namespace Sadco.FamilyDoctor.MedicalChart
                                 })
                                 .OrderBy(item => item.value)
                                 .ToList();
-                ctrlRoles.SelectedIndex = 1;
+                ctrlRoles.SelectedIndex = 0;
             }
 
 #if DEBUG
