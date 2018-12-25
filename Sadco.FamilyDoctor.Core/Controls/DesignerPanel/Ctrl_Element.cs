@@ -238,7 +238,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
 
         private Control f_UpdateControlValue(Control a_Control)
         {
-            a_Control.Font = new Font(a_Control.Font.FontFamily, a_Control.Font.Size, FontStyle.Bold);
+            a_Control.Font = new Font(Cl_App.f_GetRecordSetting().p_RecordFontFamily, Cl_App.f_GetRecordSetting().p_RecordFontSize, Cl_App.f_GetRecordSetting().p_RecordFontStyle);
             a_Control.GotFocus += Ctrl_GotFocus;
             a_Control.LostFocus += Ctrl_LostFocus;
             if (!(a_Control is Ctrl_TextBoxAutoHeight))
@@ -318,7 +318,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             {
                 l = new Label() { Text = p_Value };
                 l.TextAlign = ContentAlignment.MiddleCenter;
-                l.Font = new Font(l.Font.FontFamily, Cl_App.f_GetRecordSetting().p_SizeH1 - 2 * (p_Element.p_HeaderLevel - 1));
+                l.Font = new Font(Cl_App.f_GetRecordSetting().p_RecordFontFamily, Cl_App.f_GetRecordSetting().p_SizeH1 - 2 * (p_Element.p_HeaderLevel - 1));
                 l.Dock = DockStyle.Top;
                 l.Height = l.Font.Height + 6;
                 if (a_Table != null)
@@ -370,7 +370,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 if (p_Element.p_IsPartPre)
                 {
                     l = new Label() { Text = p_Element.p_PartPre };
-                    l.Font = new Font(l.Font.FontFamily, l.Font.Size, p_Element.p_Required ? FontStyle.Bold : FontStyle.Italic);
+                    l.Font = new Font(Cl_App.f_GetRecordSetting().p_RecordFontFamily, Cl_App.f_GetRecordSetting().p_RecordFontSize, p_Element.p_Required ? FontStyle.Bold : FontStyle.Italic);
                     l.AutoSize = true;
                     l.Margin = new Padding(0, 6, 0, 0);
                     tablePanel.Controls.Add(l, 0, a_RowIndex);

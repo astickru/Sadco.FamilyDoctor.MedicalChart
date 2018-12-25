@@ -8,6 +8,11 @@ namespace Sadco.FamilyDoctor.Core.Settings
     public class Cl_RecordSetting
     {
         public float p_SizeH1 { get; set; } = 20;
+        
+        public string p_RecordFontFamily { get; set; } = "Verdana";
+        public float p_RecordFontSize { get; set; } = 8.25f;
+        public FontStyle p_RecordFontStyle { get; set; } = FontStyle.Bold;
+
         public Color p_RecordBackColor { get; set; } = Color.Azure;
         public Color p_RecordReadOnlyBackColor { get; set; } = Color.Green;
         public Color p_RecordCurrentEditColor { get; set; } = Color.Yellow;

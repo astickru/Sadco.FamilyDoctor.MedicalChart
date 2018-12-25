@@ -85,6 +85,15 @@ namespace Sadco.FamilyDoctor.MedicalChart
             var recordSetting = new Cl_RecordSetting();
             if (int.TryParse(ConfigurationManager.AppSettings["RecordSizeH1"], out int sizeH1))
                 recordSetting.p_SizeH1 = sizeH1;
+
+            recordSetting.p_RecordFontFamily = ConfigurationManager.AppSettings["FontFamily"].ToString();
+            if (float.TryParse(ConfigurationManager.AppSettings["FontSize"], out float fontSize))
+                recordSetting.p_RecordFontSize = fontSize;
+            if (Enum.TryParse(ConfigurationManager.AppSettings["FontStyle"], out FontStyle fontStyle))
+            {
+                recordSetting.p_RecordFontStyle = fontStyle;
+            }
+
             recordSetting.p_RecordBackColor = Color.FromName(ConfigurationManager.AppSettings["RecordBackColor"]);
             recordSetting.p_RecordReadOnlyBackColor = Color.FromName(ConfigurationManager.AppSettings["RecordReadOnlyBackColor"]);
             recordSetting.p_RecordCurrentEditColor = Color.FromName(ConfigurationManager.AppSettings["RecordCurrentEditColor"]);
