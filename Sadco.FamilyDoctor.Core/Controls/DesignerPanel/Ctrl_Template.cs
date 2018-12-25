@@ -171,7 +171,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             ctrlTable.ColumnCount = 4;
             ctrlTable.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             ctrlTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            ctrlTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40));
+            ctrlTable.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             ctrlTable.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             ctrlTable.RowCount = 0;
             return ctrlTable;
@@ -293,7 +293,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     splitPanel.SuspendLayout();
                     splitPanel.AutoScroll = true;
                     splitPanel.AutoSize = true;
-                    splitPanel.Dock = DockStyle.Fill;
+                    splitPanel.Dock = DockStyle.Top;
                     splitPanel.ColumnCount = p_Template.p_CountColumn > 0 ? p_Template.p_CountColumn : 1;
                     for (int colIndex = 0; colIndex < splitPanel.ColumnCount; colIndex++)
                     {
@@ -330,7 +330,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                     splitPanel.SuspendLayout();
                                     splitPanel.AutoScroll = true;
                                     splitPanel.AutoSize = true;
-                                    splitPanel.Dock = DockStyle.Fill;
+                                    splitPanel.Dock = DockStyle.Top;
                                     splitPanel.ColumnCount = p_Template.p_CountColumn > 0 ? p_Template.p_CountColumn : 1;
                                     for (int colIndex = 0; colIndex < splitPanel.ColumnCount; colIndex++)
                                     {
@@ -537,18 +537,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     f_ResumeLayoutContent(tab.Controls);
                     f_SortByColumns((TableLayoutPanel)tab.Controls[0]);
                 }
-
-
                 ctrlContent.Selected += CtrlContent_Selected;
-
-               
-
-                //foreach (TabPage tab in ctrlContent.TabPages)
-                //{
-                //    tab.ResumeLayout();
-                //    f_ResumeLayoutContent(tab.Controls);
-                //    f_SortByColumns((TableLayoutPanel)tab.Controls[0]);
-                //}
             }
             else
             {

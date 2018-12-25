@@ -248,7 +248,9 @@ namespace Sadco.FamilyDoctor.Core.Controls
                     eLog.f_SaveEntity(newTemplate);
                     transaction.Commit();
 
-                    SelectedNode.Nodes.Add(new Ctrl_TreeNodeTemplate(group, newTemplate));
+                    var newNode = new Ctrl_TreeNodeTemplate(group, newTemplate);
+                    SelectedNode.Nodes.Add(newNode);
+                    e_EditTemplate?.Invoke(ctrl_TemplateEditParams, new TreeViewEventArgs(newNode));
                 }
                 catch (Exception ex)
                 {
