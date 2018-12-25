@@ -27,6 +27,7 @@ namespace Sadco.FamilyDoctor.UnitTestProject
         {
             //tag_one = "pat2"; tag_dva = 11; tag_tri = 5
             var record = new Cl_Record() { p_Title = "Тест проверки формул" };
+            record.p_DateCreate = DateTime.Now;
             var medicalCard = new Cl_MedicalCard();
             medicalCard.p_PatientSex = Core.Permision.Cl_User.E_Sex.Man;
             medicalCard.p_PatientDateBirth = new DateTime(1981, 4, 1);
@@ -226,28 +227,36 @@ namespace Sadco.FamilyDoctor.UnitTestProject
             template.p_TemplateElements = elements;
             record.f_SetTemplate(template);
 
-            decimal? result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_one + 3");
+            element.p_NumberFormula = "tag_one + 3";
+            decimal? result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, element);
             Assert.AreEqual(17, result);
-            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_one + 8");
+            element.p_NumberFormula = "tag_one + 8";
+            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, element);
             Assert.AreEqual(22, result);
 
-            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_one - 3");
+            element.p_NumberFormula = "tag_one - 3";
+            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, element);
             Assert.AreEqual(11, result);
-            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_dva - 8");
+            element.p_NumberFormula = "tag_dva - 8";
+            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, element);
             Assert.AreEqual(3, result);
-            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_dva * 11");
+            element.p_NumberFormula = "tag_dva * 11";
+            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, element);
             Assert.AreEqual(121, result);
-            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_dva / 2");
+            element.p_NumberFormula = "tag_dva / 2";
+            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, element);
             Assert.AreEqual((decimal)5.5, result);
-            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_tri - 7");
+            element.p_NumberFormula = "tag_tri - 7";
+            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, element);
             Assert.AreEqual(-2, result);
-
-            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_one + tag_dva - tag_tri");
+            element.p_NumberFormula = "tag_one + tag_dva - tag_tri";
+            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, element);
             Assert.AreEqual(20, result);
-            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_one * tag_dva / tag_tri");
+            element.p_NumberFormula = "tag_one * tag_dva / tag_tri";
+            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, element);
             Assert.AreEqual((decimal)30.8, result);
-
-            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, "tag_one / tag_chet / tag_chet");
+            element.p_NumberFormula = "tag_one / tag_chet / tag_chet";
+            result = Cl_RecordsFacade.f_GetInstance().f_GetElementMathematicValue(record, element);
             Assert.AreEqual((decimal)0.001767, Math.Round(result.Value, 6));
         }
 

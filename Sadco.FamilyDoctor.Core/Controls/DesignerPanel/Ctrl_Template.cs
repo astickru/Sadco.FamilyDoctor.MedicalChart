@@ -290,6 +290,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     ctrlContent.TabPages.Add(tab);
 
                     var splitPanel = new TableLayoutPanel();
+                    splitPanel.SuspendLayout();
                     splitPanel.AutoScroll = true;
                     splitPanel.AutoSize = true;
                     splitPanel.Dock = DockStyle.Fill;
@@ -298,6 +299,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                     {
                         splitPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F / splitPanel.ColumnCount));
                         var panel = new Panel();
+                        panel.SuspendLayout();
                         panel.AutoSize = true;
                         panel.Dock = DockStyle.Top;
                         splitPanel.Controls.Add(panel, colIndex, 0);
@@ -325,6 +327,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                     tab.BackColor = Cl_App.f_GetRecordSetting().p_RecordBackColor;
                                     ctrlContent.TabPages.Add(tab);
                                     var splitPanel = new TableLayoutPanel();
+                                    splitPanel.SuspendLayout();
                                     splitPanel.AutoScroll = true;
                                     splitPanel.AutoSize = true;
                                     splitPanel.Dock = DockStyle.Fill;
@@ -333,6 +336,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                                     {
                                         splitPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F / splitPanel.ColumnCount));
                                         var panel = new Panel();
+                                        panel.SuspendLayout();
                                         panel.AutoSize = true;
                                         panel.Dock = DockStyle.Top;
                                         splitPanel.Controls.Add(panel, colIndex, 0);
@@ -344,6 +348,7 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             else
                             {
                                 var pnl = new Panel();
+                                pnl.SuspendLayout();
                                 pnl.AutoSize = true;
                                 pnl.Dock = DockStyle.Bottom;
                                 if (te.p_ChildElement.p_IsImage)
@@ -385,15 +390,18 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             if (te.p_ChildTemplate.p_Type == Cl_Template.E_TemplateType.Block)
                             {
                                 var pnl = new Panel();
+                                pnl.SuspendLayout();
                                 pnl.AutoSize = true;
                                 pnl.Dock = DockStyle.Bottom;
                                 pnl.Padding = new Padding(0, p_Padding, 0, p_Padding);
                                 var ctrlGroup = new GroupBox();
+                                ctrlGroup.SuspendLayout();
                                 ctrlGroup.Dock = DockStyle.Top;
                                 ctrlGroup.Font = new Font(ctrlGroup.Font.FontFamily, ctrlGroup.Font.Size, FontStyle.Bold);
                                 ctrlGroup.Text = te.p_ChildTemplate.p_Name.ToUpper();
                                 ctrlGroup.AutoSize = true;
                                 var ctrlTable = f_GetControlTable();
+                                ctrlTable.SuspendLayout();
                                 ctrlTable.Dock = DockStyle.Top;
                                 ctrlTable.AutoSize = true;
                                 ctrlTable.RowCount = 1;
@@ -406,10 +414,12 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             else if (te.p_ChildTemplate.p_Type == Cl_Template.E_TemplateType.Table)
                             {
                                 var pnl = new Panel();
+                                pnl.SuspendLayout();
                                 pnl.AutoSize = true;
                                 pnl.Dock = DockStyle.Bottom;
                                 pnl.Padding = new Padding(0, p_Padding, 0, p_Padding);
                                 var ctrlTable = f_GetControlTable();
+                                ctrlTable.SuspendLayout();
                                 ctrlTable.Dock = DockStyle.Top;
                                 ctrlTable.AutoSize = true;
                                 ctrlTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.InsetDouble;
@@ -425,13 +435,6 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                             }
                         }
                     }
-                }
-            }
-            if (a_Controls == null)
-            {
-                foreach (TabPage tab in ctrlContent.TabPages)
-                {
-                    f_SortByColumns((TableLayoutPanel)tab.Controls[0]);
                 }
             }
         }
@@ -472,6 +475,34 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
             }
         }
 
+        private void f_ResumeLayoutContent(ControlCollection controls)
+        {
+            if (controls != null && controls.Count > 0)
+            {
+                foreach (Control ctrl in controls)
+                {
+                    if (ctrl is Panel)
+                    {
+                        var panel = (Panel)ctrl;
+                        if (panel.AutoSize)
+                        {
+                            panel.ResumeLayout();
+                            f_ResumeLayoutContent(panel.Controls);
+                        }
+                    }
+                    else if (ctrl is GroupBox)
+                    {
+                        var panel = (GroupBox)ctrl;
+                        if (panel.AutoSize)
+                        {
+                            panel.ResumeLayout();
+                            f_ResumeLayoutContent(panel.Controls);
+                        }
+                    }
+                }
+            }
+        }
+
         /// <summary>Установка записи</summary>
         public void f_SetRecord(Cl_Record a_Record)
         {
@@ -498,10 +529,42 @@ namespace Sadco.FamilyDoctor.Core.Controls.DesignerPanel
                 ctrlContent.TabPages[0].Controls[0].Controls.Add(ctrlLMKB);
                 f_UpdateMKB();
                 ctrlContent.SelectedIndex = 0;
+
+                if (ctrlContent.TabPages.Count > 0)
+                {
+                    TabPage tab = ctrlContent.TabPages[0];
+                    tab.ResumeLayout();
+                    f_ResumeLayoutContent(tab.Controls);
+                    f_SortByColumns((TableLayoutPanel)tab.Controls[0]);
+                }
+
+
+                ctrlContent.Selected += CtrlContent_Selected;
+
+               
+
+                //foreach (TabPage tab in ctrlContent.TabPages)
+                //{
+                //    tab.ResumeLayout();
+                //    f_ResumeLayoutContent(tab.Controls);
+                //    f_SortByColumns((TableLayoutPanel)tab.Controls[0]);
+                //}
             }
             else
             {
                 ctrlLMKB = null;
+            }
+        }
+
+        private void CtrlContent_Selected(object sender, TabControlEventArgs e)
+        {
+            if (e.TabPageIndex > 0 && e.TabPage.Tag == null)
+            {
+                TabPage tab = e.TabPage;
+                tab.Tag = true;
+                tab.ResumeLayout();
+                f_ResumeLayoutContent(tab.Controls);
+                f_SortByColumns((TableLayoutPanel)tab.Controls[0]);
             }
         }
 

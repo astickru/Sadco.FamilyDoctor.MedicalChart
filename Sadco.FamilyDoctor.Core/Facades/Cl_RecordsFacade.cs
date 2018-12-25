@@ -322,7 +322,20 @@ namespace Sadco.FamilyDoctor.Core.Facades
                     {
                         if (recValue.p_ValuesCatalog != null && recValue.p_ValuesCatalog.Length > 0)
                         {
-                            vals.AddRange(recValue.p_ValuesCatalog.Select(vc => vc.p_ElementParam.p_Value));
+                            var valsObjects = recValue.p_ValuesCatalog.Select(vc => vc.p_ElementParam.p_Value);
+                            foreach (var val in valsObjects)
+                            {
+                                if (recValue.p_Element != null && recValue.p_Element.p_IsNumber)
+                                {
+                                    decimal dVal = 0;
+                                    if (decimal.TryParse(val, out dVal)) vals.Add(dVal);
+                                    else vals.Add(dVal);
+                                }
+                                else
+                                {
+                                    vals.Add(val);
+                                }
+                            }
                         }
                         else
                         {
